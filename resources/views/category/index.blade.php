@@ -25,6 +25,53 @@
 
     <div class="row">
         <div class="col-md-6">
+            <h4>Добавить категорию события</h4>
+            <form action="/category" method="POST">
+                @csrf
+
+                <div class="mb-3">
+                    <label for="category-name">Имя</label>
+                    <input class="form-control {{ $errors->has('name') ? 'border-danger' : '' }}" id="category-name" name="name" placeholder="компьютеры" value="{{old('name')}}" >
+                </div>
+
+                @include('errors')
+
+                <div class="mb-3">
+                    <button class="btn btn-success">Создать</button>
+                </div>
+
+            </form>
+        </div>
+        <div class="col-md-6">
+            <h4>Добавить тип события</h4>
+            <h5 class="text-success"><?=session()->get('type_created')?></h5>
+            <form action="/type" method="POST">
+                @csrf
+
+                <div class="mb-3">
+                    <label for="type-name">Имя</label>
+                    <input class="form-control  {{ $errors->has('name') ? 'border-danger' : '' }}" id="type-name" name="name" placeholder="выходной" value="{{old('name')}}" >
+                </div>
+
+                <div class="mb-3">
+                    <label for="type-color">Цвет</label>
+                    <input class="form-control {{ $errors->has('color') ? 'border-danger' : '' }}" id="type-color" name="color" placeholder="79B1E1" value="{{old('color')}}" >
+                </div>
+
+                @include('errors')
+
+                <div class="mb-3">
+                    <button class="btn btn-success">Создать</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
             <h4>Список категорий событий</h4>
             <h5 class="text-success"><?=session()->get('category_deleted')?></h5>
             <h5 class="text-success"><?=session()->get('category_created')?></h5>
@@ -65,6 +112,9 @@
             </table>
 
         </div>
+
+
+
         <div class="col-md-6">
             <h4>Список типов событий</h4>
             <table class="table table-bordered table-striped">
@@ -104,52 +154,6 @@
                     </tr>
                 @endif
             </table>
-
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6">
-            <h4>Добавить категорию события</h4>
-            <form action="/category" method="POST">
-                @csrf
-
-                <div class="mb-3">
-                    <label for="category-name">Имя</label>
-                    <input class="form-control {{ $errors->has('name') ? 'border-danger' : '' }}" id="category-name" name="name" placeholder="компьютеры" value="{{old('name')}}" >
-                </div>
-
-                @include('errors')
-
-                <div class="mb-3">
-                    <button class="btn btn-success">Создать</button>
-                </div>
-
-            </form>
-        </div>
-        <div class="col-md-6">
-            <h4>Добавить тип события</h4>
-            <h5 class="text-success"><?=session()->get('type_created')?></h5>
-            <form action="/type" method="POST">
-                @csrf
-
-                <div class="mb-3">
-                    <label for="type-name">Имя</label>
-                    <input class="form-control  {{ $errors->has('name') ? 'border-danger' : '' }}" id="type-name" name="name" placeholder="выходной" value="{{old('name')}}" >
-                </div>
-
-                <div class="mb-3">
-                    <label for="type-color">Цвет</label>
-                    <input class="form-control {{ $errors->has('color') ? 'border-danger' : '' }}" id="type-color" name="color" placeholder="#79B1E1" value="{{old('color')}}" >
-                </div>
-
-                @include('errors')
-
-                <div class="mb-3">
-                    <button class="btn btn-success">Создать</button>
-                </div>
-
-            </form>
 
         </div>
     </div>

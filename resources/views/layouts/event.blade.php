@@ -38,68 +38,43 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-default d-sm-none d-xl-none">
-        <div class="container">
-            <!-- Brand и toggle сгруппированы для лучшего отображения на мобильных дисплеях -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">
-                    <i class="fa fa-sun-o" aria-hidden="true"></i>
-                    <span>{{ config('app.name', 'Laravel') }}</span>
-                </a>
-            </div>
+    <?php
+        $mainMenuSVGclass1 = 'main-menu-svg-class-1';
+        $mainMenuData = [
+            [
+                'url' => 'exchange-rate',
+                'title' => 'Курсы валют',
+                'svg_class_1' => $mainMenuSVGclass1,
+                'svg' => '<svg height="32" class="octicon octicon-book __SVG_REPLACE_CLASS__" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path></svg>'
+            ],
+            [
+                'url' => 'event',
+                'title' => 'События',
+                'svg_class_1' => $mainMenuSVGclass1,
+                'svg' => '<svg height="32" class="octicon octicon-megaphone __SVG_REPLACE_CLASS__" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M10 1c-.17 0-.36.05-.52.14C8.04 2.02 4.5 4.58 3 5c-1.38 0-3 .67-3 2.5S1.63 10 3 10c.3.08.64.23 1 .41V15h2v-3.45c1.34.86 2.69 1.83 3.48 2.31.16.09.34.14.52.14.52 0 1-.42 1-1V2c0-.58-.48-1-1-1zm0 12c-.38-.23-.89-.58-1.5-1-.16-.11-.33-.22-.5-.34V3.31c.16-.11.31-.2.47-.31.61-.41 1.16-.77 1.53-1v11zm2-6h4v1h-4V7zm0 2l4 2v1l-4-2V9zm4-6v1l-4 2V5l4-2z"></path></svg>'
+            ],
+            [
+                'url' => 'youtube',
+                'title' => 'Youtube',
+                'svg_class_1' => $mainMenuSVGclass1,
+                'svg' => '<svg height="32" class="octicon octicon-play __SVG_REPLACE_CLASS__" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M14 8A7 7 0 1 1 0 8a7 7 0 0 1 14 0zm-8.223 3.482l4.599-3.066a.5.5 0 0 0 0-.832L5.777 4.518A.5.5 0 0 0 5 4.934v6.132a.5.5 0 0 0 .777.416z"></path></svg>'
+            ],
 
-            <!-- Соберите навигационные ссылки, формы, и другой контент для переключения -->
-            <?php
-            $mainMenuSVGclass1 = 'main-menu-svg-class-1';
-            $mainMenuData = [
-                [
-                    'url' => 'exchange-rate',
-                    'title' => 'Курсы валют',
-                    'svg_class_1' => $mainMenuSVGclass1,
-                    'svg' => '<svg height="32" class="octicon octicon-book __SVG_REPLACE_CLASS__" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path></svg>'
-                ],
-                [
-                    'url' => 'event',
-                    'title' => 'События',
-                    'svg_class_1' => $mainMenuSVGclass1,
-                    'svg' => '<svg height="32" class="octicon octicon-megaphone __SVG_REPLACE_CLASS__" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M10 1c-.17 0-.36.05-.52.14C8.04 2.02 4.5 4.58 3 5c-1.38 0-3 .67-3 2.5S1.63 10 3 10c.3.08.64.23 1 .41V15h2v-3.45c1.34.86 2.69 1.83 3.48 2.31.16.09.34.14.52.14.52 0 1-.42 1-1V2c0-.58-.48-1-1-1zm0 12c-.38-.23-.89-.58-1.5-1-.16-.11-.33-.22-.5-.34V3.31c.16-.11.31-.2.47-.31.61-.41 1.16-.77 1.53-1v11zm2-6h4v1h-4V7zm0 2l4 2v1l-4-2V9zm4-6v1l-4 2V5l4-2z"></path></svg>'
-                ],
-                [
-                    'url' => 'youtube',
-                    'title' => 'Youtube',
-                    'svg_class_1' => $mainMenuSVGclass1,
-                    'svg' => '<svg height="32" class="octicon octicon-play __SVG_REPLACE_CLASS__" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M14 8A7 7 0 1 1 0 8a7 7 0 0 1 14 0zm-8.223 3.482l4.599-3.066a.5.5 0 0 0 0-.832L5.777 4.518A.5.5 0 0 0 5 4.934v6.132a.5.5 0 0 0 .777.416z"></path></svg>'
-                ],
+            //
+            [
+                'url' => 'document',
+                'title' => 'Документы',
+                'svg_class_1' => $mainMenuSVGclass1,
+                'svg' => '<svg height="32" class="octicon octicon-file-submodule __SVG_REPLACE_CLASS__" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M10 7H4v7h9c.55 0 1-.45 1-1V8h-4V7zM9 9H5V8h4v1zm4-5H7V3c0-.66-.31-1-1-1H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h2V7c0-.55.45-1 1-1h6c.55 0 1 .45 1 1h3V5c0-.55-.45-1-1-1zM6 4H1V3h5v1z"></path></svg>'
+            ],
 
-                //
-                [
-                    'url' => 'document',
-                    'title' => 'Документы',
-                    'svg_class_1' => $mainMenuSVGclass1,
-                    'svg' => '<svg height="32" class="octicon octicon-file-submodule __SVG_REPLACE_CLASS__" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M10 7H4v7h9c.55 0 1-.45 1-1V8h-4V7zM9 9H5V8h4v1zm4-5H7V3c0-.66-.31-1-1-1H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h2V7c0-.55.45-1 1-1h6c.55 0 1 .45 1 1h3V5c0-.55-.45-1-1-1zM6 4H1V3h5v1z"></path></svg>'
-                ],
-
-            ];
-            foreach($mainMenuData as &$menu)
-                if (array_key_exists('svg_class_1', $menu))
-                        $menu['svg'] = str_replace('__SVG_REPLACE_CLASS__',$menu['svg_class_1'],$menu['svg']);
-            unset($menu); // !
-            //echo \App\Debug::d($mainMenuData); die;
-            ?>
-
-            <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
-                <ul class="list-unstyled mainul">
-
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
+        ];
+        foreach($mainMenuData as &$menu)
+            if (array_key_exists('svg_class_1', $menu))
+                $menu['svg'] = str_replace('__SVG_REPLACE_CLASS__',$menu['svg_class_1'],$menu['svg']);
+        unset($menu); // !
+        //echo \App\Debug::d($mainMenuData); die;
+        ?>
 
     <div class="wrapper">
         <div class="container1">
@@ -128,8 +103,7 @@
                                 ?>
                                 <li>
                                     <a href="{{$menu['url']}}">
-                                        <?=$menu['svg']?>
-                                        <span class="text">{{$menu['title']}}</span>
+                                        <?=$menu['svg']?><span class="text">{{$menu['title']}}</span>
                                     </a>
                                 </li>
                                 <?php else: ?>
@@ -161,15 +135,20 @@
                                         </strong>
                                         <span class="caret"></span>
                                     </a>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a class="dropdown-item" href="<?="/user/change-user-info"?>"><i class="fa fa-pencil-square-o"></i> Редактирование</a></li>
+                                    <ul class="dropdown-menu " aria-labelledby="dropdownMenu1" >
+                                        <li>
+                                            <a class="dropdown-item" href="<?="/user/change-user-info"?>">
+                                                <svg height="32" class="octicon octicon-three-bars user-sign-svg-1" viewBox="0 0 12 16" version="1.1" width="24" aria-hidden="true"><path fill-rule="evenodd" d="M11.41 9H.59C0 9 0 8.59 0 8c0-.59 0-1 .59-1H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1h.01zm0-4H.59C0 5 0 4.59 0 4c0-.59 0-1 .59-1H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1h.01zM.59 11H11.4c.59 0 .59.41.59 1 0 .59 0 1-.59 1H.59C0 13 0 12.59 0 12c0-.59 0-1 .59-1z"></path></svg>
+                                                {{ __('Редактирование') }}
+                                            </a>
+                                        </li>
                                         <li role="separator" class="divider"></li>
 
                                         <li>
                                             <a class="dropdown-item" href="{{ route('logout') }}"
                                                onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                                <i class="fa fa-power-off icon"></i>
+                                                <svg height="32" class="octicon octicon-sign-out user-sign-svg-1" viewBox="0 0 16 16" version="1.1" width="32" aria-hidden="true"><path fill-rule="evenodd" d="M12 9V7H8V5h4V3l4 3-4 3zm-2 3H6V3L2 1h8v3h1V1c0-.55-.45-1-1-1H1C.45 0 0 .45 0 1v11.38c0 .39.22.73.55.91L6 16.01V13h4c.55 0 1-.45 1-1V8h-1v4z"></path></svg>
                                                 {{ __('Выйти') }}
                                             </a>
                                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

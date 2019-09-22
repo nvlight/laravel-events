@@ -54,7 +54,7 @@
                             <td>{{$event->amount}}</td>
                             <td>{{$event->date}}</td>
                             <td>
-                                <button class="btn" style="background-color: {{$event->color}}; color: #ffffff;">
+                                <button class="btn" style="background-color: #{{$event->color}}; color: #ffffff;">
                                     {{$event->type_name}}
                                 </button>
                             </td>

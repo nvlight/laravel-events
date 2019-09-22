@@ -23,12 +23,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(['verify' => true]);
+Auth::routes();
 
 Route::resource('category', 'CategoryController')->middleware('verified');
 Route::resource('type', 'TypeController')->middleware('verified');
 Route::resource('event', 'EventController')->middleware('verified');
 
 //Route::get('/home', 'HomeController@index')->name('home');
-
 //Route::get('/documents', )
+
+Route::get('exchange-rate', 'ExchangeRateController@index');
+Route::get('youtube', 'YouTubeController@index');
+Route::get('document', 'DocumentController@index');
+Route::get('events-graphics', 'EventController@graphics_index');

@@ -45,7 +45,7 @@ return [
     ],
 
     'events' => [
-        'paginate_number' => 7
+        'paginate_number' => 25
     ]
 
 ];

@@ -277,6 +277,7 @@ p.reg{
 .mainul li a{
 	padding: 15px 15px;
 	display: block;
+	display: flex;
 	color: #9FA3AE;
 	text-decoration: none;
 }
@@ -1103,4 +1104,14 @@ body > nav.navbar{
 }
 .events-right-actions a{
 	margin-left: 5px;
+}
+
+.dropdown-menu.show{
+	transform: translate3d(-80px, 36px, 0px) !important;
+}
+
+.user-sign-svg-1{
+	color: #22800a;
+	fill: currentColor;
+	height: 23px;
 }
