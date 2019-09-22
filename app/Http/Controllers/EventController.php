@@ -79,6 +79,8 @@ class EventController extends Controller
         ]);
 
         $attributes += ['user_id' => auth()->id()];
+        $attributes['date'] =  Carbon::parse($attributes['date'])->format('Y-m-d');
+        //echo Debug::d($attributes); die;
 
         Event::create($attributes);
 
@@ -135,7 +137,7 @@ class EventController extends Controller
             'category_id' => ['required','integer','min:1'],
             'type_id' => ['required','integer','min:1'],
             'date' => ['required','date'],
-            'amount' => ['required','integer','min:0'],
+            'amount' => ['integer','min:0'],
             'description' => ['required','string','min:3','max:1111'],
         ]);
 
@@ -304,7 +306,7 @@ class EventController extends Controller
         ];
         //echo Debug::d($series2,'',2);
         //echo Debug::d($series0,'',2); die;
-        $series2 = $series0;
+        //$series2 = $series0;
 
         $chart2 = \Chart::title([
             'text' => 'Сумма ресурсов по типам',
