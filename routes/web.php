@@ -28,11 +28,13 @@ Auth::routes();
 Route::resource('category', 'CategoryController')->middleware('verified');
 Route::resource('type', 'TypeController')->middleware('verified');
 Route::resource('event', 'EventController')->middleware('verified');
+Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
 
 //Route::get('/home', 'HomeController@index')->name('home');
 //Route::get('/documents', )
 
-Route::get('exchange-rate', 'ExchangeRateController@index');
-Route::get('youtube', 'YouTubeController@index');
-Route::get('document', 'DocumentController@index');
-Route::get('events-graphics', 'EventController@graphics_index');
+Route::get('exchange-rate', 'ExchangeRateController@index')->middleware('verified');
+Route::get('youtube', 'YouTubeController@index')->middleware('verified');
+Route::get('document', 'DocumentController@index')->middleware('verified');
+Route::get('events-graphics', 'EventController@graphics_index')->middleware('verified');
+Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');

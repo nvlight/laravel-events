@@ -68,6 +68,13 @@
                 'svg' => '<svg height="32" class="octicon octicon-file-submodule __SVG_REPLACE_CLASS__" viewBox="0 0 14 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M10 7H4v7h9c.55 0 1-.45 1-1V8h-4V7zM9 9H5V8h4v1zm4-5H7V3c0-.66-.31-1-1-1H1c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h2V7c0-.55.45-1 1-1h6c.55 0 1 .45 1 1h3V5c0-.55-.45-1-1-1zM6 4H1V3h5v1z"></path></svg>'
             ],
 
+            [
+                'url' => 'shorturl',
+                'title' => 'Goo.gl',
+                'svg_class_1' => $mainMenuSVGclass1,
+                'svg' => '<svg height="32" width="28" class="octicon octicon-code __SVG_REPLACE_CLASS__" viewBox="0 0 14 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M9.5 3L8 4.5 11.5 8 8 11.5 9.5 13 14 8 9.5 3zm-5 0L0 8l4.5 5L6 11.5 2.5 8 6 4.5 4.5 3z"></path></svg>'
+            ],
+
         ];
         foreach($mainMenuData as &$menu)
             if (array_key_exists('svg_class_1', $menu))
@@ -102,7 +109,7 @@
 //                                    'svg' => ''
                                 ?>
                                 <li>
-                                    <a href="{{$menu['url']}}">
+                                    <a href="{{url($menu['url'])}}">
                                         <?=$menu['svg']?><span class="text">{{$menu['title']}}</span>
                                     </a>
                                 </li>

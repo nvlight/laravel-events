@@ -45,7 +45,12 @@ return [
     ],
 
     'events' => [
-        'paginate_number' => 25
-    ]
+        'paginate_number' => 15
+    ],
+
+    'shorturl' => [
+        'char_number' => 7,
+        'paginate_number' => 15
+    ],
 
 ];
