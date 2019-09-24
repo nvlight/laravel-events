@@ -53,4 +53,8 @@ return [
         'paginate_number' => 15
     ],
 
+    'documents' => [
+        'path2save' => 'ev_documents'
+    ],
+
 ];

@@ -38,3 +38,7 @@ Route::get('youtube', 'YouTubeController@index')->middleware('verified');
 Route::get('document', 'DocumentController@index')->middleware('verified');
 Route::get('events-graphics', 'EventController@graphics_index')->middleware('verified');
 Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');
+
+//Route::post('document-load', 'DocumentController@upload')->middleware('verified');
+Route::resource('document', 'DocumentController')->middleware('verified');
+Route::get('document-download/{document}','DocumentController@download')->middleware('verified');
