@@ -42,3 +42,11 @@ Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');
 //Route::post('document-load', 'DocumentController@upload')->middleware('verified');
 Route::resource('document', 'DocumentController')->middleware('verified');
 Route::get('document-download/{document}','DocumentController@download')->middleware('verified');
+
+Route::get('test111', 'TestController@show')->name('tttest.note');
+//Route::get('verification.notice', 'TestController@show')->name('tttest.note');
+
+//Route::get('email/verify', 'auth\VerificationController@show')->name('tttest.note');
+Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
+Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
