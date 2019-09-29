@@ -129,7 +129,11 @@
                         <tr>
                             <td>{{$type->id}}</td>
                             <td>{{$type->name}}</td>
-                            <td>{{$type->color}}</td>
+                            <td class="">
+                                <div class="event_type_td">
+                                    {{$type->color}}<span class="event_type_color" style="background-color: #{{$type->color}};"></span>
+                                </div>
+                            </td>
                             <td class="td-btn-flex-1">
                                 <form action="/type/{{$type->id}}/edit" method="GET" style="">
                                     <button class="mg-btn-1" type="submit" title="редактировать">

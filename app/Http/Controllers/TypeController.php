@@ -105,7 +105,7 @@ class TypeController extends Controller
     public function validateType(){
         return request()->validate([
             'name' => ['required', 'string', 'max:215', 'min:3'],
-            'color' => ['required', 'string', 'min:4', 'max:7'],
+            'color' => ['required', 'string', 'regex:/^[a-f\d]{3,6}$/ui'],
         ]);
     }
 }

@@ -1120,3 +1120,14 @@ body > nav.navbar{
 	fill: currentColor;
 	height: 23px;
 }
+.event_type_td{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.event_type_color{
+	width: 15px;
+	height: 15px;
+	display: inline-block;
+	margin-left: 10px;
+}
