@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Validator;
 
 class EventController extends Controller
 {
@@ -70,13 +71,7 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $attributes = $request->validate([
-            'category_id' => ['required','integer','min:1'],
-            'type_id' => ['required','integer','min:1'],
-            'date' => ['required','date'],
-            'amount' => ['required','integer','min:0'],
-            'description' => ['required','string','min:3','max:1111'],
-        ]);
+        $attributes = $this->validateEvent();
 
         $attributes += ['user_id' => auth()->id()];
         $attributes['date'] =  Carbon::parse($attributes['date'])->format('Y-m-d');
@@ -133,13 +128,7 @@ class EventController extends Controller
     {
         abort_if(auth()->user()->cannot('view', $event), 403);
 
-        $attributes = $request->validate([
-            'category_id' => ['required','integer','min:1'],
-            'type_id' => ['required','integer','min:1'],
-            'date' => ['required','date'],
-            'amount' => ['integer','min:0'],
-            'description' => ['required','string','min:3','max:1111'],
-        ]);
+        $attributes = $this->validateEvent();
 
         $event->category_id = $attributes['category_id'];
         $event->type_id = $attributes['type_id'];
@@ -760,5 +749,70 @@ class EventController extends Controller
         }
 
         return $pie_data;
+    }
+
+    public function filter(){
+
+        $date_regexp  = "/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/";
+        $date_regexp2 = "/(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.([12]\d{3})$/"; //
+
+        $vld = Validator::make(request()->all(), [
+           'category_id' => ['required','array','min:1'],
+           'type_id' => ['required','array','min:1'],
+           'date1' => ['required', "regex:".$date_regexp2],
+           'date2' => ['required', "regex:".$date_regexp2],
+           'amount1' => ['integer','min:0'],
+           'amount2' => ['integer','min:0'],
+        ]); //->validate();
+        //dd($vld->failed());
+        //dd($vld->fails());
+        //dd(intval(\request('amount1')));
+        $amount1 = intval(\request('amount1'));
+        $amount2 = intval(\request('amount2'));
+        $date_etalon1 = \request('date1');
+        $date_etalon2 = \request('date2');
+        $date1 = Carbon::parse($date_etalon1)->format('Y-m-d');
+        $date2 = Carbon::parse($date_etalon2)->format('Y-m-d');
+
+        $categories = Category::where('user_id', '=', auth()->id() )->get();
+        $types = Type::where('user_id', '=', auth()->id() )->get();
+        //dd($types);
+
+        $events = null;
+        $category_id = \request('category_id');
+        $type_id     = \request('type_id');
+        if (!$vld->fails()){
+            $events = DB::table('users')
+                ->leftJoin('events', 'events.user_id','=', 'users.id')
+                ->leftJoin('types','types.id','=','events.type_id')
+                ->leftJoin('categories','categories.id', '=', 'events.category_id')
+                ->where('users.id','=',auth()->id())
+
+                ->whereBetween('amount', [$amount1, $amount2])
+                ->whereBetween('date', [$date1, $date2])
+                ->whereIn('category_id', $category_id)
+                ->whereIn('events.type_id', $type_id) // [1,2]
+
+                ->select('events.id', 'categories.name as category_name',
+                    'events.date', 'events.description', 'events.amount', 'types.name as type_name', 'types.color')
+                ->orderBy('date','desc')
+                ->get()
+                //->toSql()
+                //->paginate(config('services.events.paginate_number'))
+            ;
+        }
+
+        return view('event.filter', compact('categories', 'types', 'events', 'vld'
+            ,'category_id', 'type_id', 'date_etalon1', 'date_etalon2', 'amount1', 'amount2') );
+    }
+
+    public function validateEvent(){
+        return \request()->validate([
+            'category_id' => ['required','integer','min:1'],
+            'type_id' => ['required','integer','min:1'],
+            'date' => ['required','date'],
+            'amount' => ['integer','min:0'],
+            'description' => ['required','string','min:3','max:1111'],
+        ]);
     }
 }

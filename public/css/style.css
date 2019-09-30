@@ -1131,3 +1131,17 @@ body > nav.navbar{
 	display: inline-block;
 	margin-left: 10px;
 }
+
+.dts-start-end{
+	display: flex;
+	justify-content: space-around;
+}
+
+.amounts-start-end{
+	display: flex;
+}
+
+.filter-controls-do-flex{
+	display: flex;
+	justify-content: space-around;
+}

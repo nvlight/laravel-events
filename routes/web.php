@@ -50,3 +50,5 @@ Route::get('test111', 'TestController@show')->name('tttest.note');
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
 Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+
+Route::get('events-filter', 'EventController@filter')->middleware('verified');

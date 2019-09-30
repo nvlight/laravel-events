@@ -45,7 +45,7 @@
                     <th>Тип</th>
                     <th>Действия</th>
                 </tr>
-                @if($events->count())
+                @if( $events->count())
                     @foreach($events as $event_key => $event)
                         <tr>
                             <td>{{$event->id}}</td>
