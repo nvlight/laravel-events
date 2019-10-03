@@ -57,4 +57,9 @@ return [
         'path2save' => 'ev_documents'
     ],
 
+    'cbr' => [
+        'url_json' => 'https://www.cbr-xml-daily.ru/daily_json.js',
+        'timeout' => 3
+    ]
+
 ];
