@@ -643,13 +643,16 @@ class EventController extends Controller
             ->where(DB::raw('year(events.date)'), '=', $year)
             ->groupBy('sm','tp','mnthnm','mnth','dtr')
             ->orderBy('mnth')->orderBy('tp')
-            ->get();
+            //->toSql()
+            ->get()
+        ;
+        //dd($q_get_years_with_months);
         //echo Debug::d($q_get_years_with_months,'$q_get_years_with_months'); die;
 
         $monthSumms = $this->groupAmountsByMonths($q_get_years_with_months->toArray());
         //echo Debug::d($monthSumms); die;
 
-        $months = $this->getMonthLabels();
+        $months = $this->getMonthLabels(0);
         //echo Debug::d($months); die;
 
         $filledZeroMonths = $this->fillZerroEmptyMonths($monthSumms, $months);
@@ -715,10 +718,10 @@ class EventController extends Controller
     }
 
     // получение названий всех месяцев на инглише
-    public function getMonthLabels($monthOffset=4){
+    public function getMonthLabels($monthOffset=0){
 
         $newArr = [];
-        $time = strtotime("now");
+        $time = strtotime("2017-01-01");
         $dtFormat = "F"; $monthOffset;
         for($i=0;$i<=11;$i++){
             $newMonth = $monthOffset + $i;
@@ -794,13 +797,19 @@ class EventController extends Controller
                 ->whereIn('events.type_id', $type_id) // [1,2]
 
                 ->select('events.id', 'categories.name as category_name',
-                    'events.date', 'events.description', 'events.amount', 'types.name as type_name', 'types.color')
+                    'events.date', 'events.description', 'events.amount',
+                    DB::raw(('(events.amount)')),
+                    'types.name as type_name', 'types.color')
+                //->groupBy('events.id', 'events.amount', 'types.id', 'date')
                 ->orderBy('date','desc')
+                //->getBindings()
                 ->get()
                 //->toSql()
                 //->paginate(config('services.events.paginate_number'))
             ;
         }
+        //dd($events);
+        //echo Debug::d($events); die;
 
         return view('event.filter', compact('categories', 'types', 'events', 'vld'
             ,'category_id', 'type_id', 'date_etalon1', 'date_etalon2', 'amount1', 'amount2') );
