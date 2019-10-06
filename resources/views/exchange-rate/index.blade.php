@@ -6,7 +6,7 @@
 
     @if($gcer !== null)
         <h5>Курс на - {{\Illuminate\Support\Carbon::parse($gcer['Date'])->format('d.m.Y h:m:s')}}</h5>
-
+{{--        <div><span></span>{{\Illuminate\Support\Carbon::parse($gcer['Date'])->diffInDays(now(), false)}}</div>--}}
         @if(array_key_exists('Valute', $gcer))
             <table class="table table-striped table-bordered">
 
