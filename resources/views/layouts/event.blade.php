@@ -200,7 +200,7 @@ $('#go_to_top').fadeOut();
 
 $('#go_to_top').click(function(){
 $("html, body").animate({ scrollTop: 0 }, 0);
-return false;
+    return false;
 });
 
 $('#hellopreloader_preload').delay(150).fadeOut('slow');
@@ -210,13 +210,21 @@ $('.delete-event-by-id').submit(function (el) {
    if (!confirm('Удалить выделенный элемент?')) return false;
 });
 
+$('[class^=amount-computed]').on('keyup', function(e) {
+  let parent_tr = $(this).parent().parent();
+  let value = parent_tr.find('.Value').text();
+  let nominal = parent_tr.find('.Nominal').text();
+  let computed = ( (value * 1) / (nominal * 1) ) * ( $(this).val() * 1);
+  parent_tr.find('.exchange-rate-result').val(computed.toFixed(2));
+  console.log(value + ' : ' + nominal + ' --- ' + computed.toFixed(2));
+});
+
 JS;
     $css = <<<CSS
 body{
     opacity: 1;
 }
 CSS;
-
 
     ?>
     <script>

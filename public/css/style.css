@@ -1145,3 +1145,7 @@ body > nav.navbar{
 	display: flex;
 	justify-content: space-around;
 }
+
+.exchange-rate-computed, .exchange-rate-result{
+	width: 99px;
+}

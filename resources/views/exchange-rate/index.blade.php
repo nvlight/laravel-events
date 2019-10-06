@@ -5,9 +5,7 @@
     <h3>Курсы валют</h3>
 
     @if($gcer !== null)
-        <h5>{{$gcer['Date']}}</h5>
-        <h5>{{$gcer['PreviousDate']}}</h5>
-        <h5>{{$gcer['Timestamp']}}</h5>
+        <h5>Курс на - {{\Illuminate\Support\Carbon::parse($gcer['Date'])->format('d.m.Y h:m:s')}}</h5>
 
         @if(array_key_exists('Valute', $gcer))
             <table class="table table-striped table-bordered">
@@ -19,8 +17,15 @@
                             <tr>
                                 @foreach( array_keys($tmp) as $k => $v )
                                     <?php $columns[] = $v; ?>
-                                    <th>{{$v}}</th>
+                                    @switch($v)
+                                        @case('ID')
+                                            @break
+                                        @default
+                                            <th>{{$v}}</th>
+                                    @endswitch
                                 @endforeach
+                                <th>computed</th>
+                                <th>result</th>
                             </tr>
                         @endif
 
@@ -28,11 +33,33 @@
                     {{-- вывод основных данных --}}
                     @foreach(array_keys($gcer['Valute']) as $k => $v)
                         @if (count($columns))
-                            <tr>
-                                @foreach($columns as $column)
-                                    <td>{{$gcer['Valute'][$v][$column]}}</td>
-                                @endforeach
-                            </tr>
+                            @if(in_array($gcer['Valute'][$v]['NumCode'], config('services.cbr.white_list') ) )
+                                <tr>
+                                    @foreach($columns as $column)
+
+                                        @switch($column)
+                                            @case('ID')
+                                                @break
+                                            @case('Value')
+                                                <td class="Value">{{$gcer['Valute'][$v][$column]}}</td>
+                                                @break
+                                            @case('Nominal')
+                                                <td class="Nominal">{{$gcer['Valute'][$v][$column]}}</td>
+                                            @break
+                                            @default
+                                                <td>{{$gcer['Valute'][$v][$column]}}</td>
+                                        @endswitch
+
+                                    @endforeach
+
+                                    <td>
+                                        <input type="text" class="amount-computed-{{$gcer['Valute'][$v]['ID']}} exchange-rate-computed" value="">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="amount-result-{{$gcer['Valute'][$v]['ID']}} exchange-rate-result" disabled="">
+                                    </td>
+                                </tr>
+                            @endif
                         @endif
                     @endforeach
                 @else
