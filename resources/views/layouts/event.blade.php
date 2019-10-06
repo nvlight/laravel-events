@@ -205,6 +205,11 @@ return false;
 
 $('#hellopreloader_preload').delay(150).fadeOut('slow');
 
+$('.delete-event-by-id').submit(function (el) {
+   console.log('before del element');
+   if (!confirm('Удалить выделенный элемент?')) return false;
+});
+
 JS;
     $css = <<<CSS
 body{

@@ -26,17 +26,20 @@ class EventController extends Controller
 //            ->first();
 
         $events = DB::table('users')
-            ->leftJoin('events', 'events.user_id','=', 'users.id')
-            ->leftJoin('types','types.id','=','events.type_id')
-            ->leftJoin('categories','categories.id', '=', 'events.category_id')
+            ->join('events', 'events.user_id','=', 'users.id')
+            ->join('types','types.id','=','events.type_id')
+            ->join('categories','categories.id', '=', 'events.category_id')
             ->where('users.id','=',auth()->id())
             //->select('users.*','events.*','categories.*','types.*',)
             ->select('events.id', 'categories.name as category_name',
                 'events.date', 'events.description', 'events.amount', 'types.name as type_name', 'types.color')
             ->orderBy('date','desc')
             ->paginate(config('services.events.paginate_number'));
-            //->get();
-
+            //->count();
+            //->toSql()
+            //->get()
+        ;
+        //dd($events);
         // после переделать ^ используя reletions
         //$events = auth()->user()->events()->caregories;
         //$events = auth()->user()->load('events', 'types', 'categories')->toArray();
@@ -604,7 +607,7 @@ class EventController extends Controller
             ->from('events')
             ->whereIn('events.type_id', $type_ids)
             ->where('events.user_id', auth()->id())
-            ->leftJoin('types','types.id','=','events.type_id')
+            ->join('types','types.id','=','events.type_id')
             ->groupBy('tp')
             ->orderBy('tp')
             ->get();
@@ -637,7 +640,7 @@ class EventController extends Controller
                 'types.name as nm',
                 'types.color as cl')
             ->from('events')
-            ->leftJoin('types','types.id','=','events.type_id')
+            ->join('types','types.id','=','events.type_id')
             ->where('events.user_id', '=', auth()->id() )
             ->whereIn('events.type_id',$type_ids)
             ->where(DB::raw('year(events.date)'), '=', $year)
@@ -786,9 +789,9 @@ class EventController extends Controller
         $type_id     = \request('type_id');
         if (!$vld->fails()){
             $events = DB::table('users')
-                ->leftJoin('events', 'events.user_id','=', 'users.id')
-                ->leftJoin('types','types.id','=','events.type_id')
-                ->leftJoin('categories','categories.id', '=', 'events.category_id')
+                ->join('events', 'events.user_id','=', 'users.id')
+                ->join('types','types.id','=','events.type_id')
+                ->join('categories','categories.id', '=', 'events.category_id')
                 ->where('users.id','=',auth()->id())
 
                 ->whereBetween('amount', [$amount1, $amount2])
