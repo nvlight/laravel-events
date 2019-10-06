@@ -139,9 +139,6 @@
 
                 </div>
 
-                <div class="mb-3">
-
-                </div>
 
                 <div class="mb-3 amounts-start-end">
                     <div>
@@ -153,6 +150,12 @@
                         <input class="form-control {{ $errors->has('amount') ? 'border-danger' : '' }}" id="amount2" name="amount2" placeholder="500" value="<?php !$vld->fails() ? $out = $amount2 : $out = 57000; echo $out; ?>" >
                     </div>
                 </div>
+
+                <div class="mb-3">
+                    <label for="description">Описание</label>
+                    <input class="form-control {{ $errors->has('description') ? 'border-danger' : '' }}" id="description" name="description" placeholder="cool!" value="{{$description}}" >
+                </div>
+
 
                 <script>
                     $('#date1').datepicker({

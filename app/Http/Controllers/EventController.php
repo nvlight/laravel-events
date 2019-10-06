@@ -763,12 +763,13 @@ class EventController extends Controller
         $date_regexp2 = "/(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.([12]\d{3})$/"; //
 
         $vld = Validator::make(request()->all(), [
-           'category_id' => ['required','array','min:1'],
-           'type_id' => ['required','array','min:1'],
-           'date1' => ['required', "regex:".$date_regexp2],
-           'date2' => ['required', "regex:".$date_regexp2],
-           'amount1' => ['integer','min:0'],
-           'amount2' => ['integer','min:0'],
+            'category_id' => ['required','array','min:1'],
+            'type_id' => ['required','array','min:1'],
+            'date1' => ['required', "regex:".$date_regexp2],
+            'date2' => ['required', "regex:".$date_regexp2],
+            'amount1' => ['integer','min:0'],
+            'amount2' => ['integer','min:0'],
+            //'description' => ['string','min:3','max:55'],
         ]); //->validate();
         //dd($vld->failed());
         //dd($vld->fails());
@@ -779,6 +780,7 @@ class EventController extends Controller
         $date_etalon2 = \request('date2');
         $date1 = Carbon::parse($date_etalon1)->format('Y-m-d');
         $date2 = Carbon::parse($date_etalon2)->format('Y-m-d');
+        $description = \request('description');
 
         $categories = Category::where('user_id', '=', auth()->id() )->get();
         $types = Type::where('user_id', '=', auth()->id() )->get();
@@ -793,7 +795,14 @@ class EventController extends Controller
                 ->join('types','types.id','=','events.type_id')
                 ->join('categories','categories.id', '=', 'events.category_id')
                 ->where('users.id','=',auth()->id())
+            ;
 
+            $description = preg_replace('/[^a-zа-я\d_-]+/ui','',$description);
+            if (mb_strlen($description) >= 3 ) {
+                $events = $events->where('description','like', '%' . $description . '%');
+            }
+
+            $events = $events
                 ->whereBetween('amount', [$amount1, $amount2])
                 ->whereBetween('date', [$date1, $date2])
                 ->whereIn('category_id', $category_id)
@@ -814,7 +823,7 @@ class EventController extends Controller
         //dd($events);
         //echo Debug::d($events); die;
 
-        return view('event.filter', compact('categories', 'types', 'events', 'vld'
+        return view('event.filter', compact('categories', 'types', 'events', 'vld', 'description'
             ,'category_id', 'type_id', 'date_etalon1', 'date_etalon2', 'amount1', 'amount2') );
     }
 
