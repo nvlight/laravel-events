@@ -37,31 +37,35 @@
 
             <?php
                 //echo \App\Debug::d($_SERVER);
-                $qs = explode('&', $_SERVER['QUERY_STRING']);
-                //echo \App\Debug::d($qs);
-                $sqr = []; $sqr2 = []; $sqr3 = [];
-                if (is_array($qs))
-                    foreach($qs as $k => $v){
-                        $sqr[] = explode('=', $v);
-                    }
-                // процентики в урле, вместо [] для массивов, убираю
-                foreach($sqr as $k => &$v)
-                    $v[0] = urldecode($v[0]);
-                unset($v);
+                if (mb_strpos($_SERVER['QUERY_STRING'], '&') ){
 
-                // делаю массив для категорий и типов
-                foreach($sqr as $k => $v)
-                $sqr2[$v[0]][] = $v[1];
+                    $qs = explode('&', $_SERVER['QUERY_STRING']);
+                    //echo \App\Debug::d($qs); die;
+                    $sqr = []; $sqr2 = []; $sqr3 = [];
+                    if (is_array($qs))
+                        foreach($qs as $k => $v){
+                            $sqr[] = explode('=', $v);
+                        }
 
-                // убираю сам знак массива
-                foreach(array_keys($sqr2) as $v){
-                    if (mb_strpos('[', $v) === false){
-                        $sqr3[str_replace('[]', '', $v)] = $sqr2[$v];
-                    }else{
-                        $sqr3[$v] = $sqr2[$v][0];
+                    // процентики в урле, вместо [] для массивов, убираю
+                    foreach($sqr as $k => &$v)
+                        $v[0] = urldecode($v[0]);
+                    unset($v);
+
+                    // делаю массив для категорий и типов
+                    foreach($sqr as $k => $v)
+                    $sqr2[$v[0]][] = $v[1];
+
+
+                    // убираю сам знак массива
+                    foreach(array_keys($sqr2) as $v){
+                        if (mb_strpos('[', $v) === false){
+                            $sqr3[str_replace('[]', '', $v)] = $sqr2[$v];
+                        }else{
+                            $sqr3[$v] = $sqr2[$v][0];
+                        }
                     }
                 }
-
                 //echo \App\Debug::d($sqr3);
                 //echo \App\Debug::d(\request('category_id'));
             ?>

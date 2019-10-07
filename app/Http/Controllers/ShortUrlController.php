@@ -16,11 +16,19 @@ class ShortUrlController extends Controller
      */
     public function index()
     {
-        $shorturls = ShortUrl::where('user_id', '=', auth()->id() ) //->get();c
-            ->paginate(config('services.shorturl.paginate_number'));
-        //dd($shorturls);
+        $description = preg_replace("/[^a-zа-я\d_-]+/ui", '', \request('description'));
 
-        return view('shorturl.index', compact('shorturls'));
+        $shorturls = ShortUrl::where('description', 'like', '%' . $description . '%')
+            ->where('user_id','=', auth()->id())
+            ->paginate(config('services.shorturl.paginate_number'))
+            //->get()
+        ;
+
+//        $shorturls = ShortUrl::where('user_id', '=', auth()->id() ) //->get();c
+//            ->paginate(config('services.shorturl.paginate_number'));
+//        dd($shorturls);
+
+        return view('shorturl.index', compact('shorturls', 'description'));
     }
 
     /**
