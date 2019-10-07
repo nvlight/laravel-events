@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.8.35 on 2019-09-19 11:08:16.
+ * Generated for Laravel 5.8.35 on 2019-10-06 16:45:42.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -14654,6 +14654,246 @@ namespace Intervention\Image\Facades {
  
 }
 
+namespace RezaAr\Highcharts { 
+
+    /**
+     * 
+     *
+     */ 
+    class Facade {
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function highcart_js($bool = true)
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->highcart_js($bool);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function series_label_js($bool = true)
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->series_label_js($bool);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function exporting_js($bool = true)
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->exporting_js($bool);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function export_data_js($bool = true)
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->export_data_js($bool);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getInitJs()
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->getInitJs();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function container($container = 'container')
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->container($container);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function title($title = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->title($title);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function subtitle($subtitle = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->subtitle($subtitle);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function yaxis($data = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->yaxis($data);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function xaxis($data = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->xaxis($data);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function legend($legend = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->legend($legend);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function plotOptions($plotOptions = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->plotOptions($plotOptions);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function series($series = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->series($series);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function chart($series = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->chart($series);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function colors($series = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->colors($series);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function credits($credits = array())
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->credits($credits);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getTransform()
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->getTransform();
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function tes($tes)
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->tes($tes);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function display()
+        {
+            //Method inherited from \RezaAr\Highcharts\Classes\Presenters\ChartPresenter            
+                        /** @var \RezaAr\Highcharts\Highcharts $instance */
+                        return $instance->display();
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -17449,6 +17689,8 @@ namespace  {
     class View extends \Illuminate\Support\Facades\View {}
 
     class Image extends \Intervention\Image\Facades\Image {}
+
+    class Chart extends \RezaAr\Highcharts\Facade {}
  
 }
 

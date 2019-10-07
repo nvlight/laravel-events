@@ -5,7 +5,7 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2019-09-19 11:08:54.
+    * Generated on 2019-10-06 16:50:11.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
@@ -141,6 +141,7 @@ namespace PHPSTORM_META {
         'queue.worker' => \Illuminate\Queue\Worker::class,
         'redirect' => \Illuminate\Routing\Redirector::class,
         'redis' => \Illuminate\Redis\RedisManager::class,
+        'register-highcharts' => \RezaAr\Highcharts\Highcharts::class,
         'router' => \Illuminate\Routing\Router::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
@@ -285,6 +286,7 @@ namespace PHPSTORM_META {
         'queue.worker' => \Illuminate\Queue\Worker::class,
         'redirect' => \Illuminate\Routing\Redirector::class,
         'redis' => \Illuminate\Redis\RedisManager::class,
+        'register-highcharts' => \RezaAr\Highcharts\Highcharts::class,
         'router' => \Illuminate\Routing\Router::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
@@ -429,6 +431,7 @@ namespace PHPSTORM_META {
         'queue.worker' => \Illuminate\Queue\Worker::class,
         'redirect' => \Illuminate\Routing\Redirector::class,
         'redis' => \Illuminate\Redis\RedisManager::class,
+        'register-highcharts' => \RezaAr\Highcharts\Highcharts::class,
         'router' => \Illuminate\Routing\Router::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
@@ -573,6 +576,7 @@ namespace PHPSTORM_META {
         'queue.worker' => \Illuminate\Queue\Worker::class,
         'redirect' => \Illuminate\Routing\Redirector::class,
         'redis' => \Illuminate\Redis\RedisManager::class,
+        'register-highcharts' => \RezaAr\Highcharts\Highcharts::class,
         'router' => \Illuminate\Routing\Router::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
@@ -717,6 +721,7 @@ namespace PHPSTORM_META {
         'queue.worker' => \Illuminate\Queue\Worker::class,
         'redirect' => \Illuminate\Routing\Redirector::class,
         'redis' => \Illuminate\Redis\RedisManager::class,
+        'register-highcharts' => \RezaAr\Highcharts\Highcharts::class,
         'router' => \Illuminate\Routing\Router::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
@@ -861,6 +866,7 @@ namespace PHPSTORM_META {
         'queue.worker' => \Illuminate\Queue\Worker::class,
         'redirect' => \Illuminate\Routing\Redirector::class,
         'redis' => \Illuminate\Redis\RedisManager::class,
+        'register-highcharts' => \RezaAr\Highcharts\Highcharts::class,
         'router' => \Illuminate\Routing\Router::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
@@ -1005,6 +1011,7 @@ namespace PHPSTORM_META {
         'queue.worker' => \Illuminate\Queue\Worker::class,
         'redirect' => \Illuminate\Routing\Redirector::class,
         'redis' => \Illuminate\Redis\RedisManager::class,
+        'register-highcharts' => \RezaAr\Highcharts\Highcharts::class,
         'router' => \Illuminate\Routing\Router::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,
@@ -1149,6 +1156,7 @@ namespace PHPSTORM_META {
         'queue.worker' => \Illuminate\Queue\Worker::class,
         'redirect' => \Illuminate\Routing\Redirector::class,
         'redis' => \Illuminate\Redis\RedisManager::class,
+        'register-highcharts' => \RezaAr\Highcharts\Highcharts::class,
         'router' => \Illuminate\Routing\Router::class,
         'session' => \Illuminate\Session\SessionManager::class,
         'session.store' => \Illuminate\Session\Store::class,

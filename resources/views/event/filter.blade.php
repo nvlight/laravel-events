@@ -35,7 +35,52 @@
 
             </table>
 
-{{--            {{$events->links()}}--}}
+            <?php
+                //echo \App\Debug::d($_SERVER);
+                $qs = explode('&', $_SERVER['QUERY_STRING']);
+                //echo \App\Debug::d($qs);
+                $sqr = []; $sqr2 = []; $sqr3 = [];
+                if (is_array($qs))
+                    foreach($qs as $k => $v){
+                        $sqr[] = explode('=', $v);
+                    }
+                // процентики в урле, вместо [] для массивов, убираю
+                foreach($sqr as $k => &$v)
+                    $v[0] = urldecode($v[0]);
+                unset($v);
+
+                // делаю массив для категорий и типов
+                foreach($sqr as $k => $v)
+                $sqr2[$v[0]][] = $v[1];
+
+                // убираю сам знак массива
+                foreach(array_keys($sqr2) as $v){
+                    if (mb_strpos('[', $v) === false){
+                        $sqr3[str_replace('[]', '', $v)] = $sqr2[$v];
+                    }else{
+                        $sqr3[$v] = $sqr2[$v][0];
+                    }
+                }
+
+                //echo \App\Debug::d($sqr3);
+                //echo \App\Debug::d(\request('category_id'));
+            ?>
+
+            @if(!is_null($events))
+                <?php
+                //$events->appends(['chich' => ['marin','yeaw'] ]); //$_SERVER['QUERY_STRING']
+                //$events->appends(['chich[]' => 'Ori']); //$_SERVER['QUERY_STRING']
+                //$events->fragment($_SERVER['QUERY_STRING']);
+                ?>
+                @foreach(array_keys($sqr3) as $v)
+                    @if(count($sqr3[$v]) == 1)
+                        <?php $events->appends([$v => $sqr3[$v][0] ]); ?>
+                    @else
+                        <?php $events->appends([$v => $sqr3[$v]]); ?>
+                    @endif
+                @endforeach
+                {{$events->links()}}
+            @endif
         </div>
 
         <div class="col-md-3">
@@ -47,7 +92,7 @@
                     <div>
                         <label for="category_id">Категория</label>
                         <select class="form-control" name="category_id[]" id="category_id" multiple="multiple">
-                            <option value="0" >Не выбрано</option>
+                            <option value="0" >Выбрать все</option>
                             @if($categories->count())
 
                                 @if(!$vld->fails())
@@ -55,7 +100,7 @@
 
                                         <?php $f = false; ?>
                                         @foreach($category_id as $ctg)
-                                            @if( $category->id == $ctg )
+                                            @if( $category->id == $ctg->id )
                                                 <?php $f = true; ?>
                                             @endif
                                         @endforeach
@@ -88,7 +133,7 @@
                 <div class="mb-3">
                     <label for="type_id">Тип</label>
                     <select class="form-control" name="type_id[]" id="type_id" multiple>
-                        <option value="0" >Не выбрано</option>
+                        <option value="0" >Выбрать все</option>
                         @if($types->count())
 
                             @if(!$vld->fails())
@@ -97,7 +142,7 @@
 
                                     <?php $f = false; ?>
                                     @foreach($type_id as $tp)
-                                        @if( $type->id == $tp )
+                                        @if( $type->id == $tp->id )
                                             <?php $f = true; ?>
                                         @endif
                                     @endforeach

@@ -782,13 +782,44 @@ class EventController extends Controller
         $date2 = Carbon::parse($date_etalon2)->format('Y-m-d');
         $description = \request('description');
 
+        $category_id = \request('category_id') ? \request('category_id') : [];
+        $type_id     = \request('type_id') ? \request('type_id') : [];
+        //echo Debug::d($category_id);
+        //echo Debug::d($type_id);
+        //dd($type_id);
+
         $categories = Category::where('user_id', '=', auth()->id() )->get();
         $types = Type::where('user_id', '=', auth()->id() )->get();
         //dd($types);
 
+        $category_id = Category::where('user_id', '=', auth()->id() )
+            ->whereIn('id', $category_id)
+            ->get();
+        $type_id = Type::where('user_id', '=', auth()->id() )
+            ->whereIn('id', $type_id)
+            ->get();
+        //echo Debug::d($category_id);
+        //echo Debug::d($type_id);
+        //die;
+
+        // добавление проверки, если для категорий или типов есть ключ 0, то нужно выбрать всех для них
+        if (in_array(0, ( \request('category_id') ?: [] ) )){
+            $category_id = $categories;
+        }
+        if (in_array(0, ( \request('type_id') ?: [] ) )){
+            $type_id = $types;
+        }
+
         $events = null;
-        $category_id = \request('category_id');
-        $type_id     = \request('type_id');
+
+        if (is_array($category_id) && in_array(0, $category_id) ){
+            $category_id = $categories->toArray();
+        }
+        if (is_array($type_id) && in_array(0, $type_id)  ){
+            $type_id = $types->toArray();
+        }
+        //dd($category_id);
+
         if (!$vld->fails()){
             $events = DB::table('users')
                 ->join('events', 'events.user_id','=', 'users.id')
@@ -805,8 +836,8 @@ class EventController extends Controller
             $events = $events
                 ->whereBetween('amount', [$amount1, $amount2])
                 ->whereBetween('date', [$date1, $date2])
-                ->whereIn('category_id', $category_id)
-                ->whereIn('events.type_id', $type_id) // [1,2]
+                ->whereIn('category_id', \request('category_id') )
+                ->whereIn('events.type_id', \request('type_id') ) // [1,2]
 
                 ->select('events.id', 'categories.name as category_name',
                     'events.date', 'events.description', 'events.amount',
@@ -815,9 +846,9 @@ class EventController extends Controller
                 //->groupBy('events.id', 'events.amount', 'types.id', 'date')
                 ->orderBy('date','desc')
                 //->getBindings()
-                ->get()
+                //->get()
                 //->toSql()
-                //->paginate(config('services.events.paginate_number'))
+                ->paginate(config('services.events.paginate_number'))
             ;
         }
         //dd($events);
