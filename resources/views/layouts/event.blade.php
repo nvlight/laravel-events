@@ -205,7 +205,7 @@ $("html, body").animate({ scrollTop: 0 }, 0);
 
 $('#hellopreloader_preload').delay(150).fadeOut('slow');
 
-$('.delete-event-by-id').submit(function (el) {
+$('.delete-event-by-id, .shorturl-delete-button').submit(function (el) {
    console.log('before del element');
    if (!confirm('Удалить выделенный элемент?')) return false;
 });

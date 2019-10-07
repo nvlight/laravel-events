@@ -20,6 +20,7 @@ class ShortUrlController extends Controller
 
         $shorturls = ShortUrl::where('description', 'like', '%' . $description . '%')
             ->where('user_id','=', auth()->id())
+            ->orderBy('id','desc')
             ->paginate(config('services.shorturl.paginate_number'))
             //->get()
         ;

@@ -53,8 +53,8 @@
             <form action="/shorturl" method="GET">
 
                 <div class="mb-3">
-                    <label for="description">Описание</label>
-                    <input class="form-control {{ $errors->has('name') ? 'border-danger' : '' }}" id="description" name="description" placeholder="Описание самой крутой ссылки, ага!" value="{{$description}}" >
+                    <label for="description2">Описание</label>
+                    <input class="form-control {{ $errors->has('name') ? 'border-danger' : '' }}" id="description2" name="description" placeholder="Описание самой крутой ссылки, ага!" value="{{$description}}" >
                 </div>
 
                 @include('errors')
