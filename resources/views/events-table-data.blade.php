@@ -5,7 +5,7 @@
             <td>{{$event->category_name}}</td>
             <td><?php echo strip_tags($event->description); ?></td>
             <td>{{$event->amount}}</td>
-            <td>{{$event->date}}</td>
+            <td class="mg-date-nowrap">{{$event->date}}</td>
             <td>
                 <button class="btn" style="background-color: #{{$event->color}}; color: #ffffff;">
                     {{$event->type_name}}

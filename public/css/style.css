@@ -1149,3 +1149,7 @@ body > nav.navbar{
 .exchange-rate-computed, .exchange-rate-result{
 	width: 99px;
 }
+
+.mg-date-nowrap{
+	white-space: nowrap;
+}

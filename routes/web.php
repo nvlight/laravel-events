@@ -23,7 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::resource('category', 'CategoryController')->middleware('verified');
 Route::resource('type', 'TypeController')->middleware('verified');

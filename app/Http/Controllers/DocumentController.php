@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Document;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Debug;
 use Illuminate\Support\Facades\Storage;
+use Validator;
 
 
 class DocumentController extends Controller
@@ -17,10 +19,23 @@ class DocumentController extends Controller
      */
     public function index()
     {
-        $documents = Document::where('user_id','=',auth()->id() )->get();
+        $filename = \request('filename');
+        $docVld = Validator::make(request()->all(), [
+            'filename' => ['string','regex:/^[a-zа-я\d_-]{3,55}$/ui'], //'min:3','max:55',
+        ]);
+        //dd($docVld->errors());
+        if ($docVld->fails()){
+            $documents = new Collection();
+        }else{
+            $search_string = '%' . $filename . '%';
+            $documents = Document::where('user_id','=',auth()->id() )
+                ->where('filename', 'like', $search_string)
+                ->get();
+        }
+
         //dd($documents);
 
-        return view('document.index', compact('documents'));
+        return view('document.index', compact('documents', 'filename', 'docVld'));
     }
 
     /**

@@ -228,7 +228,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <a href="/events-filter" class="btn btn-primary">Сбросить</a>
+                        <a href="/event-filter" class="btn btn-primary">Сбросить</a>
                     </div>
                 </div>
 

@@ -15,7 +15,28 @@
                     {{--                    <label for="uploadFile">Example file input</label>--}}
                     <input type="file" class="form-control-file" name="uploadFile">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Загрузить</button>
+            </form>
+        </div>
+
+        <div class="col-sm-6">
+            <form class="form" action="{{ URL::to('/document') }}" method="GET" enctype="multipart/form-data" >
+                <div class="form-group">
+                    <label for="filename1">Имя файла</label>
+                    <input type="text" class="form-control" id="filename1" name="filename" placeholder="поиск самого интересного файла!" value="{{$filename}}">
+                </div>
+                @if ($docVld->fails())
+                    <?php //dd($docVld->errors()->all()); ?>
+                    <ul class="notification text-danger text-center">
+                        @foreach ($docVld->errors()->all() as $error)
+                            <li>
+                                {{ $error }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
+                <button type="submit" class="btn btn-primary">Искать</button>
+                <a href="/document" class="btn btn-danger">Сброс</a>
             </form>
         </div>
     </div>
@@ -42,7 +63,7 @@
                             </button>
                         </form>
 
-                        <form action="/document/{{$document->id}}" method="POST" style="">
+                        <form action="/document/{{$document->id}}" class="mg-document-delete"  method="POST" style="">
                             @csrf
                             @method('DELETE')
                             <button class="mg-btn-1" type="submit" title="удалить">
