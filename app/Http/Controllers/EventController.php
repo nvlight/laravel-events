@@ -783,6 +783,7 @@ class EventController extends Controller
         $date2 = Carbon::parse($date_etalon2)->format('Y-m-d');
         $description = \request('description');
 
+        //echo Debug::d($_REQUEST);
         $category_id = \request('category_id') ? \request('category_id') : [];
         $type_id     = \request('type_id') ? \request('type_id') : [];
         //echo Debug::d($category_id);
@@ -793,34 +794,38 @@ class EventController extends Controller
         $types = Type::where('user_id', '=', auth()->id() )->get();
         //dd($types);
 
-        $category_id = Category::where('user_id', '=', auth()->id() )
-            ->whereIn('id', $category_id)
-            ->get();
-        $type_id = Type::where('user_id', '=', auth()->id() )
-            ->whereIn('id', $type_id)
-            ->get();
-        //echo Debug::d($category_id);
-        //echo Debug::d($type_id);
+        $category_id_tmp = [];
+        if (in_array(0, $category_id) ){
+            $category_id = $categories;
+            foreach($category_id as $value) $category_id_tmp[] = $value->id;
+        }else {
+            $category_id = Category::where('user_id', '=', auth()->id())
+                ->whereIn('id', $category_id)
+                ->get()
+            ;
+            foreach($category_id as $value) $category_id_tmp[] = $value->id;
+        }
+        //echo Debug::d($category_id); die;
+
+        $type_id_tmp = [];
+        if (in_array(0, $type_id)  ){
+            $type_id = $types;
+
+            foreach($type_id as $value) $type_id_tmp[] = $value->id;
+        }else {
+            $type_id = Type::where('user_id', '=', auth()->id())
+                ->whereIn('id', $type_id)
+                ->get()
+            ;
+            foreach($type_id as $value) $type_id_tmp[] = $value->id;
+        }
+//        echo Debug::d($category_id);
+//        echo Debug::d($type_id);
+//        echo Debug::d($category_id_tmp);
+//        echo Debug::d($type_id_tmp);
         //die;
 
-        // добавление проверки, если для категорий или типов есть ключ 0, то нужно выбрать всех для них
-        if (in_array(0, ( \request('category_id') ?: [] ) )){
-            $category_id = $categories;
-        }
-        if (in_array(0, ( \request('type_id') ?: [] ) )){
-            $type_id = $types;
-        }
-
-        $events = null;
-
-        if (is_array($category_id) && in_array(0, $category_id) ){
-            $category_id = $categories->toArray();
-        }
-        if (is_array($type_id) && in_array(0, $type_id)  ){
-            $type_id = $types->toArray();
-        }
-        //dd($category_id);
-
+        $events = null; $events_count = 0;
         if (!$vld->fails()){
             $events = DB::table('users')
                 ->join('events', 'events.user_id','=', 'users.id')
@@ -837,26 +842,30 @@ class EventController extends Controller
             $events = $events
                 ->whereBetween('amount', [$amount1, $amount2])
                 ->whereBetween('date', [$date1, $date2])
-                ->whereIn('category_id', \request('category_id') )
-                ->whereIn('events.type_id', \request('type_id') ) // [1,2]
+                ->whereIn('category_id', $category_id_tmp )
+                ->whereIn('events.type_id', $type_id_tmp ) // [1,2]
 
                 ->select('events.id', 'categories.name as category_name',
                     'events.date', 'events.description', 'events.amount',
                     DB::raw(('(events.amount)')),
                     'types.name as type_name', 'types.color')
                 //->groupBy('events.id', 'events.amount', 'types.id', 'date')
-                ->orderBy('date','desc')
+                ->orderBy('date','desc');
+
+            $events_count = $events->count();
+
+            $events = $events
                 //->getBindings()
                 //->get()
                 //->toSql()
                 ->paginate(config('services.events.paginate_number'))
             ;
         }
-        //dd($events);
+        //dd(count($events));
         //echo Debug::d($events); die;
 
         return view('event.filter', compact('categories', 'types', 'events', 'vld', 'description'
-            ,'category_id', 'type_id', 'date_etalon1', 'date_etalon2', 'amount1', 'amount2') );
+            ,'category_id', 'type_id', 'date_etalon1', 'date_etalon2', 'amount1', 'amount2', 'events_count') );
     }
 
     public function validateEvent(){

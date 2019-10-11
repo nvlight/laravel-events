@@ -20,6 +20,9 @@
 
         <div class="col-md-9">
             <h3>Результаты поиска</h3>
+            @if(($events_count))
+                <p>Найдено записей: {{($events_count)}}</p>
+            @endif
             <table class="table table-bordered table-striped table-cover">
                 <tr>
                     <th>№</th>
@@ -56,7 +59,6 @@
                     foreach($sqr as $k => $v)
                     $sqr2[$v[0]][] = $v[1];
 
-
                     // убираю сам знак массива
                     foreach(array_keys($sqr2) as $v){
                         if (mb_strpos('[', $v) === false){
@@ -75,12 +77,15 @@
                 //$events->appends(['chich' => ['marin','yeaw'] ]); //$_SERVER['QUERY_STRING']
                 //$events->appends(['chich[]' => 'Ori']); //$_SERVER['QUERY_STRING']
                 //$events->fragment($_SERVER['QUERY_STRING']);
+                //echo \App\Debug::d(array_keys($sqr3));
+                $needed_array_keys = ['category_id', 'type_id'];
                 ?>
                 @foreach(array_keys($sqr3) as $v)
-                    @if(count($sqr3[$v]) == 1)
-                        <?php $events->appends([$v => $sqr3[$v][0] ]); ?>
+                    @if(in_array($v, $needed_array_keys))
+                        <?php $events->appends([$v.'[]' => $sqr3[$v][0]]); ?>
                     @else
-                        <?php $events->appends([$v => $sqr3[$v]]); ?>
+                        <?php $events->appends([$v => $sqr3[$v][0] ]); ?>
+
                     @endif
                 @endforeach
                 {{$events->links()}}
