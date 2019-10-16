@@ -1069,6 +1069,7 @@ body > nav.navbar{
 	color: #EFFCFF;
 	fill: currentColor;
 	height: 23px;
+	width: 28px;
 }
 
 .mg-event-add-a{
@@ -1152,4 +1153,17 @@ body > nav.navbar{
 
 .mg-date-nowrap{
 	white-space: nowrap;
+}
+
+.mg-span-fz11{
+	font-size: 19px;
+	color: #ec6dde;
+}
+
+.question_controls .need_controls{
+
+}
+
+#question_type_1 .badge{
+	cursor: pointer;
 }

@@ -17,7 +17,7 @@ class ShortUrlController extends Controller
     public function index()
     {
         $description = preg_replace("/[^a-zа-я\d_-]+/ui", '', \request('description'));
-
+        
         $shorturls = ShortUrl::where('description', 'like', '%' . $description . '%')
             ->where('user_id','=', auth()->id())
             ->orderBy('id','desc')

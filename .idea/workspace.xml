@@ -2,7 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7252fe2-b9a3-40c3-800a-06b98a10aaab" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/views/simpletestsystem/test/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/7b337b93-6fb5-4ec4-99a8-860a1ad8f732.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/7b337b93-6fb5-4ec4-99a8-860a1ad8f732.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ShortUrlController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ShortUrlController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/CategoryController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/CategoryController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/cbr-xml-daily.json_decoded" beforeDir="false" afterPath="$PROJECT_DIR$/public/cbr-xml-daily.json_decoded" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/event.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/event.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,13 +55,6 @@
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="laravel_events: schema" type="76f4a085:MysqlImplModel$Schema" />
       </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="laravel_events@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="laravel_events: schema" type="76f4a085:MysqlImplModel$Schema" />
-        <item name="events: table" type="285a2a93:MysqlImplModel$Table" />
-      </path>
     </expand>
     <select />
   </component>
@@ -58,44 +63,59 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="54" column="11" selection-start-line="54" selection-start-column="11" selection-end-line="54" selection-end-column="11" />
+            <state relative-caret-position="533">
+              <caret line="58" column="48" selection-start-line="58" selection-start-column="48" selection-end-line="58" selection-end-column="48" />
+              <folding>
+                <element signature="e#407#589#1#PHP" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_195242_create_prepared_qsts_table.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_195650_create_shedules_table.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="20" column="44" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="44" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_200147_create_answered_qsts_table.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="20" column="35" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+            <state relative-caret-position="373">
+              <caret line="93" column="61" lean-forward="true" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="61" />
+              <folding>
+                <element signature="e#57#102#0#PHP" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_200627_create_results_table.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+            <state relative-caret-position="302">
+              <caret line="70" column="31" selection-start-line="70" selection-start-column="31" selection-end-line="70" selection-end-column="31" />
+              <folding>
+                <element signature="e#57#71#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/test/index.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="233">
+              <caret line="78" column="85" lean-forward="true" selection-start-line="78" selection-start-column="12" selection-end-line="78" selection-end-column="85" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="540">
+              <caret line="207" column="51" selection-start-line="207" selection-start-column="51" selection-end-line="207" selection-end-column="51" />
+              <folding>
+                <element signature="e#2011#2787#0#HTML" />
+                <element signature="e#2080#2767#0#HTML" />
+                <element signature="e#3633#3673#0#HTML" />
+                <element signature="e#5185#5466#0#HTML" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -103,8 +123,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/css/style.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="613">
-              <caret line="1153" column="24" selection-start-line="1153" selection-start-column="24" selection-end-line="1153" selection-end-column="24" />
+            <state relative-caret-position="573">
+              <caret line="1166" column="17" selection-start-line="1166" selection-start-column="17" selection-end-line="1166" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/questions">
+          <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+            <state projectRestartId="9cb50831-50c6-49b2-8e37-dd9e54e7fbdd">
+              <filtering>
+                <filter text="" />
+              </filtering>
             </state>
           </provider>
         </entry>
@@ -113,14 +144,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>regex</find>
-      <find>@err</find>
-      <find>error</find>
-      <find>createFromDate</find>
-      <find>Carbon</find>
-      <find>config</find>
-      <find>$monthOffset</find>
-      <find>getMonthLabels</find>
       <find>getQueryRs</find>
       <find>groupby</find>
       <find>raw</find>
@@ -143,16 +166,24 @@
       <find>$vld</find>
       <find>regexp</find>
       <find>category_id</find>
+      <find>main-menu-svg</find>
+      <find>список</find>
+      <find>question_type_1</find>
+      <find>replace</find>
+      <find>question_type</find>
+      <find>add_question</find>
+      <find>$errors[]</find>
+      <find>$question</find>
     </findStrings>
     <replaceStrings>
       <replace>join</replace>
       <replace>Выбрать все</replace>
     </replaceStrings>
     <dirStrings>
-      <dir>C:\OpenServer\domains\laravel_events\vendor</dir>
       <dir>C:\OpenServer\domains\laravel_events\resources\views\auth\passwords</dir>
       <dir>C:\OpenServer\domains\laravel_events\app</dir>
       <dir>C:\OpenServer\domains\laravel_events</dir>
+      <dir>C:\OpenServer\domains\laravel_events\vendor</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -161,13 +192,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Policies/ShortUrlPolicy.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/_DocumentController.php" />
-        <option value="$PROJECT_DIR$/app/Document.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_09_24_172138_create_documents_table.php" />
-        <option value="$PROJECT_DIR$/resources/views/youtube/index.blade.php" />
-        <option value="$PROJECT_DIR$/resources/views/auth/tttest/note.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/TestController.php" />
         <option value="$PROJECT_DIR$/resources/views/auth/notice.blade.php" />
         <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/config/session.php" />
@@ -183,14 +207,10 @@
         <option value="$PROJECT_DIR$/resources/views/event/index.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/shorturl/filter.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/shorturl-table-data.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/ShortUrlController.php" />
         <option value="$PROJECT_DIR$/resources/views/shorturl/index.blade.php" />
-        <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php" />
         <option value="$PROJECT_DIR$/resources/views/events-table-data.blade.php" />
-        <option value="$PROJECT_DIR$/public/css/style.css" />
         <option value="$PROJECT_DIR$/config/services.php" />
-        <option value="$PROJECT_DIR$/resources/views/layouts/event.blade.php" />
         <option value="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" />
         <option value="$PROJECT_DIR$/resources/views/document/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/DocumentController.php" />
@@ -199,7 +219,6 @@
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_161248_create_table_test.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_163435_create_test_table.php" />
         <option value="$PROJECT_DIR$/app/Models/SimpleTestSystem/Test.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_165352_create_tests_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_170623_create_tests_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_172339_create_test_categories_table.php" />
@@ -212,6 +231,18 @@
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_195650_create_shedules_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_200147_create_answered_qsts_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_200627_create_results_table.php" />
+        <option value="$PROJECT_DIR$/resources/views/simpletestsystem/index.blade.php" />
+        <option value="$PROJECT_DIR$/resources/views/layouts/event.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/ShortUrlController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/CategoryController.php" />
+        <option value="$PROJECT_DIR$/routes/web.php" />
+        <option value="$PROJECT_DIR$/resources/views/simpletestsystem/test/index.blade.php" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
+        <option value="$PROJECT_DIR$/public/css/style.css" />
+        <option value="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" />
       </list>
     </option>
   </component>
@@ -339,6 +370,77 @@
               <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
               <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="Http" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="Http" type="462c0819:PsiDirectoryNode" />
+              <item name="Controllers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="Http" type="462c0819:PsiDirectoryNode" />
+              <item name="Controllers" type="462c0819:PsiDirectoryNode" />
+              <item name="SimpleTestSystem" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="simpletestsystem" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="simpletestsystem" type="462c0819:PsiDirectoryNode" />
+              <item name="question" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="views" type="462c0819:PsiDirectoryNode" />
+              <item name="simpletestsystem" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -350,7 +452,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="database.console.LAST_STATE" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../laravel-master-class" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -358,13 +460,14 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\OpenServer\domains\laravel_events\resources\views\simpletestsystem" />
       <recent name="C:\OpenServer\domains\laravel_events\resources\views\shorturl" />
       <recent name="C:\OpenServer\domains\laravel_events\resources\views" />
       <recent name="C:\OpenServer\domains\laravel_events\resources\views\event" />
       <recent name="C:\OpenServer\domains\laravel_events\public" />
-      <recent name="C:\OpenServer\domains\laravel_events\config" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\OpenServer\domains\laravel_events\resources\views\simpletestsystem\question" />
       <recent name="C:\OpenServer\domains\laravel_events\app\Models" />
       <recent name="C:\OpenServer\domains\laravel_events\resources\views\shorturl" />
       <recent name="C:\OpenServer\domains\laravel_events\public\img" />
@@ -407,11 +510,15 @@
       <workItem from="1570554000701" duration="532000" />
       <workItem from="1570642294623" duration="707000" />
       <workItem from="1570802391444" duration="18409000" />
+      <workItem from="1570980960180" duration="15692000" />
+      <workItem from="1571156041886" duration="53000" />
+      <workItem from="1571156104725" duration="6617000" />
+      <workItem from="1571204304795" duration="30175000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="249332000" />
+    <option name="totallyTimeSpent" value="301869000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -424,10 +531,11 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="834" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info id="npm" order="1" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.13108882" />
+      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.12535816" />
       <window_info id="Structure" order="3" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.2981455" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" weight="0.32952926" />
@@ -442,7 +550,7 @@
       <window_info anchor="bottom" id="Inspection" order="10" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="11" weight="0.32952926" />
       <window_info anchor="bottom" id="Database Console" order="12" weight="0.32952926" />
-      <window_info anchor="right" id="Database" order="0" weight="0.13610315" />
+      <window_info active="true" anchor="right" id="Database" order="0" visible="true" weight="0.15114613" />
       <window_info anchor="right" id="Remote Host" order="1" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
@@ -453,188 +561,8 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/config/ide-helper.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="27" column="29" lean-forward="true" selection-start-line="27" selection-start-column="29" selection-end-line="27" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Contracts/Pagination/Paginator.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="21" column="20" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/app.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/app.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="212" column="57" lean-forward="true" selection-start-line="212" selection-start-column="57" selection-end-line="212" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/111.php" />
-    <entry file="file://$PROJECT_DIR$/resources/views/shorturl/_filter.blade.php" />
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ShortUrlController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/shorturl/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="393">
-          <caret line="57" column="22" selection-start-line="57" selection-start-column="16" selection-end-line="57" selection-end-column="22" />
-          <folding>
-            <element signature="e#675#1733#0#HTML" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="27" column="35" selection-start-line="27" selection-start-column="35" selection-end-line="27" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="26" column="26" lean-forward="true" selection-start-line="26" selection-start-column="10" selection-end-line="26" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/layouts/event.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="679">
-          <caret line="222" column="17" lean-forward="true" selection-start-line="222" selection-start-column="17" selection-end-line="222" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/event/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="59">
-          <caret line="26" column="108" selection-start-line="26" selection-start-column="108" selection-end-line="26" selection-end-column="108" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/shorturl-table-data.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="20" column="88" selection-start-line="20" selection-start-column="88" selection-end-line="20" selection-end-column="88" />
-          <folding>
-            <element signature="e#0#1757#0#Blade" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/cbr-xml-daily.json_decoded">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="251" column="27" selection-start-line="251" selection-start-column="24" selection-end-line="251" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/services.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="63" column="52" selection-start-line="63" selection-start-column="52" selection-end-line="63" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config/auth.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="433">
-          <caret line="98" column="27" lean-forward="true" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" column="39" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ExchangeRateController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="22" column="29" lean-forward="true" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-          <folding>
-            <element signature="e#40#68#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CategoryController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="820">
-          <caret line="42" column="45" selection-start-line="42" selection-start-column="29" selection-end-line="42" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/events-table-data.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-221">
-          <caret line="7" column="37" selection-start-line="7" selection-start-column="23" selection-end-line="7" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/errors.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="8" column="6" lean-forward="true" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="855" column="47" selection-start-line="855" selection-start-column="40" selection-end-line="855" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_161248_create_table_test.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="15" selection-start-line="15" selection-end-line="21" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/SimpleTestSystem/Test.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_163435_create_test_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="15" selection-start-line="15" selection-end-line="21" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_165352_create_tests_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="21" column="11" lean-forward="true" selection-start-line="15" selection-start-column="7" selection-end-line="21" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_163435_create_test_table.php" />
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_165352_create_tests_table.php" />
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_09_24_172138_create_documents_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
@@ -642,44 +570,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_170623_create_tests_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="17" column="12" selection-start-line="17" selection-start-column="12" selection-end-line="19" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_170623_create_tests_table.php" />
     <entry file="file://$PROJECT_DIR$/resources/views/event/filter.blade.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="79" column="18" selection-start-line="79" selection-start-column="18" selection-end-line="79" selection-end-column="18" />
           <folding>
             <element signature="e#62#92#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="613">
-          <caret line="1153" column="24" selection-start-line="1153" selection-start-column="24" selection-end-line="1153" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/EventController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="836" column="40" lean-forward="true" selection-start-line="836" selection-start-column="40" selection-end-line="836" selection-end-column="40" />
-          <folding>
-            <element signature="e#40#57#0#PHP" expanded="true" />
-            <element signature="e#4743#4979#0#PHP" />
-            <element signature="e#4992#20207#0#PHP" />
-            <element signature="e#20213#21740#0#PHP" />
-            <element signature="e#21753#24400#0#PHP" />
-            <element signature="e#24523#25764#0#PHP" />
-            <element signature="e#25863#26142#0#PHP" />
-            <element signature="e#26198#26543#0#PHP" />
-            <element signature="e#26605#27324#0#PHP" />
           </folding>
         </state>
       </provider>
@@ -708,13 +605,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/CategoryController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-853">
-          <caret line="13" column="30" selection-start-line="13" selection-start-column="30" selection-end-line="13" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_172339_create_test_categories_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
@@ -722,20 +612,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" column="1" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_181825_create_question_type_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" column="11" lean-forward="true" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_181825_create_question_type_table.php" />
     <entry file="file://$PROJECT_DIR$/app/Models/SimpleTestSystem/QuestionType.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -785,16 +662,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="54" column="11" selection-start-line="54" selection-start-column="11" selection-end-line="54" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_195242_create_prepared_qsts_table.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
+        <state relative-caret-position="253">
           <caret line="23" column="33" selection-start-line="23" selection-start-column="33" selection-end-line="23" selection-end-column="33" />
         </state>
       </provider>
@@ -815,8 +685,260 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_200627_create_results_table.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+        <state relative-caret-position="220">
+          <caret line="13" column="24" lean-forward="true" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/app.blade.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Contracts/Auth/Guard.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="500">
+          <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-615">
+          <caret line="158" column="13" selection-start-line="158" selection-start-column="13" selection-end-line="158" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/User.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="80" column="42" lean-forward="true" selection-start-line="80" selection-start-column="42" selection-end-line="80" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/TypeController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-180">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/EventController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4542">
+          <caret line="836" column="40" lean-forward="true" selection-start-line="836" selection-start-column="40" selection-end-line="836" selection-end-column="40" />
+          <folding>
+            <element signature="e#40#57#0#PHP" expanded="true" />
+            <element signature="e#4743#4979#0#PHP" />
+            <element signature="e#4992#20207#0#PHP" />
+            <element signature="e#20213#21740#0#PHP" />
+            <element signature="e#21753#24400#0#PHP" />
+            <element signature="e#24523#25764#0#PHP" />
+            <element signature="e#25863#26142#0#PHP" />
+            <element signature="e#26198#26543#0#PHP" />
+            <element signature="e#26605#27324#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/CategoryController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="17" column="25" lean-forward="true" selection-start-line="17" selection-start-column="25" selection-end-line="17" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/test_categories">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="4cbf7eb3-8349-414c-9809-bd577318172f">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/layouts/event.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="173" column="34" lean-forward="true" selection-start-line="173" selection-start-column="34" selection-end-line="173" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/shorturl-table-data.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="11" selection-start-line="11" selection-end-line="28" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/shorturl/edit.blade.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/ShortUrlController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2160">
+          <caret line="110" column="65" selection-start-line="110" selection-start-column="8" selection-end-line="110" selection-end-column="65" />
+          <folding>
+            <element signature="e#40#57#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/shorturl/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1540">
+          <caret line="77" column="81" selection-start-line="77" selection-start-column="12" selection-end-line="77" selection-end-column="81" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/LoginController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/ResetPasswordController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="27" column="30" selection-start-line="27" selection-start-column="30" selection-end-line="27" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/ForgotPasswordController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/VerificationController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="35" column="5" lean-forward="true" selection-start-line="35" selection-start-column="5" selection-end-line="35" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/tests">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="01f65369-cdf5-48fe-b114-b76169eecd23">
+          <filtering>
+            <filter text="" />
+          </filtering>
+          <column-attributes>
+            <column name="author_ids" languageId="JSON" position="4" />
+          </column-attributes>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/answered_qsts">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="01f65369-cdf5-48fe-b114-b76169eecd23">
+          <filtering>
+            <filter text="" />
+          </filtering>
+          <column-attributes>
+            <column name="answer" languageId="JSON" position="5" />
+          </column-attributes>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/CategoryController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="22" column="21" lean-forward="true" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
+          <folding>
+            <element signature="e#57#98#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/description_types">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="9cb50831-50c6-49b2-8e37-dd9e54e7fbdd">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/question_types">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="9cb50831-50c6-49b2-8e37-dd9e54e7fbdd">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="573">
+          <caret line="1166" column="17" selection-start-line="1166" selection-start-column="17" selection-end-line="1166" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="533">
+          <caret line="58" column="48" selection-start-line="58" selection-start-column="48" selection-end-line="58" selection-end-column="48" />
+          <folding>
+            <element signature="e#407#589#1#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="93" column="61" lean-forward="true" selection-start-line="93" selection-start-column="8" selection-end-line="93" selection-end-column="61" />
+          <folding>
+            <element signature="e#57#102#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/test/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="78" column="85" lean-forward="true" selection-start-line="78" selection-start-column="12" selection-end-line="78" selection-end-column="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="207" column="51" selection-start-line="207" selection-start-column="51" selection-end-line="207" selection-end-column="51" />
+          <folding>
+            <element signature="e#2011#2787#0#HTML" />
+            <element signature="e#2080#2767#0#HTML" />
+            <element signature="e#3633#3673#0#HTML" />
+            <element signature="e#5185#5466#0#HTML" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/questions">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="9cb50831-50c6-49b2-8e37-dd9e54e7fbdd">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="302">
+          <caret line="70" column="31" selection-start-line="70" selection-start-column="31" selection-end-line="70" selection-end-column="31" />
+          <folding>
+            <element signature="e#57#71#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

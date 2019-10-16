@@ -53,3 +53,7 @@ Route::get('email/resend', 'Auth\VerificationController@resend')->name('verifica
 
 Route::get('event-filter', 'EventController@filter')->middleware('verified');
 Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified');
+
+Route::resource('simple-test-system', 'SimpleTestSystem\CategoryController')->middleware('verified');
+Route::resource('simple-test-system-test', 'SimpleTestSystem\TestController')->middleware('verified');
+Route::resource('simple-test-system-question', 'SimpleTestSystem\QuestionController')->middleware('verified');

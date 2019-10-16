@@ -75,6 +75,13 @@
                 'svg' => '<svg height="32" width="28" class="octicon octicon-code __SVG_REPLACE_CLASS__" viewBox="0 0 14 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M9.5 3L8 4.5 11.5 8 8 11.5 9.5 13 14 8 9.5 3zm-5 0L0 8l4.5 5L6 11.5 2.5 8 6 4.5 4.5 3z"></path></svg>'
             ],
 
+            [
+                'url' => 'simple-test-system',
+                'title' => 'SimpleTestSystem',
+                'svg_class_1' => $mainMenuSVGclass1,
+                'svg' => '<svg height="32" width="28" class="octicon octicon-mortar-board __SVG_REPLACE_CLASS__" viewBox="0 0 14 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M8.11 2.8a.34.34 0 0 0-.2 0L.27 5.18a.35.35 0 0 0 0 .67L2 6.4v1.77c-.3.17-.5.5-.5.86 0 .19.05.36.14.5-.08.14-.14.31-.14.5v2.58c0 .55 2 .55 2 0v-2.58c0-.19-.05-.36-.14-.5.08-.14.14-.31.14-.5 0-.38-.2-.69-.5-.86V6.72l4.89 1.53c.06.02.14.02.2 0l7.64-2.38a.35.35 0 0 0 0-.67L8.1 2.81l.01-.01zM4 8l3.83 1.19h-.02c.13.03.25.03.36 0L12 8v2.5c0 1-1.8 1.5-4 1.5s-4-.5-4-1.5V8zm3.02-2.5c0 .28.45.5 1 .5s1-.22 1-.5-.45-.5-1-.5-1 .22-1 .5z"></path></svg>'
+            ],
+
         ];
         foreach($mainMenuData as &$menu)
             if (array_key_exists('svg_class_1', $menu))

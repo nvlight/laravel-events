@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SimpleTestSystem;
 
+use App\Models\SimpleTestSystem\TestCategory;
 use App\Models\SimpleTestSystem\Test;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -36,7 +37,14 @@ class TestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $attributes = $this->validateAddTest();
+
+        $test = new Test();
+        $test->parent_id = $attributes['parent_id'];
+        $test->name = $attributes['name'];
+        $test->save();
+
+        return back();
     }
 
     /**
@@ -45,7 +53,7 @@ class TestController extends Controller
      * @param  \App\Models\SimpleTestSystem\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function show(Test $test)
+    public function show(TestCategory $test)
     {
         //
     }
@@ -56,7 +64,7 @@ class TestController extends Controller
      * @param  \App\Models\SimpleTestSystem\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function edit(Test $test)
+    public function edit(TestCategory $test)
     {
         //
     }
@@ -68,7 +76,7 @@ class TestController extends Controller
      * @param  \App\Models\SimpleTestSystem\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Test $test)
+    public function update(Request $request, TestCategory $test)
     {
         //
     }
@@ -79,8 +87,19 @@ class TestController extends Controller
      * @param  \App\Models\SimpleTestSystem\Test  $test
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Test $test)
+    public function destroy(Test $simple_test_system_test)
     {
-        //
+        //return $simple_test_system_test;
+        $simple_test_system_test->delete();
+        session()->flash('test_deleted', 'Тест (ТЗ) удален');
+        return back();
+    }
+
+    //
+    public function validateAddTest(){
+        return \request()->validate([
+            'parent_id' => 'required|int|min:1',
+            'name' => 'required|string|min:3',
+        ]);
     }
 }

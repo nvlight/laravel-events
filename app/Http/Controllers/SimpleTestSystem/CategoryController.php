@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\SimpleTestSystem;
 
+use App\Models\SimpleTestSystem\Question;
+use App\Models\SimpleTestSystem\QuestionType;
+use App\Models\SimpleTestSystem\Test;
 use App\Models\SimpleTestSystem\TestCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,6 +19,16 @@ class CategoryController extends Controller
     public function index()
     {
         //
+        $question_types = QuestionType::all();
+        //dd($question_types);
+        $categories = TestCategory::where('id','>=',0)->orderby('id','asc')->get();
+        $tests = Test::where('id','>=',0)
+            ->orderBy('id','desc')
+            ->get();
+        //dd($categories->toArray());
+        //dd($tests);
+
+        return view('simpletestsystem.test.index', compact('categories', 'tests','question_types'));
     }
 
     /**
@@ -37,6 +50,15 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
+        $attributes = $this->validateAddTestCategory();
+
+        $testCategory = new TestCategory();
+        $testCategory->parent_id = $attributes['parent_id'];
+        $testCategory->name = $attributes['name'];
+        $testCategory->save();
+        session()->flash('testcategory_created', 'Категория создана');
+
+        return back();
     }
 
     /**
@@ -79,8 +101,18 @@ class CategoryController extends Controller
      * @param  \App\Models\SimpleTestSystem\TestCategory  $testCategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(TestCategory $testCategory)
+    public function destroy(TestCategory $simple_test_system)
     {
-        //
+        //return $simple_test_system;
+        $simple_test_system->delete();
+        session()->flash('testcategory_deleted', 'Категория удалена');
+        return back();
+    }
+
+    public function validateAddTestCategory(){
+        return \request()->validate([
+            'parent_id' => 'required|int|min:0',
+            'name' => 'required|string|min:3',
+        ]);
     }
 }
