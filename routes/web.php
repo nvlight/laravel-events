@@ -59,3 +59,4 @@ Route::resource('simple-test-system-test', 'SimpleTestSystem\TestController')->m
 Route::resource('simple-test-system-question', 'SimpleTestSystem\QuestionController')->middleware('verified');
 
 Route::post('simple-test-system-question-theme/{question}', 'SimpleTestSystem\QuestionController@add_theme')->middleware('verified');
+Route::post('sts-add-question', 'SimpleTestSystem\QuestionController@store2')->middleware('verified');

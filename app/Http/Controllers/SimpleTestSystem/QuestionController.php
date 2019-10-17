@@ -227,6 +227,197 @@ class QuestionController extends Controller
         return back();
     }
 
+    //
+    public function store2(Request $request){
+
+        //dd($request->all());
+        $question_type = intval($request['question_type']);
+        $question_theme_id = $request['question_theme_id'] ?? 0;
+        //dd($question_theme_id);
+
+        switch ($question_type){
+            case 1:
+                //question_type	"1"
+                //question_description	"questin1 ?"
+                //answer1	"a1"
+                //hidden_answer_1	"1"
+                //answer2	"a2"
+                //hidden_answer_2	"0"
+                //answer3	"a3"
+                //hidden_answer_3	"0"
+                //answer4	"a4"
+                //hidden_answer_4	"0"
+                $question = [];
+                $errors = [];
+
+                // now need to now, question number in table, then get number + 1
+                $number = 0;
+                try {
+                    $rs = \DB::table('questions')
+                        ->select(\DB::raw('MAX(number) as number'))
+                        //->groupBy('number')
+                        ->get();
+                    //dd($rs);
+                    $number = $rs->first()->number;
+                    $number++;
+                    //dd($number);
+
+                }catch (\Exception $e){
+                    $errors[] = $e->getCode() . $e->getMessage();
+                }
+                if (count($errors)){
+                    session()->flash('add_question_error', implode(' ', $errors));
+                    break;
+                }
+
+                $question_tmp = [
+                    'parent_id' => intval($request['parent_id']),
+                    'number' => $number,
+                    'type' => intval($request['question_type']),
+                    'theme_id' => $question_theme_id,
+                ];
+
+                //dd($request->all());
+                // description is empty?
+                $validator = Validator::make($request->all(), [
+                    'question_description' => 'min:3',
+                ]);
+                if ($validator->fails()){
+                    $errors[] = 'Description is empty';
+                }
+                if (count($errors)){
+                    session()->flash('add_question_error', implode(' ', $errors));
+                    break;
+                }
+
+                $question_main = $question_tmp;
+                $question_main['description'] = $request['question_description'];
+                $question_main['description_type'] = 1;
+
+                $question[] = $question_main;
+
+                $input = $request->all();
+                //echo Debug::d($input); //die;
+                $answered = []; $i = 0;
+                foreach($input as $k => $v){
+                    //echo $k . ' : ' . $v;
+                    if (preg_match("/^answer(\d)$/ui",$k,$rs1)){
+
+                        //$answered[$v] = $input['hidden_answer_' . $rs1[1]];
+
+                        $pattern = "/^hidden_answer_(".$rs1[1].")$/ui";
+                        foreach($input as $kk => $vv) {
+
+                            //echo Debug::d($pattern);
+                            if (preg_match($pattern, $kk, $rs2)) {
+                                //echo Debug::d($rs2);
+
+                                $answered[$v] = $input['hidden_answer_' . $rs2[1]];
+
+                                $tmp_answer = $question_tmp;
+                                $tmp_answer['description'] = $v;
+                                $tmp_answer['description_type'] = intval($input['hidden_answer_' . $rs2[1]]);
+
+                                $question[] = $tmp_answer;
+
+                                $i++;
+
+                                if ($i == 4) {
+                                    //echo Debug::d($v);
+                                    //echo Debug::d($input['hidden_answer_' . $rs2[1]]);
+                                    //die;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // проверки теперь
+                // проверка на существование вопроса и min:3
+                // есть ли хотя бы 1 правильный и неправильный ответ
+
+                $one_true_answer = false; $one_false_answer = false;
+
+                // are we have one true and false answer?
+                foreach($question as $k => $v){
+                    if ($v['description_type'] === 2) {
+                        $one_true_answer = true;
+                    }
+                    if ($v['description_type'] === 3) {
+                        $one_false_answer = true;
+                    }
+                }
+                if (!$one_true_answer){
+                    $errors[] = 'No one true answer';
+                }
+                if (!$one_false_answer){
+                    $errors[] = 'No one false answer';
+                }
+                if (count($errors)){
+                    session()->flash('add_question_error', implode(' ', $errors));
+                    break;
+                }
+
+                // is one of answers empty?
+                foreach($question as $k => $v)
+                    if ($v['description_type'] == 2 || $v['description_type'] == 3)
+                    {
+                        $validator = Validator::make($v, [
+                            'description' => 'min:1',
+                        ]);
+                        if ($validator->fails()){
+                            $errors[] = 'One of answers is empty';
+                            break;
+                        }
+                    }
+                if (count($errors)){
+                    session()->flash('add_question_error', implode(' ', $errors));
+                    break;
+                }
+
+                //echo Debug::d($question); die;
+
+                // well ! we need add questions data!
+                try {
+                    \DB::transaction(function () use($question) {
+
+                        foreach($question as $qk => $qv){
+                            $question = new Question();
+                            $question->parent_id = $qv['parent_id'];
+                            $question->type = $qv['type'];
+                            $question->number = $qv['number'];
+                            $question->description = $qv['description'];
+                            $question->description_type = $qv['description_type'];
+                            $question->theme_id = $qv['theme_id'];
+                            $question->save();
+                        }
+
+                    });
+                }catch (\Exception $e){
+                    $errors[] = $e->getCode() . ' | ' . $e->getMessage();
+                }
+
+                //echo Debug::d($errors); die;
+
+                if (count($errors)){
+                    session()->flash('add_question_error', implode(' ', $errors));
+                    break;
+                }
+
+                session()->flash('add_question_success', 'Вопрос добавлен, ага!');
+                break;
+            default:
+                session()->flash('add_question_error', 'Что-то пошло не так!');
+        }
+
+        $rs = ['success' => 1, 'message' => 'done!'];
+        if (count($errors)){
+            $rs = ['success' => 0, 'message' => 'Bad way!', 'errors' => implode('; ', $errors)];
+        }
+
+        return response()->json($rs);
+    }
+
     /**
      * Display the specified resource.
      *
@@ -330,4 +521,5 @@ class QuestionController extends Controller
 
         return back();
     }
+
 }

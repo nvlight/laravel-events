@@ -48,7 +48,7 @@
 
             </div>
 
-            <h5 class="text-success"><?=session()->get('add_question_success')?></h5>
+            <h5 class="text-success add_question_success_ajax"><?=session()->get('add_question_success')?></h5>
             <h5 class="text-success"><?=session()->get('add_question_error')?></h5>
 
             <div class="mb-3 forms_for_qst_types">
@@ -94,6 +94,10 @@
                     @include('errors')
 
                     <div class="mb-3">
+                        <h5 class="text-danger add_question_error_ajax"></h5>
+                    </div>
+
+                    <div class="mb-3">
                         <button class="btn btn-success ">Добавить вопрос</button>
                     </div>
                 </form>
@@ -107,6 +111,7 @@
                     //console.log('select switched: '+qst_type);
                     $('.forms_for_qst_types form').addClass('d-none');
                     $("#question_type_1 input[name=question_type]").val(qst_type);
+                    $('.add_question_success_ajax').html('');
                     switch (qst_type) {
                         case 1:
                             $('#question_type_1').removeClass('d-none');
@@ -212,10 +217,27 @@
                     $('input[name=hidden_answer_'+tr_id+']').val('3');
                 });
 
-                //
-                function change_answer_state(e, th){
+                $('#question_type_1').submit(function (e) {
 
-                }
+                    e.preventDefault();
+
+                    $.ajax({
+                        type:'POST',
+                        url:'/sts-add-question',
+                        data: $(this).serialize(),
+                        success:function(data){
+                            //console.log(data.message);
+                            if (data.success === 1){
+                                //$(this).submit();
+                                location.reload();
+                            } else {
+                                $('.add_question_error_ajax').html(data.errors);
+                                return false;
+                            }
+                        }
+                    });
+
+                });
 
             </script>
 
