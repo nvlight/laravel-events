@@ -57,3 +57,5 @@ Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified
 Route::resource('simple-test-system', 'SimpleTestSystem\CategoryController')->middleware('verified');
 Route::resource('simple-test-system-test', 'SimpleTestSystem\TestController')->middleware('verified');
 Route::resource('simple-test-system-question', 'SimpleTestSystem\QuestionController')->middleware('verified');
+
+Route::post('simple-test-system-question-theme/{question}', 'SimpleTestSystem\QuestionController@add_theme')->middleware('verified');

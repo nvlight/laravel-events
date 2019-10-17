@@ -41,8 +41,10 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->all());
         $question_type = intval($request['question_type']);
-        //dd($question_type);
+        $question_theme_id = $request['question_theme_id'] ?? 0;
+        //dd($question_theme_id);
 
         switch ($question_type){
             case 1:
@@ -83,6 +85,7 @@ class QuestionController extends Controller
                     'parent_id' => intval($request['parent_id']),
                     'number' => $number,
                     'type' => intval($request['question_type']),
+                    'theme_id' => $question_theme_id,
                 ];
 
                 //dd($request->all());
@@ -196,6 +199,7 @@ class QuestionController extends Controller
                             $question->number = $qv['number'];
                             $question->description = $qv['description'];
                             $question->description_type = $qv['description_type'];
+                            $question->theme_id = $qv['theme_id'];
                             $question->save();
                         }
 
@@ -235,6 +239,8 @@ class QuestionController extends Controller
         $test_curr = $simple_test_system_question;
         $question_types = QuestionType::all();
         $tests = Test::all();
+        $themes = Question::where('description_type', '=', 7)->get();
+        //dd($themes);
 
         //echo Debug::d($test_curr->parent_id);
         //die;
@@ -243,7 +249,7 @@ class QuestionController extends Controller
         //return $simple_test_system_question;
 
         return view('simpletestsystem.question.index',
-            compact('question_types', 'test_curr', 'tests', 'questions')
+            compact('question_types', 'test_curr', 'tests', 'questions', 'themes')
         );
     }
 
@@ -279,5 +285,49 @@ class QuestionController extends Controller
     public function destroy(Question $question)
     {
         //
+    }
+
+    //
+    public function add_theme(Test $question, Request $request){
+        //return $question;
+
+        //echo Debug::d($question->parent_id);
+        $errors = [];
+
+        $question1 = new Question();
+        $question1->parent_id = $question->id;
+
+        $question1->type = 0;
+
+        // надо сначала найти максимальный number и +1 от него
+        $number = 0;
+        try {
+            $rs = \DB::table('questions')
+                ->select(\DB::raw('MAX(number) as number'))
+                //->groupBy('number')
+                ->get();
+            //dd($rs);
+            $number = $rs->first()->number;
+            $number++;
+            //dd($number);
+
+        }catch (\Exception $e){
+            $errors[] = $e->getCode() . $e->getMessage();
+        }
+        //dd($number);
+        $question1->number = $number;
+
+        $question1->description = $request['theme'];
+
+        $question1->description_type = 7; // type for theme
+
+        $question1->theme_id = 0;
+
+        //dd($question1);
+        $question1->save();
+
+        session()->flash('add_question_theme', 'Тема добавлена!');
+
+        return back();
     }
 }

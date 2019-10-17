@@ -5,8 +5,35 @@
     <h3 class="mb-3">Банк тестового задания - <span class="mg-span-fz11">{{$test_curr->name}} ({{$test_curr->id}}) </span></h3>
 
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-5">
+            <h5>Добавление темы </h5>
+
+            <form action="/simple-test-system-question-theme/{{$test_curr->id}}" method="POST" id="question_theme" class="mb-3">
+                @csrf
+                <label for="question_theme_add">Добавление темы к вопросу</label>
+                <input type="text" name="theme" class="form-control" placeholder="theeeme" id="question_theme_add">
+
+
+                <h5 class="text-success mt-3"><?=session()->get('add_question_theme')?></h5>
+
+                <div class="mt-3">
+                    <button class="btn btn-success">Добавить тему</button>
+                </div>
+            </form>
+
             <h5>Добавление вопроса</h5>
+
+            <div class="mb-3">
+                <label for="question_theme_select">Тема вопроса</label>
+                <select class="form-control" name="parent_id" id="question_theme_select">
+                    <option value="0">Тема не выбрана</option>
+                    @if($themes->count())
+                        @foreach($themes as $theme)
+                            <option value="{{$theme->id}}">{{$theme->description}}</option>
+                        @endforeach
+                    @endif
+                </select>
+            </div>
 
             <div class="mb-3">
                 <label for="qtype_select_id">Тип вопроса</label>
@@ -18,6 +45,7 @@
                         @endforeach
                     @endif
                 </select>
+
             </div>
 
             <h5 class="text-success"><?=session()->get('add_question_success')?></h5>
@@ -29,6 +57,7 @@
 
                     <input type="hidden" name="parent_id" value="{{$test_curr->id}}">
                     <input type="hidden" name="question_type" value="0">
+                    <input type="hidden" name="question_theme_id" value="0">
 
                     <div class="mb-3">
                         <label for="question_type_1_qstnum_1">Описание вопроса</label>
@@ -92,6 +121,13 @@
                             break;
                         default:
                     }
+                });
+
+                $('#question_theme_select').on('change', function (e) {
+                    let theme_id = $(this).val();
+                    theme_id *= 1;
+                    console.log('theme_id: '+theme_id);
+                    $('#question_type_1 input[name=question_theme_id]').val(theme_id);
                 });
 
                 //
@@ -187,29 +223,42 @@
 
 
 
-        <div class="col-sm-6">
+        <div class="col-sm-7">
             <h5>Список вопросов</h5>
 
-            @if($questions->count())
-                <table class="table table-bordered table-striped">
-                    <tr>
-                        <th>#</th>
-                        <th>qst_type</th>
-                        <th>description</th>
-                        <th>desc_type</th>
-                        <th>number</th>
-                    </tr>
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>id</th>
+                    <th>nm</th>
+                    <th>thm</th>
+                    <th>qt</th>
+                    <th>description</th>
+                    <th>dt</th>
+                </tr>
+                @if($questions->count())
                     @foreach($questions as $question)
                         <tr>
+                            <td>{{$question->id}}</td>
                             <td>{{$question->number}}</td>
+                            <td>{{$question->theme_id}}</td>
                             <td>{{$question->type}}</td>
-                            <td>{{$question->description}}</td>
+                            @if($question->description_type == 1)
+                                <td><strong>{{$question->description}}</strong></td>
+                            @else
+                                <td>{{$question->description}}</td>
+                            @endif
+
                             <td>{{$question->description_type}}</td>
-                            <td>{{$question->number}}</td>
                         </tr>
                     @endforeach
-                </table>
-            @endif
+                @else
+                    <tr>
+                        <td>Список вопросов пуст</td>
+                    </tr>
+                @endif
+            </table>
+
+
 
         </div>
 
