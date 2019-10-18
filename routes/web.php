@@ -58,5 +58,5 @@ Route::resource('simple-test-system', 'SimpleTestSystem\CategoryController')->mi
 Route::resource('simple-test-system-test', 'SimpleTestSystem\TestController')->middleware('verified');
 Route::resource('simple-test-system-question', 'SimpleTestSystem\QuestionController')->middleware('verified');
 
-Route::post('simple-test-system-question-theme/{question}', 'SimpleTestSystem\QuestionController@add_theme')->middleware('verified');
-Route::post('sts-add-question', 'SimpleTestSystem\QuestionController@store2')->middleware('verified');
+Route::post('simple-test-system-question-theme/{question}', 'SimpleTestSystem\QuestionController@store_theme')->middleware('verified');
+Route::post('sts-add-question', 'SimpleTestSystem\QuestionController@store')->middleware('verified');

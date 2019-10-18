@@ -39,7 +39,7 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store2(Request $request)
     {
         //dd($request->all());
         $question_type = intval($request['question_type']);
@@ -228,10 +228,48 @@ class QuestionController extends Controller
     }
 
     //
-    public function store2(Request $request){
+    public function storeReal($question){
 
-        //dd($request->all());
-        $question_type = intval($request['question_type']);
+        try {
+            \DB::transaction(function () use($question) {
+
+                foreach($question as $qk => $qv){
+                    $question = new Question();
+                    $question->parent_id = $qv['parent_id'];
+                    $question->type = $qv['type'];
+                    $question->number = $qv['number'];
+                    $question->description = $qv['description'];
+                    $question->description_type = $qv['description_type'];
+                    $question->theme_id = $qv['theme_id'];
+                    $question->save();
+                }
+            });
+        }catch (\Exception $e){
+            $errors[] = $e->getCode() . ' | ' . $e->getMessage();
+        }
+        //echo Debug::d($errors); die;
+
+//        if (count($errors)){
+//            session()->flash('add_question_error', implode(' ', $errors));
+//        }
+//        session()->flash('add_question_success', 'Вопрос добавлен!');
+
+        $result = ['success' => 1, 'errors' => $errors];
+        if (count($errors))
+            $result = ['success' => 0, 'errors' => $errors];
+
+        return $result;
+
+    }
+
+    /**
+     * @param $question_type
+     * @param $request
+     * @return array
+     * @throws \Throwable
+     */
+    public function validateQuestion($question_type, $request){
+
         $question_theme_id = $request['question_theme_id'] ?? 0;
         //dd($question_theme_id);
 
@@ -376,43 +414,31 @@ class QuestionController extends Controller
                 }
 
                 //echo Debug::d($question); die;
+                $storeResult = $this->storeReal($question);
 
-                // well ! we need add questions data!
-                try {
-                    \DB::transaction(function () use($question) {
-
-                        foreach($question as $qk => $qv){
-                            $question = new Question();
-                            $question->parent_id = $qv['parent_id'];
-                            $question->type = $qv['type'];
-                            $question->number = $qv['number'];
-                            $question->description = $qv['description'];
-                            $question->description_type = $qv['description_type'];
-                            $question->theme_id = $qv['theme_id'];
-                            $question->save();
-                        }
-
-                    });
-                }catch (\Exception $e){
-                    $errors[] = $e->getCode() . ' | ' . $e->getMessage();
-                }
-
-                //echo Debug::d($errors); die;
-
-                if (count($errors)){
-                    session()->flash('add_question_error', implode(' ', $errors));
-                    break;
-                }
-
-                session()->flash('add_question_success', 'Вопрос добавлен, ага!');
                 break;
             default:
                 session()->flash('add_question_error', 'Что-то пошло не так!');
         }
 
+        $result = ['errors' => '', 'success' => 1];
+        if (count($errors))
+            $result = ['errors' => $errors, 'success' => 0];
+
+        return $result;
+    }
+
+    //
+    public function store(Request $request){
+
+        //dd($request->all());
+        $question_type = intval($request['question_type']);
+
+        $res = $this->validateQuestion($question_type, $request);
+
         $rs = ['success' => 1, 'message' => 'done!'];
-        if (count($errors)){
-            $rs = ['success' => 0, 'message' => 'Bad way!', 'errors' => implode('; ', $errors)];
+        if (count($res['errors'])){
+            $rs = ['success' => 0, 'message' => 'Bad way!', 'errors' => implode('; ', $res['errors'])];
         }
 
         return response()->json($rs);
@@ -479,19 +505,10 @@ class QuestionController extends Controller
     }
 
     //
-    public function add_theme(Test $question, Request $request){
-        //return $question;
-
-        //echo Debug::d($question->parent_id);
-        $errors = [];
-
-        $question1 = new Question();
-        $question1->parent_id = $question->id;
-
-        $question1->type = 0;
+    public function getLastInsertNumber(){
 
         // надо сначала найти максимальный number и +1 от него
-        $number = 0;
+        $number = 0; $errors = [];
         try {
             $rs = \DB::table('questions')
                 ->select(\DB::raw('MAX(number) as number'))
@@ -501,23 +518,79 @@ class QuestionController extends Controller
             $number = $rs->first()->number;
             $number++;
             //dd($number);
-
         }catch (\Exception $e){
             $errors[] = $e->getCode() . $e->getMessage();
         }
         //dd($number);
-        $question1->number = $number;
 
+        $result = ['success' => 1, 'number' => $number];
+        if (count($errors))
+            $result = ['success' => 0, 'errors' => $errors ];
+
+        return $result;
+    }
+
+    //
+    public function store_theme_real($question, $request){
+
+        //echo Debug::d($question->parent_id);
+        $errors = [];
+
+        $question1 = new Question();
+
+        $question1->parent_id = $question->id;
+        $question1->type = 0;
+
+        $getLastInsertNumber = $this->getLastInsertNumber();
+
+        if ($getLastInsertNumber['success'] === 0)
+            return ['success' => 0, 'message' => $getLastInsertNumber['message']];
+
+        $question1->number = $getLastInsertNumber['number'];
         $question1->description = $request['theme'];
-
         $question1->description_type = 7; // type for theme
-
         $question1->theme_id = 0;
-
         //dd($question1);
-        $question1->save();
 
-        session()->flash('add_question_theme', 'Тема добавлена!');
+        try{
+            $question1->save();
+        }catch (\Exception $e){
+            $errors[] = $e->getCode() . ' | ' . $e->getMessage();
+        }
+
+        $result = ['success' => 1];
+        if (count($errors))
+            $result = ['success' => 0, 'errors' => $errors];
+
+        return $result;
+    }
+
+    //
+    public function store_theme(Test $question, Request $request){
+        //return $question;
+
+        $validator = Validator::make($request->all(), [
+            'theme' => 'min:2',
+        ]);
+        $errors = [];
+        if ($validator->fails()){
+            $errors[] = 'Введите название темы!';
+        }
+        if (count($errors)){
+            $validateTheme = ['success' => 0, 'message' =>  $errors[0]];
+            session()->flash('add_question_theme', $validateTheme);
+            return back();
+        }
+
+        $storeTheme = $this->store_theme_real($question, $request);
+
+        if ( $storeTheme['success'] !== 1 ){
+            $validateTheme = ['success' => 0, 'message' => 'Ошибка при добавлении темы!']; // . implode('|', $storeTheme['errors'])
+            session()->flash('add_question_theme', $validateTheme);
+        }else{
+            $validateTheme = ['success' => 1, 'message' => 'Тема добавлена!'];
+            session()->flash('add_question_theme', $validateTheme);
+        }
 
         return back();
     }

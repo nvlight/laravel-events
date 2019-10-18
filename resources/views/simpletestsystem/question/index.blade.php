@@ -13,8 +13,14 @@
                 <label for="question_theme_add">Добавление темы к вопросу</label>
                 <input type="text" name="theme" class="form-control" placeholder="theeeme" id="question_theme_add">
 
-
-                <h5 class="text-success mt-3"><?=session()->get('add_question_theme')?></h5>
+                @if(session()->has('add_question_theme'))
+                    @if(session()->get('add_question_theme')['success'] === 1)
+                        <?php $add_question_theme_className = 'text-success'; ?>
+                    @else
+                        <?php $add_question_theme_className = 'text-danger'; ?>
+                    @endif
+                        <h5 class="{{$add_question_theme_className}} mt-3"><?=session()->get('add_question_theme')['message']?></h5>
+                @endif
 
                 <div class="mt-3">
                     <button class="btn btn-success">Добавить тему</button>
