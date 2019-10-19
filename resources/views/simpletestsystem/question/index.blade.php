@@ -123,6 +123,7 @@
                             $('#question_type_1').removeClass('d-none');
                             break;
                         case 2:
+                            $('#question_type_1').removeClass('d-none');
                             break;
                         case 3:
                             break;
