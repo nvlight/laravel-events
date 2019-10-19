@@ -380,7 +380,7 @@ class QuestionController extends Controller
         $question1->number = $getLastInsertNumber['number'];
         $question1->description = $request['theme'];
         $question1->description_type = 7; // type for theme
-        $question1->theme_id = 0;
+        $question1->theme_id = intval($request['theme_parent']);
         //dd($question1);
 
         try{
@@ -402,13 +402,14 @@ class QuestionController extends Controller
 
         $validator = Validator::make($request->all(), [
             'theme' => 'min:2',
+            'theme_parent' => 'int|min:0',
         ]);
         $errors = [];
         if ($validator->fails()){
-            $errors[] = 'Введите название темы!';
+            $errors[] = $validator->errors();
         }
         if (count($errors)){
-            $validateTheme = ['success' => 0, 'message' =>  $errors[0]];
+            $validateTheme = ['success' => 0, 'message' => $errors[0]];
             session()->flash('add_question_theme', $validateTheme);
             return back();
         }

@@ -10,17 +10,41 @@
 
             <form action="/simple-test-system-question-theme/{{$test_curr->id}}" method="POST" id="question_theme" class="mb-3">
                 @csrf
-                <label for="question_theme_add">Добавление темы к вопросу</label>
-                <input type="text" name="theme" class="form-control" placeholder="theeeme" id="question_theme_add">
 
-                @if(session()->has('add_question_theme'))
-                    @if(session()->get('add_question_theme')['success'] === 1)
-                        <?php $add_question_theme_className = 'text-success'; ?>
-                    @else
-                        <?php $add_question_theme_className = 'text-danger'; ?>
+                <div class="mb-3">
+                    <label for="question_theme_add">Название темы</label>
+                    <input type="text" name="theme" class="form-control" placeholder="theeeme" id="question_theme_add">
+                </div>
+
+                <div class="mb-3">
+                <label for="question_theme_parent">Родительская тема</label>
+                    <select name="theme_parent" id="question_theme_parent" class="form-control">
+                        <option value="0">Не выбрана</option>
+                        @if($themes->count())
+                            @foreach($themes as $theme)
+                                <option value="{{$theme->id}}">{{$theme->description}}</option>
+                            @endforeach
+                        @endif
+                    </select>
+                </div>
+
+                <div class="theme_add_message">
+                    @if(session()->has('add_question_theme'))
+                        @if(session()->get('add_question_theme')['success'] === 1)
+                            <?php $add_question_theme_className = 'text-success'; ?>
+                            <h5 class="{{$add_question_theme_className}}">Тема добавлена!</h5>
+                        @else
+                            <?php $add_question_theme_className = 'text-danger'; ?>
+                            <?php //dd(session()->get('add_question_theme')['message']->getMessages()); ?>
+                            @foreach(session()->get('add_question_theme')['message']->getMessages() as $key => $value)
+                                <p class="{{$add_question_theme_className}}">
+                                    {{$key}} - {{$value[0]}}
+                                </p>
+                            @endforeach
+                        @endif
+
                     @endif
-                        <h5 class="{{$add_question_theme_className}} mt-3"><?=session()->get('add_question_theme')['message']?></h5>
-                @endif
+                </div>
 
                 <div class="mt-3">
                     <button class="btn btn-success">Добавить тему</button>
