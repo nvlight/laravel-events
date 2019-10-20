@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7252fe2-b9a3-40c3-800a-06b98a10aaab" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" afterDir="false" />
     </list>
@@ -53,8 +52,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="60" column="108" selection-start-line="60" selection-start-column="97" selection-end-line="60" selection-end-column="108" />
+            <state relative-caret-position="473">
+              <caret line="58" column="44" selection-start-line="58" selection-start-column="17" selection-end-line="58" selection-end-column="44" />
               <folding>
                 <element signature="e#407#589#1#PHP" />
               </folding>
@@ -62,17 +61,25 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="454">
-              <caret line="376" column="15" selection-start-line="376" selection-start-column="15" selection-end-line="376" selection-end-column="15" />
+            <state relative-caret-position="313">
+              <caret line="266" lean-forward="true" selection-start-line="266" selection-end-line="266" />
               <folding>
                 <element signature="e#57#71#0#PHP" expanded="true" />
-                <element signature="e#8012#9004#0#PHP" />
                 <element signature="e#9144#14375#0#PHP" />
                 <element signature="e#9366#9385#0#PHP" />
+                <element signature="e#10534#11466#0#PHP" />
+                <element signature="e#11639#12671#0#PHP" />
+                <element signature="e#18405#18468#0#PHP" />
+                <element signature="e#17569#17791#0#PHP" />
+                <element signature="e#13158#13241#0#PHP" />
+                <element signature="e#13331#13402#0#PHP" />
+                <element signature="e#13852#15602#0#PHP" />
                 <element signature="e#19048#19783#0#PHP" />
+                <element signature="e#19796#20779#0#PHP" />
+                <element signature="e#13625#14694#0#PHP" />
               </folding>
             </state>
           </provider>
@@ -81,8 +88,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20">
-              <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+            <state relative-caret-position="29">
+              <caret line="19" column="5" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
               <folding>
                 <element signature="e#57#102#0#PHP" expanded="true" />
               </folding>
@@ -93,17 +100,27 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/test/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="129" column="81" selection-start-line="129" selection-start-column="81" selection-end-line="129" selection-end-column="81" />
+            <state relative-caret-position="238">
+              <caret line="201" column="108" selection-start-line="201" selection-start-column="108" selection-end-line="201" selection-end-column="108" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="34" column="89" selection-start-line="34" selection-start-column="89" selection-end-line="34" selection-end-column="89" />
+            <state relative-caret-position="238">
+              <caret line="318" column="48" selection-start-line="318" selection-start-column="48" selection-end-line="318" selection-end-column="48" />
+              <folding>
+                <element signature="e#281#1279#0#HTML" />
+                <element signature="e#1334#1871#0#HTML" />
+                <element signature="e#1885#2489#0#HTML" />
+                <element signature="e#2700#4983#0#HTML" />
+                <element signature="e#12298#12303#0#PHP" />
+                <element signature="e#12258#13394#0#HTML" />
+                <element signature="e#14266#15406#0#HTML" />
+                <element signature="e#15424#16782#0#HTML" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -141,23 +158,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>events-f</find>
-      <find>where</find>
-      <find>грив</find>
-      <find>filename</find>
-      <find>valida</find>
-      <find>validateCategory</find>
-      <find>Validator</find>
-      <find>$vld</find>
-      <find>regexp</find>
-      <find>category_id</find>
-      <find>main-menu-svg</find>
-      <find>список</find>
-      <find>replace</find>
-      <find>question_type</find>
-      <find>$errors[]</find>
-      <find>$question</find>
-      <find>parent_id</find>
       <find>question_type_1</find>
       <find>add_question</find>
       <find>errors</find>
@@ -171,6 +171,23 @@
       <find>store_theme</find>
       <find>add_question_theme</find>
       <find>dd</find>
+      <find>whereIn</find>
+      <find>CreateTree</find>
+      <find>creaT</find>
+      <find>creaTeTree</find>
+      <find>createTree</find>
+      <find>child_question_count</find>
+      <find>delete_</find>
+      <find>simple-test-system-question</find>
+      <find>question</find>
+      <find>flash</find>
+      <find>DB</find>
+      <find>transaction</find>
+      <find>add_question_success</find>
+      <find>text-danger add_question_error_ajax</find>
+      <find>add_question_error_ajax</find>
+      <find>beginTransaction</find>
+      <find>reload</find>
     </findStrings>
     <replaceStrings>
       <replace>join</replace>
@@ -178,9 +195,9 @@
     </replaceStrings>
     <dirStrings>
       <dir>C:\OpenServer\domains\laravel_events\resources\views\auth\passwords</dir>
-      <dir>C:\OpenServer\domains\laravel_events\app</dir>
       <dir>C:\OpenServer\domains\laravel_events</dir>
       <dir>C:\OpenServer\domains\laravel_events\vendor</dir>
+      <dir>C:\OpenServer\domains\laravel_events\app</dir>
     </dirStrings>
   </component>
   <component name="Git.Settings">
@@ -238,8 +255,8 @@
         <option value="$PROJECT_DIR$/app/Models/SimpleTestSystem/Question.php" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
         <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" />
+        <option value="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" />
       </list>
     </option>
   </component>
@@ -347,7 +364,7 @@
       <path value="$PROJECT_DIR$/vendor/muhamadrezaar/highcharts" />
     </include_path>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="325" />
     <option name="y" value="140" />
     <option name="width" value="869" />
@@ -533,12 +550,12 @@
       <workItem from="1571156104725" duration="6617000" />
       <workItem from="1571204304795" duration="37883000" />
       <workItem from="1571328357673" duration="16574000" />
-      <workItem from="1571478098962" duration="7947000" />
+      <workItem from="1571478098962" duration="23135000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="334098000" />
+    <option name="totallyTimeSpent" value="349286000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -878,20 +895,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php">
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="17" column="5" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+        <state relative-caret-position="473">
+          <caret line="58" column="44" selection-start-line="58" selection-start-column="17" selection-end-line="58" selection-end-column="44" />
           <folding>
-            <element signature="e#57#102#0#PHP" expanded="true" />
+            <element signature="e#407#589#1#PHP" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/test/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="129" column="81" selection-start-line="129" selection-start-column="81" selection-end-line="129" selection-end-column="81" />
         </state>
       </provider>
     </entry>
@@ -904,33 +914,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/test/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="34" column="89" selection-start-line="34" selection-start-column="89" selection-end-line="34" selection-end-column="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="60" column="108" selection-start-line="60" selection-start-column="97" selection-end-line="60" selection-end-column="108" />
-          <folding>
-            <element signature="e#407#589#1#PHP" />
-          </folding>
+        <state relative-caret-position="238">
+          <caret line="201" column="108" selection-start-line="201" selection-start-column="108" selection-end-line="201" selection-end-column="108" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="376" column="15" selection-start-line="376" selection-start-column="15" selection-end-line="376" selection-end-column="15" />
+        <state relative-caret-position="313">
+          <caret line="266" lean-forward="true" selection-start-line="266" selection-end-line="266" />
           <folding>
             <element signature="e#57#71#0#PHP" expanded="true" />
-            <element signature="e#8012#9004#0#PHP" />
             <element signature="e#9144#14375#0#PHP" />
             <element signature="e#9366#9385#0#PHP" />
+            <element signature="e#10534#11466#0#PHP" />
+            <element signature="e#11639#12671#0#PHP" />
+            <element signature="e#18405#18468#0#PHP" />
+            <element signature="e#17569#17791#0#PHP" />
+            <element signature="e#13158#13241#0#PHP" />
+            <element signature="e#13331#13402#0#PHP" />
+            <element signature="e#13852#15602#0#PHP" />
             <element signature="e#19048#19783#0#PHP" />
+            <element signature="e#19796#20779#0#PHP" />
+            <element signature="e#13625#14694#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="29">
+          <caret line="19" column="5" lean-forward="true" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
+          <folding>
+            <element signature="e#57#102#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="318" column="48" selection-start-line="318" selection-start-column="48" selection-end-line="318" selection-end-column="48" />
+          <folding>
+            <element signature="e#281#1279#0#HTML" />
+            <element signature="e#1334#1871#0#HTML" />
+            <element signature="e#1885#2489#0#HTML" />
+            <element signature="e#2700#4983#0#HTML" />
+            <element signature="e#12298#12303#0#PHP" />
+            <element signature="e#12258#13394#0#HTML" />
+            <element signature="e#14266#15406#0#HTML" />
+            <element signature="e#15424#16782#0#HTML" />
           </folding>
         </state>
       </provider>

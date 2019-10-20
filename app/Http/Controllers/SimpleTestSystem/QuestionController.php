@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\SimpleTestSystem\Test;
 use Illuminate\Support\Facades\Validator;
 
+
 class QuestionController extends Controller
 {
     /**
@@ -265,14 +266,54 @@ class QuestionController extends Controller
         $question = $validateQuestionForClosedType['question'];
 
         $storeResult = $this->storeReal($question);
-        // session()->flash('add_question_error', implode('|', $errors));
-        // session()->flash('add_question_success', 'Вопрос добавлен!');
 
-        //if ( $storeResult['success'] !== 1 ){
-        //    $result = ['success' => 0, 'message' => 'Bad way!', 'errors' => ''];
-        //}
+        session()->flash('add_question_success', 'Вопрос добавлен!');
+        if ($storeResult['success'] !== 1){
+            session()->flash('add_question_error', implode('|', $storeResult['errors']));
+        }
 
         return response()->json($storeResult);
+    }
+
+    //
+    public static function createTree($array, $level=0)
+    {
+        $a = [];
+        foreach($array as $v)
+        {
+            if($level == $v['theme_id'])
+            {
+                // нужно найти потомков с типом вопрос.
+                $child_question_count = 0;
+                foreach($array as $kk => $vv)
+                if ($vv['theme_id'] == $v['id'] && $vv['description_type'] == 1)
+                    $child_question_count++;
+
+                $tmp_child = [
+                    'id' => $v['id'],
+                    'theme_id' => $v['theme_id'],
+                    'description' => $v['description'],
+                    'description_type' => $v['description_type'],
+                    'number' => $v['number'],
+                    'parent_id' => $v['parent_id'],
+                    'type' => $v['type'],
+                    'child_question_count' => $child_question_count,
+                ];
+
+                $child = self::createTree($array, $v['id']);
+                if(!empty($child)){
+                    //$a[$v['description']] = $child;
+
+                    //$tmp_child['child_question_count'] = $child_question_count;
+                    $tmp_child['child'] = $child;
+                    $a[$v['id']] = $tmp_child;
+                } else{
+                    $a[$v['id']] = $tmp_child;
+                }
+
+            }
+        }
+        return $a;
     }
 
     /**
@@ -290,6 +331,12 @@ class QuestionController extends Controller
         $themes = Question::where('description_type', '=', 7)->get();
         //dd($themes);
 
+        $themesWichQustionChilds = Question::whereIn('description_type', [1,7])->get()->toArray();
+        //echo Debug::d($themesWichQustionChilds); die;
+        $catsThemesWithQuestionChilds = self::createTree($themesWichQustionChilds);
+        //echo Debug::d($catsThemesWithQuestionChilds); die;
+        //dd($themesWichQustionChilds);
+
         //echo Debug::d($test_curr->parent_id);
         //die;
         $questions = Question::where('parent_id','=',$test_curr->id)->get();
@@ -297,7 +344,7 @@ class QuestionController extends Controller
         //return $simple_test_system_question;
 
         return view('simpletestsystem.question.index',
-            compact('question_types', 'test_curr', 'tests', 'questions', 'themes')
+            compact('question_types', 'test_curr', 'tests', 'questions', 'themes', 'catsThemesWithQuestionChilds')
         );
     }
 
@@ -324,15 +371,77 @@ class QuestionController extends Controller
         //
     }
 
+    //
+    public static function getAllChildsByThemeId($questions, $id){
+
+        $ids = $id . ' ';
+        //dd($ids);
+        foreach($questions as $k => $v){
+            if($v['theme_id'] == $id){
+                $ids .= $v['id'] . ' ';
+                $ids .= self::getAllChildsByThemeId($questions, $v['id']);
+            }
+        }
+        return $ids;
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\SimpleTestSystem\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Question $question)
+    public function destroy(Question $simple_test_system_question)
     {
-        //
+        //return $simple_test_system_question;
+
+        // надо предусмотреть возможность удаления темы со всеми его дочерними темами и вопросами
+        $questions = Question::all('id','theme_id')->toArray();
+        //dd($questions);
+        $deleteAllChildsByThemeId = trim(self::getAllChildsByThemeId($questions, $simple_test_system_question->id));
+        //dd($deleteAllChildsByThemeId);
+        $deleteAllChildsByThemeIdIds = explode(' ', $deleteAllChildsByThemeId);
+        //dd($deleteAllChildsByThemeIdIds);
+        $deleteAllChildsByThemeIdIdsWithotSpaces = [];
+        foreach($deleteAllChildsByThemeIdIds as $k => $v)
+            $deleteAllChildsByThemeIdIdsWithotSpaces[] = intval($v);
+
+        $deleteUniqueIds = array_unique($deleteAllChildsByThemeIdIdsWithotSpaces);
+        //dd($deleteUniqueIds);
+
+        $errors = [];
+        try {
+            \DB::transaction(function () use(&$deletedRaws, $deleteAllChildsByThemeIdIdsWithotSpaces) {
+                //dd($deleteAllChildsByThemeIdIdsWithotSpaces);
+                $deletedRaws = \DB::table('questions')->whereIn('id', $deleteAllChildsByThemeIdIdsWithotSpaces)->delete();
+                // ('DELETE FROM questions WHERE id IN ' . $deleteAllChildsByThemeIdIdsWithotSpaces);
+                // Question::delete();
+                //dd($rs);
+            });
+        }catch (\Exception $e){
+            $errors[] = $e->getCode() . ' | ' . $e->getMessage();
+        }
+        //dd($errors);
+        if (count($errors)){
+            session()->flash('del_question', 'Ошибка при удалении!');
+            return back();
+        }
+
+        //$simple_test_system_question->delete();
+        //$object = $simple_test_system_question->description_type === 7 ? 'Тема удалена' : 'Вопрос удален';
+        switch ($simple_test_system_question->description_type){
+            case 7:
+                $object = 'Тема удалена вместо со всеми потомками. Всего записей удалено - ' . $deletedRaws;
+                break;
+            case 1:
+                $object = 'Вопрос удален';
+                break;
+            default:
+                $object = "Что-то пошло не так!";
+        }
+
+        session()->flash('del_question', $object);
+        return back();
     }
 
     //
