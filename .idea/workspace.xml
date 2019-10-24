@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7252fe2-b9a3-40c3-800a-06b98a10aaab" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/cbr-xml-daily.json_decoded" beforeDir="false" afterPath="$PROJECT_DIR$/public/cbr-xml-daily.json_decoded" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,19 +65,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="266" lean-forward="true" selection-start-line="266" selection-end-line="266" />
+            <state relative-caret-position="234">
+              <caret line="479" column="22" lean-forward="true" selection-start-line="479" selection-start-column="22" selection-end-line="479" selection-end-column="22" />
               <folding>
                 <element signature="e#57#71#0#PHP" expanded="true" />
                 <element signature="e#9144#14375#0#PHP" />
                 <element signature="e#9366#9385#0#PHP" />
+                <element signature="e#7170#10117#0#PHP" />
                 <element signature="e#10534#11466#0#PHP" />
                 <element signature="e#11639#12671#0#PHP" />
                 <element signature="e#18405#18468#0#PHP" />
                 <element signature="e#17569#17791#0#PHP" />
                 <element signature="e#13158#13241#0#PHP" />
                 <element signature="e#13331#13402#0#PHP" />
-                <element signature="e#13852#15602#0#PHP" />
                 <element signature="e#19048#19783#0#PHP" />
                 <element signature="e#19796#20779#0#PHP" />
                 <element signature="e#13625#14694#0#PHP" />
@@ -106,11 +107,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="318" column="48" selection-start-line="318" selection-start-column="48" selection-end-line="318" selection-end-column="48" />
+            <state relative-caret-position="233">
+              <caret line="328" column="17" selection-start-line="328" selection-start-column="17" selection-end-line="328" selection-end-column="17" />
               <folding>
                 <element signature="e#281#1279#0#HTML" />
                 <element signature="e#1334#1871#0#HTML" />
@@ -125,7 +126,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/questions">
           <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
             <state projectRestartId="ed5504f6-ccb4-479f-9e01-b05785237a9d">
@@ -158,8 +159,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>question_type_1</find>
-      <find>add_question</find>
       <find>errors</find>
       <find>$number</find>
       <find>validator</find>
@@ -186,8 +185,10 @@
       <find>add_question_success</find>
       <find>text-danger add_question_error_ajax</find>
       <find>add_question_error_ajax</find>
-      <find>beginTransaction</find>
       <find>reload</find>
+      <find>script</find>
+      <find>beginTransaction</find>
+      <find>getAllChildsByThemeId</find>
     </findStrings>
     <replaceStrings>
       <replace>join</replace>
@@ -206,7 +207,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/resources/views/category/index.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/TypeController.php" />
         <option value="$PROJECT_DIR$/resources/views/events-table.blade.php" />
         <option value="$PROJECT_DIR$/public/css/fonts.css" />
@@ -255,8 +255,9 @@
         <option value="$PROJECT_DIR$/app/Models/SimpleTestSystem/Question.php" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell" />
         <option value="$PROJECT_DIR$/routes/web.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" />
         <option value="$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php" />
+        <option value="$PROJECT_DIR$/../test/aslan-bitrix-first-job/index.html" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" />
       </list>
     </option>
   </component>
@@ -365,8 +366,8 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="325" />
-    <option name="y" value="140" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
     <option name="width" value="869" />
     <option name="height" value="697" />
   </component>
@@ -383,92 +384,6 @@
             <path>
               <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
               <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-              <item name="Controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Models" type="462c0819:PsiDirectoryNode" />
-              <item name="SimpleTestSystem" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="simpletestsystem" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="simpletestsystem" type="462c0819:PsiDirectoryNode" />
-              <item name="question" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-              <item name="views" type="462c0819:PsiDirectoryNode" />
-              <item name="simpletestsystem" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="storage" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="laravel_events" type="b2602c69:ProjectViewProjectNode" />
-              <item name="laravel_events" type="462c0819:PsiDirectoryNode" />
-              <item name="storage" type="462c0819:PsiDirectoryNode" />
-              <item name="framework" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -550,12 +465,12 @@
       <workItem from="1571156104725" duration="6617000" />
       <workItem from="1571204304795" duration="37883000" />
       <workItem from="1571328357673" duration="16574000" />
-      <workItem from="1571478098962" duration="23135000" />
+      <workItem from="1571478098962" duration="32627000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="349286000" />
+    <option name="totallyTimeSpent" value="358778000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -567,12 +482,12 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1456" height="834" extended-state="6" />
+    <frame x="-8" y="-8" width="1456" height="834" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info id="npm" order="1" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.14183381" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.09383954" />
       <window_info id="Structure" order="3" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.2981455" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" weight="0.32952926" />
@@ -598,13 +513,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Models/SimpleTestSystem/TestCategory.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_12_172339_create_test_categories_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
@@ -905,12 +813,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/questions">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state projectRestartId="ed5504f6-ccb4-479f-9e01-b05785237a9d">
-          <filtering>
-            <filter text="" />
-          </filtering>
+    <entry file="file://$PROJECT_DIR$/../test/aslan-bitrix-first-job/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="434" column="42" selection-start-line="434" selection-start-column="42" selection-end-line="434" selection-end-column="42" />
+          <folding>
+            <element signature="n#style#0;n#head#0;n#html#0;n#!!top" />
+            <element signature="n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" />
+            <element signature="n#script#4;n#body#0;n#html#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="233">
+          <caret line="328" column="17" selection-start-line="328" selection-start-column="17" selection-end-line="328" selection-end-column="17" />
+          <folding>
+            <element signature="e#281#1279#0#HTML" />
+            <element signature="e#1334#1871#0#HTML" />
+            <element signature="e#1885#2489#0#HTML" />
+            <element signature="e#2700#4983#0#HTML" />
+            <element signature="e#12298#12303#0#PHP" />
+            <element signature="e#12258#13394#0#HTML" />
+            <element signature="e#14266#15406#0#HTML" />
+            <element signature="e#15424#16782#0#HTML" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -918,28 +846,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="201" column="108" selection-start-line="201" selection-start-column="108" selection-end-line="201" selection-end-column="108" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="266" lean-forward="true" selection-start-line="266" selection-end-line="266" />
-          <folding>
-            <element signature="e#57#71#0#PHP" expanded="true" />
-            <element signature="e#9144#14375#0#PHP" />
-            <element signature="e#9366#9385#0#PHP" />
-            <element signature="e#10534#11466#0#PHP" />
-            <element signature="e#11639#12671#0#PHP" />
-            <element signature="e#18405#18468#0#PHP" />
-            <element signature="e#17569#17791#0#PHP" />
-            <element signature="e#13158#13241#0#PHP" />
-            <element signature="e#13331#13402#0#PHP" />
-            <element signature="e#13852#15602#0#PHP" />
-            <element signature="e#19048#19783#0#PHP" />
-            <element signature="e#19796#20779#0#PHP" />
-            <element signature="e#13625#14694#0#PHP" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -953,20 +859,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/simpletestsystem/question/index.blade.php">
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="318" column="48" selection-start-line="318" selection-start-column="48" selection-end-line="318" selection-end-column="48" />
+        <state relative-caret-position="234">
+          <caret line="479" column="22" lean-forward="true" selection-start-line="479" selection-start-column="22" selection-end-line="479" selection-end-column="22" />
           <folding>
-            <element signature="e#281#1279#0#HTML" />
-            <element signature="e#1334#1871#0#HTML" />
-            <element signature="e#1885#2489#0#HTML" />
-            <element signature="e#2700#4983#0#HTML" />
-            <element signature="e#12298#12303#0#PHP" />
-            <element signature="e#12258#13394#0#HTML" />
-            <element signature="e#14266#15406#0#HTML" />
-            <element signature="e#15424#16782#0#HTML" />
+            <element signature="e#57#71#0#PHP" expanded="true" />
+            <element signature="e#9144#14375#0#PHP" />
+            <element signature="e#9366#9385#0#PHP" />
+            <element signature="e#7170#10117#0#PHP" />
+            <element signature="e#10534#11466#0#PHP" />
+            <element signature="e#11639#12671#0#PHP" />
+            <element signature="e#18405#18468#0#PHP" />
+            <element signature="e#17569#17791#0#PHP" />
+            <element signature="e#13158#13241#0#PHP" />
+            <element signature="e#13331#13402#0#PHP" />
+            <element signature="e#19048#19783#0#PHP" />
+            <element signature="e#19796#20779#0#PHP" />
+            <element signature="e#13625#14694#0#PHP" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/questions">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="ed5504f6-ccb4-479f-9e01-b05785237a9d">
+          <filtering>
+            <filter text="" />
+          </filtering>
         </state>
       </provider>
     </entry>

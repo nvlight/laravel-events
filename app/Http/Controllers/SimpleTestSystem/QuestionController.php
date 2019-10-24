@@ -374,15 +374,30 @@ class QuestionController extends Controller
     //
     public static function getAllChildsByThemeId($questions, $id){
 
-        $ids = $id . ' ';
+        //$ids = $id . ' ';
+        $ids = [];
         //dd($ids);
         foreach($questions as $k => $v){
             if($v['theme_id'] == $id){
-                $ids .= $v['id'] . ' ';
-                $ids .= self::getAllChildsByThemeId($questions, $v['id']);
+                //$ids .= $v['id'] . ' ';
+                //$ids .= self::getAllChildsByThemeId($questions, $v['id']);
+                $ids[] = $v;
+                $ids[] = self::getAllChildsByThemeId($questions, $v['id']);
             }
         }
         return $ids;
+    }
+
+    //
+    public function getQuestionChildIds(array $question, int $number):array{
+        $result = [];
+        //dd($question);
+        //dd($number);
+        foreach($question as $q)
+            if ($q['number'] === $number)
+                $result[] = $q['id'];
+
+        return $result;
     }
 
     /**
@@ -396,27 +411,57 @@ class QuestionController extends Controller
         //return $simple_test_system_question;
 
         // надо предусмотреть возможность удаления темы со всеми его дочерними темами и вопросами
-        $questions = Question::all('id','theme_id')->toArray();
+        $questions = Question::where('parent_id', '=', $simple_test_system_question->parent_id)
+            ->select('id','theme_id', 'number','description_type')
+            ->get()->toArray();
+        //all('id','theme_id', 'number','description_type')->toArray();
         //dd($questions);
-        $deleteAllChildsByThemeId = trim(self::getAllChildsByThemeId($questions, $simple_test_system_question->id));
-        //dd($deleteAllChildsByThemeId);
-        $deleteAllChildsByThemeIdIds = explode(' ', $deleteAllChildsByThemeId);
-        //dd($deleteAllChildsByThemeIdIds);
-        $deleteAllChildsByThemeIdIdsWithotSpaces = [];
-        foreach($deleteAllChildsByThemeIdIds as $k => $v)
-            $deleteAllChildsByThemeIdIdsWithotSpaces[] = intval($v);
 
-        $deleteUniqueIds = array_unique($deleteAllChildsByThemeIdIdsWithotSpaces);
-        //dd($deleteUniqueIds);
+        //
+        switch ($simple_test_system_question['description_type']){
+            case 1:
+                $deleteAllChildsByThemeId = $this->getQuestionChildIds($questions, $simple_test_system_question->number);
+                //dd($deleteAllChildsByThemeId);
+                break;
+
+            case 7:
+                $deleteAllChildsByThemeId = (self::getAllChildsByThemeId($questions, $simple_test_system_question->id));
+                //dd($deleteAllChildsByThemeId);
+                $deleteAllChildsByThemeIdIds = explode(' ', $deleteAllChildsByThemeId);
+                //dd($deleteAllChildsByThemeIdIds);
+                $deleteAllChildsByThemeIdIdsWithotSpaces = [];
+                foreach($deleteAllChildsByThemeIdIds as $k => $v)
+                    $deleteAllChildsByThemeIdIdsWithotSpaces[] = intval($v);
+                //dd($deleteAllChildsByThemeIdIdsWithotSpaces);
+
+                // теперь нужно к найденному списку найти все вопросы и добавить их ID для удаления
+                //$qst_child_ids = [];  // $deleteAllChildsByThemeIdWithotSpacesWithChildQuestionIds = [];
+                //foreach($deleteAllChildsByThemeIdIdsWithotSpaces as $qst) {
+                //    $tmp_ids = $this->getQuestionChildIds($questions, $qst);
+                //    $deleteAllChildsByThemeIdWithotSpacesWithChildQuestionIds = array_merge($deleteAllChildsByThemeIdIdsWithotSpaces, $tmp_ids);
+                //}
+                //dd($deleteAllChildsByThemeIdWithotSpacesWithChildQuestionIds);
+
+                //$deleteUniqueIds = array_unique($deleteAllChildsByThemeIdIdsWithotSpaces);
+                //dd($deleteUniqueIds);
+
+                $deleteAllChildsByThemeId = $deleteAllChildsByThemeIdIdsWithotSpaces;
+
+                break;
+
+            default:
+                session()->flash('del_question', "Что-то пошло не так!");
+                return back();
+        }
 
         $errors = [];
         try {
-            \DB::transaction(function () use(&$deletedRaws, $deleteAllChildsByThemeIdIdsWithotSpaces) {
+            \DB::transaction(function () use(&$deletedRaws, $deleteAllChildsByThemeId) {
                 //dd($deleteAllChildsByThemeIdIdsWithotSpaces);
-                $deletedRaws = \DB::table('questions')->whereIn('id', $deleteAllChildsByThemeIdIdsWithotSpaces)->delete();
-                // ('DELETE FROM questions WHERE id IN ' . $deleteAllChildsByThemeIdIdsWithotSpaces);
+                $deletedRaws = \DB::table('questions')->whereIn('id', $deleteAllChildsByThemeId)->delete();
+                // ('DELETE FROM questions WHERE id IN ' . $deleteAllChildsByThemeId);
                 // Question::delete();
-                //dd($rs);
+                // dd($deletedRaws);
             });
         }catch (\Exception $e){
             $errors[] = $e->getCode() . ' | ' . $e->getMessage();
