@@ -2,7 +2,9 @@
 
 @section('content')
 
-    <h3 class="mb-3">Банк тестового задания - <span class="mg-span-fz11">{{$test_curr->name}} ({{$test_curr->id}}) </span></h3>
+    <h4><a href="/simple-test-system">Список банка ТЗ</a></h4>
+
+    <h4 class="mb-3">Банк ТЗ - <span class="mg-span-fz11">{{$test_curr->name}} ({{$test_curr->id}}) </span></h4>
 
     <div class="row">
         <div class="col-sm-6">
@@ -141,12 +143,19 @@
             $current = "";
             foreach($array as $k => $v)
             {
+                $url_for_show = "";
                 //echo \App\Debug::d($v); die;
                 if ($v['theme_id'] == $level){
                     $description_type = '';
                     switch ($v['description_type']){
-                        case 7: $description_type = 'Тема'; break;
-                        case 1: $description_type = 'Вопрос'; break;
+                        case 7:
+                            $description_type = 'Тема';
+                            $url_for_show = 'sts-theme';
+                            break;
+                        case 1:
+                            $description_type = 'Вопрос';
+                            $url_for_show = 'sts-question';
+                            break;
                     }
 
                 $indent_html = str_repeat("&mdash;", $indent);
@@ -156,13 +165,20 @@
 
                 $cqt = $v['child_question_count'] == 0 ? '' : $v['child_question_count'];
                 $current .= <<<STR
-                <tr>
+                <tr class="">
                     <td>{$v['id']}</td>
                     <td>{$v['theme_id']}</td>
                     <td>{$description_type}</td>
                     <td>{$indent_html} {$v['description']}</td>
                     <td>{$cqt}</td>
-                    <td>
+                    <td class="td-btn-flex-1">
+
+                        <a href="/{$url_for_show}/{$v['id']}">
+                            <button class="mg-btn-1" type="submit" title="просмотреть">
+                                <svg height="25" class="mg-btn-show" viewBox="0 0 12 16" version="1.1" width="28" aria-hidden="true"><path fill-rule="evenodd" d="M6 5H2V4h4v1zM2 8h7V7H2v1zm0 2h7V9H2v1zm0 2h7v-1H2v1zm10-7.5V14c0 .55-.45 1-1 1H1c-.55 0-1-.45-1-1V2c0-.55.45-1 1-1h7.5L12 4.5zM11 5L8 2H1v12h10V5z"></path></svg>
+                            </button>
+                        </a>
+
                         <form action="/simple-test-system-question/{$v['id']}" class="shorturl-delete-button" method="POST" style="">
                             {$crsf_field}
                             {$method_delete}
@@ -359,38 +375,41 @@ STR;
                 @endif
             </table>
 
-            <h5>Список вопросов - простой</h5>
-            <table class="table table-bordered table-striped mb-3">
-                    <tr>
-                        <th>id</th>
-                        <th>nm</th>
-                        <th>thm</th>
-                        <th>qt</th>
-                        <th>description</th>
-                        <th>dt</th>
-                    </tr>
-                    @if($questions->count())
-                        @foreach($questions as $question)
-                            <tr>
-                                <td>{{$question->id}}</td>
-                                <td>{{$question->number}}</td>
-                                <td>{{$question->theme_id}}</td>
-                                <td>{{$question->type}}</td>
-                                @if($question->description_type == 1)
-                                    <td><strong>{{$question->description}}</strong></td>
-                                @else
-                                    <td>{{$question->description}}</td>
-                                @endif
-
-                                <td>{{$question->description_type}}</td>
-                            </tr>
-                        @endforeach
-                    @else
+            <?php $anather_selections_show = false; ?>
+            @if($anather_selections_show)
+                <h5>Список вопросов - простой</h5>
+                <table class="table table-bordered table-striped mb-3">
                         <tr>
-                            <td>Список вопросов пуст</td>
+                            <th>id</th>
+                            <th>nm</th>
+                            <th>thm</th>
+                            <th>qt</th>
+                            <th>description</th>
+                            <th>dt</th>
                         </tr>
-                    @endif
-                </table>
+                        @if($questions->count())
+                            @foreach($questions as $question)
+                                <tr>
+                                    <td>{{$question->id}}</td>
+                                    <td>{{$question->number}}</td>
+                                    <td>{{$question->theme_id}}</td>
+                                    <td>{{$question->type}}</td>
+                                    @if($question->description_type == 1)
+                                        <td><strong>{{$question->description}}</strong></td>
+                                    @else
+                                        <td>{{$question->description}}</td>
+                                    @endif
+
+                                    <td>{{$question->description_type}}</td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td>Список вопросов пуст</td>
+                            </tr>
+                        @endif
+                    </table>
+            @endif
 
         </div>
     </div>

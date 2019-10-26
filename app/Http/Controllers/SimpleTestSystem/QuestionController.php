@@ -278,6 +278,40 @@ class QuestionController extends Controller
     }
 
     //
+    public function updateTheme(Question $theme, Request $request){
+        //return $request;
+        $validator = Validator::make($request->all(), [
+            'theme' => 'min:2|max:222',
+        ]);
+        $errors = [];
+        if ($validator->fails()){
+            $errors[] = $validator->errors();
+            //dd($errors);
+        }
+        if (count($errors)){
+            session()->flash('theme_edit', ["success" => 0, 'message' => "Тема должна состоять из минимум 2 символов"] );
+            return back();
+        }
+
+        try{
+            $theme->description = $request->get('theme');
+            $theme->save();
+            session()->flash('theme_edit', ["success" => 1, 'message' => "Изменения сохранены!"] );
+        }catch (\Exception $e){
+            session()->flash('theme_edit', ["success" => 0, 'message' => "Ошибка при сохранении темы!"] );
+        }
+
+        return back();
+    }
+
+    //
+    public function editTheme(Question $theme){
+        //return $theme;
+
+        return view('simpletestsystem.theme.edit', compact('theme'));
+    }
+
+    //
     public static function createTree($array, $level=0)
     {
         $a = [];
@@ -319,7 +353,7 @@ class QuestionController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Show TZ child themes and questions
      *
      * @param  \App\Models\SimpleTestSystem\Question  $question
      * @return \Illuminate\Http\Response
@@ -333,6 +367,8 @@ class QuestionController extends Controller
         $themes = Question::where('description_type', '=', 7)->get();
         //dd($themes);
 
+        session()->put('tz', $test_curr);
+
         $themesWichQustionChilds = Question::whereIn('description_type', [1,7])->get()->toArray();
         //echo Debug::d($themesWichQustionChilds); die;
         $catsThemesWithQuestionChilds = self::createTree($themesWichQustionChilds);
@@ -341,13 +377,30 @@ class QuestionController extends Controller
 
         //echo Debug::d($test_curr->parent_id);
         //die;
-        $questions = Question::where('parent_id','=',$test_curr->id)->get();
+        $questions = Question::where('parent_id','=',$test_curr->id)
+            ->orderBy('theme_id', 'asc')
+            ->orderBy('number', 'asc')
+            ->get();
         //dd($questions);
         //return $simple_test_system_question;
 
         return view('simpletestsystem.question.index',
             compact('question_types', 'test_curr', 'tests', 'questions', 'themes', 'catsThemesWithQuestionChilds')
         );
+    }
+
+    //
+    public function showQuestion(Question $question){
+        //return $question;
+        return view('simpletestsystem.question.show',
+            compact('question'));
+    }
+
+    //
+    public function showTheme(Question $theme){
+        //return $theme;
+        return view('simpletestsystem.theme.show',
+            compact('theme'));
     }
 
     /**
