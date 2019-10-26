@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 
 class QuestionController extends Controller
 {
+    protected static $deleteQuestionChilds;
+
     /**
      * Display a listing of the resource.
      *
@@ -374,13 +376,11 @@ class QuestionController extends Controller
     //
     public static function getAllChildsByThemeId($questions, $id){
 
-        //$ids = $id . ' ';
         $ids = [];
         //dd($ids);
         foreach($questions as $k => $v){
             if($v['theme_id'] == $id){
-                //$ids .= $v['id'] . ' ';
-                //$ids .= self::getAllChildsByThemeId($questions, $v['id']);
+                self::$deleteQuestionChilds[] = $v;
                 $ids[] = $v;
                 $ids[] = self::getAllChildsByThemeId($questions, $v['id']);
             }
@@ -391,6 +391,7 @@ class QuestionController extends Controller
     //
     public function getQuestionChildIds(array $question, int $number):array{
         $result = [];
+        //echo Debug::d($number);
         //dd($question);
         //dd($number);
         foreach($question as $q)
@@ -410,7 +411,6 @@ class QuestionController extends Controller
     {
         //return $simple_test_system_question;
 
-        // надо предусмотреть возможность удаления темы со всеми его дочерними темами и вопросами
         $questions = Question::where('parent_id', '=', $simple_test_system_question->parent_id)
             ->select('id','theme_id', 'number','description_type')
             ->get()->toArray();
@@ -425,27 +425,28 @@ class QuestionController extends Controller
                 break;
 
             case 7:
+                self::$deleteQuestionChilds = [];
+                self::$deleteQuestionChilds[] = $simple_test_system_question->toArray();
+
                 $deleteAllChildsByThemeId = (self::getAllChildsByThemeId($questions, $simple_test_system_question->id));
+                //echo Debug::d(self::$deleteQuestionChilds); die;
                 //dd($deleteAllChildsByThemeId);
-                $deleteAllChildsByThemeIdIds = explode(' ', $deleteAllChildsByThemeId);
-                //dd($deleteAllChildsByThemeIdIds);
-                $deleteAllChildsByThemeIdIdsWithotSpaces = [];
-                foreach($deleteAllChildsByThemeIdIds as $k => $v)
-                    $deleteAllChildsByThemeIdIdsWithotSpaces[] = intval($v);
-                //dd($deleteAllChildsByThemeIdIdsWithotSpaces);
 
-                // теперь нужно к найденному списку найти все вопросы и добавить их ID для удаления
-                //$qst_child_ids = [];  // $deleteAllChildsByThemeIdWithotSpacesWithChildQuestionIds = [];
-                //foreach($deleteAllChildsByThemeIdIdsWithotSpaces as $qst) {
-                //    $tmp_ids = $this->getQuestionChildIds($questions, $qst);
-                //    $deleteAllChildsByThemeIdWithotSpacesWithChildQuestionIds = array_merge($deleteAllChildsByThemeIdIdsWithotSpaces, $tmp_ids);
-                //}
-                //dd($deleteAllChildsByThemeIdWithotSpacesWithChildQuestionIds);
+                $deleteAllChildsByThemeIdWithQuestionChildIds = [];
+                if (count(self::$deleteQuestionChilds))
+                foreach(self::$deleteQuestionChilds as $k => $v){
+                    if ($v['description_type'] === 1){
+                        //dd($v);
+                        $curr_qustion_child_ids = $this->getQuestionChildIds($questions, $v['number']);
+                        //dd($curr_qustion_child_ids);
+                        foreach($curr_qustion_child_ids as $kk => $vv) $deleteAllChildsByThemeIdWithQuestionChildIds[] = $vv;
+                    }else{
+                        $deleteAllChildsByThemeIdWithQuestionChildIds[] = $v['id'];
+                    }
+                }
+                //echo Debug::d($deleteAllChildsByThemeIdWithQuestionChildIds); die;
 
-                //$deleteUniqueIds = array_unique($deleteAllChildsByThemeIdIdsWithotSpaces);
-                //dd($deleteUniqueIds);
-
-                $deleteAllChildsByThemeId = $deleteAllChildsByThemeIdIdsWithotSpaces;
+                $deleteAllChildsByThemeId = $deleteAllChildsByThemeIdWithQuestionChildIds;
 
                 break;
 
@@ -476,16 +477,16 @@ class QuestionController extends Controller
         //$object = $simple_test_system_question->description_type === 7 ? 'Тема удалена' : 'Вопрос удален';
         switch ($simple_test_system_question->description_type){
             case 7:
-                $object = 'Тема удалена вместо со всеми потомками. Всего записей удалено - ' . $deletedRaws;
+                $message = 'Тема удалена вместо со всеми потомками. Всего удалено записей - ' . $deletedRaws;
                 break;
             case 1:
-                $object = 'Вопрос удален';
+                $message = 'Вопрос удален';
                 break;
             default:
-                $object = "Что-то пошло не так!";
+                $message = "Что-то пошло не так!";
         }
 
-        session()->flash('del_question', $object);
+        session()->flash('del_question', $message);
         return back();
     }
 

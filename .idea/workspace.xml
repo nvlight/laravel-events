@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7252fe2-b9a3-40c3-800a-06b98a10aaab" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/cbr-xml-daily.json_decoded" beforeDir="false" afterPath="$PROJECT_DIR$/public/cbr-xml-daily.json_decoded" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -62,11 +60,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="479" column="22" lean-forward="true" selection-start-line="479" selection-start-column="22" selection-end-line="479" selection-end-column="22" />
+            <state relative-caret-position="578">
+              <caret line="431" column="18" selection-start-line="431" selection-start-column="18" selection-end-line="431" selection-end-column="18" />
               <folding>
                 <element signature="e#57#71#0#PHP" expanded="true" />
                 <element signature="e#9144#14375#0#PHP" />
@@ -77,7 +75,6 @@
                 <element signature="e#18405#18468#0#PHP" />
                 <element signature="e#17569#17791#0#PHP" />
                 <element signature="e#13158#13241#0#PHP" />
-                <element signature="e#13331#13402#0#PHP" />
                 <element signature="e#19048#19783#0#PHP" />
                 <element signature="e#19796#20779#0#PHP" />
                 <element signature="e#13625#14694#0#PHP" />
@@ -126,7 +123,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/questions">
           <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
             <state projectRestartId="ed5504f6-ccb4-479f-9e01-b05785237a9d">
@@ -159,7 +156,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>errors</find>
       <find>$number</find>
       <find>validator</find>
       <find>fails</find>
@@ -187,8 +183,9 @@
       <find>add_question_error_ajax</find>
       <find>reload</find>
       <find>script</find>
-      <find>beginTransaction</find>
       <find>getAllChildsByThemeId</find>
+      <find>beginTransaction</find>
+      <find>$deleteQuestionChilds</find>
     </findStrings>
     <replaceStrings>
       <replace>join</replace>
@@ -401,7 +398,7 @@
     <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
     <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../524673-doingsdone-11" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -465,12 +462,12 @@
       <workItem from="1571156104725" duration="6617000" />
       <workItem from="1571204304795" duration="37883000" />
       <workItem from="1571328357673" duration="16574000" />
-      <workItem from="1571478098962" duration="32627000" />
+      <workItem from="1571478098962" duration="36723000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="358778000" />
+    <option name="totallyTimeSpent" value="362874000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -487,7 +484,7 @@
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info id="npm" order="1" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.09383954" />
+      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.09383954" />
       <window_info id="Structure" order="3" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.2981455" />
       <window_info anchor="bottom" id="Event Log" order="1" side_tool="true" weight="0.32952926" />
@@ -849,6 +846,15 @@
         </state>
       </provider>
     </entry>
+    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/questions">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="ed5504f6-ccb4-479f-9e01-b05785237a9d">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/TestController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="29">
@@ -861,8 +867,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/QuestionController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="479" column="22" lean-forward="true" selection-start-line="479" selection-start-column="22" selection-end-line="479" selection-end-column="22" />
+        <state relative-caret-position="578">
+          <caret line="431" column="18" selection-start-line="431" selection-start-column="18" selection-end-line="431" selection-end-column="18" />
           <folding>
             <element signature="e#57#71#0#PHP" expanded="true" />
             <element signature="e#9144#14375#0#PHP" />
@@ -873,20 +879,10 @@
             <element signature="e#18405#18468#0#PHP" />
             <element signature="e#17569#17791#0#PHP" />
             <element signature="e#13158#13241#0#PHP" />
-            <element signature="e#13331#13402#0#PHP" />
             <element signature="e#19048#19783#0#PHP" />
             <element signature="e#19796#20779#0#PHP" />
             <element signature="e#13625#14694#0#PHP" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://7b337b93-6fb5-4ec4-99a8-860a1ad8f732/schema/laravel_events/table/questions">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state projectRestartId="ed5504f6-ccb4-479f-9e01-b05785237a9d">
-          <filtering>
-            <filter text="" />
-          </filtering>
         </state>
       </provider>
     </entry>
