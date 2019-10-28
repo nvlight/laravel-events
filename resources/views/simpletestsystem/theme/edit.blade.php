@@ -8,7 +8,7 @@
     <h5 class="mb-3">Редактирование темы '<?=$theme->description?>'</h5>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <table class="table table-striped table-striped table-responsive">
                 <form action="/sts-theme/{{$theme->id}}" class="form-control mb-3" method="POST">
                     @csrf
