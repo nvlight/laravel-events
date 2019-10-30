@@ -312,6 +312,81 @@ class QuestionController extends Controller
     }
 
     //
+    public function editQuestion(Question $question){
+        //return $question;
+
+        // в зависимости от description_type нужно нужно показать соотв. форму редактирования
+        // для темы - просто редактируем название
+        // для вопроса сложнее, нужно найти все его дочерние элементы по номеру, далее нужно все это показать
+        // и добавить средства для правки самого вопроса, добавления, удаления вопросов, изменение правильных ответов
+        // также нужно пока что запретить там возможность изменить тип вопроса!
+
+        // #1 для начала найдем вопрос по parent_id && number
+        $question_ids = Question::where('parent_id', '=', $question->parent_id)
+            ->where('number','=', $question->number)
+            ->get()
+        ;
+        //dd($question_ids);
+
+        return view('simpletestsystem.question.edit', compact('question', 'question_ids'));
+    }
+
+    //
+    public function getQuestion(Question $question){
+
+        $rs = ['success' => 1, 'description' => $question->description];
+        return response()->json($rs);
+    }
+
+    //
+    public function deleteQuestion(Question $question){
+
+        $rs = ['success' => 1, 'message' => 'Запись удалена!'];
+        try{
+            $question->delete();
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'Что-то пошло не так!'];
+        }
+        session()->flash('del_question', $rs['message']);
+
+        //return response()->json($rs);
+        return back();
+    }
+
+    //
+    public function updateQuestionDescription(Request $request){
+
+        $rs = ['success' => 1, 'message' => 'its cool!', 'request' => $request->all()];
+
+        $validator = Validator::make($request->all(), [
+            'question_description' => 'min:2|max:222',
+            'qst_id' => 'int|min:1',
+        ]);
+        $errors = [];
+        if ($validator->fails()){
+            $errors[] = $validator->errors();
+            //dd($errors);
+        }
+        if (count($errors)){
+            $rs = ["success" => 0, 'message' => "Символов меньше 2!"];
+            return response()->json($rs);
+        }
+
+        try{
+            $question = Question::where('id', '=', intval($request->get('qst_id')) )->get()->first();
+            $question->description = $request->get('question_description');
+            $question->save();
+            $rs = ["success" => 1, 'message' => "Изменения сохранены!"];
+        }catch (\Exception $e){
+            $rs = ["success" => 0, 'message' => "Ошибка при сохранении описания вопроса!",
+                'error' => $e->getMessage(), 'qst' => $question->toArray()
+            ];
+        }
+
+        return response()->json($rs);
+    }
+
+    //
     public static function createTree($array, $level=0)
     {
         $a = [];
@@ -364,12 +439,16 @@ class QuestionController extends Controller
         $test_curr = $simple_test_system_question;
         $question_types = QuestionType::all();
         $tests = Test::all();
-        $themes = Question::where('description_type', '=', 7)->get();
+        $themes = Question::where('description_type', '=', 7)
+            ->where('parent_id', '=', $simple_test_system_question->id)
+            ->get();
         //dd($themes);
 
         session()->put('tz', $test_curr);
 
-        $themesWichQustionChilds = Question::whereIn('description_type', [1,7])->get()->toArray();
+        $themesWichQustionChilds = Question::whereIn('description_type', [1,7])
+            ->where('parent_id', '=', $simple_test_system_question->id)
+            ->get()->toArray();
         //echo Debug::d($themesWichQustionChilds); die;
         $catsThemesWithQuestionChilds = self::createTree($themesWichQustionChilds);
         //echo Debug::d($catsThemesWithQuestionChilds); die;
@@ -409,9 +488,58 @@ class QuestionController extends Controller
      * @param  \App\Models\SimpleTestSystem\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function edit(Question $question)
+    public function edit(Question $theme)
     {
-        //
+        //return $theme;
+        $this->editTheme($theme);
+    }
+
+    //
+    public function addAnswer(Question $question, Request $request){
+
+        $rs = ['success' => 1, 'message' => 'Save this'];
+
+        $validator = Validator::make($request->all(), [
+            'description_type' => 'int|min:2|max:3',
+            // 'description_type' => 'int|between:2,3',
+            'description' => 'string|min:1|max:222',
+        ]);
+        $errors = [];
+        if ($validator->fails()){
+            $errors[] = $validator->errors();
+        }
+        if (count($errors)){
+            $rs['success'] = 0;
+            $rs['errors'] = $errors;
+            $rs['message'] = 'Что-то пошло не так';
+        }else{
+            try{
+                $answer = new Question();
+                $answer->number = $question->number;
+                $answer->description = $request->get('description');
+                $answer->description_type = $request->get('description_type');
+                $answer->parent_id = $question->parent_id;
+                $answer->theme_id = $question->theme_id;
+                $answer->type = $question->type;
+                $answer->save();
+                session()->flash('add_questionAnswer', 'Ответ добавлен к вопросу');
+            }catch (\Exception $e){
+                $rs['success'] = 0;
+                $rs['errors'] = $e->getMessage();
+                $rs['message'] = 'Ошибка при добавлении!';
+            }
+
+        }
+
+        return response()->json($rs);
+    }
+
+    //
+    public function getAnswer(Question $question){
+
+        $rs = ['success' => 1, 'message' => 'get this', 'data' => $question];
+
+        return response()->json($rs);
     }
 
     /**

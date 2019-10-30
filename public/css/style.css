@@ -239,6 +239,7 @@ p.reg{
 	border-radius: 50%;
 	cursor: pointer;
 }
+
 #go_to_top:hover{
 	transition: all .3s;
 	opacity: .7;
@@ -1166,4 +1167,45 @@ body > nav.navbar{
 
 #question_type_1 .badge{
 	cursor: pointer;
+}
+
+.question_update_status{
+	position: absolute;
+	top: 6px;
+	right: 11px;
+}
+.question_update_status::after{
+    content: '';
+    z-index: 1112;
+	display: inline-block;
+
+    width: 27px;
+    height: 27px;
+    border: 2px solid rgb(117,117,117);
+    border-radius: 50%;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    animation: cssload-spin 1500ms infinite linear;
+    /*-o-animation: cssload-spin 500ms infinite linear;*/
+    /*-ms-animation: cssload-spin 500ms infinite linear;*/
+    /*-webkit-animation: cssload-spin 500ms infinite linear;*/
+
+}
+
+@keyframes cssload-spin {100%{transform:rotate(360deg);transform:rotate(360deg)}}
+/*@-o-keyframes cssload-spin {100%{-o-transform:rotate(360deg);transform:rotate(360deg)}}*/
+/*@-ms-keyframes cssload-spin {100%{-ms-transform:rotate(360deg);transform:rotate(360deg)}}*/
+/*@-webkit-keyframes cssload-spin {100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}*/
+/*@-moz-keyframes cssload-spin {100%{-moz-transform:rotate(360deg);transform:rotate(360deg)}}*/
+
+.cupr{
+	cursor: pointer;
+}
+
+.question_update_span{
+	cursor: pointer;
+	display: inline-block;
+	position: absolute;
+	top: 38px;
+	right: 9px;
 }

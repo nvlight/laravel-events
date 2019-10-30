@@ -21,6 +21,7 @@ class CreateQuestionsTable extends Migration
             $table->bigInteger('type');
             $table->text('description');
             $table->bigInteger('description_type');
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
