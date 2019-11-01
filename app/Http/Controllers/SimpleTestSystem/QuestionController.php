@@ -535,6 +535,40 @@ class QuestionController extends Controller
     }
 
     //
+    public function updateAnswer(Question $question, Request $request){
+
+        $rs = ['success' => 1, 'message' => 'Вопрос обновлен!'];
+
+        $validator = Validator::make($request->all(), [
+            'answer_type' => 'int|min:2|max:3', // 'description_type' => 'int|between:2,3',
+            'description' => 'string|min:1|max:222',
+        ]);
+        $errors = [];
+        if ($validator->fails()){
+            $errors[] = $validator->errors();
+        }
+        if (count($errors)){
+            $rs['success'] = 0;
+            $rs['errors'] = $errors;
+            $rs['message'] = 'Что-то пошло не так';
+        }else{
+            try{
+                $question->description = $request->get('description');
+                $question->description_type = $request->get('answerType');
+                $question->save();
+                session()->flash('update_questionAnswer', 'Ответ обновлен');
+            }catch (\Exception $e){
+                $rs['success'] = 0;
+                $rs['errors'] = [[$e->getMessage()]];
+                $rs['message'] = 'Ошибка при обновлении!';
+            }
+
+        }
+
+        return response()->json($rs);
+    }
+
+    //
     public function getAnswer(Question $question){
 
         $rs = ['success' => 1, 'message' => 'get this', 'data' => $question];

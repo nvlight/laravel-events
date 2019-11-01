@@ -52,6 +52,10 @@
                 <h5 class="text-success">{{session()->get('add_questionAnswer')}}</h5>
             @endif
 
+            @if(session()->has('update_questionAnswer'))
+                <h5 class="text-success">{{session()->get('update_questionAnswer')}}</h5>
+            @endif
+
             <button id="addNewAnswer" class="btn btn-primary mb-3" data-toggle="modal" data-target="#modalAddNewAnswer">Добавить новый</button>
 
             <table class="table table-bordered table-striped table-responsive">
@@ -83,6 +87,7 @@
                                     </form>
                                     <form action="/sts-question/{{$v['id']}}" class="shorturl-delete-button" method="POST" style="">
                                         @csrf
+                                        @method('delete')
                                         <button class="mg-btn-1 " type="submit" title="удалить">
                                             <svg viewBox="0 0 12 16" version="1.1" aria-hidden="true" class="mg-btn-delete" width="35" height="29"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"></path></svg>
                                         </button>
@@ -136,7 +141,7 @@
         </div>
     </div>
 
-    <!-- Modal addNewAnswer -->
+    <!-- Modal EditNewAnswer -->
     <div class="modal fade" id="modalEditAnswer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel_2" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -154,20 +159,22 @@
                             <label for="modalEditAnswer_description">Ответ</label>
                             <input class="form-control" type="text" id="modalEditAnswer_description" name="description" placeholder="Введите описание ответа">
                         </div>
+                        <input type="hidden" id="modalEditAnswer_id" value="">
                         <div class="mb-3">
-                            <label for="modalEditAnswer_descriptionType">Тип ответа</label>
-                            <select class="form-control" name="description_type" id="modalEditAnswer_descriptionType">
+                            <label for="modalEditAnswer_answerType">Тип ответа</label>
+                            <select class="form-control" name="answerType" id="modalEditAnswer_answerType">
                                 <option value="0">Выберите тип ответа</option>
                                 <option value="2">Правильный ответ</option>
                                 <option value="3">Неправильный ответ</option>
                             </select>
                         </div>
                         <div class="mb-3 errors ">
+
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                            <button type="submit" class="btn btn-primary">Добавить</button>
+                            <button type="submit" class="btn btn-primary">Обновить</button>
                         </div>
                     </div>
                 </form>
@@ -316,6 +323,7 @@
 
         $('form[id^=editAnswer_]').submit(function (e) {
             e.preventDefault();
+
             let id = $(this).attr('id');
             id = id.replace('editAnswer_','');
             //console.log(id);
@@ -327,15 +335,46 @@
                 success:function(data){
                     if (data.success === 1){
                         $('#modalEditAnswer').modal();
+                        $('#modalEditAnswer_id').val(data.data['id']);
                         $('#modalEditAnswer_description').val(data.data['description']);
-                        $('#modalEditAnswer_descriptionType').find('option[value='+data.data['description_type'] +']').attr('selected','selected');
+                        $('#modalEditAnswer_answerType').find('option[value='+data.data['description_type'] +']').attr('selected','selected');
                     }else{
-                        alert('Что-то пошло не так!')
+                        console.log('Что-то пошло не так!')
                     }
                 },
                 error:function (e) { console.log('something gone wrong') }
             });
 
+        });
+
+        $('#form_EditAnswer').submit(function (e) {
+            e.preventDefault();
+            //console.log('form_EditAnswer - stop ');
+            var description = $('#modalEditAnswer_description').val();
+            var answer_type = $('#modalEditAnswer_answerType :selected').val();
+            var id = $('#modalEditAnswer_id').val();
+            var dt = 'description=' + description + '&answer_type=' + answer_type;
+            //let answer_type = ['answer_type'] = answer_type;
+            //console.log(($(this).serialize()));
+            //console.log(description + ' - ' + answer_type);
+            $.ajax({
+                type:'patch',
+                url:"/sts-question-update-answer/"+id,
+                data: $(this).serialize(),
+                beforeSend: function(){ $('#form_EditAnswer .errors').html('') },
+                success:function(data){
+                    if (data.success === 1){
+                        location.reload();
+                    }else{
+                        //console.log('Что-то пошло не так!')
+                        for(var key in data.errors[0]){
+                            $('#form_EditAnswer .errors').append("<div class='text-danger'><strong>"+data['errors'][0][key]+"</strong></div>")
+                            //console.log(key + ' : ' + data['errors'][0][key])
+                        }
+                    }
+                },
+                error:function (e) { console.log('something gone wrong') }
+            });
         });
 
     </script>
