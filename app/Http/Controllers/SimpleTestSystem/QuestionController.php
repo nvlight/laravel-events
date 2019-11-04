@@ -339,7 +339,80 @@ class QuestionController extends Controller
     }
 
     //
+    public function getQuestionAnswersByDescriptionType(array $questions, int $description_type){
+
+        $count = 0;
+        switch ($description_type){
+            case 2:
+                foreach($questions as $k => $v){
+                    if ($v['description_type'] === $description_type){
+                        $count++;
+                    }
+                }
+                break;
+            case 3:
+                foreach($questions as $k => $v){
+                    if ($v['description_type'] === $description_type){
+                        $count++;
+                    }
+                }
+                break;
+            default:
+        }
+        return $count;
+    }
+
+    //
     public function deleteQuestion(Question $question){
+
+        //dd($question);
+        $qst_ids = Question::where('number', '=', $question->number)
+            ->where('parent_id','=',$question->parent_id)
+            ->get();
+        $qst_ids_count = $qst_ids->count();
+        if ($qst_ids_count === 0){
+            $rs = ['success' => 0, 'message' => 'Не найдено потомков вопроса'];
+            //dd($rs);
+            session()->flash('del_question', $rs['message']);
+            return back();
+        }
+
+        $qst_ids_array = $qst_ids->toArray();
+        //dd($qst_ids_array);
+
+        $trueAnsersCount  = $this->getQuestionAnswersByDescriptionType($qst_ids_array, 2);
+        $falseAnsersCount = $this->getQuestionAnswersByDescriptionType($qst_ids_array, 3);
+        //dump($trueAnsersCount);
+        //dump($falseAnsersCount);
+
+        $current_answer_type = $question->description_type;
+        //dd($current_answer_type);
+        switch ($current_answer_type){
+            case 2:
+                if ($trueAnsersCount < 2){
+                    $rs = ['success' => 0, 'message' => 'Невозможно удалить единственный оставшийся правильный ответ'];
+                    session()->flash('del_question', $rs['message']);
+                    //dd($rs);
+                    return back();
+                }
+                break;
+            case 3:
+                if ($falseAnsersCount < 2){
+                    $rs = ['success' => 0, 'message' => 'Невозможно удалить единственный оставшийся неправильный ответ'];
+                    session()->flash('del_question', $rs['message']);
+                    //dump($falseAnsersCount);
+                    //dd($rs);
+                    return back();
+                }
+                break;
+            default:
+                $rs = ['success' => 0, 'message' => 'Неизвестный тип вопроса'];
+                session()->flash('del_question', $rs['message']);
+                //dd($rs);
+                return back();
+        }
+
+        //dd('okey');
 
         $rs = ['success' => 1, 'message' => 'Запись удалена!'];
         try{
@@ -569,6 +642,12 @@ class QuestionController extends Controller
     }
 
     //
+    public function isQuestionValid(Question $question){
+
+
+    }
+
+    //
     public function getAnswer(Question $question){
 
         $rs = ['success' => 1, 'message' => 'get this', 'data' => $question];
@@ -618,6 +697,7 @@ class QuestionController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * Удаление темы или вопроса
      *
      * @param  \App\Models\SimpleTestSystem\Question  $question
      * @return \Illuminate\Http\Response
