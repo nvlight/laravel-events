@@ -331,14 +331,13 @@ class QuestionController extends Controller
         return view('simpletestsystem.question.edit', compact('question', 'question_ids'));
     }
 
-    //
-    public function getQuestion(Question $question){
-
-        $rs = ['success' => 1, 'description' => $question->description];
-        return response()->json($rs);
-    }
-
-    //
+    /**
+     * Получение количества ответов по типу, например по (не)правильным ответам для вопроса
+     *
+     * @param array $questions массив, по которому будет идти поиск
+     * @param int $description_type тип, по которому будет идти сравнение
+     * @return int количество ответов по типу
+     **/
     public function getQuestionAnswersByDescriptionType(array $questions, int $description_type){
 
         $count = 0;
@@ -362,13 +361,26 @@ class QuestionController extends Controller
         return $count;
     }
 
-    //
+    /**
+     * Получения вопроса с дочерними ответами
+     *
+     * @param int $parent_id - id предка
+     * @param int $number - номер вопроса
+     * @return mixed объект с полученным вопросом
+     */
+    public function getQuestionWithChildAnswersByParentIdAndByNumber(int $parent_id, int $number){
+        return $qst_ids = Question::where('number', '=', $number)
+            ->where('parent_id','=', $parent_id)
+            ->get();
+    }
+
+    /**/
     public function deleteQuestion(Question $question){
 
         //dd($question);
-        $qst_ids = Question::where('number', '=', $question->number)
-            ->where('parent_id','=',$question->parent_id)
-            ->get();
+
+        $qst_ids = $this->getQuestionWithChildAnswersByParentIdAndByNumber($question->parent_id, $question->number);
+
         $qst_ids_count = $qst_ids->count();
         if ($qst_ids_count === 0){
             $rs = ['success' => 0, 'message' => 'Не найдено потомков вопроса'];
@@ -567,10 +579,22 @@ class QuestionController extends Controller
         $this->editTheme($theme);
     }
 
-    //
-    public function addAnswer(Question $question, Request $request){
+    /**
+     * @param Question $question
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getQuestion(Question $question){
+        $rs = ['success' => 1, 'description' => $question->description];
+        return response()->json($rs);
+    }
 
-        $rs = ['success' => 1, 'message' => 'Save this'];
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function validateAnswerBeforeAdd(Request $request){
+
+        $rs = ['success' => 1];
 
         $validator = Validator::make($request->all(), [
             'description_type' => 'int|min:2|max:3',
@@ -584,27 +608,123 @@ class QuestionController extends Controller
         if (count($errors)){
             $rs['success'] = 0;
             $rs['errors'] = $errors;
-            $rs['message'] = 'Что-то пошло не так';
-        }else{
-            try{
-                $answer = new Question();
-                $answer->number = $question->number;
-                $answer->description = $request->get('description');
-                $answer->description_type = $request->get('description_type');
-                $answer->parent_id = $question->parent_id;
-                $answer->theme_id = $question->theme_id;
-                $answer->type = $question->type;
-                $answer->save();
-                session()->flash('add_questionAnswer', 'Ответ добавлен к вопросу');
-            }catch (\Exception $e){
-                $rs['success'] = 0;
-                $rs['errors'] = $e->getMessage();
-                $rs['message'] = 'Ошибка при добавлении!';
-            }
+        }
+        return $rs;
+    }
 
+    /**
+     * @param Question $question
+     * @param Request $request
+     * @return array
+     */
+    public function storeAnswer(Question $question, Request $request){
+        $rs = ['success' => 1];
+        try{
+            $answer = new Question();
+            $answer->number = $question->number;
+            $answer->description = $request->get('description');
+            $answer->description_type = $request->get('description_type');
+            $answer->parent_id = $question->parent_id;
+            $answer->theme_id = $question->theme_id;
+            $answer->type = $question->type;
+            $answer->save();
+            session()->flash('add_questionAnswer', 'Ответ добавлен к вопросу');
+        }catch (\Exception $e){
+            $rs['success'] = 0;
+            $rs['errors'] = $e->getMessage();
+            $rs['message'] = 'Ошибка при добавлении!';
+        }
+        return $rs;
+    }
+
+    /**
+     * @param Question $question
+     * @param Request $request
+     * @return array
+     */
+    public function addAnwerBefore(Question $question, Request $request){
+
+        //dd($question);
+
+        $validateAnswer = $this->validateAnswerBeforeAdd($request);
+        if ($validateAnswer['success'] === 0){
+            return $validateAnswer;
         }
 
-        return response()->json($rs);
+        $qst_ids = $this->getQuestionWithChildAnswersByParentIdAndByNumber($question->parent_id, $question->number);
+        $qst_ids_count = $qst_ids->count();
+        if ($qst_ids_count === 0){
+            $rs = ['success' => 0, 'message' => 'Не найдено потомков вопроса'];
+            return $rs;
+        }
+        $qst_ids_array = $qst_ids->toArray();
+        //dd($qst_ids_array);
+
+        $trueAnsersCount  = $this->getQuestionAnswersByDescriptionType($qst_ids_array, 2);
+        $falseAnsersCount = $this->getQuestionAnswersByDescriptionType($qst_ids_array, 3);
+        //dump($trueAnsersCount);
+        //dump($falseAnsersCount);
+
+        $dbg_data = [$qst_ids_array, $trueAnsersCount, $falseAnsersCount];
+        $rs = ['success' => 1, '$dbg_data' => $dbg_data, 'trueAnsersCount' => $trueAnsersCount, 'falseAnsersCount' => $falseAnsersCount];
+
+        return $rs;
+    }
+
+    /**
+     * @param Question $question
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addAnswer(Question $question, Request $request){
+
+        $addAnwerBefore = $this->addAnwerBefore($question, $request);
+        if ($addAnwerBefore['success'] === 0){
+            return response()->json($addAnwerBefore);
+        }
+
+        //$rs = ['success' => 2, 'desc' => $request->get('description_type'), gettype(intval($request->get('description_type')))];
+        //return response()->json($rs);
+
+        // если добавляем правильный ответ, то должны предупредить, что это приведет к изменения типа вопроса
+        // с закрытого с 1 правильным ответом на тот же закрытый с 2-я и более правильными ответами
+        if ( intval($request->get('description_type')) === 2 && $addAnwerBefore['trueAnsersCount'] === 1 ){
+            $rs = [
+                'success' => 2,
+                'message' => <<<STR
+Попытка добавления 2 правильного ответа. 
+Это приведет к изменению типа вопроса (Закрытый тип, два и более правильных ответов). 
+Требуется подтверждение действия. 
+Подтвердить изменения типа вопроса и добавления правильного ответа?
+STR
+            ];
+            return response()->json($rs);
+        }
+
+        $store = $this->storeAnswer($question, $request);
+
+        return response()->json($store);
+    }
+
+    /**
+     * @param Question $question
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addAnswerConfirm(Question $question, Request $request){
+
+        $addAnwerBefore = $this->addAnwerBefore($question, $request);
+        if ($addAnwerBefore['success'] === 0){
+            return response()->json($addAnwerBefore);
+        }
+
+        if ( intval($request->get('description_type')) === 2 && $addAnwerBefore['trueAnsersCount'] === 1 ){
+            // нужно сменить тип вопроса на закрытый с несколькими правильными ответами.
+        }
+
+        $store = $this->storeAnswer($question, $request);
+
+        return response()->json($store);
     }
 
     //
@@ -639,12 +759,6 @@ class QuestionController extends Controller
         }
 
         return response()->json($rs);
-    }
-
-    //
-    public function isQuestionValid(Question $question){
-
-
     }
 
     //

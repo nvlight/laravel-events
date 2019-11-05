@@ -127,7 +127,7 @@
                                 <option value="3">Неправильный ответ</option>
                             </select>
                         </div>
-                        <div class="mb-3 errors ">
+                        <div class="mb-3 errors">
                         </div>
 
                         <div class="modal-footer">
@@ -186,7 +186,7 @@
 
     <script>
 
-        //$('#modalAddNewAnswer').modal();
+        $('#modalAddNewAnswer').modal();
 
         function reloadQuestionDescription(){
             $.ajax({
@@ -208,8 +208,6 @@
             });
         };
 
-        reloadQuestionDescription();
-
         function deleteQuestionById(id){
             $.ajax({
                 type:'delete',
@@ -228,6 +226,8 @@
                 }
             });
         }
+
+        reloadQuestionDescription();
 
         $('input[name=question_description]').on('keyup', function (e) {
 
@@ -292,26 +292,52 @@
         $('form#form_AddNewAnswer').submit(function (e) {
             e.preventDefault();
 
-            //
             $.ajax({
                 type:'post',
                 url:"/sts-question-add-answer/<?=$question_description?>",
                 data: $(this).serialize(),
-                beforeSend: function(){
-
-                },
+                beforeSend: function(){},
                 success:function(data){
                     $('#form_AddNewAnswer .errors').html("");
-                    if (data.success === 1){
-                        //console.log('okey');
-                        // $('#modalAddNewAnswer').modal('hide');
-                        location.reload();
-                    }else{
+                    switch (data.success) {
+                        case 1:
+                            location.reload();
+                            break;
+                        case 2:
+                            var doConfirm = confirm(data.message);
+                            console.log('confirm: '+doConfirm);
 
-                        for(var key in data.errors[0]){
-                            $('#form_AddNewAnswer .errors').append("<div class='text-danger'><strong>"+data['errors'][0][key]+"</strong></div>")
-                            //console.log(key + ' : ' + data['errors'][0][key])
-                        }
+                            if (doConfirm){
+                                $.ajax({
+                                    type:'post',
+                                    url:"/sts-question-add-answer-confirm/<?=$question_description?>",
+                                    data: $('form#form_AddNewAnswer').serialize(),
+                                    beforeSend: function(){},
+                                    success:function(data){
+                                        $('#form_AddNewAnswer .errors').html("");
+                                        switch (data.success) {
+                                            case 1:
+                                                location.reload();
+                                                break;
+                                            case 0:
+                                                for(var key in data.errors[0]){
+                                                    $('#form_AddNewAnswer .errors').append("<div class='text-danger'><strong>"+data['errors'][0][key]+"</strong></div>")
+                                                    //console.log(key + ' : ' + data['errors'][0][key])
+                                                }
+                                        }
+                                    },
+                                    error:function (e) {
+                                        $('#form_AddNewAnswer .errors').html("");
+                                        console.log('something gone wrong');
+                                    }
+                                });
+                            }
+                            break;
+                        case 0:
+                            for(var key in data.errors[0]){
+                                $('#form_AddNewAnswer .errors').append("<div class='text-danger'><strong>"+data['errors'][0][key]+"</strong></div>")
+                                //console.log(key + ' : ' + data['errors'][0][key])
+                            }
                     }
                 },
                 error:function (e) {
