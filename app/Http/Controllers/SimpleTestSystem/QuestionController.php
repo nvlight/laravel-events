@@ -401,6 +401,17 @@ class QuestionController extends Controller
         //dd($current_answer_type);
         switch ($current_answer_type){
             case 2:
+
+                // если правильных ответов 2, то при удалении нужно изменить тип вопроса на закрытый с 1 прав.ответом
+                if ($trueAnsersCount == 2){
+                    $changeType = $this->setQuestionChildsType($qst_ids, 1);
+                    if ($changeType['success'] !== 1){
+                        session()->flash('del_question', $changeType['message']);
+                        return back();
+                    }
+                    break;
+                }
+
                 if ($trueAnsersCount < 2){
                     $rs = ['success' => 0, 'message' => 'Невозможно удалить единственный оставшийся правильный ответ'];
                     session()->flash('del_question', $rs['message']);
@@ -665,8 +676,11 @@ class QuestionController extends Controller
         //dump($trueAnsersCount);
         //dump($falseAnsersCount);
 
-        $dbg_data = [$qst_ids_array, $trueAnsersCount, $falseAnsersCount];
-        $rs = ['success' => 1, '$dbg_data' => $dbg_data, 'trueAnsersCount' => $trueAnsersCount, 'falseAnsersCount' => $falseAnsersCount];
+        $dbg_data = [$qst_ids_array];
+        $rs = ['success' => 1, '$dbg_data' => $dbg_data,
+            'trueAnsersCount' => $trueAnsersCount, 'falseAnsersCount' => $falseAnsersCount,
+            'qst_childs' => $qst_ids,
+        ];
 
         return $rs;
     }
@@ -707,6 +721,29 @@ STR
     }
 
     /**
+     * @param $question_childs
+     * @param $type
+     * @return array
+     * @throws \Throwable
+     */
+    public function setQuestionChildsType($question_childs, $type){
+
+        $result = ['success' => 1, 'transaction is done'];
+        try{
+            \DB::transaction(function () use($question_childs, $type) {
+                foreach($question_childs as $qk => $qv){
+                    $question_child = $qv;
+                    $question_child->type = $type;
+                    $question_child->save();
+                }
+            });
+        }catch (\Exception $e){
+            $result = ['success' => 0, 'message' => 'transaction is failed', 'error' => $e->getCode() . ' || ' . $e->getMessage()];
+        }
+        return $result;
+    }
+
+    /**
      * @param Question $question
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -718,8 +755,29 @@ STR
             return response()->json($addAnwerBefore);
         }
 
+        $is_question_type_changed = false;
         if ( intval($request->get('description_type')) === 2 && $addAnwerBefore['trueAnsersCount'] === 1 ){
             // нужно сменить тип вопроса на закрытый с несколькими правильными ответами.
+            $qst_childs =  $addAnwerBefore['qst_childs'];
+
+            $rs = $this->setQuestionChildsType($qst_childs, 2);
+
+            $is_question_type_changed = true;
+
+            if ($rs['success'] === 0){
+                return response()->json($rs);
+            }
+
+        }
+
+        if ($is_question_type_changed){
+            $question->type = 2;
+            try {
+                $question->save();
+            }catch (\Exception $e){
+                $rs = ['success' => 0, 'message' => 'Ошибка при изменения типа перед сохранением!'];
+                return response()->json($rs);
+            }
         }
 
         $store = $this->storeAnswer($question, $request);

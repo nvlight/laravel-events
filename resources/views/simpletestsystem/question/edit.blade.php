@@ -186,7 +186,7 @@
 
     <script>
 
-        $('#modalAddNewAnswer').modal();
+        //$('#modalAddNewAnswer').modal();
 
         function reloadQuestionDescription(){
             $.ajax({
@@ -213,9 +213,7 @@
                 type:'delete',
                 url:"/sts-question/"+id,
                 data: '',
-                beforeSend: function(){
-
-                },
+                beforeSend: function(){ },
                 success:function(data){
                     if (data.success === 1){
                         console.log('success - deleteQuestionById');
