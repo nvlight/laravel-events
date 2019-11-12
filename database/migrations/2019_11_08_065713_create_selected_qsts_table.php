@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateResultsTable extends Migration
+class CreateSelectedQstsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateResultsTable extends Migration
      */
     public function up()
     {
-        Schema::create('results', function (Blueprint $table) {
+        Schema::create('selected_qsts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
+            $table->bigInteger('number'); // номер выборки
             $table->bigInteger('test_id');
-            $table->bigInteger('prepared_qst_id');
-            $table->integer('ball');
+            $table->bigInteger('theme_id');
+            $table->bigInteger('qsts_count')->default(0);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateResultsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('results');
+        Schema::dropIfExists('selected_qsts');
     }
 }

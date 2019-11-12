@@ -76,3 +76,7 @@ Route::post('sts-question-add-answer-confirm/{question}', 'SimpleTestSystem\Ques
 Route::get('sts-question-get-answer/{question}', 'SimpleTestSystem\QuestionController@getAnswer')->middleware('verified');
 Route::patch('sts-question-update-answer/{question}', 'SimpleTestSystem\QuestionController@updateAnswer')->middleware('verified');
 
+Route::resource('sts-selected-qsts', 'SimpleTestSystem\SelectedQstsController')->middleware('verified');
+Route::resource('sts-shedule', 'SimpleTestSystem\SheduleController')->middleware('verified');
+
+//Route::post('sts-selected-qsts','')->middleware('verified');

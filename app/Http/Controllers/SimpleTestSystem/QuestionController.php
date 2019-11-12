@@ -51,6 +51,7 @@ class QuestionController extends Controller
                     $question->description = $qv['description'];
                     $question->description_type = $qv['description_type'];
                     $question->theme_id = $qv['theme_id'];
+                    //dump($question);
                     $question->save();
                 }
             });
@@ -76,7 +77,12 @@ class QuestionController extends Controller
     public function validateQuestionForClosedType($question_type, $request){
 
         $question_theme_id = $request['question_theme_id'] ?? 0;
-        //dd($question_theme_id);
+        //dump($question_theme_id);
+
+        if (intval($question_theme_id) === 0){
+            $result = ['success' => 0, 'errors' => 'Вопрос должен быть включен в тему!'];
+            return $result;
+        }
 
         $errors = [];
         switch ($question_type){
@@ -114,7 +120,7 @@ class QuestionController extends Controller
                     'question_description' => 'min:3',
                 ]);
                 if ($validator->fails()){
-                    $errors[] = 'Description is empty';
+                    $errors[] = 'Пустое описание вопроса';
                     break;
                 }
 
@@ -176,10 +182,10 @@ class QuestionController extends Controller
                     }
                 }
                 if (!$one_true_answer){
-                    $errors[] = 'No one true answer';
+                    $errors[] = 'Не выбрано ни одного правильного ответа';
                 }
                 if (!$one_false_answer){
-                    $errors[] = 'No one false answer';
+                    $errors[] = 'Не выбрано ни одного неправильного ответа';
                 }
                 if (count($errors)){
                     break;
@@ -193,7 +199,7 @@ class QuestionController extends Controller
                             'description' => 'min:1',
                         ]);
                         if ($validator->fails()){
-                            $errors[] = 'One of answers is empty';
+                            $errors[] = 'Один из ответов не имеет описания!';
                             break;
                         }
                     }
@@ -218,7 +224,7 @@ class QuestionController extends Controller
     //
     public function store(Request $request){
 
-        //dd($request->all());
+        //dump($request->all());
         $question_type = intval($request['question_type']);
 
         switch ($question_type){
@@ -548,7 +554,7 @@ class QuestionController extends Controller
         //echo Debug::d($themesWichQustionChilds); die;
         $catsThemesWithQuestionChilds = self::createTree($themesWichQustionChilds);
         //echo Debug::d($catsThemesWithQuestionChilds); die;
-        //dd($themesWichQustionChilds);
+        //dd($catsThemesWithQuestionChilds);
 
         //echo Debug::d($test_curr->parent_id);
         //die;

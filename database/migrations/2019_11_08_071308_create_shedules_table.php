@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAnsweredQstsTable extends Migration
+class CreateShedulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateAnsweredQstsTable extends Migration
      */
     public function up()
     {
-        Schema::create('answered_qsts', function (Blueprint $table) {
+        Schema::create('shedules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->bigInteger('prepared_qst_id');
-            $table->bigInteger('question_id');
-            $table->json('answer');
+            $table->string('name');
+            $table->timestamp('test_started_at')->useCurrent(); //dateTime('test_started_at')->default();
+            $table->bigInteger('duration');
+            $table->bigInteger('selected_qsts_number');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateAnsweredQstsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('answered_qsts');
+        Schema::dropIfExists('shedules');
     }
 }

@@ -1209,3 +1209,14 @@ body > nav.navbar{
 	top: 38px;
 	right: 9px;
 }
+
+.mr-0{
+	margin-right: 0px;
+}
+.ml-0{
+	margin-left: 0px;
+}
+
+.mg-duration-maxw101{
+	max-width: 101px;
+}
