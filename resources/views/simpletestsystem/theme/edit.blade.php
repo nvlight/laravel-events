@@ -2,7 +2,6 @@
 
 @section('content')
 
-    <h4><a href="/simple-test-system-question/<?=session()->get('tz')->id?>">Банк ТЗ - '<?=session()->get('tz')->name?>'</a></h4>
     <h4><a href="/sts-theme/{{$theme->id}}">Назад</a></h4>
 
     <h5 class="mb-3">Редактирование темы '<?=$theme->description?>'</h5>

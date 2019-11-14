@@ -2,8 +2,6 @@
 
 @section('content')
 
-    <h4><a href="/simple-test-system-question/<?=session()->get('tz')->id?>">Банк ТЗ - '<?=session()->get('tz')->name?>'</a></h4>
-
     <h5 class="mb-3">Просмотр темы '<?=$theme->description?>'</h5>
 
     <table class="table table-striped table-striped table-responsive">

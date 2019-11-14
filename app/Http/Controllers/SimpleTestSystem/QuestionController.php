@@ -5,6 +5,7 @@ namespace App\Http\Controllers\SimpleTestSystem;
 use App\Debug;
 use App\Models\SimpleTestSystem\Question;
 use App\Models\SimpleTestSystem\QuestionType;
+use App\Models\SimpleTestSystem\Shedule;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SimpleTestSystem\Test;
@@ -22,8 +23,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
-        return view('simpletestsystem.question.index');
+        //return view('simpletestsystem.question.index');
     }
 
     /**
@@ -537,6 +537,7 @@ class QuestionController extends Controller
      */
     public function show(Test $simple_test_system_question)
     {
+        //dd('stop');
         //return $simple_test_system_question;
         $test_curr = $simple_test_system_question;
         $question_types = QuestionType::all();
@@ -546,7 +547,8 @@ class QuestionController extends Controller
             ->get();
         //dd($themes);
 
-        session()->put('tz', $test_curr);
+        //session()->put('tz', $test_curr);
+        //dump(session());
 
         $themesWichQustionChilds = Question::whereIn('description_type', [1,7])
             ->where('parent_id', '=', $simple_test_system_question->id)
@@ -565,8 +567,15 @@ class QuestionController extends Controller
         //dd($questions);
         //return $simple_test_system_question;
 
+        $shedules = Shedule::where('test_id', '=', $test_curr->id)
+            ->join('tests','tests.id','=','shedules.test_id')
+            ->join('test_categories','test_categories.id','=','shedules.test_id')
+            ->select('shedules.*', 'tests.name as test_name','test_categories.name as test_cat_name')
+            ->get();
+
         return view('simpletestsystem.question.index',
-            compact('question_types', 'test_curr', 'tests', 'questions', 'themes', 'catsThemesWithQuestionChilds')
+            compact('question_types', 'test_curr', 'tests', 'questions', 'themes',
+                'catsThemesWithQuestionChilds', 'shedules')
         );
     }
 

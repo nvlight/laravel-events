@@ -203,7 +203,7 @@ class SheduleController extends Controller
         //dump($need_keys);
         if (!count($need_keys)){
             $tarr = []; $tarr['qst_theme_ids'] = ['Не выбрано ни 1 темы с вопросами'];
-            $errors = ['success' => 0, 'message' => [$tarr], ];
+            $errors = ['success' => 0, 'message' => $tarr, ];
             //dd($errors);
             session()->flash('addNewSelectedQsts', $errors);
             return back();
@@ -227,7 +227,7 @@ class SheduleController extends Controller
             ->whereIn('description_type', [1,7])
             ->get();
         if (!$qstsWithChildQstsCount){
-            $errors[] = ['success' => 0, 'message' => 'Нет вопросов и тем в текущем ТЗ', ];
+            $errors[] = ['success' => 0, 'message' => [ 'Questions in TZ' => ['Нет вопросов и тем в текущем ТЗ' ], ] ];
             //dd($errors);
             session()->flash('addNewSelectedQsts', $errors);
             return back();
@@ -262,7 +262,9 @@ class SheduleController extends Controller
         }
         //dump($themesWithCheckedQuestionsCount);
         if (!$we_find_one_good_theme_with_positive_question){
-            $errors[] = ['success' => 0, 'message' => 'Полученный список тем с вопросами не существует в БД!', ];
+            $errors[] = ['success' => 0, //'message' => 'Полученный список тем с вопросами не существует в БД!',
+                    'message' => [ 'Check themes is DB' => ['Полученный список тем с вопросами не существует в БД!' ], ]
+                ];
             //dd($errors);
             session()->flash('addNewSelectedQsts', $errors);
             return back();
@@ -272,7 +274,9 @@ class SheduleController extends Controller
         $lastInsertNumber = $this->getLastInsertNumber('selected_qsts');
         //dump($lastInsertNumber);
         if ($lastInsertNumber['success'] !== 1){
-            $errors[] = ['success' => 0, 'message' => 'Не удалось получить последний вставленный ID', ];
+            $errors[] = ['success' => 0, //'message' => 'Не удалось получить последний вставленный ID',
+                'message' => [ 'LastInsertNumber' => ['Не удалось получить последний вставленный ID'], ]
+            ];
             //dd($errors);
             session()->flash('addNewSelectedQsts', $errors);
             return back();
@@ -284,15 +288,17 @@ class SheduleController extends Controller
         // 3.2 добавление данных в shedules
         try{
             \DB::transaction(function () use($themesWithCheckedQuestionsCount, $request, $number) {
-
+                $qsts_count = 0;
                 // 2. подготовка данных для вставки в selected_qsts
                 foreach($themesWithCheckedQuestionsCount as $qk => $qv) {
                     $selectedQsts = new SelectedQsts();
                     // number, test_id, theme_id, qsts_count
                     $selectedQsts->test_id = $request->get('test_id');
+                    $test_id = $selectedQsts->test_id;
                     $selectedQsts->number = $number;
                     $selectedQsts->theme_id = $qv['theme_id'];
                     $selectedQsts->qsts_count = $qv['qst_count'];
+                    $qsts_count += $selectedQsts->qsts_count;
                     //dump($selectedQsts);
                     $selectedQsts->save();
                 }
@@ -303,6 +309,8 @@ class SheduleController extends Controller
                 $shedule->test_started_at = Carbon::parse($request->get('selected_qst_test_started_at'))->format('Y-m-d');
                 $shedule->duration = $request->get('selected_qst_duration');
                 $shedule->selected_qsts_number = $number;
+                $shedule->qsts_count = $qsts_count;
+                $shedule->test_id = $test_id;
                 $shedule->save();
 
             });
@@ -359,8 +367,33 @@ class SheduleController extends Controller
      * @param  \App\Models\SimpleTestSystem\Shedule  $shedule
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Shedule $shedule)
+    public function destroy(Shedule $sts_shedule)
     {
-        //
+        //return $sts_shedule;
+        // т.к. нужно удалить записи с Shedule и Selected_qsts, нужно запустить транзакцию
+        $idsForDeleteOnSelectedQsts = Shedule::where('shedules.id','=',$sts_shedule->id)
+            ->join('selected_qsts','selected_qsts.number', '=', 'shedules.selected_qsts_number')
+            ->select('selected_qsts.id')
+            ->get()->toArray();
+
+        //$idsForDelete = array_merge($idsForDeleteOnSelectedQsts, [ ['id' => $sts_shedule->id]] );
+        $idsForDeleteOnSelectedQstsReal = [];
+        foreach($idsForDeleteOnSelectedQsts as $k => $v){
+            $idsForDeleteOnSelectedQstsReal[] = $v['id'];
+        }
+        //return $idsForDeleteOnSelectedQstsReal;
+
+        $result = ['success' => 1, 'message' => 'Элемент удален из расписания'];
+        try{
+            \DB::transaction(function () use($idsForDeleteOnSelectedQstsReal, $sts_shedule) {
+                SelectedQsts::whereIn('id', $idsForDeleteOnSelectedQstsReal)->delete();
+                Shedule::where('id','=',$sts_shedule->id)->delete();
+            });
+        }catch (\Exception $e){
+            $result = ['success' => 0, 'message' => 'Ошибка при удалении элемента расписания',
+                'error' => $e->getCode() . ' || ' . $e->getMessage()];
+        }
+        session()->flash('deleteElementFromShedulesWithSelectedQstsChilds', $result);
+        return back();
     }
 }

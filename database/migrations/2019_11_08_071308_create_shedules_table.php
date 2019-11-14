@@ -19,6 +19,8 @@ class CreateShedulesTable extends Migration
             $table->timestamp('test_started_at')->useCurrent(); //dateTime('test_started_at')->default();
             $table->bigInteger('duration');
             $table->bigInteger('selected_qsts_number');
+            $table->integer('test_id');
+            $table->integer('qsts_count');
             $table->timestamps();
         });
     }

@@ -537,8 +537,54 @@ STR;
     </div>
 
     <div id="mainRasps" class="w3-container myTab" style="display:none">
-        <h3>Добавление расписания</h3>
-        <h5>Выборка тем с вопросами, даты, длительности тестирования и его сохранение</h5>
+        <h3>Выборка тем с вопросами, даты, длительности тестирования и его сохранение</h3>
+        <h5>Список расписаний</h5>
+        <table class="table table-striped table-bordered table-responsive">
+            <tr>
+                <th>#</th>
+                <th>Test_id</th>
+                <th>Имя выборки</th>
+                <th>Вопросов/минут</th>
+                <th>Дата тестирования</th>
+                <th>действия</th>
+            </tr>
+            <?php
+            //dump($shedules->toArray());
+            ?>
+            @if($shedules->count())
+                @foreach($shedules as $shedule)
+                    <tr>
+                        <td>{{$shedule->id}}</td>
+                        <td>{{$shedule->test_cat_name}} / {{$shedule->test_name}}</td>
+                        <td>{{$shedule->name}}</td>
+                        <td>{{$shedule->qsts_count}}/{{$shedule->duration}}</td>
+                        <td>{{$shedule->test_started_at}}</td>
+                        <td>
+                            <form action="/sts-shedule/{{$shedule->id}}" class="shorturl-delete-button" method="POST" style="">
+                                @csrf
+                                @method('DELETE')
+                                <button class="mg-btn-1 " type="submit" title="удалить">
+                                    <svg viewBox="0 0 12 16" version="1.1" aria-hidden="true" class="mg-btn-delete" width="35" height="29"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"></path></svg>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr>
+                    <td>Нет записей</td>
+                </tr>
+            @endif
+        </table>
+        @if(session()->has('deleteElementFromShedulesWithSelectedQstsChilds'))
+            <?php //dump(session()->get('deleteElementFromShedulesWithSelectedQstsChilds')); ?>
+            @if(session()->get('deleteElementFromShedulesWithSelectedQstsChilds')['success'] === 1)
+                <h5 class="text-success">{{session()->get('deleteElementFromShedulesWithSelectedQstsChilds')['message']}}</h5>
+            @else
+                <p class="text-danger">{{session()->get('deleteElementFromShedulesWithSelectedQstsChilds')['message']}}</p>
+            @endif
+        @endif
+
         @if(session()->has('addNewSelectedQsts'))
             <?php //dump(session()->get('addNewSelectedQsts')); ?>
             @if(session()->get('addNewSelectedQsts')['success'] === 1)
@@ -550,6 +596,7 @@ STR;
                 @endforeach
             @endif
         @endif
+        <h5>Добавление расписания</h5>
         <?php
         $output_array = [];
         //dump($catsThemesWithQuestionChilds);

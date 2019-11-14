@@ -2,8 +2,6 @@
 
 @section('content')
 
-    <h4><a href="/simple-test-system-question/<?=session()->get('tz')->id?>"><?=session()->get('tz')->name?></a></h4>
-
     <h5 class="mb-3">Просмотр вопроса</h5>
 
     <?php
