@@ -63,6 +63,10 @@ return [
         'path2save_json_encoded' => 'cbr-xml-daily.json_decoded',
         'white_list' => ['933','840',826,978,156,980],
         'active_days' => 2
-    ]
+    ],
+
+    'sts' => [ // simple test system
+        'test_start_session_key' => 'test_start',
+    ],
 
 ];

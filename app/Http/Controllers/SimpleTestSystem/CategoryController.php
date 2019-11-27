@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SimpleTestSystem;
 
+use App\Debug;
 use App\Models\SimpleTestSystem\Question;
 use App\Models\SimpleTestSystem\QuestionType;
 use App\Models\SimpleTestSystem\Test;
@@ -22,9 +23,16 @@ class CategoryController extends Controller
         $question_types = QuestionType::all();
         //dd($question_types);
         $categories = TestCategory::where('id','>=',0)->orderby('id','asc')->get();
-        $tests = Test::where('id','>=',0)
-            ->orderBy('id','desc')
+        $tests = Test::where('tests.id','>=',0)
+            ->join('test_categories','test_categories.id','=', 'tests.parent_id')
+            ->select('test_categories.id as test_categories_id',
+                'tests.id as tests_id',
+                'test_categories.name as category_name',
+                'tests.name as tests_name'
+            )
+            ->orderBy('tests.id','desc')
             ->get();
+        //echo Debug::d($tests->toArray());
         //dd($categories->toArray());
         //dd($tests);
 

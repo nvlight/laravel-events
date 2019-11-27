@@ -457,7 +457,7 @@ STR;
                     <tr>
                         <th>id</th>
                         <th>theme_id</th>
-                        <th>Тип</th>
+                        <th>theme_name</th>
                         <th>description</th>
                         <th>qcount</th>
                         <th>controls</th>
@@ -586,15 +586,8 @@ STR;
         @endif
 
         @if(session()->has('addNewSelectedQsts'))
-            <?php //dump(session()->get('addNewSelectedQsts')); ?>
-            @if(session()->get('addNewSelectedQsts')['success'] === 1)
-                <h5 class="text-success">{{session()->get('addNewSelectedQsts')['message']}}</h5>
-            @else
-                <p class="text-danger">Ошибки: </p>
-                @foreach(session()->get('addNewSelectedQsts')['message'] as $k => $v)
-                    <p>{{$k}} - {{$v[0]}}</p>
-                @endforeach
-            @endif
+            <?php dump(session()->get('addNewSelectedQsts')); ?>
+
         @endif
         <h5>Добавление расписания</h5>
         <?php
@@ -669,7 +662,7 @@ STR;
             }
             document.getElementById(tabName).style.display = "block";
         }
-        openTab('mainRasps');
+        openTab('mainAddQuestions');
 
         $('#selected_qst_test_started_at').datepicker({
             'format' : 'dd.mm.yyyy',

@@ -20,8 +20,16 @@ Route::get('/', function () {
         return redirect('/event');
     }
 
-    return view('welcome');
+    //return view('welcome');
+    return redirect('/tests');
 });
+
+Route::get('/tests', 'SimpleTestSystem\HhController@index');//->middleware('guest');
+Route::get('/tests/resume','SimpleTestSystem\HhController@testResume');
+Route::get('/tests/{shedule_id}', 'SimpleTestSystem\HhController@showThemes');//->middleware('guest');
+Route::post('/tests/start', 'SimpleTestSystem\HhController@testStart');//->middleware('guest');
+Route::post('/tests/results','SimpleTestSystem\HhController@testResults');
+Route::patch('tests/save-result','SimpleTestSystem\HhController@saveResult');
 
 Auth::routes(['verify' => true]);
 

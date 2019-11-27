@@ -542,6 +542,7 @@ class QuestionController extends Controller
         $test_curr = $simple_test_system_question;
         $question_types = QuestionType::all();
         $tests = Test::all();
+        //dd($tests);
         $themes = Question::where('description_type', '=', 7)
             ->where('parent_id', '=', $simple_test_system_question->id)
             ->get();
@@ -569,9 +570,11 @@ class QuestionController extends Controller
 
         $shedules = Shedule::where('test_id', '=', $test_curr->id)
             ->join('tests','tests.id','=','shedules.test_id')
-            ->join('test_categories','test_categories.id','=','shedules.test_id')
-            ->select('shedules.*', 'tests.name as test_name','test_categories.name as test_cat_name')
+            ->join('test_categories','test_categories.id','=','tests.parent_id')
+            ->select('shedules.*', 'tests.name as test_name','test_categories.name as test_cat_name') //
             ->get();
+
+        //dd($shedules->toArray());
 
         return view('simpletestsystem.question.index',
             compact('question_types', 'test_curr', 'tests', 'questions', 'themes',

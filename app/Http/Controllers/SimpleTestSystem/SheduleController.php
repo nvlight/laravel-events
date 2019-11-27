@@ -164,7 +164,7 @@ class SheduleController extends Controller
      */
     public function store(Request $request)
     {
-        //dd('Hellloooo!');
+        //dump('Hellloooo!');
         //dump($request->all());
 
         // 1. проверка входных данных
@@ -184,9 +184,11 @@ class SheduleController extends Controller
         if (count($errors)){
             $validateShuduleAndSelectedQsts = ['success' => 0, 'message' => $errors[0]];
             //dd($validateShuduleAndSelectedQsts);
+            //dd($errors);
             session()->flash('addNewSelectedQsts', $validateShuduleAndSelectedQsts);
             return back();
         }
+
         // 1.2 получить все ключи с '^qst_theme_id_'
         // существует ли хотя 1 хороший ключ?
         $all_keys = $request->all(); $need_keys = [];
@@ -221,13 +223,12 @@ class SheduleController extends Controller
             session()->flash('addNewSelectedQsts', $errors);
             return back();
         }
-
         // 1.4 Самая важная часть, нужно отсеять из массива $need_keys - qst_theme_id_* те, которые существуют
         $qstsWithChildQstsCount = Question::where('parent_id','=',$request->get('test_id'))
             ->whereIn('description_type', [1,7])
             ->get();
         if (!$qstsWithChildQstsCount){
-            $errors[] = ['success' => 0, 'message' => [ 'Questions in TZ' => ['Нет вопросов и тем в текущем ТЗ' ], ] ];
+            $errors = ['success' => 0, 'message' => [ 'Questions in TZ' => ['Нет вопросов и тем в текущем ТЗ' ], ] ];
             //dd($errors);
             session()->flash('addNewSelectedQsts', $errors);
             return back();
@@ -260,21 +261,23 @@ class SheduleController extends Controller
 
             }
         }
+        //dump('okk');
         //dump($themesWithCheckedQuestionsCount);
         if (!$we_find_one_good_theme_with_positive_question){
-            $errors[] = ['success' => 0, //'message' => 'Полученный список тем с вопросами не существует в БД!',
-                    'message' => [ 'Check themes is DB' => ['Полученный список тем с вопросами не существует в БД!' ], ]
+            $errors = ['success' => 0, //'message' => 'Полученный список тем с вопросами не существует в БД!',
+                    'message' => [ 'Check themes in DB' => ['Полученный список тем с вопросами не существует в БД!' ], ]
                 ];
             //dd($errors);
             session()->flash('addNewSelectedQsts', $errors);
+            //dd($errors);
             return back();
         }
-
+        //dd('stop');
         // 2.0 поиск последнего вставленного ИД
         $lastInsertNumber = $this->getLastInsertNumber('selected_qsts');
         //dump($lastInsertNumber);
         if ($lastInsertNumber['success'] !== 1){
-            $errors[] = ['success' => 0, //'message' => 'Не удалось получить последний вставленный ID',
+            $errors = ['success' => 0, //'message' => 'Не удалось получить последний вставленный ID',
                 'message' => [ 'LastInsertNumber' => ['Не удалось получить последний вставленный ID'], ]
             ];
             //dd($errors);
@@ -299,6 +302,7 @@ class SheduleController extends Controller
                     $selectedQsts->theme_id = $qv['theme_id'];
                     $selectedQsts->qsts_count = $qv['qst_count'];
                     $qsts_count += $selectedQsts->qsts_count;
+                    $selectedQsts->theme_parent_id = $qv['id'];
                     //dump($selectedQsts);
                     $selectedQsts->save();
                 }
@@ -322,6 +326,8 @@ class SheduleController extends Controller
             session()->flash('addNewSelectedQsts', $errors);
             return back();
         }
+
+        //dd('ok');
 
         session()->flash('addNewSelectedQsts', ['success' => 1, 'message' => 'Выборка сохранена!']);
         return back();
