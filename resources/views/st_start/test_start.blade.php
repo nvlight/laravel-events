@@ -91,7 +91,13 @@
                             //console.log('ok!');
                             let mid = $(this).attr('id');
                             //console.log(mid);
-                            console.log(mid + ' - ' + $(this).prop('checked'));
+                            //console.log(mid + ' - ' + $(this).prop('checked'));
+                            let qst_type = 0;
+                            //console.log(document.getElementById(mid).type);
+                            switch (document.getElementById(mid).type) {
+                                case "radio": qst_type = 1; break;
+                                case "checkbox": qst_type = 2; break;
+                            }
 
                             $.ajax({
                                 type:'POST',
@@ -99,6 +105,7 @@
                                 data:
                                     '_token='+"<?=csrf_token()?>"+
                                     '&_method=patch'+
+                                    '&qst_type='+qst_type+
                                     '&test_number='+"<?=session()->get($started_config_key)['test_number']?>"+
                                     '&params='+mid+'&checked='+$(this).prop('checked'),
                                 success:function(data){

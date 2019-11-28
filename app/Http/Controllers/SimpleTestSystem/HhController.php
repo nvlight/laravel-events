@@ -602,7 +602,8 @@ class HhController extends Controller
         $rs = ['success' => 1, 'message' => 'its all ok for now!'];
 
         $test_number = \request()->get('test_number');
-        $checked = true;
+        $checked = \request()->get('checked');
+        $checked = $checked === "true" ? true : false;
         $intPattern = "#^[1-9]\d*$#";
         $params = explode('_', \request()->get('params'));
         if (
@@ -620,9 +621,10 @@ class HhController extends Controller
         // #1 валидация на существование данных параметров
 
         // #2 по questions.number узнать тип вопроса (1,2)
-        $question_type = 1; // xD
+        //$question_type = 1; // xD
+        $question_type = intval(\request()->get('qst_type'));
 
-        // #3 исходя из 2 подсунуть нужный сохранение
+        // #3 исходя из 2 подсунуть нужный для сохранения
         switch ($question_type){
             case 1:
                 $rs = ['success' => 1, 'message' => 'okey!',
@@ -633,18 +635,48 @@ class HhController extends Controller
                 try{
                     $ssq = SavedSelectedQst::where('test_number','=',$test_number)
                         ->where('qsts_number','=',$question_number)
-                        //->get()
-                    ;
-                    //die($ssq);
-                    //$ssq->qsts_answer = $question_id;
-                    $ssq->update(['qsts_answer' => $question_id]);
-                    //$ssq->save();
+                        ->update(['qsts_answer' => $question_id]);
                     $rs = ['success' => 1, 'message' => 'saved!'];
                 }catch (\Exception $e){
                     $rs = ['success' => 0, 'message' => $e->getLine() . '_' . $e->getFile() . '_' . $e->getMessage()];
                     break;
                 }
                 break;
+
+            case 2:
+                try{
+                    $ssq = SavedSelectedQst::where('test_number','=',$test_number)
+                        ->where('qsts_number','=',$question_number);
+                    //echo Debug::d($ssq->get()->toArray());
+                    $question_ids = strval($ssq->get()->toArray()[0]['qsts_answer']);
+                    $question_ids_array = explode(';', $question_ids);
+
+                    $newQuestionIds = $question_ids;
+
+                    if ($checked){
+                        if (!in_array($question_id, $question_ids_array)){
+                            $newQuestionIds .= $question_id . ';';
+                        }
+                    }else{
+                        if (in_array($question_id, $question_ids_array)){
+                            $copy_question_ids_array = $question_ids_array;
+                            foreach($copy_question_ids_array as $k => $v){
+                                if ($copy_question_ids_array[$k] === strval($question_id)){
+                                    unset($copy_question_ids_array[$k]);
+                                }
+                            }
+                            $newQuestionIds = implode(';', $copy_question_ids_array);
+                        }
+                    }
+
+                    $ssq->update(['qsts_answer' => $newQuestionIds]);
+                    $rs = ['success' => 1, 'message' => 'saved!'];
+                }catch (\Exception $e){
+                    $rs = ['success' => 0, 'message' => $e->getLine() . '_' . $e->getFile() . '_' . $e->getMessage()];
+                    break;
+                }
+                break;
+
             default:
                 $rs = ['success' => 0, 'message' => 'undefined question_type!'];
         }
