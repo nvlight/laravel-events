@@ -89,6 +89,7 @@
                             }
 
                             if (t.total <= 0) {
+                                $('#form_testSystemMain').submit();
                                 clearInterval(timeinterval);
                             }
                         }
@@ -109,6 +110,44 @@
                     var deadOffset = <?=($timeDiff['etalonDiffInSeconds'] - $timeDiff['diffInSeconds'])?>;
                     var deadline = new Date(Date.parse(new Date()) + deadOffset * 1000); // for endless timer
                     initializeClock('mg_countdown', deadline);
+
+                    // надо сделать так, чтобы при истечении всего времени отправить форму!
+                    function stopTestCountdown(id, endtime) {
+                        var clock = document.getElementById(id);
+                        var daysSpan = clock.querySelector('.days');
+                        var hoursSpan = clock.querySelector('.hours');
+                        var minutesSpan = clock.querySelector('.minutes');
+                        var secondsSpan = clock.querySelector('.seconds');
+
+                        function updateClock() {
+                            var t = getTimeRemaining(endtime);
+
+                            daysSpan.innerHTML = t.days;
+                            hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+                            minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+                            secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+                            var toHide = [[t.days, daysSpan], [t.hours, hoursSpan]];
+                            //var toHide = [];
+                            for(let i=0; i<toHide.length; i++){
+                                if (toHide[i][0] === 0){
+                                    //console.warn(toHide[i][1]);
+                                    toHide[i][1].parentElement.style.display = 'none';
+                                }
+                            }
+
+                            if (t.total <= 0) {
+                                clearInterval(timeinterval);
+                                console.warn('Шах, следующим ходом мат - ты проиграл!');
+                                $('#form_testSystemMain').submit();
+                            }
+                        }
+
+                        updateClock();
+                        var timeinterval = setInterval(updateClock, 1000);
+                    }
+                    //stopTestCountdown('mg_countdown', new Date(Date.parse(new Date()) + 5 * 1000));
+
                 </script>
 
                 <?php
@@ -156,7 +195,7 @@
 
 {{--                <button class="btn btn-primary" id="btn_getTimeDiff">btn_getTimeDiff</button>--}}
 
-                <form action="/tests/results" method="POST" class="mb-3 mt-3">
+                <form action="/tests/results" method="POST" class="mb-3 mt-3" id="form_testSystemMain">
                     @csrf
                     <input type="hidden" name="shedule_id" value="{{$getNames[0]['shedule_id']}}">
                     <input type="hidden" name="category_id" value="{{$getNames[0]['category_id']}}">

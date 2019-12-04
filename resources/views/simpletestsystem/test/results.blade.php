@@ -4,7 +4,7 @@
 
     <?php
     $diffInSeconds = $timeDiff['diffInSeconds'];
-    $miniutes = ($diffInSeconds >= 60) ? intval($miniutes / 60) : 0;
+    $miniutes = ($diffInSeconds >= 60) ? intval($diffInSeconds  / 60) : 0;
     $seconds = ($diffInSeconds % 60 !== 0) ? $diffInSeconds % 60 : 0;
     //echo \App\Debug::d($timeDiff);
     //<h4>Длительность теcтирования: {{$miniutes}} минут(а,ы) {{$seconds}} секунд(а,ы) из {{$result['questionsCountAndDurationNumber'][0]['duration']}} минут</h4>
