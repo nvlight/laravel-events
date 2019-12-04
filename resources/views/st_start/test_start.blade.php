@@ -2,13 +2,114 @@
 
 @section('content')
 
-    <div class="container">
-        <div class="row">
+    <div id="mg_content">
 
-            <div class="col-sm-10 offset-sm-1">
+        <div class="container">
+            <div class="row">
 
-                <h3>Тестирование начато</h3>
-                <h4>{{$getNames[0]['category']}} - {{$getNames[0]['test_name']}}. {{$getNames[0]['selection']}}</h4>
+             <div class="col-sm-10 offset-sm-1">
+
+                 <div id="mg_test__header__wrapper">
+
+                     <div id="mg_test__header">
+                        <div class="mg_test__header__caption">
+                            <h3>Тестирование начато</h3>
+                            <h4>{{$getNames[0]['category']}} - {{$getNames[0]['test_name']}}. {{$getNames[0]['selection']}}</h4>
+                        </div>
+                        <div class="mg_test__header__countdown_timer">
+                            <div class="mg_countdown_wrapper">
+                                <div id="mg_countdown">
+                            <span>
+                                <span class="mg_countdown days">Days</span>:
+                            </span>
+                            <span>
+                                <span class="mg_countdown hours">Hours</span>:
+                            </span>
+                            <span>
+                                <span class="mg_countdown minutes">Minutes</span>:
+                            </span>
+                            <span>
+                                <span class="mg_countdown seconds">Seconds</span>
+                            </span>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+
+                 </div>
+
+                <style>
+                    .mg_countdown_wrapper{
+                        display: flex;
+                        justify-content: flex-end;
+                    }
+                    #mg_countdown{
+                        display: flex;
+                        font-size: 25px;
+                    }
+                </style>
+                <script>
+                    function getTimeRemaining(endtime) {
+                        var t = Date.parse(endtime) - Date.parse(new Date());
+                        var seconds = Math.floor((t / 1000) % 60);
+                        var minutes = Math.floor((t / 1000 / 60) % 60);
+                        var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+                        var days = Math.floor(t / (1000 * 60 * 60 * 24));
+                        return {
+                            'total': t,
+                            'days': days,
+                            'hours': hours,
+                            'minutes': minutes,
+                            'seconds': seconds
+                        };
+                    }
+
+                    function initializeClock(id, endtime) {
+                        var clock = document.getElementById(id);
+                        var daysSpan = clock.querySelector('.days');
+                        var hoursSpan = clock.querySelector('.hours');
+                        var minutesSpan = clock.querySelector('.minutes');
+                        var secondsSpan = clock.querySelector('.seconds');
+
+                        function updateClock() {
+                            var t = getTimeRemaining(endtime);
+
+                            daysSpan.innerHTML = t.days;
+                            hoursSpan.innerHTML = ('0' + t.hours).slice(-2);
+                            minutesSpan.innerHTML = ('0' + t.minutes).slice(-2);
+                            secondsSpan.innerHTML = ('0' + t.seconds).slice(-2);
+
+                            var toHide = [[t.days, daysSpan], [t.hours, hoursSpan]];
+                            //var toHide = [];
+                            for(let i=0; i<toHide.length; i++){
+                                if (toHide[i][0] === 0){
+                                    //console.warn(toHide[i][1]);
+                                    toHide[i][1].parentElement.style.display = 'none';
+                                }
+                            }
+
+                            if (t.total <= 0) {
+                                clearInterval(timeinterval);
+                            }
+                        }
+
+                        updateClock();
+                        var timeinterval = setInterval(updateClock, 1000);
+                    }
+
+                    var deadline="December 01 2018 00:00:00 GMT+0300"; //for Ukraine
+                    <?php
+                        //$deadOffset = 500;
+                        if (session()->has($started_config_key)){
+                            $arrSession = session()->get($started_config_key);
+                            $deadOffset = $arrSession['duration'];
+                        }
+                        // $timeDiff['etalonDiffInSeconds']
+                    ?>
+                    var deadOffset = <?=($timeDiff['etalonDiffInSeconds'] - $timeDiff['diffInSeconds'])?>;
+                    var deadline = new Date(Date.parse(new Date()) + deadOffset * 1000); // for endless timer
+                    initializeClock('mg_countdown', deadline);
+                </script>
 
                 <?php
 
@@ -43,10 +144,17 @@
                 //echo \App\Debug::d(request()->all());
                 //dump($themesWithChildRandomQsts);
                 //echo \App\Debug::d($themesWithChildRandomQsts);
+                //echo \App\Debug::d(session()->all());
+                $started_config_key = config('services.sts.test_start_session_key');
                 if (session()->has($started_config_key)){
-                    echo \App\Debug::d(session()->get($started_config_key));
+                    //echo \App\Debug::d(session()->get($started_config_key));
                 }
+//                echo \Carbon\Carbon::now();echo "<br>";
+//                echo \Carbon\Carbon::now('America/Vancouver');echo "<br>";
+//                echo \Carbon\Carbon::now('Europe/Moscow');echo "<br>";
                 ?>
+
+{{--                <button class="btn btn-primary" id="btn_getTimeDiff">btn_getTimeDiff</button>--}}
 
                 <form action="/tests/results" method="POST" class="mb-3 mt-3">
                     @csrf
@@ -101,7 +209,7 @@
 
                             $.ajax({
                                 type:'POST',
-                                url:'/tests/save-result',
+                                url:'/tests/save-single-result',
                                 data:
                                     '_token='+"<?=csrf_token()?>"+
                                     '&_method=patch'+
@@ -115,6 +223,18 @@
                             });
 
                         });
+
+                        $('#btn_getTimeDiff').on('click', function () {
+                            $.ajax({
+                                type:'GET',
+                                url:'/tests/get-time-diff',
+                                data: {},
+                                success:function(data){
+                                    if (data.success === 1){
+                                    }
+                                }
+                            });
+                        });
                     </script>
 
                     <button type="submit" class="btn btn-primary">End this test!</button>
@@ -123,7 +243,9 @@
 
             </div>
 
+            </div>
         </div>
+
     </div>
 
 @endsection

@@ -23,40 +23,66 @@
 <body>
 
 <header id="mg_header">
-    <div class="mg_events_mainLink">
-        <a href="/">Events</a>
+    <div class="mg_header_inner">
+        <div class="mg_events_mainLink">
+            <a href="/">Events</a>
+        </div>
+
+        <div class="d-flex flex-row justify-content-end">
+            @if (Route::has('login'))
+                <div class="top-right links">
+                    @auth
+                        <a href="{{ url('/tests') }}">tests</a>
+                        <a href="{{ url('/event') }}">events</a>
+                    @else
+                        <a href="{{ route('login') }}">Login</a>
+
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}">Register</a>
+                        @endif
+                    @endauth
+                </div>
+            @endif
+        </div>
     </div>
+
 </header>
 
-<div class="p-3 d-flex flex-row justify-content-end">
-    @if (Route::has('login'))
-        <div class="top-right links">
-            @auth
-                <a href="{{ url('/tests') }}">tests</a>
-                <a href="{{ url('/event') }}">events</a>
-            @else
-                <a href="{{ route('login') }}">Login</a>
+<style>
+    html,
+    body {
+        height: 100%;
+    }
+    .wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+    }
+    .content {
+        flex: 1 0 auto;
+    }
+    .footer {
+        flex: 0 0 auto;
+    }
+</style>
 
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}">Register</a>
-                @endif
-            @endauth
-        </div>
-    @endif
+<div class="wrapper">
+
+    <div class="content">
+        @yield('content')
+    </div>
+
+    <div class="footer">
+        <footer id="mg_footer" class="">
+            <nav id="mg_footer_inner">
+                <div class="copyright text-center">
+                    &copy; <?=date('Y')?> Martin German. All rights reserved.
+                </div>
+
+            </nav>
+        </footer>
+    </div>
 </div>
-
-<div class="container">
-    @yield('content')
-</div>
-
-<footer id="mg_footer" class="">
-    <nav id="mg_footer_inner">
-        <div class="copyright text-center">
-            &copy; <?=date('Y')?> Martin German. All rights reserved.
-        </div>
-
-    </nav>
-</footer>
 
 </body>
 </html>

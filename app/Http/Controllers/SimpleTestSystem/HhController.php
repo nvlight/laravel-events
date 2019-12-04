@@ -10,6 +10,7 @@ use App\Models\SimpleTestSystem\Shedule;
 use App\Models\SimpleTestSystem\Test;
 use App\Models\SimpleTestSystem\TestCategory;
 use App\models\simpleTestSystem\TestResult;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -246,7 +247,7 @@ class HhController extends Controller
             ->join('test_categories','test_categories.id','=','tests.parent_id')
             ->select('test_categories.name as category','tests.name as test_name','shedules.name as selection',
                 'test_categories.id as category_id', 'tests.id as test_id' ,'shedules.id as shedule_id',
-                'shedules.selected_qsts_number as selected_qsts_id'
+                'shedules.selected_qsts_number as selected_qsts_id', 'shedules.duration as duration'
             )
             ->get()
             ->toArray()
@@ -285,7 +286,10 @@ class HhController extends Controller
             'shedule_id' => $getNames[0]['shedule_id'],
             'category_id' => $getNames[0]['category_id'],
             'test_id' => $getNames[0]['test_id'],
+            'test_name' => $getNames[0]['test_name'],
             'selected_qsts_id' => $getNames[0]['selected_qsts_id'],
+            'duration' => $getNames[0]['duration'],
+            'category' => $getNames[0]['category'],
         ];
         session()->put($test_start_key, $test_start);
 
@@ -391,12 +395,14 @@ class HhController extends Controller
             $result = ['success' => 0, 'message' => 'transaction is failed', 'error' => $e->getCode() . ' || ' . $e->getMessage()];
         }
 
+        $timeDiff = $this->getTimeDiff();
+
         if (!$result['success']){
             echo Debug::d($result); die;
         }
 
         return view('st_start.test_start', compact('themesWithChildRandomQsts',
-                'getNames', 'started_config_key')
+                'getNames', 'started_config_key', 'timeDiff')
         );
     }
 
@@ -456,7 +462,7 @@ class HhController extends Controller
     //
     public function testResume(){
 
-        //$this->destroyUserSession();
+        //$this->destroyUserSession(); return redirect('/tests');
         //echo Debug::d(session()->all()); die;
 
         $started_config_key = config('services.sts.test_start_session_key');
@@ -464,8 +470,13 @@ class HhController extends Controller
             return redirect('/tests');
         }
 
-        //echo Debug::d('Да, это снова мы, нужно сохрнаненное отобразить тут же!');
+        // если время истекло, то сразу выходим!
+        $timeDiff = $this->getTimeDiff();
+        if ($timeDiff['success']){
 
+        }
+
+        //echo Debug::d('Да, это снова мы, нужно сохрнаненное отобразить тут же!');
         //echo Debug::d(session()->get($started_config_key));
 
         // получение номеров вопросов
@@ -574,8 +585,295 @@ class HhController extends Controller
         //die;
 
         return view('st_start.test_start', compact('themesWithChildRandomQsts',
-            'getNames', 'started_config_key')
+            'getNames', 'started_config_key', 'timeDiff'
+            )
         );
+    }
+
+    /**
+     * @param int $qid
+     * @return array
+     */
+    public function getQuestionTypeByQuestionNumber(int $qnumber):array{
+
+        try{
+            $qst_type = Question::where('number','=',$qnumber)->select('type')->get()->first()->type;
+            $result = ['success' => 1, 'message' => 'type is getting', 'result_type_id' => $qst_type];
+        }catch (\Exception $e){
+            $result = ['success' => 0, 'message' => $e->getLine() . '_' . $e->getFile() . '_' . $e->getMessage()];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param int $test_id
+     * @param int $number
+     * @return array
+     */
+    public function getQuestionByTetsIdAndNumber(int $test_id, int $number):array{
+
+        try{
+            $questionChildsByNumber = Question::where('parent_id','=', $test_id)
+                ->where('number','=',$number)
+                //->where('description_type','=',2)
+                ->get()->toArray();
+            //echo Debug::d($questionChildsByNumber,'chichn');
+
+            $result = ['success' => 0, 'message' => 'im didnt find answer with that id!'];
+            if (count($questionChildsByNumber))
+                $result = ['success' => 1, 'message' => 'thats true question checkbox answers!',
+                    'data' => $questionChildsByNumber];
+
+        }catch (\Exception $e){
+            $result = ['success' => 0, 'message' => $e->getLine() . '_' . $e->getFile() . '_' . $e->getMessage()];
+        }
+        return $result;
+
+    }
+
+    /**
+     * @param int $test_id
+     * @param int $qst_number
+     * @param int $answer_id
+     * @return array
+     */
+    public function isQuestionAnswerTrueForRadio(int $test_id, int $qst_number, int $answer_id):array{
+
+        $questionChildsByNumber = $this->getQuestionByTetsIdAndNumber($test_id, $qst_number);
+        if (!$questionChildsByNumber['success']){
+            $result = $questionChildsByNumber;
+            return $result;
+        }
+
+        $find = false;
+        foreach($questionChildsByNumber['data'] as $k => $v){
+            if ($v['id'] === $answer_id && $v['description_type'] === 2){
+                $find = true;
+                break;
+            }
+        }
+
+        $result = ['success' => 0, 'message' => 'im found nothing!'];
+
+        if ($find)
+            $result = ['success' => 1, 'message' => 'thats true question radio answer!'];
+
+        return $result;
+    }
+
+    /**
+     * @param int $test_id
+     * @param int $qst_number
+     * @param array $answer_id
+     * @return array
+     */
+    public function isQuestionAnswerTrueForCheckbox(int $test_id, int $qst_number, array $answer_ids):array{
+
+        $questionChildsByNumber = $this->getQuestionByTetsIdAndNumber($test_id, $qst_number);
+        if (!$questionChildsByNumber['success']){
+            $result = $questionChildsByNumber;
+            return $result;
+        }
+
+        //echo Debug::d($answer_ids,'',1);
+        //echo Debug::d($questionChildsByNumber,'',1); die;
+
+//        $find = true;
+//        foreach($answer_ids as $ak => $av) {
+//
+//            $id_exists = false; $needId = 0;
+//            foreach($questionChildsByNumber['data'] as $k => $v){
+//                if (($v['id'] === $av)) {
+//                    $id_exists = true;
+//                    $needId = $k;
+//                    break;
+//                }
+//            }
+//            if (!$id_exists) {
+//                $find = false;
+//                break;
+//            }
+//
+//            if ($questionChildsByNumber['data'][$needId]['description_type'] !== 2){
+//                $find = false;
+//                break;
+//            }
+//
+//        }
+
+        // попробую другим способом, найду все эталонные правильные ответы, и сравню их ИД с моими.
+        $etalonTrueIds = [];
+        foreach($questionChildsByNumber['data'] as $k => $v){
+            if ($v['description_type'] === 2) {
+                $etalonTrueIds[] = $v['id'];
+            }
+        }
+        //echo Debug::d($etalonTrueIds,'',2);
+        //echo Debug::d($answer_ids,'',2);
+        $find = true;
+        foreach($etalonTrueIds as $k => $v){
+            $curr_find = false;
+            foreach($answer_ids as $kk => $vv)
+                if ($v === $vv){
+                    $curr_find = true;
+                }
+            if (!$curr_find) {
+                $find = false;
+                break;
+            }
+        }
+
+
+        $result = ['success' => 0, 'message' => 'im found nothing!'];
+
+        if ($find)
+            $result = ['success' => 1, 'message' => 'thats true question checkbox answers!'];
+
+        return $result;
+    }
+
+    /**
+     * @param int $test_id
+     * @param int $qst_number
+     * @param int $qst_type
+     * @param array $answers
+     * @return array
+     */
+    public function isQuestionAnswersIsTrue(int $test_id, int $qst_number, int $qst_type, array $answers){
+
+        switch ($qst_type){
+            case 1:
+                $result = $this->isQuestionAnswerTrueForRadio($test_id, $qst_number, $answers[0]);
+                break;
+            case 2:
+                $result = $this->isQuestionAnswerTrueForCheckbox($test_id, $qst_number, $answers);
+                break;
+            default:
+                $result = ['success' => 0, 'message' => 'undefined question type'];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $request
+     * @return array
+     */
+    public function countingResultBallsByRequest($request=[]){
+
+        // полученный запрос имеет вид.
+//        [_token] => baPwbzeeKtMZAiheUcMnTLbs4BDFuCkLgoj32yWp
+//        [shedule_id] => 12
+//        [category_id] => 7
+//        [test_id] => 11
+//        [selected_qsts_id] => 6
+//        [radio_qst_number_12] => Array
+//        (
+//            [0] => 98
+//        )
+//        [checkbox_qst_number_24] => Array
+//        (
+//            [0] => 156
+//            [1] => 157
+//        )
+        // тестовый набор входных данных для быстрого моделирования нужной обработки данных!
+//        $rqst_test = [
+//            'shedule_id' => 12,
+//            'category_id' => 7,
+//            'test_id' => 11,
+//            'selected_qsts_id' => 6,
+//            'radio_qst_number_12' => [
+//              0 => 99
+//            ],
+//            'checkbox_qst_number_24' => [
+//                0 => 156,
+//                1 => 157
+//            ],
+//        ];
+
+        $rqst_test = $request;
+
+        // получаем все вопросы по test_id: test_id = questions.parent_id
+        $all_qsts = Question::where('parent_id','=',$rqst_test['test_id'])->get()->toArray();
+        //echo Debug::d($all_qsts);
+
+        // по selected_qsts_id = 6: shedules -> selected_qsts_number = selected_qsts_id получаем кол-во вопросов и минут
+        $questionsCountAndDurationNumber = Shedule::where('id','=',$rqst_test['shedule_id'])
+            ->select('duration','qsts_count')->get()->toArray();
+        //echo Debug::d($questionsCountAndDurationNumber);
+
+
+        // написать функцию для определения типа вопроса по ID. exmpl: radio_qst_number_12 -> 12 -> qst_type - 1 open
+        // test that
+        //echo Debug::d($this->getQuestionTypeByQuestionNumber(24));
+
+        // получим все вопросы типа радио и типа чекбокс а также номер вопроса, тип вопроса и ИД-шники ответов
+        $neededQuestionTypeArrayTypes = [
+            'radioQuestionsAnwsersIds'    => "#^(radio_qst_number_)([1-9]\d*)#u",
+            'checkboxQuestionsAnwsersIds' => "#^(checkbox_qst_number_)([1-9]\d*)#u",
+        ];
+        try {
+            foreach($neededQuestionTypeArrayTypes as $k => $v){
+
+                $$k = [];
+                foreach($rqst_test as $kk => $vv){
+                    if (preg_match($v, $kk, $matches)){
+                        //echo Debug::d($matches);
+                        /// ! потом эту функцию нужно заменить без использования запросов к БД, сразу 1 раз возьмем весь ТЗ
+                        $qst_type = $this->getQuestionTypeByQuestionNumber($matches[2]);
+                        if (!$qst_type['success']) break;
+                        //echo Debug::d($qst_type); break;
+                        //
+                        $qst_type = $qst_type['result_type_id'];
+                        $tmp_rs = [ 'number' => $matches[2], 'type' => $qst_type ];
+                        switch ($qst_type){
+                            case 1:
+                                $tmp_rs['answer_ids'] = $rqst_test[$matches[0]];
+                                break;
+                            case 2:
+                                $ids = [];
+                                foreach($rqst_test[$matches[0]] as $mk => $mv){
+                                    $ids[] = $mv;
+                                }
+                                $tmp_rs['answer_ids'] = $ids;
+                                break;
+                        }
+                        $$k[] = $tmp_rs;
+                    }
+                }
+            }
+        }catch (\Exception $e){
+            $result = ['success' => 0, 'message' => $questionsCountAndDurationNumber['message']];
+            return $result;
+        }
+        foreach($neededQuestionTypeArrayTypes as $k => $v){
+            //echo Debug::d(${$k});
+        }
+        //echo Debug::d($this->isQuestionAnswersIsTrue($rqst_test['test_id'], 12, 1, [99]));
+        //echo Debug::d($this->isQuestionAnswersIsTrue($rqst_test['test_id'], 24, 2, [156,157,158]));
+
+        $trueAnswers = 0;
+        foreach($neededQuestionTypeArrayTypes as $k => $v){
+
+            foreach(${$k} as $kk1 => $vv1){
+                if ($this->isQuestionAnswersIsTrue($rqst_test['test_id'], $vv1['number'], $vv1['type'],
+                    $vv1['answer_ids'])['success'] === 1 ){
+                    $trueAnswers++;
+                }
+            }
+
+        }
+        //echo Debug::d($trueAnswers);
+
+        // emxpl2: [checkbox_qst_number_24] -> 24 -> qst_type - 2 open
+        // написать функции (2 штуки), которые из типа и ответа (ненулевого) узнают правильность ответа исходя из
+        // типа вопроса и выбранных ответов на вопросов.
+        // foreach($questions as $question) - проходимся циклом по всему
+        //
+
+        return $result = ['success' => 1, 'balls' => $trueAnswers, 'questionsCountAndDurationNumber' => $questionsCountAndDurationNumber];
+        //dump($result);
     }
 
     //
@@ -587,13 +885,19 @@ class HhController extends Controller
             return redirect('/tests/');
         }
 
-        echo Debug::d($request->all());
+        //echo Debug::d($started_config_key);
+        //echo Debug::d($request->all());
+        $result = $this->countingResultBallsByRequest($request->all());
+        $sessionInner = session()->get($started_config_key);
+        //echo Debug::d($sessionInner);
+        $timeDiff = $this->getTimeDiff();
         session()->forget($started_config_key);
 
+        return view('simpletestsystem.test.results', compact('result','sessionInner','timeDiff'));
     }
 
     //
-    public function saveResult(){
+    public function saveSingleQuestionResultByClickWithAjax(){
 
         // test_number	29 in {saved_selected_qsts; test_results}
         // params	id_16_118 (16 questions.number;  118 = answered questions.id)
@@ -684,6 +988,44 @@ class HhController extends Controller
         die(json_encode($rs));
 
     }
+
+    /**
+     * @return array
+     */
+    public function getTimeDiff(){
+
+        $rs = ['success' => 1, 'its all fine!'];
+
+        $started_config_key = config('services.sts.test_start_session_key');
+
+        if (!session()->has($started_config_key)) {
+            $rs = ['success' => 0, '$started_config_key is not exists!'];
+            return $rs;
+        }
+
+        $arrSession = session()->get($started_config_key);
+        $rs['duration']['minutes'] = $arrSession['duration'];
+        $test_started_at = TestResult::where('test_number','=', $arrSession['test_number'])
+            ->get()->first()->test_started_at;
+        $rs['test_started_at'] = $test_started_at;
+        $rs['test_started_at'] = Carbon::parse($test_started_at, 'Europe/Moscow');
+        $rs['test_started_now'] = Carbon::now('Europe/Moscow');
+        $rs['diffInMinutes'] = $rs['test_started_now']->diffInMinutes($rs['test_started_at']);
+        $rs['diffInSeconds'] = $rs['test_started_now']->diffInSeconds($rs['test_started_at']);
+        $rs['etalonDiffInSeconds'] = $rs['duration']['minutes'] * 60;
+
+        return $rs;
+    }
+
+    //
+    public function getTimeDiffAjax(){
+
+        $rs = $this->getTimeDiff();
+        die(json_encode($rs));
+    }
+
+
+
 
 
 }

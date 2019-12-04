@@ -1231,6 +1231,9 @@ body > nav.navbar{
 	color: #fff;
 	font-size: 23px;
 	padding: 20px;
+	position: fixed;
+	width: 100%;
+	z-index: 100;
 }
 .mg-span-betaVersion{
 	font-size: 16px;
@@ -1268,4 +1271,31 @@ body > nav.navbar{
 .mg_tests_title{
 	font-size: 25px;
 	font-family: 'Nunito';
+}
+.mg_header_inner{
+	display: flex;
+	justify-content: space-between;
+}
+#mg_content{
+	padding-top: 83px;
+}
+
+#mg_test__header{
+	display: flex;
+	justify-content: space-between;
+}
+.mg_test__header__countdown_timer{
+	display: flex;
+	align-self: center;
+}
+#mg_test__header__wrapper {
+	position: fixed;
+	top: 88px;
+	right: 166px;
+	width: 31%;
+	padding: 9px 20px;
+	/*border: 1px solid #ccc;*/
+	border-radius: 3px;
+	background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(69, 104, 220), rgb(176, 106, 179)) repeat scroll 0% 0%;
+	color: #fff;
 }
