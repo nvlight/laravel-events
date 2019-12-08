@@ -29,6 +29,7 @@ Route::get('/tests/resume','SimpleTestSystem\HhController@testResume');
 Route::get('/tests/destroy-ss','SimpleTestSystem\HhController@destroyUserSession');
 Route::get('/tests/get-time-diff','SimpleTestSystem\HhController@getTimeDiff');
 Route::get('/tests/get-test-results-with-testParams', 'SimpleTestSystem\HhController@countingResultBallsByRequest');//->middleware('guest');
+Route::get('/tests/isTetsTimeElapsed','SimpleTestSystem\HhController@isTestTimeEndedAjax');
 Route::get('/tests/{shedule_id}', 'SimpleTestSystem\HhController@showThemes');//->middleware('guest');
 Route::post('/tests/start', 'SimpleTestSystem\HhController@testStart');//->middleware('guest');
 Route::post('/tests/results','SimpleTestSystem\HhController@testResults');

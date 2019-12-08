@@ -193,7 +193,7 @@
 //                echo \Carbon\Carbon::now('Europe/Moscow');echo "<br>";
                 ?>
 
-{{--                <button class="btn btn-primary" id="btn_getTimeDiff">btn_getTimeDiff</button>--}}
+                 <button class="btn btn-primary" id="btn_getTimeDiff">btn_getTimeDiff</button>
 
                 <form action="/tests/results" method="POST" class="mb-3 mt-3" id="form_testSystemMain">
                     @csrf
@@ -263,10 +263,22 @@
 
                         });
 
-                        $('#btn_getTimeDiff').on('click', function () {
+                        $('#btn_getTimeDiff_222').on('click', function () {
                             $.ajax({
                                 type:'GET',
                                 url:'/tests/get-time-diff',
+                                data: {},
+                                success:function(data){
+                                    if (data.success === 1){
+                                    }
+                                }
+                            });
+                        });
+
+                        $('#btn_getTimeDiff').on('click', function () {
+                            $.ajax({
+                                type:'GET',
+                                url:'/tests/isTetsTimeElapsed',
                                 data: {},
                                 success:function(data){
                                     if (data.success === 1){

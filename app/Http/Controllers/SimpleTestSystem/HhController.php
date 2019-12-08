@@ -486,7 +486,9 @@ class HhController extends Controller
             ->get()->toArray();
         //echo Debug::d($qstsNew,'$qstsNew');
         if (!$qstsNew || !count($qstsNew)){
-            die('$qstsNew!');
+            $this->destroyUserSession();
+            return $this->redirect('/tests');
+            //die('$qstsNew!');
         }
 
         // получаю из questions все элементы с test_id = parent_id = моему = (session()->get($started_config_key)['test_id']
@@ -740,7 +742,7 @@ class HhController extends Controller
      * @param array $answers
      * @return array
      */
-    public function isQuestionAnswersIsTrue(int $test_id, int $qst_number, int $qst_type, array $answers){
+    public function isQuestionAnswersTrue(int $test_id, int $qst_number, int $qst_type, array $answers){
 
         switch ($qst_type){
             case 1:
@@ -850,14 +852,14 @@ class HhController extends Controller
         foreach($neededQuestionTypeArrayTypes as $k => $v){
             //echo Debug::d(${$k});
         }
-        //echo Debug::d($this->isQuestionAnswersIsTrue($rqst_test['test_id'], 12, 1, [99]));
-        //echo Debug::d($this->isQuestionAnswersIsTrue($rqst_test['test_id'], 24, 2, [156,157,158]));
+        //echo Debug::d($this->isQuestionAnswersTrue($rqst_test['test_id'], 12, 1, [99]));
+        //echo Debug::d($this->isQuestionAnswersTrue($rqst_test['test_id'], 24, 2, [156,157,158]));
 
         $trueAnswers = 0;
         foreach($neededQuestionTypeArrayTypes as $k => $v){
 
             foreach(${$k} as $kk1 => $vv1){
-                if ($this->isQuestionAnswersIsTrue($rqst_test['test_id'], $vv1['number'], $vv1['type'],
+                if ($this->isQuestionAnswersTrue($rqst_test['test_id'], $vv1['number'], $vv1['type'],
                     $vv1['answer_ids'])['success'] === 1 ){
                     $trueAnswers++;
                 }
@@ -902,6 +904,12 @@ class HhController extends Controller
         // test_number	29 in {saved_selected_qsts; test_results}
         // params	id_16_118 (16 questions.number;  118 = answered questions.id)
         // checked	true {пришедший овет, если чекбокс может быть false/true, если radio - только true}
+
+        // если время истекло, нужно отказать в обновлении ответа на вопрос
+        if ($this->isTestTimeEnded()){
+            $result = ['success' => 0, 'message' => 'test time is ended'];
+            die(json_encode($result));
+        }
 
         $rs = ['success' => 1, 'message' => 'its all ok for now!'];
 
@@ -990,6 +998,22 @@ class HhController extends Controller
     }
 
     /**
+     * @return bool
+     */
+    public function isTestTimeEnded():bool{
+        //diffInSeconds	58
+        //etalonDiffInSeconds	1980
+        $testTimeDiffs = $this->getTimeDiff();
+        return $testTimeDiffs['diffInSeconds'] >= $testTimeDiffs['etalonDiffInSeconds'];
+    }
+
+    //
+    public function isTestTimeEndedAjax(){
+        $result = $this->isTestTimeEnded();
+        die(json_encode($result));
+    }
+
+    /**
      * @return array
      */
     public function getTimeDiff(){
@@ -1019,7 +1043,6 @@ class HhController extends Controller
 
     //
     public function getTimeDiffAjax(){
-
         $rs = $this->getTimeDiff();
         die(json_encode($rs));
     }
