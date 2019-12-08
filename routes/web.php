@@ -35,6 +35,8 @@ Route::post('/tests/start', 'SimpleTestSystem\HhController@testStart');//->middl
 Route::post('/tests/results','SimpleTestSystem\HhController@testResults');
 Route::patch('tests/save-single-result','SimpleTestSystem\HhController@saveSingleQuestionResultByClickWithAjax');
 
+Route::get('/test_getQuestionByTetsIdAndNumber', 'SimpleTestSystem\HhController@test_getQuestionByTetsIdAndNumber');//->middleware('guest');
+
 Auth::routes(['verify' => true]);
 
 Route::resource('category', 'CategoryController')->middleware('verified');

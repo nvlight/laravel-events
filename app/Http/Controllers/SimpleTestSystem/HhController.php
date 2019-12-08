@@ -223,11 +223,15 @@ class HhController extends Controller
                 foreach($qsts as $qst){
                     //echo Debug::d($qst);
                     if ($qst['number'] === $theme['qsts_numbers'][$v]){
+
                         $child[] = $qst;
                     }
                 }
 
-                $theme['child'][] = $child;
+                // прямо тут можно перемешать вопрос!
+                $questionShuffled = $this->shuffleQuestionSingle($child);
+
+                $theme['child'][] = $questionShuffled; //$child;
             }
 
         }
@@ -253,6 +257,93 @@ class HhController extends Controller
             ->toArray()
         ;
         return $getNames;
+    }
+
+    /**
+     * Перемешивание вопросов входного массива
+     * @param array $questions
+     * @return array
+     */
+    public function questionsShuffle(array $questions):array{
+
+        $questions_tmp = [];
+
+        foreach($questions as $qk => $qv){
+            $tmp = $this->shuffleQuestionChilds($qv);
+            $questions_tmp[] = $tmp;
+        }
+
+        return $questions_tmp;
+    }
+
+    /**
+     * Получение одногомерно массива вопросов, создание из него 2-мерного по номеру вопроса и перемешивание вопросов
+     * @param array $questions
+     * @return array
+     */
+    public function questionsGroupedByNumberAndShuffle(array $questions):array{
+
+        $questions_tmp = $this->questionsGroupedByNumber($questions);
+        $questions_tmp = $this->questionsShuffle($questions_tmp);
+        $questions_tmp = $this->questionsTwoDimensionalArrayConvertToOneDimensioinal($questions_tmp);
+        $questionsCategoriesArray = $this->questionsAddCategoriesItemsToArray($questions);
+        $questions_tmp = array_merge($questions_tmp, $questionsCategoriesArray);
+
+        return $questions_tmp;
+    }
+
+    /**
+     * Получения из одноверного массива с вопросами двумерного, ключами которого являются номера вопросов
+     * @param array $questions
+     * @return array
+     */
+    public function questionsGroupedByNumber(array $questions):array{
+
+        $groupedQuestions = [];
+
+        foreach($questions as $k => $v){
+            if ($v['type'] > 0){
+                $groupedQuestions[$v['number']][] = $v;
+            }
+        }
+
+        return $groupedQuestions;
+    }
+
+    /**
+     * Добавление в массив элементов типа 'вопросы', которые изначально были из нее удалены
+     * @param array $questions
+     * @return array
+     */
+    public function questionsAddCategoriesItemsToArray(array $questions):array{
+
+        $questions_arr = [];
+
+        foreach($questions as $qk => $qv){
+            if ($qv['type'] === 0){
+                $questions_arr[] = $qv;
+            }
+        }
+
+        return $questions_arr;
+    }
+
+    /**
+     * Преобразование двумерного массива с ключом номера вопроса в одномерный
+     * @param array $questions
+     * @return array
+     */
+    public function questionsTwoDimensionalArrayConvertToOneDimensioinal(array $questions):array{
+
+        $questions_tmp = [];
+
+        foreach($questions as $qk => $qv){
+            foreach($qv as $qkk => $qvv){
+                $questions_tmp[] = $qvv;
+            }
+        }
+
+        return $questions_tmp;
     }
 
     //
@@ -407,59 +498,6 @@ class HhController extends Controller
     }
 
     //
-    public function getLastTestNumber(){
-
-        // надо сначала найти максимальный number и +1 от него
-        $number = 0; $errors = [];
-        try {
-            $rs = \DB::table('test_results')
-                //->select('*')
-                ->select(\DB::raw('MAX(test_number) as number'))
-                ->get();
-            $number = $rs->first()->number;
-            $number++;
-        }catch (\Exception $e){
-            $errors[] = $e->getCode() . $e->getMessage();
-        }
-
-        $result = ['success' => 1, 'number' => $number];
-        if (count($errors))
-            $result = ['success' => 0, 'errors' => $errors ];
-
-        return $result;
-    }
-
-    //
-    public function destroyUserSession(){
-
-        $started_config_key = config('services.sts.test_start_session_key');
-        if (session()->has($started_config_key)){
-            session()->forget($started_config_key);
-            return redirect('/tests/');
-        }
-    }
-
-    //
-    public function addCategoriesToQsts(array $qstsAll, array $qsts){
-
-        // теперь нужно пройтись еще раз по списку и добавить к элементам титл родительской темы.
-        foreach($qsts as $k => &$v){
-
-            foreach($v as $kk => &$vv){
-
-                foreach($qstsAll as $kkk => $vvv){
-                    if ($vv['theme_id'] === $vvv['id']){
-                        $vv['category'] = $vvv['description'];
-                        break;
-                    }
-                }
-            }
-
-        }
-        return $qsts;
-    }
-
-    //
     public function testResume(){
 
         //$this->destroyUserSession(); return redirect('/tests');
@@ -494,7 +532,14 @@ class HhController extends Controller
         // получаю из questions все элементы с test_id = parent_id = моему = (session()->get($started_config_key)['test_id']
         $qsts_all = Question::where('parent_id','=', (session()->get($started_config_key)['test_id']))
             ->get()->toArray();
-        //echo Debug::d($qsts_all);
+        //echo Debug::d($qsts_all); //die;
+
+        // сделаю из $qsts_all массив с номерами вопросов,
+        // потом перемешаю ответы вопросов,
+        // потом соберу обратно в 1 массив
+        $qsts_all = $this->questionsGroupedByNumberAndShuffle($qsts_all);
+        //echo Debug::d($qsts_all); die;
+
         $qstsWithAllColumnsAndRows = [];
         foreach($qstsNew as $k => $v){
 
@@ -507,7 +552,7 @@ class HhController extends Controller
             if (count($tmp))
                 $qstsWithAllColumnsAndRows[] = $tmp;
         }
-        //echo Debug::d($qstsWithAllColumnsAndRows);
+        //echo Debug::d($qstsWithAllColumnsAndRows); die;
         $qstsWithAllColumnsAndRowsAndCategoryTitles = $this->addCategoriesToQsts($qsts_all, $qstsWithAllColumnsAndRows);
         //echo Debug::d($qstsWithAllColumnsAndRowsAndCategoryTitles,'titlesss');
 
@@ -558,7 +603,7 @@ class HhController extends Controller
         $QuestionsCategories = [];
         foreach($qstsWithAllColumnsAndRowsAndCategoryTitles as $k => $v){
             foreach($v as $kk => $vv)
-            $QuestionsCategories[$vv['category']] = '';
+                $QuestionsCategories[$vv['category']] = '';
         }
         //echo Debug::d($QuestionsCategories,'$QuestionsCategories'); //die;
         $newQuestionsWithChilds = [];
@@ -587,9 +632,65 @@ class HhController extends Controller
         //die;
 
         return view('st_start.test_start', compact('themesWithChildRandomQsts',
-            'getNames', 'started_config_key', 'timeDiff'
+                'getNames', 'started_config_key', 'timeDiff'
             )
         );
+    }
+
+    //
+    public function getLastTestNumber(){
+
+        // надо сначала найти максимальный number и +1 от него
+        $number = 0; $errors = [];
+        try {
+            $rs = \DB::table('test_results')
+                //->select('*')
+                ->select(\DB::raw('MAX(test_number) as number'))
+                ->get();
+            $number = $rs->first()->number;
+            $number++;
+        }catch (\Exception $e){
+            $errors[] = $e->getCode() . $e->getMessage();
+        }
+
+        $result = ['success' => 1, 'number' => $number];
+        if (count($errors))
+            $result = ['success' => 0, 'errors' => $errors ];
+
+        return $result;
+    }
+
+    /**
+     * Уничтожение пользовательской сессии и редирект на главную
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function destroyUserSession(){
+
+        $started_config_key = config('services.sts.test_start_session_key');
+        if (session()->has($started_config_key)){
+            session()->forget($started_config_key);
+            return redirect('/tests/');
+        }
+    }
+
+    //
+    public function addCategoriesToQsts(array $qstsAll, array $qsts){
+
+        // теперь нужно пройтись еще раз по списку и добавить к элементам титл родительской темы.
+        foreach($qsts as $k => &$v){
+
+            foreach($v as $kk => &$vv){
+
+                foreach($qstsAll as $kkk => $vvv){
+                    if ($vv['theme_id'] === $vvv['id']){
+                        $vv['category'] = $vvv['description'];
+                        break;
+                    }
+                }
+            }
+
+        }
+        return $qsts;
     }
 
     /**
@@ -619,10 +720,15 @@ class HhController extends Controller
             $questionChildsByNumber = Question::where('parent_id','=', $test_id)
                 ->where('number','=',$number)
                 //->where('description_type','=',2)
+            ;
+            $questionChildsByNumberSQL = $questionChildsByNumber;
+            //dump($questionChildsByNumberSQL->toSql());
+
+            $questionChildsByNumber = $questionChildsByNumber
                 ->get()->toArray();
             //echo Debug::d($questionChildsByNumber,'chichn');
 
-            $result = ['success' => 0, 'message' => 'im didnt find answer with that id!'];
+            $result = ['success' => 0, 'message' => 'im didnt find answer with that id!!!'];
             if (count($questionChildsByNumber))
                 $result = ['success' => 1, 'message' => 'thats true question checkbox answers!',
                     'data' => $questionChildsByNumber];
@@ -632,6 +738,94 @@ class HhController extends Controller
         }
         return $result;
 
+    }
+
+    /**
+     * @param array $qst
+     * @return string
+     */
+    private function getQuestionDescription(array $qst):string{
+        $description = "";
+        foreach($qst as $item)
+            if ($item['description_type'] === 1){
+                $description = $item['description'];
+                break;
+            }
+        return $description;
+    }
+
+    /** Получение массива, содержащего вопрос из входного массива с вопросом и ответами к нему.
+     * @param array $qst
+     * @return array
+     */
+    private function getQuestionDescriptionArray(array $qst):array{
+
+        $result_arr = [];
+
+        foreach($qst as $item)
+            if ($item['description_type'] === 1){
+                $result_arr = $item;
+                break;
+            }
+        return $result_arr;
+    }
+
+    /**
+     * @param array $qst
+     * @return array
+     */
+    private function getQuestionAnswers(array $qst):array{
+        $a = [];
+        foreach($qst as $item)
+            if (filter_var($item['description_type'], FILTER_VALIDATE_INT,
+                [ 'options' => ['min_range' => 2, 'max_range' => 3] ]) ){
+                $a[] = $item;
+            }
+        return $a;
+    }
+
+    /**
+     * Перемешивает варианты ответов заданного вопроса
+     * @param array $question
+     * @return array массив вопроса с перемешанными ответами
+     */
+    public function shuffleQuestionChilds(array $question):array{
+
+        $questionDescriptionArray = [$this->getQuestionDescriptionArray($question)];
+        $questionAnswersChildsArray = $this->getQuestionAnswers($question);
+
+        $shuffleQuestionAnswerChildsArray = $questionAnswersChildsArray;
+        shuffle($shuffleQuestionAnswerChildsArray);
+
+        $shuffleQuestion = array_merge($questionDescriptionArray, $shuffleQuestionAnswerChildsArray);
+
+        return $shuffleQuestion;
+    }
+
+    /**
+     * Перемешивание ответов одного вопроса
+     * @param array $question
+     * @return array
+     */
+    public function shuffleQuestionSingle(array $question): array{
+
+        $questionDescriptionArray = $this->getQuestionDescriptionArray($question);
+        $questionAnswers = $this->getQuestionAnswers($question);
+        $shuffledQuestion = $questionAnswers;
+        shuffle($shuffledQuestion);
+
+        return $shuffledQuestion;
+    }
+
+    // тестирую получение вопроса по тест_ид и номеру и его перемешивание
+    public function test_getQuestionByTetsIdAndNumber(){
+
+        $testId = 11;
+        $number = 12;
+        $question = $this->getQuestionByTetsIdAndNumber($testId, $number);
+        echo Debug::d($question);
+        $shuffleQuestion = $this->shuffleQuestionChilds($question['data']);
+        echo Debug::d($shuffleQuestion);
     }
 
     /**
@@ -898,7 +1092,10 @@ class HhController extends Controller
         return view('simpletestsystem.test.results', compact('result','sessionInner','timeDiff'));
     }
 
-    //
+    /**
+     * Сохранение состояния вопроса по test_number, questions.numbger и answered questions.id
+     * @return mixed die($json)
+     */
     public function saveSingleQuestionResultByClickWithAjax(){
 
         // test_number	29 in {saved_selected_qsts; test_results}
@@ -992,12 +1189,11 @@ class HhController extends Controller
             default:
                 $rs = ['success' => 0, 'message' => 'undefined question_type!'];
         }
-
         die(json_encode($rs));
-
     }
 
     /**
+     * Закончилось ли время тестировани?
      * @return bool
      */
     public function isTestTimeEnded():bool{
@@ -1007,13 +1203,16 @@ class HhController extends Controller
         return $testTimeDiffs['diffInSeconds'] >= $testTimeDiffs['etalonDiffInSeconds'];
     }
 
-    //
+    /**
+     * Обертка над $this->isTestTimeEnded в виде die($json)
+     */
     public function isTestTimeEndedAjax(){
         $result = $this->isTestTimeEnded();
         die(json_encode($result));
     }
 
     /**
+     * Получение разницы времени между началом и текущим времени тестирования в разных форматах
      * @return array
      */
     public function getTimeDiff(){
@@ -1041,14 +1240,11 @@ class HhController extends Controller
         return $rs;
     }
 
-    //
+    /**
+     * Обертка над $this->getTimeDiff() в виде die($json)
+     */
     public function getTimeDiffAjax(){
         $rs = $this->getTimeDiff();
         die(json_encode($rs));
     }
-
-
-
-
-
 }
