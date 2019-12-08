@@ -1283,19 +1283,27 @@ body > nav.navbar{
 #mg_test__header{
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 .mg_test__header__countdown_timer{
 	display: flex;
 	align-self: center;
+	margin-left: 10px;
 }
 #mg_test__header__wrapper {
 	position: fixed;
 	top: 88px;
-	right: 166px;
-	width: 31%;
-	padding: 9px 20px;
+	right: 16px;
+	/*width: 31%;*/
+	padding: 9px 10px;
 	/*border: 1px solid #ccc;*/
 	border-radius: 3px;
-	background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(69, 104, 220), rgb(176, 106, 179)) repeat scroll 0% 0%;
+	background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(150, 97, 174), rgb(176, 106, 179)) repeat scroll 0% 0%;
 	color: #fff;
+}
+.countdown_clock_svg{
+	color: #0C1C0D;
+	fill: currentColor;
+	height: 37px;
+	width: 28px;
 }
