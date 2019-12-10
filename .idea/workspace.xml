@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f7252fe2-b9a3-40c3-800a-06b98a10aaab" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/st_start/test_start.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/st_start/test_start.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,10 +63,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
+            <state relative-caret-position="109">
               <caret line="647" column="10" selection-start-line="647" selection-start-column="10" selection-end-line="647" selection-end-column="10" />
               <folding>
                 <element signature="e#57#71#0#PHP" expanded="true" />
@@ -96,6 +95,15 @@
                 <element signature="e#43181#43304#0#PHP" />
                 <element signature="e#43443#44508#0#PHP" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="220">
+              <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -214,7 +222,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/database/migrations/2019_10_12_193622_create_questions_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_195242_create_prepared_qsts_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_195650_create_shedules_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_12_200147_create_answered_qsts_table.php" />
@@ -265,6 +272,7 @@
         <option value="$PROJECT_DIR$/public/css/style.css" />
         <option value="$PROJECT_DIR$/resources/views/st_start/test_start.blade.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -565,12 +573,12 @@
       <workItem from="1575785249510" duration="17196000" />
       <workItem from="1575917950016" duration="17000" />
       <workItem from="1575925113999" duration="383000" />
-      <workItem from="1575965467440" duration="10674000" />
+      <workItem from="1575965467440" duration="12054000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="676540000" />
+    <option name="totallyTimeSpent" value="677920000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -582,12 +590,12 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1456" height="834" extended-state="7" />
+    <frame x="-8" y="-8" width="1456" height="834" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
       <window_info id="npm" order="1" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.08739255" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.18409742" />
       <window_info id="Structure" order="3" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Event Log" order="0" sideWeight="0.5007163" side_tool="true" weight="0.46219686" />
       <window_info anchor="bottom" id="Version Control" order="1" weight="0.32952926" />
@@ -599,10 +607,10 @@
       <window_info anchor="bottom" id="Debug" order="7" weight="0.39942938" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49928367" weight="0.46219686" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49928367" visible="true" weight="0.382311" />
       <window_info anchor="bottom" id="TODO" order="11" weight="0.32952926" />
       <window_info anchor="bottom" id="Database Console" order="12" weight="0.32952926" />
-      <window_info anchor="right" id="Database" order="0" weight="0.15830946" />
+      <window_info anchor="right" id="Database" order="0" visible="true" weight="0.15830946" />
       <window_info anchor="right" id="Remote Host" order="1" weight="0.3295129" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
@@ -613,13 +621,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Foundation/AliasLoader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="81" selection-start-line="81" selection-end-line="81" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/composer/ClassLoader.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="124">
@@ -1008,7 +1009,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
+        <state relative-caret-position="109">
           <caret line="647" column="10" selection-start-line="647" selection-start-column="10" selection-end-line="647" selection-end-column="10" />
           <folding>
             <element signature="e#57#71#0#PHP" expanded="true" />
@@ -1037,6 +1038,13 @@
             <element signature="e#43181#43304#0#PHP" />
             <element signature="e#43443#44508#0#PHP" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
         </state>
       </provider>
     </entry>
