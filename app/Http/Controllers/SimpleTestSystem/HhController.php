@@ -654,9 +654,8 @@ class HhController extends Controller
     }
 
     //
-    public function testttt(int $a, int $b):int{
-
-        return $a + $b;
+    public function testttt(int $a, int $b):float{
+        return ($a + $b)/2;
     }
 
     /**
