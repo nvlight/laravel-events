@@ -654,9 +654,9 @@ class HhController extends Controller
     }
 
     //
-    public function testttt(){
+    public function testttt(int $a, int $b):int{
 
-        return 1;
+        return $a + $b;
     }
 
     /**
