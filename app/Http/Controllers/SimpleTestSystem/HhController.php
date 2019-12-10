@@ -653,6 +653,12 @@ class HhController extends Controller
         );
     }
 
+    //
+    public function testttt(){
+
+        return 1;
+    }
+
     /**
      * Получение всех ответов на вопросы для введенего номера тестирования.
      * @param int $testNumber

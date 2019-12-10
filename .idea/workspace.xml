@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f7252fe2-b9a3-40c3-800a-06b98a10aaab" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,8 +67,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="647" column="10" selection-start-line="647" selection-start-column="10" selection-end-line="647" selection-end-column="10" />
+            <state relative-caret-position="104">
+              <caret line="658" column="17" lean-forward="true" selection-start-line="658" selection-start-column="17" selection-end-line="658" selection-end-column="17" />
               <folding>
                 <element signature="e#57#71#0#PHP" expanded="true" />
                 <element signature="e#5912#6501#0#PHP" />
@@ -103,7 +104,7 @@
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="220">
-              <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+              <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -573,12 +574,12 @@
       <workItem from="1575785249510" duration="17196000" />
       <workItem from="1575917950016" duration="17000" />
       <workItem from="1575925113999" duration="383000" />
-      <workItem from="1575965467440" duration="12054000" />
+      <workItem from="1575965467440" duration="12229000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="677920000" />
+    <option name="totallyTimeSpent" value="678095000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -607,7 +608,7 @@
       <window_info anchor="bottom" id="Debug" order="7" weight="0.39942938" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49928367" visible="true" weight="0.382311" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49928367" visible="true" weight="0.14122681" />
       <window_info anchor="bottom" id="TODO" order="11" weight="0.32952926" />
       <window_info anchor="bottom" id="Database Console" order="12" weight="0.32952926" />
       <window_info anchor="right" id="Database" order="0" visible="true" weight="0.15830946" />
@@ -621,13 +622,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/vendor/composer/ClassLoader.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="124">
-          <caret line="321" selection-start-line="321" selection-end-line="321" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
@@ -992,25 +986,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/st_start/test_start.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="248" column="40" selection-start-line="248" selection-start-column="40" selection-end-line="248" selection-end-column="40" />
-          <folding>
-            <element signature="e#7487#7581#0#PHP" />
-            <element signature="e#7598#7978#0#PHP" />
-            <element signature="e#7996#8089#0#PHP" />
-            <element signature="e#8106#8514#0#PHP" />
-            <element signature="e#8532#8725#0#PHP" />
-            <element signature="e#8742#9340#0#PHP" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/SimpleTestSystem/HhController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="647" column="10" selection-start-line="647" selection-start-column="10" selection-end-line="647" selection-end-column="10" />
+        <state relative-caret-position="104">
+          <caret line="658" column="17" lean-forward="true" selection-start-line="658" selection-start-column="17" selection-end-line="658" selection-end-column="17" />
           <folding>
             <element signature="e#57#71#0#PHP" expanded="true" />
             <element signature="e#5912#6501#0#PHP" />
@@ -1041,10 +1020,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/st_start/test_start.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="372">
+          <caret line="248" column="40" selection-start-line="248" selection-start-column="40" selection-end-line="248" selection-end-column="40" />
+          <folding>
+            <element signature="e#7487#7581#0#PHP" />
+            <element signature="e#7598#7978#0#PHP" />
+            <element signature="e#7996#8089#0#PHP" />
+            <element signature="e#8106#8514#0#PHP" />
+            <element signature="e#8532#8725#0#PHP" />
+            <element signature="e#8742#9340#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env.example">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
-          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+          <caret line="11" column="1" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
         </state>
       </provider>
     </entry>
