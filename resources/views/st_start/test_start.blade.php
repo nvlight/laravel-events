@@ -182,6 +182,30 @@
                     return $a;
                 }
 
+                /**
+                 * @param int $questionId
+                 * @param int $questionNumber
+                 * @param array $savedSearchArray
+                 * @return bool
+                 */
+                function isSavedAnswerTrueForQuestion(int $questionId, int $questionNumber, array $savedSearchArray):bool{
+
+                    $weFind = false;
+
+                    foreach($savedSearchArray as $k => $v){
+
+                        if ($questionNumber === $v['qsts_number']){
+                            $answeredIds = explode(';',$v['qsts_answer']);
+                            if (in_array($questionId, $answeredIds)){
+                                return true;
+                            }
+                        }
+
+                    }
+
+                    return $weFind;
+                }
+
                 //echo \App\Debug::d(request()->all());
                 //dump($themesWithChildRandomQsts);
                 //echo \App\Debug::d($themesWithChildRandomQsts);
@@ -217,14 +241,14 @@
                                     @switch($vvv['type'])
                                         @case(1)
                                             <input type="radio" name="radio_qst_number_{{$vvv['number']}}[]" id="id_{{$vvv['number']}}_{{$vvv['id']}}"
-                                               value="{{$vvv['id']}}"
+                                               value="{{$vvv['id']}}" <?php if(isSavedAnswerTrueForQuestion($vvv['id'],$vvv['number'], $savedQuestionsQnswersByTestNumber['data'])) echo "checked"; ?>
                                                 >
                                             <label for="id_{{$vvv['number']}}_{{$vvv['id']}}">{{$vvv['description']}}</label>
                                             <br>
                                             @break
                                         @case(2)
                                             <input type="checkbox" name="checkbox_qst_number_{{$vvv['number']}}[]" id="id_{{$vvv['number']}}_{{$vvv['id']}}"
-                                               value="{{$vvv['id']}}"
+                                               value="{{$vvv['id']}}" <?php if(isSavedAnswerTrueForQuestion($vvv['id'],$vvv['number'], $savedQuestionsQnswersByTestNumber['data'])) echo "checked"; ?>
                                                 >
                                             <label for="id_{{$vvv['number']}}_{{$vvv['id']}}">{{$vvv['description']}}</label>
                                             <br>
@@ -288,9 +312,27 @@
                                 }
                             });
                         });
+
+
                     </script>
 
-                    <button type="submit" class="btn btn-primary">End this test!</button>
+                    <button id="testForceEnd" type="submit" class="btn btn-primary">Завершить тестирование!</button>
+
+                    <script>
+                        $('#testForceEnd').on('click',function (e) {
+
+                            e.preventDefault();
+
+                            let forceEnd = confirm('Вы действительно хотите завершить тестирование досрочно?');
+                            if (!forceEnd){
+                                //console.error('its bad!');
+                                return false;
+                            }
+
+                            $('#form_testSystemMain').submit();
+                        });
+                    </script>
+
 
                 </form>
 

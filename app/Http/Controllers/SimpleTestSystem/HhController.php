@@ -253,6 +253,7 @@ class HhController extends Controller
             ->select('test_categories.name as category','tests.name as test_name','shedules.name as selection',
                 'test_categories.id as category_id', 'tests.id as test_id' ,'shedules.id as shedule_id',
                 'shedules.selected_qsts_number as selected_qsts_id', 'shedules.duration as duration'
+                //'shedules.test_number as test_number'
             )
             ->get()
             ->toArray()
@@ -347,7 +348,11 @@ class HhController extends Controller
         return $questions_tmp;
     }
 
-    //
+    /**
+     * TEST START --->
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function testStart(){
 
         $started_config_key = config('services.sts.test_start_session_key');
@@ -371,7 +376,7 @@ class HhController extends Controller
         if (session()->has($test_start_key)){
             //echo Debug::d(session()->all()); die('');
             //session()->forget($test_start_key);
-            //return redirect('/tests/resume');
+            return redirect('/tests/resume');
         }
 
         $test_start = [
@@ -493,12 +498,18 @@ class HhController extends Controller
             echo Debug::d($result); die;
         }
 
+        $savedQuestionsQnswersByTestNumber = ['data' => []];
+
         return view('st_start.test_start', compact('themesWithChildRandomQsts',
-                'getNames', 'started_config_key', 'timeDiff')
+                'getNames', 'started_config_key', 'timeDiff', 'savedQuestionsQnswersByTestNumber')
         );
     }
 
-    //
+    /**
+     * TEST RESUME --->
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     */
     public function testResume(){
 
         //$this->destroyUserSession(); return redirect('/tests');
@@ -559,6 +570,7 @@ class HhController extends Controller
 
         // получение test_categories.name/tests.name/shedules.name
         $getNames = $this->getTestingIds(session()->get($started_config_key)['shedule_id']);
+        $getNames[count($getNames)-1]['test_number'] = session()->get($started_config_key)['test_number'];
         //echo Debug::d($getNames);
 
         /* вопросы с названием категории получены в виде 1 массива
@@ -628,17 +640,43 @@ class HhController extends Controller
         }
         //echo Debug::d($newQuestionsWithChilds,'$newQuestionsWithChilds');
 
-
         $themesWithChildRandomQsts = $newQuestionsWithChilds;
         //die;
 
+        // получу сохраненные ответы на вопросы по номеру теста test_number
+        $savedQuestionsQnswersByTestNumber = $this->getQuestionsQnswersByTestNumber($getNames[count($getNames)-1]['test_number']);
+        //echo Debug::d($savedQuestionsQnswersByTestNumber,'',2); //die;
+
         return view('st_start.test_start', compact('themesWithChildRandomQsts',
-                'getNames', 'started_config_key', 'timeDiff'
+                'getNames', 'started_config_key', 'timeDiff', 'savedQuestionsQnswersByTestNumber'
             )
         );
     }
 
-    //
+    /**
+     * Получение всех ответов на вопросы для введенего номера тестирования.
+     * @param int $testNumber
+     * @return array
+     */
+    public function getQuestionsQnswersByTestNumber(int $testNumber):array{
+
+        try{
+            $recordSet = SavedSelectedQst::where('test_number','=', $testNumber)
+                ->select('qsts_number', 'qsts_answer')
+                ->get()->toArray();
+            $result = ['success' => 1, 'message' => 'uestionsQnswersByTestNumber is geted now!'];
+            $result['data'] = $recordSet;
+        }catch (\Exception $e){
+            $result = ['success' => 0, 'message' => $e->getCode() . $e->getMessage() ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Получение последнего номера для таблицы test_results
+     * @return array
+     */
     public function getLastTestNumber(){
 
         // надо сначала найти максимальный number и +1 от него
@@ -813,7 +851,6 @@ class HhController extends Controller
         $questionDescriptionArray = $this->getQuestionDescriptionArray($question);
         $questionAnswers = $this->getQuestionAnswers($question);
         $shuffledQuestion = array_merge([count($questionAnswers) => $questionDescriptionArray] + $questionAnswers);
-        //echo Debug::d($shuffledQuestion); die;
         shuffle($shuffledQuestion);
 
         return $shuffledQuestion;
