@@ -229,6 +229,7 @@ class HhController extends Controller
                 }
 
                 // прямо тут можно перемешать вопрос!
+                $questionShuffled = $child;
                 $questionShuffled = $this->shuffleQuestionSingle($child);
 
                 $theme['child'][] = $questionShuffled; //$child;
@@ -370,7 +371,7 @@ class HhController extends Controller
         if (session()->has($test_start_key)){
             //echo Debug::d(session()->all()); die('');
             //session()->forget($test_start_key);
-            return redirect('/tests/resume');
+            //return redirect('/tests/resume');
         }
 
         $test_start = [
@@ -811,7 +812,8 @@ class HhController extends Controller
 
         $questionDescriptionArray = $this->getQuestionDescriptionArray($question);
         $questionAnswers = $this->getQuestionAnswers($question);
-        $shuffledQuestion = $questionAnswers;
+        $shuffledQuestion = array_merge([count($questionAnswers) => $questionDescriptionArray] + $questionAnswers);
+        //echo Debug::d($shuffledQuestion); die;
         shuffle($shuffledQuestion);
 
         return $shuffledQuestion;
