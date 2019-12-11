@@ -252,7 +252,8 @@ class HhController extends Controller
             ->join('test_categories','test_categories.id','=','tests.parent_id')
             ->select('test_categories.name as category','tests.name as test_name','shedules.name as selection',
                 'test_categories.id as category_id', 'tests.id as test_id' ,'shedules.id as shedule_id',
-                'shedules.selected_qsts_number as selected_qsts_id', 'shedules.duration as duration'
+                'shedules.selected_qsts_number as selected_qsts_id', 'shedules.duration as duration',
+                'shedules.qsts_count as qsts_count'
                 //'shedules.test_number as test_number'
             )
             ->get()
@@ -431,6 +432,11 @@ class HhController extends Controller
         // получение вопросов дочерних вопросов к каждой теме.
         $themesWithChildRandomQsts = $this->getThemesWithChildRandomQsts($themeChildQstsNumbersByParentQstIdWithRandomNumbers, $qstsChildsByThemeId);
         //echo Debug::d($themesWithChildRandomQsts,'',1);
+
+        // перемешаю по ключам child
+        $themesWithChildRandomQsts = $this->questionsWithThemes_doShuffle($themesWithChildRandomQsts);
+        shuffle($themesWithChildRandomQsts);
+        //echo Debug::d($themesWithChildRandomQsts); die;
 
         //echo \App\Debug::d(request()->all());
         //echo Debug::d($getNames);
@@ -641,7 +647,12 @@ class HhController extends Controller
         //echo Debug::d($newQuestionsWithChilds,'$newQuestionsWithChilds');
 
         $themesWithChildRandomQsts = $newQuestionsWithChilds;
-        //die;
+        //echo Debug::d($themesWithChildRandomQsts); die;
+
+        // перемешаю по ключам child
+        $themesWithChildRandomQsts = $this->questionsWithThemes_doShuffle($themesWithChildRandomQsts);
+        shuffle($themesWithChildRandomQsts);
+        //echo Debug::d($themesWithChildRandomQsts); die;
 
         // получу сохраненные ответы на вопросы по номеру теста test_number
         $savedQuestionsQnswersByTestNumber = $this->getQuestionsQnswersByTestNumber($getNames[count($getNames)-1]['test_number']);
@@ -653,8 +664,27 @@ class HhController extends Controller
         );
     }
 
+    /**
+     * Перемешивание дочерних вопросов по каждой теме.
+     * @param array $questions
+     * @return array
+     */
+    public function questionsWithThemes_doShuffle(array $questions):array{
+
+        //$tmpArray = [];
+
+        foreach($questions as $k => $v){
+            if (isset($v['child'])){
+                shuffle($questions[$k]['child']);
+            }
+        }
+
+        return $questions;
+    }
+
     //
     public function testttt(int $a, int $b):float{
+        // yes, you do fine!
         return ($a + $b)/2;
     }
 
@@ -872,6 +902,16 @@ class HhController extends Controller
         echo Debug::d($shuffleQuestion);
     }
 
+    // тестирую работы проверочной функции для чекбокса
+    public function test_testCheckBoxAnswerIsTrue(){
+        $testData['id'] = 1;;
+        $testData['qst_number'] = 24;
+        $testData['qst_type'] = 2;
+        $testData['answer'] = [156,157,158];
+        //$testData['answer'] = [156,157,159];
+        echo Debug::d($this->isQuestionAnswersTrue(11, 24, 2, $testData['answer']));
+    }
+
     /**
      * @param int $test_id
      * @param int $qst_number
@@ -987,7 +1027,11 @@ class HhController extends Controller
                 $result = $this->isQuestionAnswerTrueForRadio($test_id, $qst_number, $answers[0]);
                 break;
             case 2:
+                $tmp_answer = array_map(function ($val){return intval($val);}, $answers);
+                $answers = $tmp_answer;
                 $result = $this->isQuestionAnswerTrueForCheckbox($test_id, $qst_number, $answers);
+                //echo Debug::d($answers, '',2);
+                //echo Debug::d($result,'$result');
                 break;
             default:
                 $result = ['success' => 0, 'message' => 'undefined question type'];
@@ -995,6 +1039,29 @@ class HhController extends Controller
 
         return $result;
     }
+
+    //
+    public function test_isCheckboxQuestionTrue(){
+
+        $request = [
+            'shedule_id' => 12,
+            'category_id' => 7,
+            'test_id' => 11,
+            'selected_qsts_id' => 6,
+            //'radio_qst_number_12' => [
+            //    '0' => 98,
+            //],
+            'checkbox_qst_number_24' => [
+                2 => '156',
+                1 => '158',
+                0 => '157'
+            ],
+        ];
+
+        echo Debug::d($this->countingResultBallsByRequest($request));
+
+    }
+    //
 
     /**
      * @param array $request
@@ -1023,12 +1090,13 @@ class HhController extends Controller
 //            'category_id' => 7,
 //            'test_id' => 11,
 //            'selected_qsts_id' => 6,
-//            'radio_qst_number_12' => [
-//              0 => 99
-//            ],
+//            //'radio_qst_number_12' => [
+//            //  0 => 99
+//            //],
 //            'checkbox_qst_number_24' => [
 //                0 => 156,
-//                1 => 157
+//                1 => 157,
+//                2 => 158
 //            ],
 //        ];
 
@@ -1088,7 +1156,7 @@ class HhController extends Controller
             return $result;
         }
         foreach($neededQuestionTypeArrayTypes as $k => $v){
-            //echo Debug::d(${$k});
+            //echo Debug::d(${$k},'tte',2);
         }
         //echo Debug::d($this->isQuestionAnswersTrue($rqst_test['test_id'], 12, 1, [99]));
         //echo Debug::d($this->isQuestionAnswersTrue($rqst_test['test_id'], 24, 2, [156,157,158]));
@@ -1112,7 +1180,11 @@ class HhController extends Controller
         // foreach($questions as $question) - проходимся циклом по всему
         //
 
-        return $result = ['success' => 1, 'balls' => $trueAnswers, 'questionsCountAndDurationNumber' => $questionsCountAndDurationNumber];
+        $result = ['success' => 1, 'balls' => $trueAnswers, 'questionsCountAndDurationNumber' => $questionsCountAndDurationNumber];
+
+        //echo Debug::d($result);
+
+        return $result;
         //dump($result);
     }
 

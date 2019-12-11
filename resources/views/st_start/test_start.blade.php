@@ -12,6 +12,8 @@
                  <div class="mg_test__header__caption">
                      <h3>Тестирование начато</h3>
                      <h4>{{$getNames[0]['category']}} - {{$getNames[0]['test_name']}}. {{$getNames[0]['selection']}}</h4>
+                     <h5>Вопросов всего: {{$getNames[0]['qsts_count']}}</h5>
+                     <h5>Времени всего: {{$getNames[0]['duration']}} минут</h5>
                  </div>
 
                  <div id="mg_test__header__wrapper">

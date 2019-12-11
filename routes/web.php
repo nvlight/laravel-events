@@ -35,7 +35,9 @@ Route::post('/tests/start', 'SimpleTestSystem\HhController@testStart');//->middl
 Route::post('/tests/results','SimpleTestSystem\HhController@testResults');
 Route::patch('tests/save-single-result','SimpleTestSystem\HhController@saveSingleQuestionResultByClickWithAjax');
 
-Route::get('/test_getQuestionByTetsIdAndNumber', 'SimpleTestSystem\HhController@test_getQuestionByTetsIdAndNumber');//->middleware('guest');
+Route::get('/test_getQuestionByTetsIdAndNumber', 'SimpleTestSystem\HhController@test_getQuestionByTetsIdAndNumber');
+Route::get('/test_testCheckBoxAnswerIsTrue', 'SimpleTestSystem\HhController@test_testCheckBoxAnswerIsTrue');
+Route::get('/test_countingResultBallsByRequest','SimpleTestSystem\HhController@test_isCheckboxQuestionTrue');
 
 Auth::routes(['verify' => true]);
 
