@@ -29,9 +29,11 @@ class HhController extends Controller
         $testCatsWithChildTestsGet = $testCatsWithChildTests
             ->get()
             ->toArray();
+        //echo Debug::d($testCatsWithChildTestsGet); die;
 
         $testCatsWithChildTests = TestCategory::
           join('tests', 'tests.parent_id','=','test_categories.id')
+            ->select('test_categories.img as category_img')
             ->join('shedules', 'shedules.test_id', '=', 'tests.id')
             ->select('test_categories.id as category_id',
                 'test_categories.name as category',
@@ -41,11 +43,12 @@ class HhController extends Controller
                 'shedules.name AS selection_name',
 	            'shedules.duration AS selection_duration',
 	            'shedules.selected_qsts_number AS selected_qsts_number',
-	            'shedules.qsts_count'
+	            'shedules.qsts_count',
+                'test_categories.img as category_img'
             )
             ->groupBy('category_id', 'category', 'test', 'test_id',
                 'selection_name', 'selection_duration', 'selected_qsts_number', 'qsts_count', 'shedule_id')
-            ->orderBy('shedules.id', 'DESC')
+            ->orderBy('shedules.id', 'ASC')
         ;
 
         $sql = $testCatsWithChildTests->toSql();
@@ -53,16 +56,40 @@ class HhController extends Controller
         $testCatsWithChildTestsGet = $testCatsWithChildTests
             ->get()
             ->toArray();
-        //echo Debug::d($testCatsWithChildTestsGet);
+        //echo Debug::d($testCatsWithChildTestsGet); die;
         //dd($testCatsWithChildTests);
         $testCatsWithChildTestsGetFormatted = [];
         foreach($testCatsWithChildTestsGet as $k => $v){
             $testCatsWithChildTestsGetFormatted[$v['category_id']][$v['test_id']][] = $v;
         }
-        //dump($testCatsWithChildTestsGetFormatted);
+        //echo Debug::d(($testCatsWithChildTestsGetFormatted));
+        //echo "<img src='testCategoriesImg/dem_5d5476089c063.png'>";
+
+        //изменение структуры т.о. чтобы ключом было имя тз, например PHP, при этом shedule_id будет клюом выходной
+        //ссылки
+//        [PHP] => Array
+//        (
+//            [0] => Array
+//            (
+//                    [category_id] => 7
+//                    [category] => PHP
+//                    [test] => Уровень 1
+//                    [test_id] => 11
+//                    [shedule_id] => 13
+//                    [selection_name] => 1 курс Математика
+//                    [selection_duration] => 1
+//                    [selected_qsts_number] => 7
+//                    [qsts_count] => 9
+//                    [category_img] => testCategoriesImg/dem_5d5476089c063.png
+//                )
+        $testCategoriesWithChilds = [];
+        foreach($testCatsWithChildTestsGet as $k => $v){
+            $testCategoriesWithChilds[$v['category']][] = $v;
+        }
+        //echo Debug::d($testCategoriesWithChilds);
 
         return view('st_start.index', compact('testCatsWithChildTests',
-            'testCatsWithChildTestsGetFormatted'
+            'testCatsWithChildTestsGetFormatted', 'testCategoriesWithChilds'
         ));
     }
 

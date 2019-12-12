@@ -1,0 +1,15 @@
+.site-footer__icon-sk {
+    bottom: auto;
+}
+
+#mg_content{
+    font-size: 17px;
+}
+
+.gb-top-menu__item > a {
+    font-size: 18px;
+}
+
+.gb-top-menu__item > a:hover {
+    text-decoration: none;
+}

@@ -17,6 +17,7 @@ class CreateTestCategoriesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('parent_id');
             $table->string('name');
+            $table->string('img', 555)->default(null);
             $table->timestamps();
         });
     }

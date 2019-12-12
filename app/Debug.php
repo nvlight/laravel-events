@@ -20,6 +20,7 @@ class Debug
     {
         if ($style === '')
             $style = <<<STYLE
+            font-size: 17px; 
             width: 100%;
             margin: 0 auto;
             background-color: #d0d0d0;
