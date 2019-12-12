@@ -63,6 +63,7 @@ class CategoryController extends Controller
         $testCategory = new TestCategory();
         $testCategory->parent_id = $attributes['parent_id'];
         $testCategory->name = $attributes['name'];
+        $testCategory->img = "";
         $testCategory->save();
         session()->flash('testcategory_created', 'Категория создана');
 
