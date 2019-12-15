@@ -38,7 +38,7 @@ Route::get('/test_getQuestionByTetsIdAndNumber', 'SimpleTestSystem\HhController@
 Route::get('/test_testCheckBoxAnswerIsTrue', 'SimpleTestSystem\HhController@test_testCheckBoxAnswerIsTrue');
 Route::get('/test_countingResultBallsByRequest','SimpleTestSystem\HhController@test_isCheckboxQuestionTrue');
 
-Auth::routes(['verify' => true]);
+Auth::routes(['verify' => false]);
 
 Route::resource('category', 'CategoryController')->middleware('verified');
 Route::resource('type', 'TypeController')->middleware('verified');
@@ -58,7 +58,7 @@ Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');
 Route::resource('document', 'DocumentController')->middleware('verified');
 Route::get('document-download/{document}','DocumentController@download')->middleware('verified');
 
-Route::get('test111', 'TestController@show')->name('tttest.note');
+//Route::get('test111', 'TestController@show')->name('tttest.note');
 //Route::get('verification.notice', 'TestController@show')->name('tttest.note');
 
 //Route::get('email/verify', 'auth\VerificationController@show')->name('tttest.note');
