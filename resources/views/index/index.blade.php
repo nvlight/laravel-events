@@ -42,14 +42,20 @@
 <body>
 
     <section class="main_section">
-        <h2>Events application</h3>
-        <h4>&copy; <?=date('Y')?> Martin German</h5>
+        <h2>Events application</h2>
+        <h4>&copy; <?=date('Y')?> Martin German</h4>
         <ul class="main_menu">
             <li>
                 <a href="/event">Events</a>
             </li>
             <li>
                 <a href="/tests">Tests</a>
+            </li>
+            <li>
+                <a href="/cp-remont-kvartir.hardweb.pw">RemontKvartir.NET</a>
+            </li>
+            <li>
+                <a href="/cp-cooldesc.hardweb.pw">CoolDESC</a>
             </li>
         </ul>
     </section>
