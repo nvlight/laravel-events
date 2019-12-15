@@ -1,0 +1,29 @@
+
+<div class="container footer-stick">
+    <section id="content">
+        <section class="vbox stretch">
+            <section class="main-content" id="main-content">
+                <section class="hbox stretch">
+                    <script id="questionsTpl" ng-non-bindable="" type="text/x-jsrender">
+                        {{if subject.length}}<div class="small m-b-lg">Тема: {{:subject[0].name}}</div>{{/if}}<div class="small bugreport text-center" data-question-id="{{:id}}" data-toggle="modal" data-target="#bug-form"><i class="fa fa-bug"></i> Сообщить об ошибке</div><div class="text-danger text-lg m-b" id="error-message"></div><h3>{{:title}}</h3>{{if code}}<div class="code-wrapper m-b m-t highlight"><pre><code class="javascript">{{:code}}</code></pre></div>{{/if}}<div class="input-group questions-list m-t"><ul class="list-unstyled">{{if multiple}}{{for options}}<li><input class="pull-left" type="checkbox" data-id="{{:id}}" /><pre class="m-l-lg"><code class="javascript">{{:title.trim()}}</code></pre></li>{{/for}}{{else}}{{for options}}<li><input class="pull-left" type="radio" data-id="{{:id}}" /><pre class="m-l-lg"><code class="javascript">{{:title.trim()}}</code></pre></li>{{/for}}{{/if}}</ul><div class="modal fade" role="dialog" id="bug-form"><div class="modal-dialog modal-vertical-centered"><div class="modal-content"><form data-parsley-validate="true"><div class="modal-header relative"><a class="dismiss" href="" data-dismiss="modal"><svg class="svg-icon icon-x icon-messages" width="32" height="32"><use xlink:href="/svg-defs.svg#icon-x"></use></svg></a><div class="modal-title">Сообщение о проблеме</div></div><div class="modal-body"><textarea class="js-modal-form__message" required="true" rows="3" autofocus="true" placeholder="Опишите проблему"></textarea></div><div class="modal-footer"><button class="btn btn-block btn-md js-modal-form__submit-btn btn-success" type="submit">Отправить</button></div></form></div></div></div></div>
+                    </script>
+                    <div id="gb-testing-wrapper">
+                        <div class="row tests-wrapper">
+                            <div class="col-xs-12" id="questions-wrapper" data-count="30" data-subject="21" data-answer="0"></div>
+                        </div>
+                        <footer class="navbar-fixed-bottom">
+                            <div class="test-status autofade">
+                                <div class="h4 text-dark">Тестирование началось</div>
+                                <div class="arrow-down"></div>
+                            </div>
+                            <section class="controls">
+                                <div class="timer text-dark text-lg no-wrap"><span class="minutes"></span><span class="m-r-xs m-l-xs">:</span><span class="seconds"></span></div>
+                                <div class="controls__progress"><span class="current text-dark text-lg m-l-xl m-r-xs current-question"></span><span class="text-dark text-lg m-r-xs">/</span><span class="text-lg text-dark total-questions"></span></div><button class="btn btn-primary m-l-lg answer" id="answer-button" disabled="true"><span class="text-lg text">Ответить →</span><i class="i i-spinner m-t-xs hide"></i></button>
+                            </section>
+                        </footer>
+                    </div>
+                </section>
+            </section>
+        </section>
+    </section>
+</div>

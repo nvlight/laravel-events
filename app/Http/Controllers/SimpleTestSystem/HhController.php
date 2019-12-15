@@ -113,7 +113,9 @@ class HhController extends Controller
 
         $testBreadCrumbs = Test::where('tests.id','=', $shedule_id->test_id)
             ->join('test_categories','test_categories.id','=','tests.parent_id')
-            ->select('test_categories.name as category', 'tests.name as test_name')
+            ->select('test_categories.name as category', 'tests.name as test_name',
+                'test_categories.img as img'
+            )
             ->get()
             //->toArray()
         ;
@@ -121,7 +123,10 @@ class HhController extends Controller
         //dd($testBreadCrumbs);
         // {{$testBreadCrumbs->category}}/{{$testBreadCrumbs->test_name}}
 
-        return view('st_start.themes', compact('theme_ids', 'shedule_id', 'testBreadCrumbs'));
+        $testSuccessCompletedCount = rand(500,999);
+
+        return view('st_start.themes', compact('theme_ids', 'shedule_id', 'testBreadCrumbs',
+            'testSuccessCompletedCount'));
     }
 
     /**
@@ -280,7 +285,8 @@ class HhController extends Controller
             ->select('test_categories.name as category','tests.name as test_name','shedules.name as selection',
                 'test_categories.id as category_id', 'tests.id as test_id' ,'shedules.id as shedule_id',
                 'shedules.selected_qsts_number as selected_qsts_id', 'shedules.duration as duration',
-                'shedules.qsts_count as qsts_count'
+                'shedules.qsts_count as qsts_count',
+                'test_categories.img as img'
                 //'shedules.test_number as test_number'
             )
             ->get()

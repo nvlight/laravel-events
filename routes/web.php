@@ -11,19 +11,18 @@
 |
 */
 
-Route::get('/', function () {
+//Route::get('/', function () {
+//
+//    $logined = auth()->id();
+//
+//    if ($logined !== null){
+//        return redirect('/event');
+//    }
+//
+//    return redirect('/tests');
+//});
 
-    $logined = auth()->id();
-
-    if ($logined !== null){
-        //return view('event.index');
-        return redirect('/event');
-    }
-
-    //return view('welcome');
-    return redirect('/tests');
-});
-
+Route::get('/','HomeController@index');
 Route::get('/tests', 'SimpleTestSystem\HhController@index');//->middleware('guest');
 Route::get('/tests/resume','SimpleTestSystem\HhController@testResume');
 Route::get('/tests/destroy-ss','SimpleTestSystem\HhController@destroyUserSession');

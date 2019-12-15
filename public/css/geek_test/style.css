@@ -4,6 +4,11 @@
 
 #mg_content{
     font-size: 17px;
+    padding-top: 3px;
+}
+
+#mg_test__header__wrapper{
+    top: 101px;
 }
 
 .gb-top-menu__item > a {
@@ -12,4 +17,27 @@
 
 .gb-top-menu__item > a:hover {
     text-decoration: none;
+}
+
+@font-face {
+    font-family: "FontAwesome";
+    src: local('--_'),
+    url("../../../../../../fonts/test-system/fontawesome-webfont.af7ae505a9eed503f8b8e6982036873e.woff2") format("woff2");
+    font-weight: 200;
+    font-style: normal;
+}
+
+.gb__main-wrapper{
+    background-color: #fff;
+}
+
+.mg_start_test_button > button{
+    border: none;
+}
+
+#testForceEnd{
+    font-size: 19px;
+    border: none;
+    padding: 10px;
+    margin: 10px 0 0 0;
 }

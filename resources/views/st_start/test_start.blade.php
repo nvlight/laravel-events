@@ -1,6 +1,9 @@
-@extends('layouts.test')
+@extends('layouts.test_geek1')
 
 @section('content')
+
+    <link href="{{ asset('css/geek_test/test_detail/vendor.0d5f9223a1f958d314fb.css') }}" rel="stylesheet" media="all">
+    <link href="{{ asset('css/geek_test/test_detail/app.4bc4dbb916729b5c2908.css') }}" rel="stylesheet" media="all">
 
     <div id="mg_content">
 
@@ -10,10 +13,10 @@
              <div class="col-sm-10 offset-sm-1">
 
                  <div class="mg_test__header__caption">
-                     <h3>Тестирование начато</h3>
-                     <h4>{{$getNames[0]['category']}} - {{$getNames[0]['test_name']}}. {{$getNames[0]['selection']}}</h4>
-                     <h5>Вопросов всего: {{$getNames[0]['qsts_count']}}</h5>
-                     <h5>Времени всего: {{$getNames[0]['duration']}} минут</h5>
+                     <h3 class="h1">Тестирование начато</h3>
+                     <h4 class="h2">{{$getNames[0]['category']}} - {{$getNames[0]['test_name']}} ({{$getNames[0]['selection']}})</h4>
+                     <h5 class="h2">Вопросов всего: {{$getNames[0]['qsts_count']}}</h5>
+                     <h5 class="h2">Времени всего: {{$getNames[0]['duration']}} минут</h5>
                  </div>
 
                  <div id="mg_test__header__wrapper">
@@ -232,33 +235,34 @@
 
                     <?php $qst_count = 0; ?>
                     @foreach($themesWithChildRandomQsts as $k => $v)
-                        <h5>Тема: {{$v['description']}}</h5>
-                        @foreach($v['child'] as $kk => $vv)
-                            <p>
-                                <?php $qst_count++; ?>
-                                <strong>Вопрос {{$qst_count}}. </strong>
-                                {{getQuestionDescription($vv)}}
-                            </p>
-                                @foreach(getQuestionAnswers($vv) as $kkk => $vvv)
-                                    @switch($vvv['type'])
-                                        @case(1)
-                                            <input type="radio" name="radio_qst_number_{{$vvv['number']}}[]" id="id_{{$vvv['number']}}_{{$vvv['id']}}"
-                                               value="{{$vvv['id']}}" <?php if(isSavedAnswerTrueForQuestion($vvv['id'],$vvv['number'], $savedQuestionsQnswersByTestNumber['data'])) echo "checked"; ?>
-                                                >
-                                            <label for="id_{{$vvv['number']}}_{{$vvv['id']}}">{{$vvv['description']}}</label>
-                                            <br>
-                                            @break
-                                        @case(2)
-                                            <input type="checkbox" name="checkbox_qst_number_{{$vvv['number']}}[]" id="id_{{$vvv['number']}}_{{$vvv['id']}}"
-                                               value="{{$vvv['id']}}" <?php if(isSavedAnswerTrueForQuestion($vvv['id'],$vvv['number'], $savedQuestionsQnswersByTestNumber['data'])) echo "checked"; ?>
-                                                >
-                                            <label for="id_{{$vvv['number']}}_{{$vvv['id']}}">{{$vvv['description']}}</label>
-                                            <br>
-                                            @break
-                                    @endswitch
-                                @endforeach
-
-                        @endforeach
+                        <div class="questionInner" data-qrndm="<?=str_repeat(strval(rand(1,9999)),3)?>">
+                            <h5>Тема: {{$v['description']}}</h5>
+                            @foreach($v['child'] as $kk => $vv)
+                                <p>
+                                    <?php $qst_count++; ?>
+                                    <strong>Вопрос {{$qst_count}}. </strong>
+                                    {{getQuestionDescription($vv)}}
+                                </p>
+                                    @foreach(getQuestionAnswers($vv) as $kkk => $vvv)
+                                        @switch($vvv['type'])
+                                            @case(1)
+                                                <input type="radio" name="radio_qst_number_{{$vvv['number']}}[]" id="id_{{$vvv['number']}}_{{$vvv['id']}}"
+                                                   value="{{$vvv['id']}}" <?php if(isSavedAnswerTrueForQuestion($vvv['id'],$vvv['number'], $savedQuestionsQnswersByTestNumber['data'])) echo 'checked'; ?>
+                                                    data-random="{{$vvv['type']}}<?=rand(1,9999)?>" >
+                                                <label for="id_{{$vvv['number']}}_{{$vvv['id']}}">{{$vvv['description']}}</label>
+                                                <br>
+                                                @break
+                                            @case(2)
+                                                <input type="checkbox" name="checkbox_qst_number_{{$vvv['number']}}[]" id="id_{{$vvv['number']}}_{{$vvv['id']}}"
+                                                   value="{{$vvv['id']}}" <?php if(isSavedAnswerTrueForQuestion($vvv['id'],$vvv['number'], $savedQuestionsQnswersByTestNumber['data'])) echo 'checked'; ?>
+                                                    data-random="{{$vvv['type']}}<?=rand(1,9999)?>" >
+                                                <label for="id_{{$vvv['number']}}_{{$vvv['id']}}">{{$vvv['description']}}</label>
+                                                <br>
+                                                @break
+                                        @endswitch
+                                    @endforeach
+                            @endforeach
+                        </div>
                     @endforeach
 
                     <script>

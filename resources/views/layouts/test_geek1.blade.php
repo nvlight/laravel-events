@@ -9,24 +9,10 @@
 
     <title>Laravel</title>
 
-    <link rel="apple-touch-icon" sizes="57x57" href="https://geekbrains.ru/apple-touch-icon-57x57.png"/>
-    <link rel="apple-touch-icon" sizes="60x60" href="https://geekbrains.ru/apple-touch-icon-60x60.png"/>
-    <link rel="apple-touch-icon" sizes="72x72" href="https://geekbrains.ru/apple-touch-icon-72x72.png"/>
-    <link rel="apple-touch-icon" sizes="76x76" href="https://geekbrains.ru/apple-touch-icon-76x76.png"/>
-    <link rel="apple-touch-icon" sizes="114x114" href="https://geekbrains.ru/apple-touch-icon-114x114.png"/>
-    <link rel="apple-touch-icon" sizes="120x120" href="https://geekbrains.ru/apple-touch-icon-120x120.png"/>
-    <link rel="apple-touch-icon" sizes="144x144" href="https://geekbrains.ru/apple-touch-icon-144x144.png"/>
-    <link rel="apple-touch-icon" sizes="152x152" href="https://geekbrains.ru/apple-touch-icon-152x152.png"/>
-    <link rel="apple-touch-icon" sizes="180x180" href="https://geekbrains.ru/apple-touch-icon-180x180.png"/>
-    <link rel="icon" type="image/png" href="https://geekbrains.ru/favicon-32x32.png" sizes="32x32"/>
-    <link rel="icon" type="image/png" href="https://geekbrains.ru/favicon-196x196.png" sizes="196x196"/>
-    <link rel="icon" type="image/png" href="https://geekbrains.ru/favicon-96x96.png" sizes="96x96"/>
-    <link rel="icon" type="image/png" href="https://geekbrains.ru/android-chrome-192x192.png" sizes="192x192"/>
-    <link rel="icon" type="image/png" href="https://geekbrains.ru/favicon-16x16.png" sizes="16x16"/>
-    <link rel="manifest" href="https://geekbrains.ru/manifest.json"/>
-    <link rel="mask-icon" href="https://geekbrains.ru/safari-pinned-tab.svg" color="#5bbad5"/>
-    <meta name="msapplication-TileColor" content="#da532c"/>
-    <meta name="msapplication-TileImage" content="/mstile-144x144.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180x180.png"/>
+    <link rel="mask-icon" href="/icons/safari-pinned-tab.svg" color="#5bbad5"/>
+    <link rel="icon" type="image/png" href="/icons/favicon-196x196.png" sizes="196x196"/>
+
     <meta name="theme-color" content="#ffffff"/>
 
 
@@ -41,6 +27,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('summernote/summernote-bs4.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/style.css')}}">
     <link rel="stylesheet" href="{{ asset('css/geek_test/style.css')}}">
 
     <!-- Scripts -->
@@ -54,7 +41,7 @@
 <body>
 
 <div class="gb__main-wrapper">
-    <aside id="nav" class="gb-left-menu gb-left-menu_main-page-hidden"><a class="gb-left-menu__logo " href="https://chichbrainsru.ru/">
+    <aside id="nav" class="gb-left-menu gb-left-menu_main-page-hidden"><a class="gb-left-menu__logo " href="/">
             <div class="geekbrains-logo-brain-ny2020">
                 <div class="geekbrains-logo-brain-ny2020__container">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 96 96" fill="none"
@@ -80,7 +67,7 @@
                         </defs>
                     </svg>
                     <img class="logo-snow"
-                         src="https://d3ur190xygwd69.cloudfront.net/assets/logo-snow-ny2020-e415003e9faaa2c7bd03876ea9cb1d27f92fcd94aee35d3ecc0397b863eff85f.gif"
+                         src="/testCategoriesImg/logo-snow-ny2020-e415003e9faaa2c7bd03876ea9cb1d27f92fcd94aee35d3ecc0397b863eff85f.gif"
                          alt="Logo snow ny2020"/></div>
             </div>
         </a>
@@ -113,7 +100,7 @@
                     <path d="m608 352h192c17.673 0 32-14.327 32-32s-14.327-32-32-32h-192c-17.673 0-32 14.327-32 32s14.327 32 32 32z"></path>
                     <path d="m352 288h128c17.673 0 32 14.327 32 32v128c0 17.673-14.327 32-32 32h-128c-17.673 0-32-14.327-32-32v-128c0-17.673 14.327-32 32-32z"></path>
                 </svg>
-                Блог</a><a class="gb-left-menu__nav-item gb-left-menu__current" href="tests.html">
+                Блог</a><a class="gb-left-menu__nav-item gb-left-menu__current" href="/tests">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" class="svg-icon icon-tests" height="32"
                      width="32">
                     <path d="M914.56 270.72c-8.684-8.674-20.676-14.038-33.92-14.038s-25.236 5.364-33.92 14.038l-332.16 316.48-110.72-123.2c-8.684-8.675-20.676-14.039-33.921-14.039-26.51 0-48 21.49-48 48 0 11.412 3.982 21.893 10.633 30.131l143.929 159.909c7.873 9.123 20.107 15.439 33.826 15.997l1.694 0.003c12.037-0.164 23.531-5.26 32.014-13.453l367.986-351.987c9.464-8.793 15.366-21.307 15.366-35.2 0-12.62-4.87-24.102-12.833-32.67z"></path>
@@ -127,9 +114,10 @@
                 Карьера</a></nav>
     </aside>
     <header id="top-menu" class="gb-header js-main-top-menu">
-        <div class="gb-header__content gb-top-menu__content_flexbox"><h2 class="gb-header__title">Тесты</h2>
+        <div class="gb-header__content gb-top-menu__content_flexbox">
+            <h2 class="gb-header__title"><a class="m-r-sm" href="/tests"><svg class="svg-icon icon-goback"><use xlink:href="/svg-defs.svg#icon-goback"></use></svg></a><a href="/tests">Тесты</a></h2>
             <ul class="gb-top-menu notifications">
-                <li class="gb-top-menu__item"><a class="voice-of-marketing js-voice-of-marketing" href="tests.html"
+                <li class="gb-top-menu__item"><a class="voice-of-marketing js-voice-of-marketing" href="/tests"
                                                  data-name="all_notification_banners">
                         <div class="voice-of-marketing__arrow js-voice-of-marketing-arrow">
                             <svg class="svg-icon icon-pointer " width="32" height="32">
@@ -140,41 +128,23 @@
                             <use xlink:href="/svg-defs.svg#icon-voice-of-marketing"></use>
                         </svg>
                     </a></li>
-                <li class="gb-top-menu__item"><a class="show-search-form" href="tests.html">
+                <li class="gb-top-menu__item"><a class="show-search-form" href="/tests">
                         <svg class="svg-icon icon-search " width="32" height="32">
                             <use xlink:href="/svg-defs.svg#icon-search"></use>
                         </svg>
                     </a></li>
                 <li class="gb-top-menu__item">
-                    <script type="application/json" id="js-react-on-rails-context">{
-                        "inMailer": false,
-                        "i18nLocale": "ru",
-                        "i18nDefaultLocale": "ru",
-                        "href": "https://chichbrains.ru/tests",
-                        "location": "/tests",
-                        "scheme": "https",
-                        "host": "geekbrains.ru",
-                        "port": null,
-                        "pathname": "/tests",
-                        "search": null,
-                        "httpAcceptLanguage": null,
-                        "serverSide": false
-                    }</script>
-                    <script type="application/json" class="js-react-on-rails-component" data-component-name="CartIcon"
-                            data-dom-id="CartIcon-react-component-c6a1a69b-691b-45c6-a321-3c715f600701">{
-                        "hideIconOnEmpty": true,
-                        "authenticated": false
-                    }</script>
+                    
                     <div class="cart-app" id="CartIcon-react-component-c6a1a69b-691b-45c6-a321-3c715f600701"></div>
 
                 </li>
-                <li class="gb-top-menu__item"><a href="https://chichbrainsru.ru/login"><i class="i i-login"></i> &nbsp;Вход</a>
+                <li class="gb-top-menu__item"><a href="/login"><i class="i i-login"></i> &nbsp;Вход</a>
                 </li>
-                <li class="gb-top-menu__item gb-top-menu__item_side-padded"><a href="https://chichbrainsru.ru/register"><i
+                <li class="gb-top-menu__item gb-top-menu__item_side-padded"><a href="/register"><i
                                 class="i i-user3"></i>&nbsp;Регистрация</a></li>
             </ul>
             <div class="mobile-menu-visible-buttons"><a class="top-menu-mobile-voice-of-marketing js-voice-of-marketing"
-                                                        href="tests.html">
+                                                        href="/tests">
                     <div class="voice-of-marketing__arrow js-voice-of-marketing-arrow">
                         <svg class="svg-icon icon-pointer " width="32" height="32">
                             <use xlink:href="/svg-defs.svg#icon-pointer"></use>
@@ -183,7 +153,7 @@
                     <svg class="svg-icon icon-voice-of-marketing " width="32" height="32">
                         <use xlink:href="/svg-defs.svg#icon-voice-of-marketing"></use>
                     </svg>
-                </a><a class="top-menu-mobile-toggle pull-right js-top-menu-mobile-toggle" href="tests.html">
+                </a><a class="top-menu-mobile-toggle pull-right js-top-menu-mobile-toggle" href="/tests">
                     <div class="nav-icon js-nav-icon"><span></span><span></span><span></span></div>
                 </a></div>
         </div>
@@ -207,7 +177,7 @@
         </div>
     </header>
     <div id="mobile-menu" class="mobile-menu hidden js-mobile-menu">
-        <header class="main-mobile-menu-header"><a class="show-search-form" href="tests.html">
+        <header class="main-mobile-menu-header"><a class="show-search-form" href="/tests">
                 <svg class="svg-icon icon-search " width="32" height="32">
                     <use xlink:href="/svg-defs.svg#icon-search"></use>
                 </svg>
@@ -228,16 +198,16 @@
                     <path d="M13.4017 3.02165C13.0132 3.55136 12.75 4.40572 12.75 5.625V7.19766C12.75 7.70857 12.9239 8.20427 13.243 8.60322L14.774 10.5169C14.8477 10.5058 14.9232 10.5 15 10.5C15.8284 10.5 16.5 11.1716 16.5 12C16.5 12.8284 15.8284 13.5 15 13.5C14.1716 13.5 13.5 12.8284 13.5 12C13.5 11.8073 13.5363 11.623 13.6026 11.4538L12.0717 9.54026C11.5398 8.87534 11.25 8.04917 11.25 7.19766V5.625C11.25 4.21928 11.5493 3.01114 12.1921 2.1346C12.8567 1.22833 13.8369 0.75 15 0.75C16.8815 0.75 18.4917 1.90415 19.1642 3.54178C20.8756 4.04449 22.125 5.62568 22.125 7.5C22.125 7.87877 22.1172 8.28337 22.006 8.68595C23.192 9.31559 24 10.5628 24 12C24 13.4372 23.192 14.6845 22.0059 15.3141C22.1171 15.7166 22.1249 16.1211 22.1249 16.4999C22.1249 18.3742 20.8754 19.9554 19.1641 20.4581C18.4916 22.0957 16.8813 23.2499 14.9999 23.2499C14.51 23.2499 14.0369 23.1713 13.5935 23.0255L14.062 21.6006C14.3561 21.6972 14.6711 21.7499 14.9999 21.7499C16.3574 21.7499 17.5061 20.8476 17.8754 19.6085L18.0075 19.1652L18.463 19.0843C19.6918 18.866 20.6249 17.7911 20.6249 16.4999C20.6249 15.8478 20.5743 15.6094 20.393 15.389C20.1453 15.088 19.8113 14.9752 19.4487 15.0139C19.0688 15.0544 18.6734 15.2648 18.4038 15.6018L17.5224 16.7036C17.5886 16.8729 17.625 17.0572 17.625 17.25C17.625 18.0784 16.9534 18.75 16.125 18.75C15.2966 18.75 14.625 18.0784 14.625 17.25C14.625 16.4216 15.2966 15.75 16.125 15.75C16.2017 15.75 16.2771 15.7558 16.3508 15.7669L17.2325 14.6648C17.7451 14.024 18.5009 13.6065 19.2896 13.5224C19.9366 13.4533 20.6132 13.6109 21.1673 14.0554C21.9529 13.7042 22.5 12.9153 22.5 12C22.5 11.0847 21.9529 10.2957 21.1672 9.94458C20.6131 10.389 19.9366 10.5466 19.2896 10.4775C18.501 10.3933 17.7452 9.97582 17.2326 9.33505L16.351 8.23309C16.2773 8.24423 16.2018 8.25 16.125 8.25C15.2966 8.25 14.625 7.57843 14.625 6.75C14.625 5.92157 15.2966 5.25 16.125 5.25C16.9534 5.25 17.625 5.92157 17.625 6.75C17.625 6.94272 17.5887 7.12696 17.5224 7.29622L18.4039 8.39801C18.6735 8.73503 19.0689 8.94542 19.4488 8.98597C19.8113 9.02467 20.1453 8.91193 20.3931 8.61091C20.5744 8.39053 20.625 8.15209 20.625 7.5C20.625 6.20874 19.6919 5.13389 18.4631 4.91559L18.0077 4.83468L17.8755 4.39138C17.5062 3.15222 16.3575 2.25 15 2.25C14.2881 2.25 13.7683 2.52167 13.4017 3.02165Z"></path>
                     <path d="M6.47756 16.7038C6.41135 16.873 6.375 17.0573 6.375 17.25C6.375 18.0784 7.04657 18.75 7.875 18.75C8.70343 18.75 9.375 18.0784 9.375 17.25C9.375 16.4216 8.70343 15.75 7.875 15.75C7.79818 15.75 7.72271 15.7558 7.649 15.7669L6.76743 14.6649C6.25482 14.0242 5.49903 13.6067 4.71043 13.5225C4.06341 13.4534 3.38688 13.611 2.83278 14.0554C2.0471 13.7043 1.5 12.9153 1.5 12C1.5 11.0847 2.04708 10.2958 2.83274 9.9446C3.38683 10.3891 4.06337 10.5467 4.71042 10.4776C5.49906 10.3935 6.25491 9.976 6.76755 9.33519L7.64921 8.23312C7.72285 8.24424 7.79825 8.25 7.875 8.25C8.70343 8.25 9.375 7.57843 9.375 6.75C9.375 5.92157 8.70343 5.25 7.875 5.25C7.04657 5.25 6.375 5.92157 6.375 6.75C6.375 6.9428 6.41137 7.1271 6.47763 7.29642L5.59624 8.39815C5.32662 8.73518 4.9312 8.94557 4.55127 8.98612C4.18875 9.0248 3.85469 8.91203 3.60698 8.61097C3.42567 8.39061 3.37512 8.15217 3.37512 7.50014C3.37512 6.20889 4.3082 5.13403 5.53701 4.91574L5.99246 4.83483L6.12459 4.39152C6.49391 3.15236 7.64263 2.25014 9.00012 2.25014C9.3289 2.25014 9.64389 2.30276 9.93801 2.39945L10.4065 0.974479C9.96306 0.828702 9.49002 0.750143 9.00012 0.750143C7.11866 0.750143 5.50843 1.90429 4.83591 3.54192C3.12457 4.04463 1.87512 5.62582 1.87512 7.50014C1.87512 7.87885 1.88291 8.28339 1.99407 8.68591C0.808044 9.31554 0 10.5628 0 12C0 13.4372 0.808009 14.6844 1.994 15.3141C1.88279 15.7166 1.875 16.1212 1.875 16.5C1.875 18.3743 3.12444 19.9555 4.83578 20.4582C5.50831 22.0958 7.11854 23.25 9 23.25C10.1631 23.25 11.1433 22.7717 11.8079 21.8654C12.4507 20.9889 12.75 19.7807 12.75 18.375V16.8023C12.75 15.9508 12.4602 15.1247 11.9283 14.4597L10.3974 12.5462C10.4637 12.377 10.5 12.1927 10.5 12C10.5 11.1716 9.82843 10.5 9 10.5C8.17157 10.5 7.5 11.1716 7.5 12C7.5 12.8284 8.17157 13.5 9 13.5C9.07682 13.5 9.15229 13.4942 9.226 13.4831L10.757 15.3968C11.0761 15.7957 11.25 16.2914 11.25 16.8023V18.375C11.25 19.5943 10.9868 20.4486 10.5983 20.9784C10.2317 21.4783 9.71191 21.75 9 21.75C7.64251 21.75 6.49379 20.8478 6.12446 19.6086L5.99234 19.1653L5.53689 19.0844C4.30808 18.8661 3.375 17.7913 3.375 16.5C3.375 15.8479 3.42555 15.6095 3.60692 15.3891C3.85466 15.0881 4.18871 14.9753 4.55121 15.014C4.93112 15.0546 5.32651 15.265 5.59612 15.602L6.47756 16.7038Z"></path>
                 </svg>
-            </a><a class="top-menu-mobile-toggle pull-right js-top-menu-mobile-toggle open" href="tests.html">
+            </a><a class="top-menu-mobile-toggle pull-right js-top-menu-mobile-toggle open" href="/tests">
                 <div class="nav-icon js-nav-icon"><span></span><span></span><span></span></div>
             </a></header>
         <nav>
             <ul class="nav">
                 <li class="unregistered">
                     <ul class="list-inline">
-                        <li class="login"><a class="login" href="https://chichbrains.ru/login"><span>Вход</span></a></li>
+                        <li class="login"><a class="login" href="/login"><span>Вход</span></a></li>
                         <li class="signup"><a class="signup"
-                                              href="https://chichbrains.ru/register"><span>Регистрация</span></a></li>
+                                              href="/register"><span>Регистрация</span></a></li>
                     </ul>
                 </li>
                 <li class="b-b nav__item"><a href="https://chichbrains.ru/">
@@ -265,7 +235,7 @@
                             <use xlink:href="/svg-defs.svg#icon-blog"></use>
                         </svg>
                         <span class="title">Блог</span></a></li>
-                <li class="b-b nav__item"><a class="current" href="tests.html">
+                <li class="b-b nav__item"><a class="current" href="/tests">
                         <svg class="svg-icon icon-tests " width="32" height="32">
                             <use xlink:href="/svg-defs.svg#icon-tests"></use>
                         </svg>
@@ -275,7 +245,7 @@
                             <use xlink:href="/svg-defs.svg#icon-career"></use>
                         </svg>
                         <span class="title">Карьера</span></a></li>
-                <li class="b-b nav__item"><a rel="nofollow" target="_blank" href="https://geekbrains.zendesk.com/hc/ru">
+                <li class="b-b nav__item"><a rel="nofollow" target="_blank" href="https://chichbrains.zendesk.com/hc/ru">
                         <svg class="svg-icon icon-help " width="32" height="32">
                             <use xlink:href="/svg-defs.svg#icon-help"></use>
                         </svg>
@@ -325,7 +295,7 @@
                             <path d="M29.067 10.733c-0.133-1.014-0.513-1.921-1.078-2.682-0.673-0.668-1.613-1.094-2.654-1.105-3.735-0.28-9.335-0.28-9.335-0.28v0s-5.6 0-9.333 0.267c-1.042 0.011-1.983 0.437-2.667 1.12-0.549 0.747-0.925 1.653-1.050 2.638-0.165 1.308-0.266 2.807-0.283 4.326l-0 2.036c0.013 1.524 0.11 3.009 0.285 4.47 0.114 0.824 0.494 1.73 1.059 2.492 0.771 0.677 1.802 1.105 2.933 1.118 2.123 0.2 9.056 0.2 9.056 0.2s5.6 0 9.333-0.28c0.009 0 0.019 0 0.030 0 1.023 0 1.952-0.401 2.638-1.055 0.552-0.744 0.933-1.651 1.062-2.636 0.16-1.304 0.257-2.794 0.27-4.305l0-2.018c-0.012-1.532-0.109-3.027-0.285-4.497zM13.333 20v-8l6.667 4z"></path>
                         </svg>
                     </a><a class="site-footer__icon" target="_blank" rel="nofollow"
-                           href="https://telegram.me/geekbrains_ru">
+                           href="https://telegram.me/chichbrains_ru">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="svg-icon icon-telegram">
                             <path d="M16 2.667c-7.364 0-13.333 5.97-13.333 13.333s5.97 13.333 13.333 13.333c7.364 0 13.333-5.97 13.333-13.333s-5.97-13.333-13.333-13.333zM22.173 10.667l-4.253 11.68c-0.1 0.249-0.34 0.422-0.62 0.422s-0.52-0.173-0.618-0.417l-2.015-5.018-5.040-2.013c-0.249-0.1-0.422-0.34-0.422-0.62s0.173-0.52 0.417-0.618l11.711-4.255c0.061-0.021 0.132-0.033 0.206-0.033 0.368 0 0.667 0.298 0.667 0.667 0 0.074-0.012 0.144-0.034 0.211z"></path>
                         </svg>
@@ -333,7 +303,7 @@
                 <div class="site-footer__links">
                     <div class="site-footer__links site-footer__links_first-row"><a
                                 href="https://chichbrains.ru/feedbacks">Отзывы</a><a target="_blank" rel="nofollow"
-                                                                                     href="https://geekbrains.zendesk.com/hc/ru">Помощь</a><a
+                                                                                     href="https://chichbrains.zendesk.com/hc/ru">Помощь</a><a
                                 href="https://chichbrains.ru/company">О проекте</a></div>
                     <div class="site-footer__links site-footer__links_second-row"><a target="_blank" rel="nofollow"
                                                                                      href="https://chichbrains.ru/license.pdf">Лицензия</a><a
