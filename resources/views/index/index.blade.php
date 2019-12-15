@@ -52,10 +52,10 @@
                 <a href="/tests">Tests</a>
             </li>
             <li>
-                <a href="/cp-remont-kvartir.hardweb.pw">RemontKvartir.NET</a>
+                <a href="https://cp-remont-kvartir.hardweb.pw">RemontKvartir.NET</a>
             </li>
             <li>
-                <a href="/cp-cooldesc.hardweb.pw">CoolDESC</a>
+                <a href="https://cp-cooldesc.hardweb.pw">CoolDESC</a>
             </li>
         </ul>
     </section>
