@@ -248,14 +248,14 @@
                                             @case(1)
                                                 <input type="radio" name="radio_qst_number_{{$vvv['number']}}[]" id="id_{{$vvv['number']}}_{{$vvv['id']}}"
                                                    value="{{$vvv['id']}}" <?php if(isSavedAnswerTrueForQuestion($vvv['id'],$vvv['number'], $savedQuestionsQnswersByTestNumber['data'])) echo 'checked'; ?>
-                                                    data-random="{{$vvv['type']}}<?=rand(1,9999)?>" >
+                                                    data-random="{{$vvv['type']}}<?=rand(1,9999)?>" autocomplete="off" >
                                                 <label for="id_{{$vvv['number']}}_{{$vvv['id']}}">{{$vvv['description']}}</label>
                                                 <br>
                                                 @break
                                             @case(2)
                                                 <input type="checkbox" name="checkbox_qst_number_{{$vvv['number']}}[]" id="id_{{$vvv['number']}}_{{$vvv['id']}}"
                                                    value="{{$vvv['id']}}" <?php if(isSavedAnswerTrueForQuestion($vvv['id'],$vvv['number'], $savedQuestionsQnswersByTestNumber['data'])) echo 'checked'; ?>
-                                                    data-random="{{$vvv['type']}}<?=rand(1,9999)?>" >
+                                                    data-random="{{$vvv['type']}}<?=rand(1,9999)?>" autocomplete="off" >
                                                 <label for="id_{{$vvv['number']}}_{{$vvv['id']}}">{{$vvv['description']}}</label>
                                                 <br>
                                                 @break

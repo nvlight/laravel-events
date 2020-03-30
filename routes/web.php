@@ -95,3 +95,4 @@ Route::resource('sts-selected-qsts', 'SimpleTestSystem\SelectedQstsController')-
 Route::resource('sts-shedule', 'SimpleTestSystem\SheduleController')->middleware('verified');
 
 //Route::post('sts-selected-qsts','')->middleware('verified');
+Route::get('ip-get-info', 'GeoIpTestController@index');

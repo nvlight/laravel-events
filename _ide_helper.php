@@ -3,7 +3,7 @@
 
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.8.35 on 2019-12-10 14:35:21.
+ * Generated for Laravel 5.8.35 on 2019-12-26 09:53:20.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -14920,6 +14920,56 @@ namespace RezaAr\Highcharts {
  
 }
 
+namespace Stevebauman\Location\Facades { 
+
+    /**
+     * 
+     *
+     * @see \Stevebauman\Location\Location
+     */ 
+    class Location {
+        
+        /**
+         * Creates the selected driver instance and sets the driver property.
+         *
+         * @param \Stevebauman\Location\Driver $driver
+         * @static 
+         */ 
+        public static function setDriver($driver)
+        {
+                        /** @var \Stevebauman\Location\Location $instance */
+                        return $instance->setDriver($driver);
+        }
+        
+        /**
+         * Sets the default driver from the configuration.
+         *
+         * @throws DriverDoesNotExistException
+         * @static 
+         */ 
+        public static function setDefaultDriver()
+        {
+                        /** @var \Stevebauman\Location\Location $instance */
+                        return $instance->setDefaultDriver();
+        }
+        
+        /**
+         * Retrieve the users location.
+         *
+         * @param string|null $ip
+         * @return \Stevebauman\Location\Position|bool 
+         * @static 
+         */ 
+        public static function get($ip = null)
+        {
+                        /** @var \Stevebauman\Location\Location $instance */
+                        return $instance->get($ip);
+        }
+         
+    }
+ 
+}
+
 
 namespace  { 
 
@@ -17717,6 +17767,8 @@ namespace  {
     class Image extends \Intervention\Image\Facades\Image {}
 
     class Chart extends \RezaAr\Highcharts\Facade {}
+
+    class Location extends \Stevebauman\Location\Facades\Location {}
  
 }
 

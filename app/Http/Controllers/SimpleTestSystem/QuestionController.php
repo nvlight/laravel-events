@@ -155,12 +155,6 @@ class QuestionController extends Controller
                                 $question[] = $tmp_answer;
 
                                 $i++;
-
-                                if ($i == 4) {
-                                    //echo Debug::d($v);
-                                    //echo Debug::d($input['hidden_answer_' . $rs2[1]]);
-                                    //die;
-                                }
                             }
                         }
                     }

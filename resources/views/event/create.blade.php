@@ -8,16 +8,49 @@
     //echo \App\Debug::d($types);
     ?>
 
+
+    <style>
+        .dropdown-menu.show {
+            transform: translate3d(0px, 0px, 0px) !important;
+        }
+
+        .dropdown-toggle.btn-light + .dropdown-menu{
+            margin-top: 40px;
+        }
+    </style>
+
+    {{-- заглушка для поиска по селекту --}}
+{{--    <div class="row">--}}
+{{--        <div class="col-md-6">--}}
+{{--            <div class="form-group">--}}
+{{--                <label for="exampleDropdown">#1 # Dropdown Select with "data-live-search" </label>--}}
+{{--                <select data-live-search="true" class="form-control selectpicker">--}}
+{{--                    <option>Mango</option>--}}
+{{--                    <option>Orange</option>--}}
+{{--                    <option>Lychee</option>--}}
+{{--                    <option>Pineapple</option>--}}
+{{--                    <option>Apple</option>--}}
+{{--                    <option>Banana</option>--}}
+{{--                    <option>Grapes</option>--}}
+{{--                    <option>Water Melon</option>--}}
+{{--                </select>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+
     <div class="row">
+
         <div class="col-md-6">
             <h3>Создание события</h3>
             <a href="/event">Список событий</a>
             <form action="/event" method="POST">
                 @csrf
 
+
+                {{-- новый селект --}}
                 <div class="mb-3">
                     <label for="category_id">Категория</label>
-                    <select class="form-control" name="category_id" id="category_id">
+                    <select data-live-search="true" class="form-control selectpicker" name="category_id" id="category_id">
                         <option value="0" selected>Не выбрано</option>
                         @if($categories->count())
                             @foreach($categories as $category)
@@ -29,7 +62,7 @@
 
                 <div class="mb-3">
                     <label for="type_id">Тип</label>
-                    <select class="form-control" name="type_id" id="type_id">
+                    <select data-live-search="true" class="form-control selectpicker" name="type_id" id="type_id">
                         <option value="0" selected>Не выбрано</option>
                         @if($types->count())
                             @foreach($types as $types)
@@ -38,6 +71,33 @@
                         @endif
                     </select>
                 </div>
+
+
+            {{-- старый селект --}}
+{{--                <div class="mb-3">--}}
+{{--                    <label for="category_id">Категория</label>--}}
+{{--                    <select class="form-control" name="category_id" id="category_id">--}}
+{{--                        <option value="0" selected>Не выбрано</option>--}}
+{{--                        @if($categories->count())--}}
+{{--                            @foreach($categories as $category)--}}
+{{--                                <option value="{{$category->id}}" >{{$category->name}}</option>--}}
+{{--                            @endforeach--}}
+{{--                        @endif--}}
+{{--                    </select>--}}
+{{--                </div>--}}
+
+{{--                <div class="mb-3">--}}
+{{--                    <label for="type_id">Тип</label>--}}
+{{--                    <select class="form-control" name="type_id" id="type_id">--}}
+{{--                        <option value="0" selected>Не выбрано</option>--}}
+{{--                        @if($types->count())--}}
+{{--                            @foreach($types as $types)--}}
+{{--                                <option value="{{$types->id}}" >{{$types->name}}</option>--}}
+{{--                            @endforeach--}}
+{{--                        @endif--}}
+{{--                    </select>--}}
+{{--                </div>--}}
+
 
                 <div class="mb-3">
                     <label for="date">Дата</label>

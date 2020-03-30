@@ -8,7 +8,6 @@
     <title>{{config('app.name')}}</title>
 
     <style>
-
         body{
             font-size: 15px;
             background-color: #3b4453;
