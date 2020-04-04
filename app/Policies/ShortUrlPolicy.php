@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\User;
-use App\ShortUrl;
+use App\Models\ShortUrl\ShortUrl;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ShortUrlPolicy
@@ -30,7 +30,7 @@ class ShortUrlPolicy
      */
     public function view(User $user, ShortUrl $shortUrl)
     {
-        return $user->id === $shortUrl->user_id;
+        // return $user->id === $shortUrl->user_id;
     }
 
     /**
@@ -53,7 +53,7 @@ class ShortUrlPolicy
      */
     public function update(User $user, ShortUrl $shortUrl)
     {
-        //
+        return $user->id === $shortUrl->user_id;
     }
 
     /**
@@ -65,7 +65,7 @@ class ShortUrlPolicy
      */
     public function delete(User $user, ShortUrl $shortUrl)
     {
-        //
+        return $user->id === $shortUrl->user_id;
     }
 
     /**

@@ -70,14 +70,14 @@ class User extends Authenticatable
     ];
 
     public function events(){
-        return $this->hasMany('App\Event');
+        return $this->hasMany('App\Models\Event\Event');
     }
 
     public function categories(){
-        return $this->hasMany('App\Category');
+        return $this->hasMany('App\Models\Event\Category');
     }
 
     public function types(){
-        return $this->hasMany('App\Type');
+        return $this->hasMany('App\Models\Event\Type');
     }
 }

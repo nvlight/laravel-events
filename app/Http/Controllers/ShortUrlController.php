@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\ShortUrl;
+use App\Models\ShortUrl\ShortUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Auth\Access\Gate;
 
 class ShortUrlController extends Controller
 {
@@ -78,12 +79,16 @@ class ShortUrlController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ShortUrl  $shortUrl
+     * @param  \App\Models\ShortUrl\ShortUrl $shortUrl
      * @return \Illuminate\Http\Response
      */
     public function edit(ShortUrl $shorturl)
     {
-        abort_if(auth()->user()->cannot('view', $shorturl), 403);
+        //dd($shorturl->toArray());
+        //dd(auth()->user());
+        //abort_if(Gate::denies('view', $shorturl), 403);
+
+        abort_if(auth()->user()->cannot('update', $shorturl), 403);
 
         //return $shorturl;
         return view('shorturl.edit', compact('shorturl'));
@@ -98,7 +103,7 @@ class ShortUrlController extends Controller
      */
     public function update(Request $request, ShortUrl $shorturl)
     {
-        abort_if(auth()->user()->cannot('view', $shorturl), 403);
+        abort_if(auth()->user()->cannot('update', $shorturl), 403);
 
         $attributes = $this->validateForUpdateShortUrl();
         //return $shorturl;
@@ -115,12 +120,17 @@ class ShortUrlController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ShortUrl  $shortUrl
+     * @param  \App\Models\ShortUrl\ShortUrl $shortUrl
      * @return \Illuminate\Http\Response
      */
     public function destroy(ShortUrl $shorturl)
     {
-        abort_if(auth()->user()->cannot('view', $shorturl), 403);
+        //dump($shorturl); die('ok delete!');
+        //dump($shorturl->user_id);
+        //dump(auth()->user()->id);
+
+        //abort_if($shorturl->user_id !== auth()->user()->id, 403);
+        abort_if(auth()->user()->cannot('delete', $shorturl), 403);
 
         $shorturl->delete();
         session()->flash('shorturl_deleted','Короткая ссылка удалена!');

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\Models\Event\Category;
+use App\Models\Event\Event;
+use App\Models\Event\Type;
 use App\Debug;
-use App\Event;
-use App\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -124,7 +124,7 @@ class EventController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Event  $event
+     * @param  \App\Models\Event\Event  $event
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Event $event)

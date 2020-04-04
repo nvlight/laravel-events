@@ -2,7 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Gate;
+use App\Policies\EventPolicy;
+use App\Policies\ShortUrlPolicy;
+use App\Models\ShortUrl\ShortUrl;
+use App\Models\Event\Event;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -14,7 +17,13 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         //'App\Model' => 'App\Policies\ModelPolicy',
-        'App\Model' => 'App\Policies\EventPolicy'
+        //'App\Model' => 'App\Policies\EventPolicy',
+
+        //'App\Models\ShortUrl\ShortUrl' => 'App\Policies\ShortUrlPolicy',
+        //ShortUrl::class => 'App\Policies\ShortUrlPolicy',
+
+        ShortUrl::class => ShortUrlPolicy::class,
+        Event::class => EventPolicy::class,
     ];
 
     /**
