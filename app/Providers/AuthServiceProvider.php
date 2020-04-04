@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Policies\DocumentPolicy;
 use App\Policies\EventPolicy;
 use App\Policies\ShortUrlPolicy;
 use App\Models\ShortUrl\ShortUrl;
 use App\Models\Event\Event;
+use App\Models\Document\Document;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -22,6 +24,7 @@ class AuthServiceProvider extends ServiceProvider
         //'App\Models\ShortUrl\ShortUrl' => 'App\Policies\ShortUrlPolicy',
         //ShortUrl::class => 'App\Policies\ShortUrlPolicy',
 
+        Document::class => DocumentPolicy::class,
         ShortUrl::class => ShortUrlPolicy::class,
         Event::class => EventPolicy::class,
     ];

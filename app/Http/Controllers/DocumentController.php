@@ -136,7 +136,8 @@ class DocumentController extends Controller
      */
     public function destroy(Document $document)
     {
-        abort_if($document->user_id !== auth()->id(), 403);
+        abort_if(auth()->user()->cannot('delete', $document), 403);
+        //abort_if($document->user_id !== auth()->id(), 403);
 
         $document->delete();
         session()->flash('document_deleted','Документ удален!');
