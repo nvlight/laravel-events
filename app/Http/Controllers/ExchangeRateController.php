@@ -4,28 +4,42 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\View;
 
 class ExchangeRateController extends Controller
 {
-    public function index(){
+    public function index()
+    {
+        $gcer = null;
+        $html = '';
 
-        if (!file_exists(config('services.cbr.path2save_json_encoded'))
-        ){
-            $gcer = $this->getLastExchangeRate();
-        }else{
-            try {
-                $gcer = json_decode(file_get_contents(config('services.cbr.path2save_json_encoded'), true), true);
-
-                if (Carbon::parse($gcer['Date'])->diffInDays(now(), false) >= config('services.cbr.active_days') ){
-                    $gcer = $this->getLastExchangeRate();
-                }
-            }catch (\Exception $e){
-                $gcer = null;
-            }
-        }
-        //dd($gcer);
-
+//        if (!file_exists(config('services.cbr.path2save_json_encoded'))
+//        ){
+//            $gcer = $this->getLastExchangeRate();
+//        }else{
+//            try {
+//                $gcer = json_decode(file_get_contents(config('services.cbr.path2save_json_encoded'), true), true);
+//
+//                if (Carbon::parse($gcer['Date'])->diffInDays(now(), false) >= config('services.cbr.active_days') ){
+//                    $gcer = $this->getLastExchangeRate();
+//                }
+//            }catch (\Exception $e){
+//                $gcer = null;
+//            }
+//        }
         return view('exchange-rate.index', compact('gcer'));
+        //return $html;
+    }
+
+    //
+    public function getLastExchangeRateHtml()
+    {
+        $gcer = $this->getLastExchangeRate();
+
+        $gcerResultHtmlRender = View::make('exchange-rate.index2', compact('gcer') )->render();
+        $gcerHtml = json_encode(['html' => $gcerResultHtmlRender]);
+
+        return $gcerHtml;
     }
 
     //
