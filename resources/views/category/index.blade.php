@@ -44,7 +44,6 @@
         </div>
         <div class="col-md-6">
             <h4>Добавить тип события</h4>
-            <h5 class="text-success"><?=session()->get('type_created')?></h5>
             <form action="/type" method="POST">
                 @csrf
 
@@ -73,8 +72,9 @@
 
         <div class="col-md-6">
             <h4>Список категорий событий</h4>
-            <h5 class="text-success"><?=session()->get('category_deleted')?></h5>
             <h5 class="text-success"><?=session()->get('category_created')?></h5>
+            <h5 class="text-success"><?=session()->get('category_updated')?></h5>
+            <h5 class="text-success"><?=session()->get('category_deleted')?></h5>
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>№</th>
@@ -117,6 +117,9 @@
 
         <div class="col-md-6">
             <h4>Список типов событий</h4>
+            <h5 class="text-success"><?=session()->get('type_created')?></h5>
+            <h5 class="text-success"><?=session()->get('type_updated')?></h5>
+            <h5 class="text-success"><?=session()->get('type_deleted')?></h5>
             <table class="table table-bordered table-striped">
                 <tr>
                     <th>№</th>

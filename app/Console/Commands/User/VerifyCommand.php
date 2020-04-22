@@ -8,7 +8,7 @@ class VerifyCommand extends Command
 {
     protected $signature = 'user:verify {email}';
 
-    protected $description = 'Verify new user';
+    protected $description = 'Verify new user (my custom!)';
 
     public function __construct()
     {

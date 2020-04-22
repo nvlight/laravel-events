@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EventRequestStore;
 use App\Models\Event\Category;
 use App\Models\Event\Event;
 use App\Models\Event\Type;
@@ -72,9 +73,11 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EventRequestStore $request)
     {
-        $attributes = $this->validateEvent();
+        //$attributes = $this->validateEvent();
+        $attributes = $request->validated();
+        //dd($attributes);
 
         $attributes += ['user_id' => auth()->id()];
         $attributes['date'] =  Carbon::parse($attributes['date'])->format('Y-m-d');
@@ -90,7 +93,7 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Event  $event
+     * @param  \App\Models\Event\Event$event
      * @return \Illuminate\Http\Response
      */
     public function show(Event $event)
@@ -106,7 +109,7 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Event  $event
+     * @param  \App\Models\Event\Event  $event
      * @return \Illuminate\Http\Response
      */
     public function edit(Event $event)
@@ -123,17 +126,16 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Event\Event  $event
-     * @return \Illuminate\Http\Response
+     * @param \App\Http\Requests\EventRequestStore $request
+     * @param \App\Models\Event\Event $event
      */
-    public function update(Request $request, Event $event)
+    public function update(EventRequestStore $request, Event $event)
     {
         abort_if(auth()->user()->cannot('view', $event), 403);
 
-        $attributes = $this->validateEvent();
-
+        $attributes = $request->validated();
         $event->category_id = $attributes['category_id'];
+
         $event->type_id = $attributes['type_id'];
         $event->date =  $event->date = Carbon::parse( $attributes['date'])->format('Y-m-d');;
         $event->amount = $attributes['amount'];
@@ -145,12 +147,6 @@ class EventController extends Controller
         return redirect('/event');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Event  $event
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Event $event)
     {
         abort_if(auth()->user()->cannot('view', $event), 403);
@@ -160,7 +156,10 @@ class EventController extends Controller
         return redirect('/event');
     }
 
-    //
+    /*
+     * graphics_index...
+     *
+     * */
     public function graphics_index(\Request $request){
 
         // получаем дату из запроса, если ее нет, то берем текущий год
@@ -549,6 +548,9 @@ class EventController extends Controller
         ]);
     }
 
+    /*
+     * getSeriesForGraphic2...
+     * */
     public function getSeriesForGraphic2($arr, $type_ids=[1,2]){
 
         $na = [];
@@ -598,7 +600,9 @@ class EventController extends Controller
         return array_values($na);
     }
 
-    //
+    /*
+     * getQueryRs...
+     * */
     public function getQueryRs($year, $type_ids){
 
         // получим тут общую сумму по 4-м типам для текущего пользователя
@@ -666,9 +670,11 @@ class EventController extends Controller
         return [$q, $series2, $months];
     }
 
-    // группировка месяцев по суммам
-    // т.е. для каждого месяця есть типы, соответствующие типы нужно складывать
-    public function groupAmountsByMonths($arr){
+    /*
+     * Группировка месяцев по суммам
+     * т.е. для каждого месяця есть типы, соответствующие типы нужно складывать
+     */
+    protected function groupAmountsByMonths($arr){
         $rs = [];
         // $break = 0; $doBreak = 30; // переменные старт и стоп для отладки
         foreach($arr as $k => $v){
@@ -705,9 +711,12 @@ class EventController extends Controller
         return $rs;
     }
 
-    // группировка месяцев по суммам, дополняя несуществующие месяцы нулями, со всеми типами
-    public function fillZerroEmptyMonths($arr, $months){
-
+    /*
+     * группировка месяцев по суммам, дополняя несуществующие месяцы нулями, со всеми типами
+     *
+     * */
+    protected function fillZerroEmptyMonths($arr, $months)
+    {
         $nrs = [];
 
         foreach($months as $month)
@@ -720,9 +729,12 @@ class EventController extends Controller
         return $nrs;
     }
 
-    // получение названий всех месяцев на инглише
-    public function getMonthLabels($monthOffset=0){
-
+    /*
+     * получение названий всех месяцев на инглише
+     *
+     * */
+    public function getMonthLabels($monthOffset=0)
+    {
         $newArr = [];
         $time = strtotime("2017-01-01");
         $dtFormat = "F"; $monthOffset;
@@ -733,9 +745,12 @@ class EventController extends Controller
         return $newArr;
     }
 
-    // формирует данные для диаграммы типа кусок пирога
-    public function getPieData($ob_rs){
-
+    /*
+     * формирует данные для диаграммы типа кусок пирога
+     *
+     * */
+    public function getPieData($ob_rs)
+    {
         // обработка и сбор 1 графика с общими сводками в серию
         $pie_data = [];
         if (isset($ob_rs) && is_array($ob_rs) && count($ob_rs)){
@@ -757,9 +772,12 @@ class EventController extends Controller
         return $pie_data;
     }
 
-    //
-    public function filter(){
-
+    /*
+     * Main filter for events...
+     *
+     * */
+    public function filter()
+    {
         $date_regexp  = "/^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$/";
         $date_regexp2 = "/(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.([12]\d{3})$/"; //
 
@@ -868,7 +886,11 @@ class EventController extends Controller
             ,'category_id', 'type_id', 'date_etalon1', 'date_etalon2', 'amount1', 'amount2', 'events_count') );
     }
 
-    public function validateEvent(){
+    /*
+     * Deprecated and moved to Requests
+     * */
+    public function validateEvent()
+    {
         return \request()->validate([
             'category_id' => ['required','integer','min:1'],
             'type_id' => ['required','integer','min:1'],
@@ -877,4 +899,5 @@ class EventController extends Controller
             'description' => ['required','string','min:3','max:1111'],
         ]);
     }
+
 }
