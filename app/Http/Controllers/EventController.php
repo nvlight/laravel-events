@@ -886,18 +886,4 @@ class EventController extends Controller
             ,'category_id', 'type_id', 'date_etalon1', 'date_etalon2', 'amount1', 'amount2', 'events_count') );
     }
 
-    /*
-     * Deprecated and moved to Requests
-     * */
-    public function validateEvent()
-    {
-        return \request()->validate([
-            'category_id' => ['required','integer','min:1'],
-            'type_id' => ['required','integer','min:1'],
-            'date' => ['required','date'],
-            'amount' => ['integer','min:0'],
-            'description' => ['required','string','min:3','max:1111'],
-        ]);
-    }
-
 }
