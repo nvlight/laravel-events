@@ -219,7 +219,8 @@ $("html, body").animate({ scrollTop: 0 }, 0);
 
 $('#hellopreloader_preload').delay(150).fadeOut('slow');
 
-$('.delete-event-by-id, .shorturl-delete-button, .mg-document-delete').submit(function (el) {
+$('.delete-event-by-id, .shorturl-delete-button, .mg-document-delete, .delete-event-category-byId, .delete-event-type-byId')
+.submit(function (el) {
    console.log('before del element');
    if (!confirm('Удалить выделенный элемент?')) return false;
 });

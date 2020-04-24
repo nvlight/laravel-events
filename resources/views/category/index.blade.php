@@ -23,6 +23,16 @@
     //echo \App\Debug::d(old('type-color'));
     ?>
 
+    <style>
+        .dropdown-menu.show {
+            transform: translate3d(0px, 0px, 0px) !important;
+        }
+
+        .dropdown-toggle.btn-light + .dropdown-menu{
+            margin-top: 40px;
+        }
+    </style>
+
     <div class="row">
         <div class="col-md-6">
             <h4>Добавить категорию события</h4>
@@ -75,7 +85,13 @@
             <h5 class="text-success"><?=session()->get('category_created')?></h5>
             <h5 class="text-success"><?=session()->get('category_updated')?></h5>
             <h5 class="text-success"><?=session()->get('category_deleted')?></h5>
-            <table class="table table-bordered table-striped">
+
+            <div class="form-group">
+                <label for="event-category-filter">Event category filter</label>
+                <input class="form-control" type="text" placeholder="type some category" id="event-category-filter">
+            </div>
+
+            <table class="table table-bordered table-striped categoryes-table">
                 <tr>
                     <th>№</th>
                     <th>Имя</th>
@@ -83,9 +99,9 @@
                 </tr>
                 @if($categories->count())
                     @foreach($categories as $category)
-                        <tr>
+                        <tr class="data">
                             <td>{{$category->id}}</td>
-                            <td>{{$category->name}}</td>
+                            <td class="cat_name">{{$category->name}}</td>
                             <td class="td-btn-flex-1">
                                 <form action="/category/{{$category->id}}/edit" method="GET" style="">
                                     <button class="mg-btn-1" type="submit" title="редактировать">
@@ -93,7 +109,7 @@
                                     </button>
                                 </form>
 
-                                <form action="/category/{{$category->id}}" method="POST" style="">
+                                <form action="/category/{{$category->id}}" method="POST" style="" class="delete-event-category-byId">
                                     @csrf
                                     @method('DELETE')
                                     <button class="mg-btn-1" type="submit" title="удалить">
@@ -111,16 +127,41 @@
                 @endif
             </table>
 
+            <script>
+                document.getElementById('event-category-filter').oninput = function () {
+                    let inputValue = this.value;
+                    if (inputValue.length >= 2){
+                        //console.log(inputValue)
+                        var cats = $('.categoryes-table tr.data td:nth-child(2)');
+                        $('.categoryes-table tr.data').addClass('d-none');
+                        cats.each(function(e){
+                            var find = $(this).html();
+                            //console.log(find);
+                            if (find.indexOf(inputValue) >= 0 ){
+                                //console.log('finded: ' + inputValue + ' !')
+                                $(this).parent().removeClass('d-none');
+                            }
+                        });
+                    }else{
+                        var cats = $('.categoryes-table tr.data').removeClass('d-none');
+                    }
+                };
+            </script>
+
         </div>
-
-
 
         <div class="col-md-6">
             <h4>Список типов событий</h4>
             <h5 class="text-success"><?=session()->get('type_created')?></h5>
             <h5 class="text-success"><?=session()->get('type_updated')?></h5>
             <h5 class="text-success"><?=session()->get('type_deleted')?></h5>
-            <table class="table table-bordered table-striped">
+
+            <div class="form-group">
+                <label for="event-type-filter">Event type filter</label>
+                <input class="form-control" type="text" placeholder="type some event type" id="event-type-filter">
+            </div>
+
+            <table class="table table-bordered table-striped types-table">
                 <tr>
                     <th>№</th>
                     <th>Имя</th>
@@ -129,10 +170,10 @@
                 </tr>
                 @if($types->count())
                     @foreach($types as $type)
-                        <tr>
+                        <tr class="data">
                             <td>{{$type->id}}</td>
                             <td>{{$type->name}}</td>
-                            <td class="">
+                            <td >
                                 <div class="event_type_td">
                                     {{$type->color}}<span class="event_type_color" style="background-color: #{{$type->color}};"></span>
                                 </div>
@@ -144,7 +185,7 @@
                                     </button>
                                 </form>
 
-                                <form action="/type/{{$type->id}}" method="POST" style="">
+                                <form action="/type/{{$type->id}}" method="POST" style="" class="delete-event-type-byId">
                                     @csrf
                                     @method('DELETE')
                                     <button class="mg-btn-1" type="submit" title="удалить">
@@ -161,6 +202,27 @@
                     </tr>
                 @endif
             </table>
+
+            <script>
+                document.getElementById('event-type-filter').oninput = function () {
+                    let inputValue = this.value;
+                    if (inputValue.length >= 2){
+                        //console.log(inputValue)
+                        var cats = $('.types-table tr.data td:nth-child(2)');
+                        $('.types-table tr.data').addClass('d-none');
+                        cats.each(function(e){
+                            var find = $(this).html();
+                            //console.log(find);
+                            if (find.indexOf(inputValue) >= 0 ){
+                                //console.log('finded: ' + inputValue + ' !')
+                                $(this).parent().removeClass('d-none');
+                            }
+                        });
+                    }else{
+                        var cats = $('.types-table tr.data').removeClass('d-none');
+                    }
+                };
+            </script>
 
         </div>
     </div>
