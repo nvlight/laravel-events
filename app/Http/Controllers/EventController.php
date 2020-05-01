@@ -158,10 +158,27 @@ class EventController extends Controller
     }
 
     /*
+     * getEventsYear
+     *
+     * */
+    public function getEventsYears()
+    {
+        $q = DB::table('events')
+            ->select(DB::raw('DISTINCT(YEAR(events.date)) as year'))
+            ->from('events')
+            ->where('events.user_id', auth()->id())
+            //->toSql();
+            ->get()->pluck('year')->toArray();
+        return $q;
+    }
+
+    /*
      * graphics_index...
      *
      * */
-    public function graphics_index(\Request $request){
+    public function graphics_index(\Request $request)
+    {
+        $eventYears = $this->getEventsYears();
 
         // получаем дату из запроса, если ее нет, то берем текущий год
         $year = \request()->exists('year');
@@ -548,6 +565,7 @@ class EventController extends Controller
         return view('event.graphics', [
             'chart1' => $chart1,
             'chart2' => $chart2,
+            'eventYears' => $eventYears
         ]);
     }
 
