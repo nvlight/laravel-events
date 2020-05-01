@@ -58,7 +58,7 @@ return [
     ],
 
     'cbr' => [
-        'url_json' => 'https://www.cbr-xml-daily.ru/daily_json.js',
+        'url_json' => 'http://www.cbr-xml-daily.ru/daily_json.js',
         'timeout' => 3,
         'path2save_json_encoded' => 'cbr-xml-daily.json_decoded',
         'white_list' => ['933','840',826,978,156,980],

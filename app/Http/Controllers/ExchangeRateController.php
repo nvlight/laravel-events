@@ -36,6 +36,8 @@ class ExchangeRateController extends Controller
     {
         $gcer = $this->getLastExchangeRate();
 
+        //dump($gcer);
+
         $gcerResultHtmlRender = View::make('exchange-rate.index2', compact('gcer') )->render();
         $gcerHtml = json_encode(['html' => $gcerResultHtmlRender]);
 
@@ -48,11 +50,16 @@ class ExchangeRateController extends Controller
         $url = config('services.cbr.url_json');
         $timeout = config('services.cbr.timeout');
 
-        $steam_context = stream_context_create(['https' => ['timeout' => $timeout]], ['http' => ['timeout' => $timeout]]);
+        $streamContextOptions = [
+            'ssl'   => ['verify_peer' => false,  'verify_peer_name' => true, ],
+            'https' => ['timeout' => $timeout],
+            'http'  => ['timeout' => $timeout],
+        ];
         try {
-            $rs_json = file_get_contents($url, false, $steam_context);
+            $rs_json = file_get_contents($url, false, stream_context_create($streamContextOptions));
         }catch (\Exception $e){
             $rs_json = false;
+            //dump($e);
         }
 
         $gcer = null;

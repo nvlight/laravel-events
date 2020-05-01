@@ -97,7 +97,7 @@ class DocumentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Document  $document
+     * @param  \App\Models\Document\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function show(Document $document)
@@ -108,7 +108,7 @@ class DocumentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Document  $document
+     * @param  \App\Models\Document\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function edit(Document $document)
@@ -120,7 +120,7 @@ class DocumentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Document  $document
+     * @param  \App\Models\Document\Document  $document
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Document $document)
@@ -131,8 +131,7 @@ class DocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Document  $document
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Document\Document $document
      */
     public function destroy(Document $document)
     {
@@ -145,8 +144,8 @@ class DocumentController extends Controller
     }
 
     //
-    public function download(Document $document){
-
+    public function download(Document $document)
+    {
         abort_if($document->user_id !== auth()->id(), 403);
 
         //return $document;
