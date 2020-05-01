@@ -7,6 +7,7 @@ use App\Models\Event\Category;
 use App\Models\Event\Event;
 use App\Models\Event\Type;
 use App\Debug;
+use App\Models\MGDebug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -177,8 +178,9 @@ class EventController extends Controller
 
         // получение данных всех диаграмм - сырые данные
         $qr = $this->getQueryRs($year, $type_ids); //
+        //dd($qr);
 
-        $pie_data = $this->getPieData($qr[0]->toArray()); // готовые данные 1 диаграммы
+        $pie_data = $this->getPieData($qr[0]->toArray(), $year); // готовые данные 1 диаграммы
 
         $series2 = ($qr[1]); // готовый для вставки в диаграмму массив
 
@@ -299,6 +301,7 @@ class EventController extends Controller
         //echo Debug::d($series0,'',2); die;
         //$series2 = $series0;
 
+        // сюда приходит общие суммы по всем годам, а нужно, чтобы приходил только текущий год...
         $chart2 = \Chart::title([
             'text' => 'Сумма ресурсов по типам',
         ])
@@ -602,20 +605,24 @@ class EventController extends Controller
 
     /*
      * getQueryRs...
+     *
      * */
-    public function getQueryRs($year, $type_ids){
-
+    public function getQueryRs($year, $type_ids)
+    {
         // получим тут общую сумму по 4-м типам для текущего пользователя
         $q = DB::table('events')
-            ->select('events.type_id as tp', DB::raw('SUM(events.amount) as  sm'), 'types.name  as nm', 'types.color as cl')
+            ->select(
+                'events.type_id as tp', DB::raw('SUM(events.amount) as  sm'), 'types.name  as nm', 'types.color as cl'
+            )
             ->from('events')
             ->whereIn('events.type_id', $type_ids)
             ->where('events.user_id', auth()->id())
             ->join('types','types.id','=','events.type_id')
+            ->where(DB::raw('year(events.date)'), '=', $year)
             ->groupBy('tp')
             ->orderBy('tp')
             ->get();
-        //echo Debug::d($q); die;
+        //dd($q);
 
         // получение данных для второй диаграммы с месяцами и расходами с доходами
         // запрос рабочий
@@ -648,13 +655,14 @@ class EventController extends Controller
             ->where('events.user_id', '=', auth()->id() )
             ->whereIn('events.type_id',$type_ids)
             ->where(DB::raw('year(events.date)'), '=', $year)
-            ->groupBy('sm','tp','mnthnm','mnth','dtr')
+            //->groupBy('sm','tp','mnthnm','mnth','dtr')
             ->orderBy('mnth')->orderBy('tp')
             //->toSql()
             ->get()
+            //->toArray()
         ;
         //dd($q_get_years_with_months);
-        //echo Debug::d($q_get_years_with_months,'$q_get_years_with_months'); die;
+        //echo MGDebug::d($q_get_years_with_months,'$q_get_years_with_months'); die;
 
         $monthSumms = $this->groupAmountsByMonths($q_get_years_with_months->toArray());
         //echo Debug::d($monthSumms); die;
@@ -751,6 +759,7 @@ class EventController extends Controller
      * */
     public function getPieData($ob_rs)
     {
+        //dd($ob_rs);
         // обработка и сбор 1 графика с общими сводками в серию
         $pie_data = [];
         if (isset($ob_rs) && is_array($ob_rs) && count($ob_rs)){
