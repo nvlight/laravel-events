@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EventTypeRequestStore;
 use App\Models\Event\Type;
-use Illuminate\Http\Request;
 
-class TypeController extends Controller
+class EventTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,18 +17,12 @@ class TypeController extends Controller
         return view('category.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
     }
 
     public function store(EventTypeRequestStore $request)
     {
-        //$attributes = $this->validateType();
         $attributes = $request->validated();
 
         $attributes += ['user_id' => auth()->id()];
@@ -51,7 +44,6 @@ class TypeController extends Controller
 
     public function update(EventTypeRequestStore $request, Type $type)
     {
-        //$attributes = $this->validateType();
         $attributes = $request->validated();
 
         $type->name = $attributes['name'];
@@ -66,7 +58,7 @@ class TypeController extends Controller
     public function destroy(Type $type)
     {
         $type->delete();
-        session()->flash('type_deleted','Событие удалено!');
+        session()->flash('type_deleted','Тип события удалено!');
         return redirect('/category');
     }
 

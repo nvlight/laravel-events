@@ -40,8 +40,8 @@ Route::get('/test_countingResultBallsByRequest','SimpleTestSystem\HhController@t
 
 Auth::routes(['verify' => false]);
 
-Route::resource('category', 'CategoryController')->middleware('verified');
-Route::resource('type', 'TypeController')->middleware('verified');
+Route::resource('category', 'EventCategoryController')->middleware('verified');
+Route::resource('type', 'EventTypeController')->middleware('verified');
 Route::resource('event', 'EventController')->middleware('verified');
 Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
 
