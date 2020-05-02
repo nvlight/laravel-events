@@ -10,7 +10,6 @@
     <div class="row">
         <div class="col-md-12">
 
-
             <div class="events-add-actions-before-table">
                 <div><span>Список событий</span></div>
                 <div class="events-right-actions">

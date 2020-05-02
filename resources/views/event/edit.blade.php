@@ -60,7 +60,6 @@
                     <textarea class="form-control {{ $errors->has('description') ? 'border-danger' : '' }}" name="description" id="description" cols="30" rows="10">{{$event->description}}</textarea>
                 </div>
 
-
                 <script>
                     $('#date').datepicker({
                         'format' : 'dd.mm.yyyy',
