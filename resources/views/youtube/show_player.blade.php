@@ -48,9 +48,7 @@
                     <tr>
                         <td>description</td>
                         <td>
-                            <textarea class="" name="" id="" cols="30" rows="10">
-                                {{$snippet->description}}
-                            </textarea>
+                            <textarea class="" name="" id="" cols="30" rows="10">{{$snippet->description}}</textarea>
                         </td>
                     </tr>
                     <tr>
@@ -66,12 +64,21 @@
                     <tr>
                         <td colspan="2"><strong>contentDetails</strong></td>
                     </tr>
+
+                    <tr>
+                        <td>
+                            @php
+                                //echo \App\Models\MGDebug::d($video->contentDetails);
+                            @endphp
+                        </td>
+                    </tr>
+
                     @foreach($video->contentDetails as $k => $v)
                         @if($k == 'duration')
-                            <?php
+                            @php
                                 $duration = new DateInterval($video->contentDetails->$k);
                                 $duration_new = $duration->format('%H:%I:%S');
-                            ?>
+                            @endphp
                             <tr>
                                 <td>{{$k}}</td>
                                 <td>{{$duration_new}}</td>
@@ -94,24 +101,27 @@
                         </tr>
                     @endforeach
 
-                    <tr>
-                        <td>default</td>
-                        <td>
-                            <img src="{{$snippet->thumbnails->default->url}}" alt="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>medium</td>
-                        <td>
-                            <img src="{{$snippet->thumbnails->medium->url}}" alt="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>high</td>
-                        <td>
-                            <img src="{{$snippet->thumbnails->high->url}}" alt="">
-                        </td>
-                    </tr>
+                    {{-- Вывод картинок видео, может быть полезно в дальнейшем --}}
+                    {{-- начало --}}
+{{--                    <tr>--}}
+{{--                        <td>default</td>--}}
+{{--                        <td>--}}
+{{--                            <img src="{{$snippet->thumbnails->default->url}}" alt="">--}}
+{{--                        </td>--}}
+{{--                    </tr>--}}
+{{--                    <tr>--}}
+{{--                        <td>medium</td>--}}
+{{--                        <td>--}}
+{{--                            <img src="{{$snippet->thumbnails->medium->url}}" alt="">--}}
+{{--                        </td>--}}
+{{--                    </tr>--}}
+{{--                    <tr>--}}
+{{--                        <td>high</td>--}}
+{{--                        <td>--}}
+{{--                            <img src="{{$snippet->thumbnails->high->url}}" alt="">--}}
+{{--                        </td>--}}
+{{--                    </tr>--}}
+                    {{--  конец --}}
 
                 </table>
 
