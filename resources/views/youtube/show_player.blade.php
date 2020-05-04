@@ -20,7 +20,7 @@
                     $snippet = $video->snippet;
                     //echo \App\Models\MGDebug::d($video);
                 ?>
-                <table class="table table-bordered table-striped table-responsive">
+                <table class="table table-bordered table-striped table-responsive youtubePlayer">
                     <tr>
                         <th>Key</th>
                         <th>Value</th>

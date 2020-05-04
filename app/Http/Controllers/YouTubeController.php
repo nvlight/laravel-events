@@ -201,15 +201,15 @@ class YouTubeController extends Controller
         $order['caption'] = 'Order';
 
         $publishedBefore = date('Y-m-d\Th:i:s\Z');
-        //echo $publishedBefore; echo "<br>";
-
-        //$publishedAfter = '1970-01-01T00:00:00Z';
         $publishedAfter = date("c", strtotime("1970-03-10"));
 
         // moderate || none || strict
         $safeSearch['key'] = 2;
         $safeSearch['value'] = 'strict';
         $safeSearch['caption'] = 'safeSearch';
+
+        $nextPageToken = "";
+        $prevPageToken = "";
 
         //dd($request->all());
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -277,20 +277,15 @@ class YouTubeController extends Controller
                 $safeSearch['value'] = $safeSearchArray[$request->post('safeSearch')];
             }
 
-            //if (array_key_exists('safeSearch',$_POST) && array_key_exists( $_POST['safeSearch'], $safeSearchArray ) ){
-            //    $safeSearch['key'] = $_POST['safeSearch'];
-            //    $safeSearch['value'] = $safeSearchArray[intval($safeSearch['key'])];
-            //}
+            // pageToken
+            if ($request->post('nextPageToken')){
+                $nextPageToken = $request->post('nextPageToken');
+            }
+            if ($request->post('prevPageToken')){
+                $prevPageToken = $request->post('prevPageToken');
+            }
         }
 
-        // debug
-        // try change date - after and before
-//        $d1 = date("c", strtotime("1970-03-10"));
-//        $d2 = date("c", strtotime("2015-03-10"));
-//        $publishedAfter  = $d1;
-//        $publishedBefore = $d2;
-
-        //$safeSearch['value'] = "none";
         $filters = [
             'q' => $q['value'],
             'safeSearch' => $safeSearch['value'],
@@ -301,6 +296,12 @@ class YouTubeController extends Controller
             'maxResults' => $maxResults['value'],
             'videoDuration' => $duration['value'],
         ];
+        if ($nextPageToken){
+            $filters['pageToken'] = $nextPageToken;
+        }
+        if ($prevPageToken){
+            $filters['pageToken'] = $prevPageToken;
+        }
 
         //dump($filters);
         //echo MGDebug::d($filters);
@@ -310,6 +311,8 @@ class YouTubeController extends Controller
 
         $part = "snippet";
         $rs = $youtube->search->listSearch($part, $filters);
+        //dump($rs);
+        //echo MGDebug::d($rs);
 
         return view('youtube.search',['rs' => $rs,
             'q' => $q,
