@@ -160,7 +160,7 @@
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         <strong>
                                             @if(Auth::user() != null)
-                                                Auth::user()->name
+                                                {{Auth::user()->name}}
                                             @else
                                                 UndefinedUser
                                             @endif
