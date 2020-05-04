@@ -153,7 +153,8 @@
                                        class="btn btn-default dropdown-toggle gg-dropdown" type="button" id="dropdownMenu1"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         <strong>
-                                            {{ Auth::user()->name }}
+                                            Chich!
+                                            {{-- Auth::user()->name --}}
                                         </strong>
                                         <span class="caret"></span>
                                     </a>
