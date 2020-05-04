@@ -51,9 +51,9 @@ Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
 Route::get('exchange-rate', 'ExchangeRateController@index')->middleware('verified');
 Route::get('exchange-rate-update', 'ExchangeRateController@getLastExchangeRateHtml')->middleware('verified');
 
-Route::get('youtube_watch/{ytVideoId}', 'YouTubeController@watch')->middleware('verified');
-Route::get('youtube_search', 'YouTubeController@search')->middleware('verified');
-Route::post('youtube_search', 'YouTubeController@search')->middleware('verified');
+Route::get('youtube_watch/{ytVideoId}', 'YouTubeController@watch'); //->middleware('verified');
+Route::get('youtube_search', 'YouTubeController@search'); //->middleware('verified');
+Route::post('youtube_search', 'YouTubeController@search'); //->middleware('verified');
 
 Route::get('document', 'DocumentController@index')->middleware('verified');
 Route::get('events-graphics', 'EventController@graphics_index')->middleware('verified');
