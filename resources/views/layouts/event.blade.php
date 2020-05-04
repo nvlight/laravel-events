@@ -38,7 +38,7 @@
 <div id="app">
 
     <?php
-    //echo Debug::d(Yii::$app->db);
+
     ?>
 
     <div id="hellopreloader">
@@ -139,8 +139,13 @@
                 </div>
                 <div class="col-md-10 mp0">
                     <div class="contentbar">
-                        <?php
-                        ?>
+
+{{--                        <div>--}}
+{{--                            {{ dump(Auth::user())}}--}}
+{{--                        </div>--}}
+                        @php
+                        @endphp
+
                         <div class="user-line">
                             <div class="curr-date">
 								<span>
@@ -148,13 +153,17 @@
 								</span>
                             </div>
                             <div class="user-info">
+
                                 <div class="dropdown">
                                     <a href="<?='/user/account'?>"
                                        class="btn btn-default dropdown-toggle gg-dropdown" type="button" id="dropdownMenu1"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                         <strong>
-                                            Chich!
-                                            {{-- Auth::user()->name --}}
+                                            @if(Auth::user() != null)
+                                                Auth::user()->name
+                                            @else
+                                                UndefinedUser
+                                            @endif
                                         </strong>
                                         <span class="caret"></span>
                                     </a>
