@@ -58,9 +58,10 @@ return [
     ],
 
     'cbr' => [
+        'path2save' => 'exchange_rate',
         'url_json' => 'http://www.cbr-xml-daily.ru/daily_json.js',
         'timeout' => 3,
-        'path2save_json_encoded' => 'cbr-xml-daily.json_decoded',
+        'filename' => 'cbr-xml-daily.json_decoded',
         'white_list' => ['933','840',826,978,156,980],
         'active_days' => 2
     ],
