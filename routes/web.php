@@ -45,9 +45,6 @@ Route::resource('type', 'EventTypeController')->middleware('verified');
 Route::resource('event', 'EventController')->middleware('verified');
 Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
 
-//Route::get('/home', 'HomeController@index')->name('home');
-//Route::get('/documents', )
-
 Route::get('exchange-rate', 'ExchangeRateController@index')->middleware('verified');
 Route::get('exchange-rate-update', 'ExchangeRateController@getLastExchangeRateHtml')->middleware('verified');
 //Route::get('exchange-rate-test', 'ExchangeRateController@getLastExchangeRate')->middleware('verified');
@@ -101,4 +98,3 @@ Route::resource('sts-selected-qsts', 'SimpleTestSystem\SelectedQstsController')-
 Route::resource('sts-shedule', 'SimpleTestSystem\SheduleController')->middleware('verified');
 
 //Route::post('sts-selected-qsts','')->middleware('verified');
-Route::get('ip-get-info', 'GeoIpTestController@index');

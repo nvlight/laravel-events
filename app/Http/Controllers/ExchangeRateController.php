@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 
@@ -31,9 +29,6 @@ class ExchangeRateController extends Controller
     {
         $url = config('services.cbr.url_json');
 
-        //$file_info = $request->file('uploadFile');
-        //$saved_path = $file_info->store(config('services.documents.path2save'));
-
         $timeout = config('services.cbr.timeout');
         $streamContextOptions = [
             'ssl'   => ['verify_peer' => false,  'verify_peer_name' => true, ],
@@ -52,7 +47,6 @@ class ExchangeRateController extends Controller
                 $gcer = json_decode($rs_json, true);
                 $filename = config('services.cbr.path2save') . '/' . config('services.cbr.filename');
                 Storage::disk('local')->put($filename, $rs_json);
-                //file_put_contents(config('services.cbr.path2save_json_encoded'), $rs_json);
             }catch (\Exception $e){
                 $gcer = null;
             }
