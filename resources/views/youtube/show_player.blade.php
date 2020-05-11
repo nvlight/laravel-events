@@ -3,19 +3,19 @@
 @section('content')
 
     @if($ytVideoId)
-        <h3>YouTube - show player with static video_id: {{$ytVideoId}}</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <iframe width="560" height="315"
+                        src="https://www.youtube.com/embed/{{$ytVideoId}}"
+                        frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+                </iframe>
+            </div>
+        </div>
     @endif
 
-    <div>
-        @if($ytVideoId)
-            <div class="row">
-                <div class="col-md-6">
-                    <iframe width="560" height="315"
-                            src="https://www.youtube.com/embed/{{$ytVideoId}}"
-                            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-                    </iframe>
-                </div>
-            </div>
+    @if(!property_exists($jsonData, 'error'))
+        <div>
+            <h3>YouTube - show player with static video_id: {{$ytVideoId}}</h3>
 
             <div class="row">
                 <div class="col-md-12">
@@ -88,9 +88,21 @@
                                     <td>{{$duration_new}}</td>
                                 </tr>
                             @else
+                                @php
+                                    //dump($video->contentDetails);
+                                @endphp
                                 <tr>
                                     <td>{{$k}}</td>
-                                    <td>{{$video->contentDetails->$k}}</td>
+                                    <td>
+                                        @php
+                                            //echo \App\Models\MGDebug::d($video->contentDetails->$k,'',2);
+                                        @endphp
+                                        @if(!is_object($video->contentDetails->$k))
+                                            {{$video->contentDetails->$k}}
+                                        @else
+                                            there is object
+                                        @endif
+                                    </td>
                                 </tr>
                             @endif
                         @endforeach
@@ -130,10 +142,9 @@
                     </table>
                 </div>
             </div>
-
-        @else
-            <h4>Не удалось воспроизвести видео, пожалуйста, попробуйте позже</h4>
-        @endif
-    </div>
+        </div>
+    @else
+        <h4>Не удалось получить подробности видео, пожалуйста, попробуйте позже</h4>
+    @endif
 
 @endsection

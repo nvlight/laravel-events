@@ -66,8 +66,9 @@ Route::get('document-download/{document}','DocumentController@download')->middle
 
 //Route::get('email/verify', 'auth\VerificationController@show')->name('tttest.note');
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
-Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::get('/verify/{token}', 'Auth\RegisterController@verify')->name('register.verify');
 
 Route::get('event-filter', 'EventController@filter')->middleware('verified');
 Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified');
@@ -98,3 +99,8 @@ Route::resource('sts-selected-qsts', 'SimpleTestSystem\SelectedQstsController')-
 Route::resource('sts-shedule', 'SimpleTestSystem\SheduleController')->middleware('verified');
 
 //Route::post('sts-selected-qsts','')->middleware('verified');
+
+Route::get('test_with_1', 'TestController@testwith1')->middleware('verified');
+Route::get('test_with_2', 'TestController@testwith2')->middleware('verified')->name('test_with_2');
+
+Route::get('mgram', 'MGram@index');

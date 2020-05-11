@@ -8,6 +8,11 @@
                 <div class="card-header">{{ __('Login') }}</div>
 
                 <div class="card-body">
+
+                    @if(session()->has('success'))
+                        <h5 class="text-success">{{session('success')}}</h5>
+                    @endif
+
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 

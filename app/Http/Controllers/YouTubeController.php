@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class YouTubeController extends Controller
 {
-    protected $youtube_api_key_1 = 'AIzaSyA8uSUgr6vMKaEHYXzGKjltL6OzhM8IuqM';
-    protected $youtube_api_key_2 = 'AIzaSyCRTxyDFpIhy_7Zl_mfL7cnZmc1JGBocm8';
+    protected $youtube_api_key_2 = 'AIzaSyA8uSUgr6vMKaEHYXzGKjltL6OzhM8IuqM';
+    protected $youtube_api_key_1 = 'AIzaSyCRTxyDFpIhy_7Zl_mfL7cnZmc1JGBocm8';
     protected $youytube_channelid_template = 'https://www.youtube.com/channel/';
 
     public function index(){
@@ -21,11 +21,6 @@ class YouTubeController extends Controller
      */
     public function watch(string $ytVideoId)
     {
-        //$ytVideoId = "e90TvNVlxr4";
-        //$ytVideoId = $request->get('ytVideoId');
-        //dump($ytVideoId); die;
-        // ?ytVideoId=e90TvNVlxr4
-
         $jsonData = $this->ApiGetVideoByMethodCurl($ytVideoId);
 
         return view('youtube.show_player', compact('jsonData', 'ytVideoId'));
@@ -310,11 +305,17 @@ class YouTubeController extends Controller
         $publishedAfter  = mb_substr($publishedAfter, 0,10);
 
         $part = "snippet";
-        $rs = $youtube->search->listSearch($part, $filters);
+        $rs = null;
+        try{
+            $rs = $youtube->search->listSearch($part, $filters);
+        }catch (\Throwable $th){
+            // ok...
+        }
         //dump($rs);
         //echo MGDebug::d($rs);
 
-        return view('youtube.search',['rs' => $rs,
+        return view('youtube.search',[
+            'rs' => $rs,
             'q' => $q,
             'part'=> $part,
             'orderArray' => $orderArray, 'order' => $order,
