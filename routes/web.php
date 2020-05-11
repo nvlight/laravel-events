@@ -104,3 +104,5 @@ Route::get('test_with_1', 'TestController@testwith1')->middleware('verified');
 Route::get('test_with_2', 'TestController@testwith2')->middleware('verified')->name('test_with_2');
 
 Route::get('mgram', 'MGram@index');
+
+Route::get('hd_video', 'HDVideoController@index');

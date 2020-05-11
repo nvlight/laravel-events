@@ -27,7 +27,7 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
-    use ThrottlesLogins;
+    //use ThrottlesLogins;
 
     //protected $redirectTo = '/events';
 
