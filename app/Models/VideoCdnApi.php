@@ -20,7 +20,7 @@ class VideoCdnApi extends Model
             $fgi_json = $e;
             $result = ['success' => 0, 'data' => $fgi_json];
         }
-        //dd($fgi_json);
+        dd($fgi_json);
 
         return $result;
     }
