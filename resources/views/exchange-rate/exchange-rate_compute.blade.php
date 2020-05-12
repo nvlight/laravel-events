@@ -1,7 +1,11 @@
 @php
     // получение УРЛ-а для запроса - тут пока что http, потом переделать!
     //dump($_SERVER);
-    $url = 'https://' . $_SERVER['HTTP_HOST'] . '/' . 'exchange-rate-update';
+
+    $httpMethod = ($_SERVER['REQUEST_SCHEME'] === 'https') ? 'https' : 'http';
+    $url = $httpMethod . '://' . $_SERVER['HTTP_HOST'] . '/' . 'exchange-rate-update';
+    //dump($httpMethod);
+    //dump($url);
 @endphp
 
 <script>

@@ -2,6 +2,11 @@
 
     <h3>Курсы валют</h3>
 
+    @php
+        //dump($_SERVER)
+    @endphp
+
+
     @if($gcer !== null)
         <h5>Курс на - {{\Illuminate\Support\Carbon::parse($gcer['Date'])->format('d.m.Y h:m:s')}}</h5>
 {{--        <div><span></span>{{\Illuminate\Support\Carbon::parse($gcer['Date'])->diffInDays(now(), false)}}</div>--}}
@@ -67,6 +72,6 @@
             </table>
         @endif
     @else
-        <h4>Ошибка при получении курсов валиют</h4>
+        <h4>Ошибка при получении курсов валют</h4>
     @endif
 </div>
