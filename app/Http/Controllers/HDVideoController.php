@@ -141,7 +141,7 @@ class HDVideoController extends Controller
 
             $url =  VideoCdnApi::$apiPrefix . 'short';
             $url .= "?" . $httBuildQuery;
-            //dump($url);
+            dump($url);
 
             $ApiResponse = VideoCdnApi::getApiResponseShort($url);
             $currentPage = $ApiResponse['data']['current_page'];
