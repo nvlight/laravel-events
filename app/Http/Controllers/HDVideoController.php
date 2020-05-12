@@ -60,13 +60,13 @@ class HDVideoController extends Controller
 
             $url =  VideoCdnApi::$apiPrefix . 'short';
             $url .= "?" . $httBuildQuery;
-            dump($url);
+            //dump($url);
 
             $ApiResponse = VideoCdnApi::getApiResponseShort($url);
             $currentPage = $ApiResponse['data']['current_page'];
         }
-        dump($apiToken);
-        dump($ApiResponse); die;
+        //dump($apiToken);
+        //dump($ApiResponse); die;
 
         //return view('newhome.index',compact('ApiResponse', 'nextPageUrl', 'prevPageUrl', 'currentPage'));
         return view('hdvideo.index', compact('ApiResponse', 'nextPageUrl', 'prevPageUrl', 'currentPage'));
