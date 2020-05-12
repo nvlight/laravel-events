@@ -1,7 +1,7 @@
 @php
     // получение УРЛ-а для запроса - тут пока что http, потом переделать!
     //dump($_SERVER);
-    $url = 'http://' . $_SERVER['HTTP_HOST'] . '/' . 'exchange-rate-update';
+    $url = 'https://' . $_SERVER['HTTP_HOST'] . '/' . 'exchange-rate-update';
 @endphp
 
 <script>
