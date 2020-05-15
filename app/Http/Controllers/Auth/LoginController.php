@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
-//use Illuminate\Support\Facades\Request;
-
 
 class LoginController extends Controller
 {
@@ -29,13 +27,8 @@ class LoginController extends Controller
     use AuthenticatesUsers;
     //use ThrottlesLogins;
 
-    //protected $redirectTo = '/events';
+    protected $redirectTo = 'event';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
@@ -80,7 +73,7 @@ class LoginController extends Controller
                 Auth::logout();
                 return back()->with('error', 'You need to confirm your account. Please check your email.');
             }
-            return redirect('event'); //->intended(route('cabinet'));
+            return redirect($this->redirectTo); //->intended(route('cabinet'));
         }
         return redirect()->intended($this->redirectPath());
 
@@ -93,7 +86,7 @@ class LoginController extends Controller
     {
         Auth::guard()->logout();
         $request->session()->invalidate();
-        return redirect('/event'); //->route('home');
+        return redirect('/'); //->route('home');
     }
 
     protected function username()
