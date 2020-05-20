@@ -38,7 +38,7 @@ Route::get('/test_getQuestionByTetsIdAndNumber', 'SimpleTestSystem\HhController@
 Route::get('/test_testCheckBoxAnswerIsTrue', 'SimpleTestSystem\HhController@test_testCheckBoxAnswerIsTrue');
 Route::get('/test_countingResultBallsByRequest','SimpleTestSystem\HhController@test_isCheckboxQuestionTrue');
 
-Auth::routes(['verify' => false]);
+Auth::routes(['verify' => true]);
 
 Route::resource('category', 'EventCategoryController')->middleware('verified');
 Route::resource('type', 'EventTypeController')->middleware('verified');
@@ -106,3 +106,21 @@ Route::get('test_with_2', 'TestController@testwith2')->middleware('verified')->n
 Route::get('mgram', 'MGram@index');
 
 Route::get('hd_video', 'HDVideoController@index');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/cabinet', 'Cabinet\HomeController@index')->name('cabinet');
+
+Route::group(
+    [
+        'prefix' => 'admin',
+        'as' => 'admin.',
+        'namespace' => 'Admin',
+        'middleware' => ['auth'],
+    ],
+    function () {
+        Route::get('/', 'HomeController@index')->name('home');
+        Route::resource('users', 'UsersController');
+    }
+);
