@@ -25,16 +25,14 @@
                 <td>
                     @if ($user->isWait())
                         <span class="badge badge-secondary">Waiting</span>
-                    @endif
-                    @if ($user->isActive())
+                    @else
                         <span class="badge badge-primary">Active</span>
                     @endif
                 </td>
                 <td>
                     @if ($user->isAdmin())
-                        <span class="badge badge-primary">Admin</span>
-                    @endif
-                    @if (!$user->isAdmin())
+                        <span class="badge badge-danger">Admin</span>
+                    @else
                         <span class="badge badge-secondary">User</span>
                     @endif
                 </td>
