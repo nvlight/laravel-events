@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 
 /**
  * App\User
@@ -16,6 +17,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
+ * @property string $verify_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Category[] $categories
@@ -68,5 +70,60 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function types(){
         return $this->hasMany('App\Models\Event\Type');
+    }
+
+    public static function register(string $name, string $email, string $password): self
+    {
+        return static::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt($password),
+            'verify_token' => Str::uuid(),
+            'status' => self::STATUS_WAIT,
+        ]);
+    }
+
+    public static function new($name, $email): self
+    {
+        return static::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt(Str::random()),
+            'status' => self::STATUS_ACTIVE,
+        ]);
+    }
+
+    public function isWait(): bool
+    {
+        return $this->status === self::STATUS_WAIT;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function verify(): void
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException('User is already verified.');
+        }
+
+        $this->update([
+            'status' => self::STATUS_ACTIVE,
+            'verify_token' => null,
+        ]);
+    }
+
+    public function unverify(): void
+    {
+        if ($this->isWait()) {
+            throw new \DomainException('User is already unverified.');
+        }
+
+        $this->update([
+            'status' => self::STATUS_WAIT,
+            'verify_token' => null,
+        ]);
     }
 }

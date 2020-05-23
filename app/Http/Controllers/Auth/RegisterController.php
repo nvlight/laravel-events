@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Mail\VerifyMail;
+use App\Mail\Auth\VerifyMail;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\UseCases\Auth\RegisterService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,11 +30,13 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
+    private $service;
     protected $redirectTo = '/';
 
-    public function __construct()
+    public function __construct(RegisterService $service)
     {
         $this->middleware('guest');
+        $this->service = $service;
     }
 
     protected function validator(array $data)
@@ -52,17 +55,14 @@ class RegisterController extends Controller
                 ->with('error', 'Sorry your link cannot be identified.');
         }
 
-        if ($user->status !== User::STATUS_WAIT) {
-            return redirect()->route('login')
-                ->with('error', 'Your email is already verified.');
+        try {
+            $user->verify();
+            $this->service->verify($user->id);
+            return redirect()->route('login')->with('success', 'Your e-mail is verified. You can now login.');
+        } catch (\DomainException $e) {
+            return redirect()->route('login')->with('error', $e->getMessage());
         }
 
-        $user->status = User::STATUS_ACTIVE;
-        $user->verify_token = null;
-        $user->save();
-
-        return redirect()->route('login')
-            ->with('success', 'Your e-mail is verified. You can now login.');
     }
 
     protected function create(array $data)
@@ -80,22 +80,13 @@ class RegisterController extends Controller
         return $user;
     }
 
-//    public function register(RegisterRequest $request)
-//    {
-//        $user = User::create([
-//            'name' => $request['name'],
-//            'email' => $request['email'],
-//            'password' => bcrypt($request['password']),
-//            'verify_token' => Str::random(),
-//            'status' => User::STATUS_WAIT,
-//        ]);
-//
-//        Mail::to($user->email)->send(new VerifyMail($user));
-//        //event(new Registered($user));
-//
-//        return redirect()->route('login')
-//            ->with('success', 'Check your email and click on the link to verify.');
-//    }
+    public function register(RegisterRequest $request)
+    {
+        $this->service->register($request);
+
+        return redirect()->route('login')
+            ->with('success', 'Check your email and click on the link to verify.');
+    }
 
     protected function registered(Request $request, $user)
     {

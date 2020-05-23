@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.event')
 
 @section('content')
     <ul class="nav nav-tabs mb-3">

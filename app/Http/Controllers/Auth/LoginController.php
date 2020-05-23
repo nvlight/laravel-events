@@ -64,7 +64,8 @@ class LoginController extends Controller
             $request->session()->regenerate();
             $this->clearLoginAttempts($request);
             $user = Auth::user();
-            if ($user->status !== User::STATUS_ACTIVE) {
+            //if ($user->status !== User::STATUS_ACTIVE) {
+            if ($user->isWait()) {
                 Auth::logout();
                 return back()->with('error', 'You need to confirm your account. Please check your email.');
             }

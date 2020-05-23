@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.event')
 
 @section('content')
     @include('admin.users._nav')

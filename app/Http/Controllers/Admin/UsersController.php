@@ -8,9 +8,18 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use App\UseCases\Auth\RegisterService;
 
 class UsersController extends Controller
 {
+
+    private $register;
+
+    public function __construct(RegisterService $register)
+    {
+        $this->register = $register;
+    }
+
     public function index()
     {
         $users = User::orderByDesc('id')->paginate(20);
@@ -25,10 +34,15 @@ class UsersController extends Controller
 
     public function store(CreateRequest $request)
     {
-        $user = User::create($request->only(['name', 'email']) + [
-            'password' => bcrypt(Str::random()),
-            'status' => User::STATUS_ACTIVE,
-        ]);
+//        $user = User::create($request->only(['name', 'email']) + [
+//            'password' => bcrypt(Str::random()),
+//            'status' => User::STATUS_ACTIVE,
+//        ]);
+
+        $user = User::new(
+            $request['name'],
+            $request['email']
+        );
 
         return redirect()->route('admin.users.show', $user);
     }
@@ -50,7 +64,9 @@ class UsersController extends Controller
 
     public function update(UpdateRequest $request, User $user)
     {
-        $user->update($request->only(['name', 'email', 'status']));
+        //$user->update($request->only(['name', 'email', 'status']));
+
+        $user->update($request->only(['name', 'email']));
 
         return redirect()->route('admin.users.show', $user);
     }
@@ -60,5 +76,21 @@ class UsersController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users.index');
+    }
+
+    public function verify(User $user)
+    {
+        //$user->verify();
+        $this->register->verify($user->id);
+
+        return redirect()->route('admin.users.show', $user);
+    }
+
+    public function unverify(User $user)
+    {
+        //$user->unverify();
+        $this->register->unverify($user->id);
+
+        return redirect()->route('admin.users.show', $user);
     }
 }

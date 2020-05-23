@@ -6,11 +6,11 @@ use Illuminate\Console\Command;
 use App\UseCases\Auth\RegisterService;
 use App\Models\User;
 
-class VerifyCommand extends Command
+class UnverifyCommand extends Command
 {
-    protected $signature = 'user:verify {email}';
+    protected $signature = 'user:unverify {email}';
 
-    protected $description = 'Verify user email';
+    protected $description = 'Unverify user email';
 
     private $service;
 
@@ -31,13 +31,13 @@ class VerifyCommand extends Command
         }
 
         try {
-            $this->service->verify($user->id);
+            $this->service->unverify($user->id);
         } catch (\DomainException $e) {
             $this->error($e->getMessage());
             return false;
         }
 
-        $this->info('User is successfully verified');
+        $this->info('User is successfully unverified');
         return true;
     }
 }
