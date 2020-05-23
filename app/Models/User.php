@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
  * @property string $name
  * @property string $email
  * @property string $status
+ * @property string $role
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
@@ -41,15 +42,19 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable // implements MustVerifyEmail
+                                   // этот интерфейс делает авто-отправку письма если в диспетчере отдается событие создания
 {
     use Notifiable;
 
     public const STATUS_WAIT = 'wait';
     public const STATUS_ACTIVE = 'active';
 
+    public const ROLE_USER = 'user';
+    public const ROLE_ADMIN = 'admin';
+
     protected $fillable = [
-        'name', 'email', 'password', 'status',
+        'name', 'email', 'password', 'verify_token', 'status', 'role',
     ];
 
     protected $hidden = [
@@ -80,6 +85,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => bcrypt($password),
             'verify_token' => Str::uuid(),
             'status' => self::STATUS_WAIT,
+            'role' => self::ROLE_USER,
         ]);
     }
 
@@ -90,6 +96,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'email' => $email,
             'password' => bcrypt(Str::random()),
             'status' => self::STATUS_ACTIVE,
+            'role' => self::ROLE_USER,
         ]);
     }
 
@@ -125,5 +132,21 @@ class User extends Authenticatable implements MustVerifyEmail
             'status' => self::STATUS_WAIT,
             'verify_token' => null,
         ]);
+    }
+
+    public function changeRole($role): void
+    {
+        if (!\in_array($role, [self::ROLE_USER, self::ROLE_ADMIN], true)) {
+            throw new \InvalidArgumentException('Undefined role "' . $role . '"');
+        }
+        if ($this->role === $role) {
+            throw new \DomainException('Role is already assigned.');
+        }
+        $this->update(['role' => $role]);
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->role === self::ROLE_ADMIN;
     }
 }

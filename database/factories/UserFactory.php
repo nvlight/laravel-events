@@ -29,5 +29,6 @@ $factory->define(User::class, function (Faker $faker) {
         //'status' => User::STATUS_ACTIVE,
         'verify_token' => $active ? null : Str::uuid(),
         'status' => $active ? User::STATUS_ACTIVE : User::STATUS_WAIT,
+        'role' => $active ? $faker->randomElement([User::ROLE_USER, User::ROLE_ADMIN]) : User::ROLE_USER,
     ];
 });
