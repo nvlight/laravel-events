@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use App\Policies\DocumentPolicy;
 use App\Policies\EventPolicy;
 use App\Policies\ShortUrlPolicy;
 use App\Models\ShortUrl\ShortUrl;
 use App\Models\Event\Event;
 use App\Models\Document\Document;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -38,6 +40,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('admin-panel', function (User $user) {
+            return $user->isAdmin();
+        });
     }
 }
