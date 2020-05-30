@@ -73,7 +73,8 @@ Route::get('/verify/{token}', 'Auth\RegisterController@verify')->name('register.
 Route::get('event-filter', 'EventController@filter')->middleware('verified');
 Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified');
 
-Route::resource('simple-test-system', 'SimpleTestSystem\CategoryController')->middleware('verified');
+Route::resource('simple-test-system', 'SimpleTestSystem\CategoryController')
+    ->middleware('verified')->middleware('can:admin-panel');
 Route::resource('simple-test-system-test', 'SimpleTestSystem\TestController')->middleware('verified');
 Route::resource('simple-test-system-question', 'SimpleTestSystem\QuestionController')->middleware('verified');
 
@@ -105,8 +106,7 @@ Route::get('test_with_2', 'TestController@testwith2')->middleware('verified')->n
 
 Route::get('mgram', 'MGram@index');
 
-Route::get('hd_video', 'HDVideoController@index');
-Auth::routes();
+Route::get('hd_video', 'HDVideoController@index'); //
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -117,8 +117,6 @@ Route::group(
         'prefix' => 'admin',
         'as' => 'admin.',
         'namespace' => 'Admin',
-
-        //'middleware' => ['auth'],
         'middleware' => ['auth', 'can:admin-panel'],
     ],
     function () {
@@ -126,5 +124,16 @@ Route::group(
         Route::resource('users', 'UsersController');
         Route::post('/users/{user}/verify', 'UsersController@verify')->name('users.verify');
         Route::post('/users/{user}/unverify', 'UsersController@unverify')->name('users.unverify');
+
+        Route::resource('regions', 'RegionController');
+
+        Route::group(['prefix' => 'adverts', 'as' => 'adverts.', 'namespace' => 'Adverts'], function () {
+            Route::resource('categories', 'CategoryController');
+
+            Route::post('/categories/{category}/first', 'CategoryController@first')->name('categories.first');
+            Route::post('/categories/{category}/up', 'CategoryController@up')->name('categories.up');
+            Route::post('/categories/{category}/down', 'CategoryController@down')->name('categories.down');
+            Route::post('/categories/{category}/last', 'CategoryController@last')->name('categories.last');
+        });
     }
 );

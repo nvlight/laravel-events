@@ -1,4 +1,4 @@
-@extends('layouts.event')
+@extends('layouts.adverts')
 
 @section('content')
     @include('admin.users._nav')
