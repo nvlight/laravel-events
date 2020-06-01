@@ -50,10 +50,10 @@ class LoginController extends Controller
 
     public function login(LoginRequest $request)
     {
-        if ($this->hasTooManyLoginAttempts($request)) {
-            $this->fireLockoutEvent($request);
-            $this->sendLockoutResponse($request);
-        }
+//        if ($this->hasTooManyLoginAttempts($request)) {
+//            $this->fireLockoutEvent($request);
+//            $this->sendLockoutResponse($request);
+//        }
 
         $authenticate = Auth::attempt(
             $request->only(['email', 'password']),
@@ -64,12 +64,15 @@ class LoginController extends Controller
             $request->session()->regenerate();
             $this->clearLoginAttempts($request);
             $user = Auth::user();
-            //if ($user->status !== User::STATUS_ACTIVE) {
+
             if ($user->isWait()) {
                 Auth::logout();
                 return back()->with('error', 'You need to confirm your account. Please check your email.');
             }
-            return redirect($this->redirectTo); //->intended(route('cabinet'));
+            return redirect('/');
+                        //->intended(route('event'));
+                        //->intended(route('cabinet'));
+                        //->intended(route('/'));
         }
         return redirect()->intended($this->redirectPath());
 

@@ -42,7 +42,7 @@ Auth::routes(['verify' => true]);
 
 Route::resource('category', 'EventCategoryController')->middleware('verified');
 Route::resource('type', 'EventTypeController')->middleware('verified');
-Route::resource('event', 'EventController')->middleware('verified');
+Route::resource('event', 'EventController')->middleware('verified'); //->name('event');
 Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
 
 Route::get('exchange-rate', 'ExchangeRateController@index')->middleware('verified');
