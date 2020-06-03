@@ -69,10 +69,11 @@ class LoginController extends Controller
                 Auth::logout();
                 return back()->with('error', 'You need to confirm your account. Please check your email.');
             }
-            return redirect('/');
+            //return redirect('/');
                         //->intended(route('event'));
                         //->intended(route('cabinet'));
                         //->intended(route('/'));
+            return redirect()->intended(route('cabinet.home'));
         }
         return redirect()->intended($this->redirectPath());
 
