@@ -40,6 +40,9 @@ Route::get('/test_countingResultBallsByRequest','SimpleTestSystem\HhController@t
 
 Auth::routes(['verify' => true]);
 
+Route::get('/login/phone', 'Auth\LoginController@phone')->name('login.phone');
+Route::post('/login/phone', 'Auth\LoginController@verify');
+
 Route::resource('category', 'EventCategoryController')->middleware('verified');
 Route::resource('type', 'EventTypeController')->middleware('verified');
 Route::resource('event', 'EventController')->middleware('verified'); //->name('event');
@@ -133,7 +136,11 @@ Route::group(
             Route::post('/phone', 'PhoneController@request');
             Route::get('/phone', 'PhoneController@form')->name('phone');
             Route::put('/phone', 'PhoneController@verify')->name('phone.verify');
+
+            Route::post('/phone/auth', 'PhoneController@auth')->name('phone.auth');
         });
+
+        Route::resource('adverts', 'Adverts\AdvertController');
     }
 );
 
