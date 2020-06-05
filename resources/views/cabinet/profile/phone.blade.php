@@ -13,9 +13,6 @@
             @if ($errors->has('token'))
                 <span class="invalid-feedback d-block"><strong>{{ $errors->first('token') }}</strong></span>
             @endif
-            @if(session()->has('phoneVerifyError'))
-                <span class="invalid-feedback d-block"><strong>{{ session()->get('phoneVerifyError') }}</strong></span>
-            @endif
         </div>
 
         <div class="form-group">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Cabinet\Adverts;
 
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\FilledProfile;
 
 class AdvertController extends Controller
 {

@@ -215,7 +215,7 @@
 
                             @section('breadcrumbs', Breadcrumbs::render())
                             @yield('breadcrumbs')
-
+                            @include('layouts.partials.flash')
                             @yield('content')
                         </div>
                     </div>

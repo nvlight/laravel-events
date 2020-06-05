@@ -50,7 +50,6 @@ class PhoneController extends Controller
         try {
             $user->verifyPhone($request['token'], Carbon::now());
         } catch (\DomainException $e) {
-            session()->flash('phoneVerifyError', $e->getMessage());
             return redirect()->route('cabinet.profile.phone')->with('error', $e->getMessage());
         }
 
