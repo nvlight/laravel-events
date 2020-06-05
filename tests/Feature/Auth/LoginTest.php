@@ -3,10 +3,13 @@
 namespace Tests\Feature\Auth;
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function testForm(): void
     {
         $response = $this->get('/login');

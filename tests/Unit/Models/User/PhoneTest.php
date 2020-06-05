@@ -44,7 +44,10 @@ class PhoneTest extends TestCase
             'phone_verify_token' => null,
         ]);
 
+        //logger(($user->phone_verify_token));
+        //logger('phone_verify_token_expire: ' . ($user->phone_verify_token_expire));
         $token = $user->requestPhoneVerification(Carbon::now());
+        //logger($token);
 
         self::assertFalse($user->isPhoneVerified());
         self::assertNotEmpty($token);
@@ -67,6 +70,7 @@ class PhoneTest extends TestCase
         self::assertNotEmpty($user->phone_verify_token);
     }
 
+    // ?
     public function testRequestAlreadySentTimeout(): void
     {
         /** @var User $user */
@@ -90,6 +94,7 @@ class PhoneTest extends TestCase
             'phone_verified' => true,
             'phone_verify_token' => null,
         ]);
+        //dump($user->phone_verify_token);
 
         $user->requestPhoneVerification($now = Carbon::now());
 
@@ -141,4 +146,6 @@ class PhoneTest extends TestCase
         $this->expectExceptionMessage('Token is expired.');
         $user->verifyPhone($token, $now->copy()->addSeconds(500));
     }
+
+
 }

@@ -176,9 +176,26 @@ class User extends Authenticatable // implements MustVerifyEmail
         if (empty($this->phone)) {
             throw new \DomainException('Phone number is empty.');
         }
-        if (!empty($this->phone_verify_token) && $this->phone_verify_token_expire && $this->phone_verify_token_expire->gt($now)) {
-            throw new \DomainException('Token is already requested.');
+
+        if ($now && $this->phone_verify_token_expire){
+
+//            logger($sss="--------------");
+//            logger('phone_verify_token: ' . empty($this->phone_verify_token)); //'phone_verify_token: ' +
+//            logger('phone_verify_token_expire: ' . $this->phone_verify_token_expire); // 'phone_verify_token: ' +
+//            logger('now: ' . $now);
+//            logger('phone_verify_token - ge ' . $this->phone_verify_token_expire->gt($now)); // 'phone_verify_token - ge ' +
+//            logger($sss="--------------");
+
+            //logger('phone_verify_token: ' . (int)(!empty($this->phone_verify_token)));
+            if (!empty($this->phone_verify_token)
+                && $this->phone_verify_token_expire && $this->phone_verify_token_expire->gt($now)
+            )
+            {
+                //logger('Token is already requested.');
+                throw new \DomainException('Token is already requested.');
+            }
         }
+
         $this->phone_verified = false;
         $this->phone_verify_token = (string)random_int(10000, 99999);
         $this->phone_verify_token_expire = $now->copy()->addSeconds(300);

@@ -4,11 +4,15 @@ namespace Tests\Feature\Auth;
 
 use App\Models\MGDebug;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class RegisterTest extends TestCase
 {
+
+    use DatabaseTransactions;
+
     public function testForm(): void
     {
         $response = $this->get('/register');
