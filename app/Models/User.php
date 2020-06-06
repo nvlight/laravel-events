@@ -59,6 +59,7 @@ class User extends Authenticatable // implements MustVerifyEmail
 
     public const ROLE_USER = 'user';
     public const ROLE_ADMIN = 'admin';
+    public const ROLE_MODERATOR = 'moderator';
 
     protected $fillable = [
         'name', 'last_name', 'email', 'phone', 'password', 'verify_token', 'status', 'role',
@@ -78,6 +79,7 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         return [
             self::ROLE_USER => 'User',
+            self::ROLE_MODERATOR => 'Moderator',
             self::ROLE_ADMIN => 'Admin',
         ];
     }
@@ -168,6 +170,12 @@ class User extends Authenticatable // implements MustVerifyEmail
     {
         return $this->role === self::ROLE_ADMIN;
     }
+
+    public function isModerator(): bool
+    {
+        return $this->role === self::ROLE_MODERATOR;
+    }
+
 
     public function isUser(): bool
     {
