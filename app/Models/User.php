@@ -74,6 +74,13 @@ class User extends Authenticatable // implements MustVerifyEmail
         'phone_auth' => 'boolean',
     ];
 
+    public static function rolesList(): array
+    {
+        return [
+            self::ROLE_USER => 'User',
+            self::ROLE_ADMIN => 'Admin',
+        ];
+    }
 
     public function events(){
         return $this->hasMany('App\Models\Event\Event');
@@ -146,7 +153,9 @@ class User extends Authenticatable // implements MustVerifyEmail
 
     public function changeRole($role): void
     {
-        if (!\in_array($role, [self::ROLE_USER, self::ROLE_ADMIN], true)) {
+        // if (!\in_array($role, [self::ROLE_USER, self::ROLE_ADMIN], true)) {
+
+        if (!array_key_exists($role, self::rolesList())) {
             throw new \InvalidArgumentException('Undefined role "' . $role . '"');
         }
         if ($this->role === $role) {

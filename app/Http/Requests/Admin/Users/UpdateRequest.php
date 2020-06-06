@@ -25,6 +25,7 @@ class UpdateRequest extends FormRequest
                 User::ROLE_USER,
                 User::ROLE_ADMIN,
             ])],
+            'role' => ['required', 'string', Rule::in(array_keys(User::rolesList()))]
         ];
     }
 }
