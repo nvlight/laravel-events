@@ -913,4 +913,17 @@ class EventController extends Controller
             ,'category_id', 'type_id', 'date_etalon1', 'date_etalon2', 'amount1', 'amount2', 'events_count') );
     }
 
+    /*
+     * Copy event record
+     *
+     * */
+    public function copyAndPast(Event $event)
+    {
+        $event = Event::find($event->id);
+        $newEvent = $event->replicate();
+        $newEvent->save();
+
+        return redirect()->back()->with('event_copy', 'Событие успешно скопировано');
+    }
+
 }

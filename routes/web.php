@@ -48,6 +48,8 @@ Route::resource('type', 'EventTypeController')->middleware('verified');
 Route::resource('event', 'EventController')->middleware('verified'); //->name('event');
 Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
 
+Route::post('event_copy/{event}','EventController@copyAndPast')->middleware('verified');
+
 Route::get('exchange-rate', 'ExchangeRateController@index')->middleware('verified');
 Route::get('exchange-rate-update', 'ExchangeRateController@getLastExchangeRateHtml')->middleware('verified');
 //Route::get('exchange-rate-test', 'ExchangeRateController@getLastExchangeRate')->middleware('verified');

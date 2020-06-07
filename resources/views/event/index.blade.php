@@ -34,6 +34,7 @@
             <h5 class="text-success"><?=session()->get('event_created');?></h5>
             <h5 class="text-success"><?=session()->get('event_deleted');?></h5>
             <h5 class="text-success"><?=session()->get('event_updated');?></h5>
+            <h5 class="text-success"><?=session()->get('event_copy');?></h5>
             <table class="table table-bordered table-striped table-responsive">
                 <tr>
                     <th>№</th>
