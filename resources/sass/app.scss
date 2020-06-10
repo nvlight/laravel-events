@@ -14,3 +14,15 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
+.adverts-list {
+  .advert {
+    margin: 20px 0;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+}

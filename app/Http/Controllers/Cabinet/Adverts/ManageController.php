@@ -1,18 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Adverts;
+namespace App\Http\Controllers\Cabinet\Adverts;
 
 use App\Models\Adverts\Advert\Advert;
-use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Adverts\AttributesRequest;
 use App\Http\Requests\Adverts\EditRequest;
 use App\Http\Requests\Adverts\PhotosRequest;
-use App\Http\Requests\Adverts\RejectRequest;
 use App\UseCases\Adverts\AdvertService;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
-class AdvertController extends Controller
+class ManageController extends Controller
 {
     private $service;
 
@@ -21,50 +19,15 @@ class AdvertController extends Controller
         $this->service = $service;
     }
 
-    public function index(Request $request)
-    {
-        $query = Advert::orderByDesc('updated_at');
-
-        if (!empty($value = $request->get('id'))) {
-            $query->where('id', $value);
-        }
-
-        if (!empty($value = $request->get('title'))) {
-            $query->where('title', 'like', '%' . $value . '%');
-        }
-
-        if (!empty($value = $request->get('user'))) {
-            $query->where('user_id', $value);
-        }
-
-        if (!empty($value = $request->get('region'))) {
-            $query->where('region_id', $value);
-        }
-
-        if (!empty($value = $request->get('category'))) {
-            $query->where('category_id', $value);
-        }
-
-        if (!empty($value = $request->get('status'))) {
-            $query->where('status', $value);
-        }
-
-        $adverts = $query->paginate(20);
-
-        $statuses = Advert::statusesList();
-
-        $roles = User::rolesList();
-
-        return view('admin.adverts.adverts.index', compact('adverts', 'statuses', 'roles'));
-    }
-
     public function editForm(Advert $advert)
     {
+        $this->checkAccess($advert);
         return view('adverts.edit.advert', compact('advert'));
     }
 
     public function edit(EditRequest $request, Advert $advert)
     {
+        $this->checkAccess($advert);
         try {
             $this->service->edit($advert->id, $request);
         } catch (\DomainException $e) {
@@ -76,11 +39,13 @@ class AdvertController extends Controller
 
     public function attributesForm(Advert $advert)
     {
+        $this->checkAccess($advert);
         return view('adverts.edit.attributes', compact('advert'));
     }
 
     public function attributes(AttributesRequest $request, Advert $advert)
     {
+        $this->checkAccess($advert);
         try {
             $this->service->editAttributes($advert->id, $request);
         } catch (\DomainException $e) {
@@ -92,11 +57,13 @@ class AdvertController extends Controller
 
     public function photosForm(Advert $advert)
     {
+        $this->checkAccess($advert);
         return view('adverts.edit.photos', compact('advert'));
     }
 
     public function photos(PhotosRequest $request, Advert $advert)
     {
+        $this->checkAccess($advert);
         try {
             $this->service->addPhotos($advert->id, $request);
         } catch (\DomainException $e) {
@@ -106,10 +73,11 @@ class AdvertController extends Controller
         return redirect()->route('adverts.show', $advert);
     }
 
-    public function moderate(Advert $advert)
+    public function send(Advert $advert)
     {
+        $this->checkAccess($advert);
         try {
-            $this->service->moderate($advert->id);
+            $this->service->sendToModeration($advert->id);
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -117,15 +85,11 @@ class AdvertController extends Controller
         return redirect()->route('adverts.show', $advert);
     }
 
-    public function rejectForm(Advert $advert)
+    public function close(Advert $advert)
     {
-        return view('admin.adverts.adverts.reject', compact('advert'));
-    }
-
-    public function reject(RejectRequest $request, Advert $advert)
-    {
+        $this->checkAccess($advert);
         try {
-            $this->service->reject($advert->id, $request);
+            $this->service->close($advert->id);
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
         }
@@ -135,12 +99,20 @@ class AdvertController extends Controller
 
     public function destroy(Advert $advert)
     {
+        $this->checkAccess($advert);
         try {
             $this->service->remove($advert->id);
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
         }
 
-        return redirect()->route('admin.adverts.adverts.index');
+        return redirect()->route('cabinet.adverts.index');
+    }
+
+    private function checkAccess(Advert $advert): void
+    {
+        if (!Gate::allows('manage-own-advert', $advert)) {
+            abort(403);
+        }
     }
 }

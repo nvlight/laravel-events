@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class YouTubeController extends Controller
 {
-    protected $youtube_api_key_2 = 'AIzaSyA8uSUgr6vMKaEHYXzGKjltL6OzhM8IuqM';
-    protected $youtube_api_key_1 = 'AIzaSyCRTxyDFpIhy_7Zl_mfL7cnZmc1JGBocm8';
+    protected $youtube_api_key_1 = 'AIzaSyDSJ9CxBFXnNvbWBwQVHeM1plBUs9wcASA';
+    protected $youtube_api_key_11 = 'AIzaSyA8uSUgr6vMKaEHYXzGKjltL6OzhM8IuqM';
     protected $youytube_channelid_template = 'https://www.youtube.com/channel/';
 
     public function index(){
@@ -305,11 +305,12 @@ class YouTubeController extends Controller
         $publishedAfter  = mb_substr($publishedAfter, 0,10);
 
         $part = "snippet";
-        $rs = null;
+        $rs = null; $ytError = null;
         try{
             $rs = $youtube->search->listSearch($part, $filters);
         }catch (\Throwable $th){
             // ok...
+            $ytError = $th->getMessage();
         }
         //dump($rs);
         //echo MGDebug::d($rs);
@@ -326,6 +327,7 @@ class YouTubeController extends Controller
             'publishedAfter' => $publishedAfter,
             'safeSearch' => $safeSearch,
             'safeSearchArray' => $safeSearchArray,
+            'ytError' => $ytError,
         ]);
     }
 

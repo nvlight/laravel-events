@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Region;
+use App\Models\Adverts\Category;
 
 class HomeController extends Controller
 {
@@ -23,6 +25,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('cabinet.home');
+        //return view('cabinet.home');
+
+        $regions = Region::roots()->orderBy('name')->getModels();
+
+        $categories = Category::whereIsRoot()->defaultOrder()->getModels();
+
+        return view('home', compact('regions', 'categories'));
     }
 }

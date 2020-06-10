@@ -54,6 +54,14 @@ $(document).ready(function () {
     // preloader
     $('#hellopreloader_preload').delay(450).fadeOut('slow');
 
+	$(document).on('click', '.phone-button', function () {
+		var button = $(this);
+		axios.post(button.data('source')).then(function (response) {
+			button.find('.number').html(response.data)
+		}).catch(function (error) {
+			console.error(error);
+		});
+	});
 
 });
 
