@@ -226,8 +226,6 @@
         </div>
     </div>
 
-    <div ><i class="fa fa-chevron-up"></i></div>
-
     <a id="go_to_top" style="display: none;" href="#" onclick="return false;" class="js-zc-conditional" data-clipboard-text="">
         <svg height="32" class="octicon octicon-chevron-up" viewBox="0 0 10 16" version="1.1" width="20" aria-hidden="true"><path fill-rule="evenodd" d="M10 10l-1.5 1.5L5 7.75 1.5 11.5 0 10l5-5 5 5z"></path></svg>
     </a>
