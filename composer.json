@@ -13,12 +13,13 @@
         "fideloper/proxy": "^4.0",
         "google/apiclient": "2.0",
         "kalnoy/nestedset": "^5.0",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
         "muhamadrezaar/highcharts": "dev-master"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.3",
         "barryvdh/laravel-ide-helper": "^2.6",
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
@@ -38,6 +39,9 @@
         }
     },
     "autoload": {
+        "files": [
+            "app/helpers.php"
+        ],
         "psr-4": {
             "App\\": "app/"
         },

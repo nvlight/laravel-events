@@ -5,13 +5,15 @@ namespace PHPSTORM_META {
 
    /**
     * PhpStorm Meta file, to provide autocomplete information for PhpStorm
-    * Generated on 2020-05-25 17:09:14.
+    * Generated on 2020-06-12 17:36:13.
     *
     * @author Barry vd. Heuvel <barryvdh@gmail.com>
     * @see https://github.com/barryvdh/laravel-ide-helper
     */
     override(new \Illuminate\Contracts\Container\Container, map([
         '' => '@',
+        'App\Services\Sms\SmsSender' => \App\Services\Sms\SmsRu::class,
+        'Barryvdh\Debugbar\LaravelDebugbar' => \Barryvdh\Debugbar\LaravelDebugbar::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsManager' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsManager::class,
         'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -53,6 +55,7 @@ namespace PHPSTORM_META {
         'command.config.clear' => \Illuminate\Foundation\Console\ConfigClearCommand::class,
         'command.console.make' => \Illuminate\Foundation\Console\ConsoleMakeCommand::class,
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
+        'command.debugbar.clear' => \Barryvdh\Debugbar\Console\ClearCommand::class,
         'command.down' => \Illuminate\Foundation\Console\DownCommand::class,
         'command.dumpserver' => \BeyondCode\DumpServer\DumpServerCommand::class,
         'command.environment' => \Illuminate\Foundation\Console\EnvironmentCommand::class,
@@ -157,6 +160,8 @@ namespace PHPSTORM_META {
     ]));
     override(\Illuminate\Container\Container::makeWith(0), map([
         '' => '@',
+        'App\Services\Sms\SmsSender' => \App\Services\Sms\SmsRu::class,
+        'Barryvdh\Debugbar\LaravelDebugbar' => \Barryvdh\Debugbar\LaravelDebugbar::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsManager' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsManager::class,
         'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -198,6 +203,7 @@ namespace PHPSTORM_META {
         'command.config.clear' => \Illuminate\Foundation\Console\ConfigClearCommand::class,
         'command.console.make' => \Illuminate\Foundation\Console\ConsoleMakeCommand::class,
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
+        'command.debugbar.clear' => \Barryvdh\Debugbar\Console\ClearCommand::class,
         'command.down' => \Illuminate\Foundation\Console\DownCommand::class,
         'command.dumpserver' => \BeyondCode\DumpServer\DumpServerCommand::class,
         'command.environment' => \Illuminate\Foundation\Console\EnvironmentCommand::class,
@@ -302,6 +308,8 @@ namespace PHPSTORM_META {
     ]));
     override(\Illuminate\Contracts\Container\Container::make(0), map([
         '' => '@',
+        'App\Services\Sms\SmsSender' => \App\Services\Sms\SmsRu::class,
+        'Barryvdh\Debugbar\LaravelDebugbar' => \Barryvdh\Debugbar\LaravelDebugbar::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsManager' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsManager::class,
         'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -343,6 +351,7 @@ namespace PHPSTORM_META {
         'command.config.clear' => \Illuminate\Foundation\Console\ConfigClearCommand::class,
         'command.console.make' => \Illuminate\Foundation\Console\ConsoleMakeCommand::class,
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
+        'command.debugbar.clear' => \Barryvdh\Debugbar\Console\ClearCommand::class,
         'command.down' => \Illuminate\Foundation\Console\DownCommand::class,
         'command.dumpserver' => \BeyondCode\DumpServer\DumpServerCommand::class,
         'command.environment' => \Illuminate\Foundation\Console\EnvironmentCommand::class,
@@ -447,6 +456,8 @@ namespace PHPSTORM_META {
     ]));
     override(\Illuminate\Contracts\Container\Container::makeWith(0), map([
         '' => '@',
+        'App\Services\Sms\SmsSender' => \App\Services\Sms\SmsRu::class,
+        'Barryvdh\Debugbar\LaravelDebugbar' => \Barryvdh\Debugbar\LaravelDebugbar::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsManager' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsManager::class,
         'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -488,6 +499,7 @@ namespace PHPSTORM_META {
         'command.config.clear' => \Illuminate\Foundation\Console\ConfigClearCommand::class,
         'command.console.make' => \Illuminate\Foundation\Console\ConsoleMakeCommand::class,
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
+        'command.debugbar.clear' => \Barryvdh\Debugbar\Console\ClearCommand::class,
         'command.down' => \Illuminate\Foundation\Console\DownCommand::class,
         'command.dumpserver' => \BeyondCode\DumpServer\DumpServerCommand::class,
         'command.environment' => \Illuminate\Foundation\Console\EnvironmentCommand::class,
@@ -592,6 +604,8 @@ namespace PHPSTORM_META {
     ]));
     override(\App::make(0), map([
         '' => '@',
+        'App\Services\Sms\SmsSender' => \App\Services\Sms\SmsRu::class,
+        'Barryvdh\Debugbar\LaravelDebugbar' => \Barryvdh\Debugbar\LaravelDebugbar::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsManager' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsManager::class,
         'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -633,6 +647,7 @@ namespace PHPSTORM_META {
         'command.config.clear' => \Illuminate\Foundation\Console\ConfigClearCommand::class,
         'command.console.make' => \Illuminate\Foundation\Console\ConsoleMakeCommand::class,
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
+        'command.debugbar.clear' => \Barryvdh\Debugbar\Console\ClearCommand::class,
         'command.down' => \Illuminate\Foundation\Console\DownCommand::class,
         'command.dumpserver' => \BeyondCode\DumpServer\DumpServerCommand::class,
         'command.environment' => \Illuminate\Foundation\Console\EnvironmentCommand::class,
@@ -737,6 +752,8 @@ namespace PHPSTORM_META {
     ]));
     override(\App::makeWith(0), map([
         '' => '@',
+        'App\Services\Sms\SmsSender' => \App\Services\Sms\SmsRu::class,
+        'Barryvdh\Debugbar\LaravelDebugbar' => \Barryvdh\Debugbar\LaravelDebugbar::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsManager' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsManager::class,
         'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -778,6 +795,7 @@ namespace PHPSTORM_META {
         'command.config.clear' => \Illuminate\Foundation\Console\ConfigClearCommand::class,
         'command.console.make' => \Illuminate\Foundation\Console\ConsoleMakeCommand::class,
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
+        'command.debugbar.clear' => \Barryvdh\Debugbar\Console\ClearCommand::class,
         'command.down' => \Illuminate\Foundation\Console\DownCommand::class,
         'command.dumpserver' => \BeyondCode\DumpServer\DumpServerCommand::class,
         'command.environment' => \Illuminate\Foundation\Console\EnvironmentCommand::class,
@@ -882,6 +900,8 @@ namespace PHPSTORM_META {
     ]));
     override(\app(0), map([
         '' => '@',
+        'App\Services\Sms\SmsSender' => \App\Services\Sms\SmsRu::class,
+        'Barryvdh\Debugbar\LaravelDebugbar' => \Barryvdh\Debugbar\LaravelDebugbar::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsManager' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsManager::class,
         'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -923,6 +943,7 @@ namespace PHPSTORM_META {
         'command.config.clear' => \Illuminate\Foundation\Console\ConfigClearCommand::class,
         'command.console.make' => \Illuminate\Foundation\Console\ConsoleMakeCommand::class,
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
+        'command.debugbar.clear' => \Barryvdh\Debugbar\Console\ClearCommand::class,
         'command.down' => \Illuminate\Foundation\Console\DownCommand::class,
         'command.dumpserver' => \BeyondCode\DumpServer\DumpServerCommand::class,
         'command.environment' => \Illuminate\Foundation\Console\EnvironmentCommand::class,
@@ -1027,6 +1048,8 @@ namespace PHPSTORM_META {
     ]));
     override(\resolve(0), map([
         '' => '@',
+        'App\Services\Sms\SmsSender' => \App\Services\Sms\SmsRu::class,
+        'Barryvdh\Debugbar\LaravelDebugbar' => \Barryvdh\Debugbar\LaravelDebugbar::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsGenerator::class,
         'DaveJamesMiller\Breadcrumbs\BreadcrumbsManager' => \DaveJamesMiller\Breadcrumbs\BreadcrumbsManager::class,
         'Illuminate\Broadcasting\BroadcastManager' => \Illuminate\Broadcasting\BroadcastManager::class,
@@ -1068,6 +1091,7 @@ namespace PHPSTORM_META {
         'command.config.clear' => \Illuminate\Foundation\Console\ConfigClearCommand::class,
         'command.console.make' => \Illuminate\Foundation\Console\ConsoleMakeCommand::class,
         'command.controller.make' => \Illuminate\Routing\Console\ControllerMakeCommand::class,
+        'command.debugbar.clear' => \Barryvdh\Debugbar\Console\ClearCommand::class,
         'command.down' => \Illuminate\Foundation\Console\DownCommand::class,
         'command.dumpserver' => \BeyondCode\DumpServer\DumpServerCommand::class,
         'command.environment' => \Illuminate\Foundation\Console\EnvironmentCommand::class,

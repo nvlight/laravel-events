@@ -48,8 +48,9 @@ Route::group([
     Route::get('/show/{advert}', 'AdvertController@show')->name('show');
     Route::post('/show/{advert}/phone', 'AdvertController@phone')->name('phone');
 
-    Route::get('/all/{category?}', 'AdvertController@index')->name('index.all');
-    Route::get('/{region?}/{category?}', 'AdvertController@index')->name('index');
+    //Route::get('/all/{category?}', 'AdvertController@index')->name('index.all');
+    //Route::get('/{region?}/{category?}', 'AdvertController@index')->name('index');
+    Route::get('/{adverts_path?}', 'AdvertController@index')->name('index')->where('adverts_path', '.+');
 });
 
 Route::get('/login/phone', 'Auth\LoginController@phone')->name('login.phone');
@@ -123,7 +124,7 @@ Route::get('test_with_2', 'TestController@testwith2')->middleware('verified')->n
 
 Route::get('mgram', 'MGram@index');
 
-Route::get('hd_video', 'HDVideoController@index'); //
+Route::get('hd_video', 'HDVideoController@index')->middleware('verified');; //
 
 Route::get('/home', 'HomeController@index')->name('home');
 
