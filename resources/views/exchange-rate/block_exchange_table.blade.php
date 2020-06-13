@@ -3,7 +3,8 @@
     <h3>Курсы валют</h3>
 
     @php
-        //dump($_SERVER)
+        //dump($_SERVER);
+        //dump($gcer);
     @endphp
 
 

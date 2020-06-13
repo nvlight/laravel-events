@@ -1,6 +1,7 @@
 @php
     // получение УРЛ-а для запроса - тут пока что http, потом переделать!
-    //dump($_SERVER);
+    // dump($_SERVER);
+    // код ниже не работает при включенном дебагБаре !
 
     $httpMethod = ($_SERVER['REQUEST_SCHEME'] === 'https') ? 'https' : 'http';
     $url = $httpMethod . '://' . $_SERVER['HTTP_HOST'] . '/' . 'exchange-rate-update';
