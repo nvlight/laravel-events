@@ -47,6 +47,8 @@ Route::group([
 ], function () {
     Route::get('/show/{advert}', 'AdvertController@show')->name('show');
     Route::post('/show/{advert}/phone', 'AdvertController@phone')->name('phone');
+    Route::post('/show/{advert}/favorites', 'FavoriteController@add')->name('favorites');
+    Route::delete('/show/{advert}/favorites', 'FavoriteController@remove');
 
     //Route::get('/all/{category?}', 'AdvertController@index')->name('index.all');
     //Route::get('/{region?}/{category?}', 'AdvertController@index')->name('index');
@@ -156,6 +158,9 @@ Route::group(
         });
 
         //Route::resource('adverts', 'Adverts\AdvertController');
+
+        Route::get('favorites', 'FavoriteController@index')->name('favorites.index');
+        Route::delete('favorites/{advert}', 'FavoriteController@remove')->name('favorites.remove');
 
         Route::group([
             'prefix' => 'adverts',
