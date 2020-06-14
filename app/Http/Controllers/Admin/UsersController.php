@@ -19,6 +19,7 @@ class UsersController extends Controller
     public function __construct(RegisterService $register)
     {
         $this->register = $register;
+        $this->middleware('can:manage-regions');
     }
 
     public function index(Request $request)
