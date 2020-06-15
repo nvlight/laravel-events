@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 
 class YouTubeController extends Controller
 {
-    protected $youtube_api_key_1 = 'AIzaSyDSJ9CxBFXnNvbWBwQVHeM1plBUs9wcASA';
-    protected $youtube_api_key_11 = 'AIzaSyA8uSUgr6vMKaEHYXzGKjltL6OzhM8IuqM';
+    protected $youtube_api_key_0 = 'AIzaSyBHJRRzbJ88z7X5dlczeo9V9zGbTeNUCrM';
+    protected $youtube_api_key_2 = 'AIzaSyDSJ9CxBFXnNvbWBwQVHeM1plBUs9wcASA';
+    protected $youtube_api_key_3 = 'AIzaSyDPPfZT5_REcYGAetI3o72p9-MDiyUz8hg';
+    protected $youtube_api_key_1 = 'AIzaSyDYFcpaXb7QWG_CSVdQp62tikTmMW6aS-Y';
     protected $youytube_channelid_template = 'https://www.youtube.com/channel/';
 
     public function index(){

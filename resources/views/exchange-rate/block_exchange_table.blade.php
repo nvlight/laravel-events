@@ -1,6 +1,7 @@
 <div class="result-exchange-rate">
 
-    <h3>Курсы валют</h3>
+    <h3 class="flex flex-column">Курсы валют <button id="btnUpdateRate" class="btn btn-success">Update Rates!</button></h3>
+    <p></p>
 
     @php
         //dump($_SERVER);

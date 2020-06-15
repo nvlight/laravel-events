@@ -155,7 +155,16 @@
                 @endif
             </div>
 
-            <hr/>
+            <table class="table table-bordered">
+                <tbody>
+                @foreach ($advert->category->allAttributes() as $attribute)
+                    <tr>
+                        <th>{{ $attribute->name }}</th>
+                        <td>{{ $advert->getValue($attribute->id) }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
 
             <div class="h3">Similar adverts</div>
 

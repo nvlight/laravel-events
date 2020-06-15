@@ -11,21 +11,66 @@
 
 <script>
 
-fetch('<?=$url?>')
-    .then(response => response.json())
-    .then(data => {
-        let el = document.querySelector(".result-exchange-rate");
-        el.innerHTML = data['html'];
+let url = '<?=$url?>';
+//console.log('current url: ' + url);
 
-        {{-- Автоматический подсчет курса по вводу нужного значения --}}
-        $('[class^=amount-computed]').on('keyup', function(e) {
-            let parent_tr = $(this).parent().parent();
-            let value = parent_tr.find('.Value').text();
-            let nominal = parent_tr.find('.Nominal').text();
-            let computed = ( (value * 1) / (nominal * 1) ) * ( $(this).val() * 1);
-            parent_tr.find('.exchange-rate-result').val(computed.toFixed(2));
-            //console.log(value + ' : ' + nominal + ' --- ' + computed.toFixed(2));
+function updateRate(url)
+{
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+
+            console.log('json_parsed: '+JSON.parse(data));
+
+            {{--let el = document.querySelector(".result-exchange-rate");--}}
+            {{--el.innerHTML = data['html'];--}}
+
+            {{-- Автоматический подсчет курса по вводу нужного значения --}}
+            {{--$('[class^=amount-computed]').on('keyup', function(e) {--}}
+            {{--    let parent_tr = $(this).parent().parent();--}}
+            {{--    let value = parent_tr.find('.Value').text();--}}
+            {{--    let nominal = parent_tr.find('.Nominal').text();--}}
+            {{--    let computed = ( (value * 1) / (nominal * 1) ) * ( $(this).val() * 1);--}}
+            {{--    parent_tr.find('.exchange-rate-result').val(computed.toFixed(2));--}}
+            {{--    //console.log(value + ' : ' + nominal + ' --- ' + computed.toFixed(2));--}}
+            {{--});--}}
+
         });
-    });
+}
+
+function updateRate2(url)
+{
+    axios.get(url)
+        .then(response => {
+            //console.log("response", response.data.html)
+
+            let el = document.querySelector(".result-exchange-rate");
+            el.innerHTML = response.data.html;
+
+            {{-- Автоматический подсчет курса по вводу нужного значения --}}
+            $('[class^=amount-computed]').on('keyup', function(e) {
+                let parent_tr = $(this).parent().parent();
+                let value = parent_tr.find('.Value').text();
+                let nominal = parent_tr.find('.Nominal').text();
+                let computed = ( (value * 1) / (nominal * 1) ) * ( $(this).val() * 1);
+                parent_tr.find('.exchange-rate-result').val(computed.toFixed(2));
+                //console.log(value + ' : ' + nominal + ' --- ' + computed.toFixed(2));
+            });
+        })
+
+    // axios.get("http://laravel-events:86/exchange-rate-update")
+    //     .then(response => {
+    //         console.log("log - response: " + response.data.html)
+    //     })
+}
+
+updateRate2(url);
+
+let btnUpdateRate = document.getElementById('btnUpdateRate');
+
+btnUpdateRate.addEventListener('click', function() {
+    //updateRate(url);
+    updateRate2(url);
+});
 
 </script>
