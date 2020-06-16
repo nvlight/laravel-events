@@ -14,7 +14,7 @@
 let url = '<?=$url?>';
 //console.log('current url: ' + url);
 
-function updateRate(url)
+function updateRate2(url)
 {
     fetch(url)
         .then(response => response.json())
@@ -38,7 +38,7 @@ function updateRate(url)
         });
 }
 
-function updateRate2(url)
+function updateRate(url)
 {
     axios.get(url)
         .then(response => {
@@ -57,20 +57,16 @@ function updateRate2(url)
                 //console.log(value + ' : ' + nominal + ' --- ' + computed.toFixed(2));
             });
         })
-
-    // axios.get("http://laravel-events:86/exchange-rate-update")
-    //     .then(response => {
-    //         console.log("log - response: " + response.data.html)
-    //     })
+        .catch(error => console.log('updateRate: ' + error));
 }
 
-updateRate2(url);
+updateRate(url);
 
 let btnUpdateRate = document.getElementById('btnUpdateRate');
 
 btnUpdateRate.addEventListener('click', function() {
-    //updateRate(url);
-    updateRate2(url);
+    //updateRate2(url);
+    updateRate(url);
 });
 
 </script>
