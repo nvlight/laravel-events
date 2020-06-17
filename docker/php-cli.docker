@@ -4,6 +4,7 @@ RUN docker-php-ext-install pdo_mysql exif pcntl
     #zlib zip exif pcntl
     #docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/i>
     #docker-php-ext-install gd
+    #ok than!
 RUN wget https://getcomposer.org/installer -O - -q | php -- --version>
 ENV COMPOSER_ALLOW_SUPERUSER 1
 WORKDIR /var/www/laravel-events
