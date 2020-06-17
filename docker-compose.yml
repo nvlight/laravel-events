@@ -5,7 +5,7 @@ services:
             context: ./
             dockerfile: docker/nginx.docker
         volumes:
-            - ./:/var/www
+            - ./:/var/www/laravel-events
             - ./docker/nginx/ssl:/etc/nginx/ssl
         ports:
             - "8080:443"
@@ -16,7 +16,7 @@ services:
             context: ./
             dockerfile: docker/php-fpm.docker
         volumes:
-            - ./:/var/www
+            - ./:/var/www/laravel-events
         links:
             - mysql
             - redis
@@ -32,7 +32,7 @@ services:
             context: ./
             dockerfile: docker/php-cli.docker
         volumes:
-            - ./:/var/www
+            - ./:/var/www/laravel-events
         links:
             - mysql
             - redis
