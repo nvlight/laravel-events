@@ -1,7 +1,10 @@
 FROM php:7.2-cli
 
 RUN apt-get update && apt-get install -y libmcrypt-dev mariadb-client wget unzip \
-    && docker-php-ext-install mcrypt pdo_mysql pcntl
+
+RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
+RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --w>
+RUN docker-php-ext-install gd
 
 RUN wget https://getcomposer.org/installer -O - -q | php -- --version=1.9.1 --install-dir=/bin --filename=composer --quiet
 
