@@ -1,10 +1,15 @@
 FROM php:7.2-cli
+#
 RUN apt-get update && apt-get install -y libmcrypt-dev mariadb-client
+#
 RUN docker-php-ext-install pdo_mysql exif pcntl
-    #zlib zip exif pcntl
-    #docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/i>
-    #docker-php-ext-install gd
+    #zlib zip
+    RUN docker-php-ext-configure gd --with-gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ --with-png-dir=/usr/include/
+    RUN docker-php-ext-install gd
     #ok than!
-RUN wget https://getcomposer.org/installer -O - -q | php -- --version>
+#
+# Install composer
+#
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 ENV COMPOSER_ALLOW_SUPERUSER 1
 WORKDIR /var/www/laravel-events
