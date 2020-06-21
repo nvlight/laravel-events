@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Region;
 use App\Models\Adverts\Category;
+use Elasticsearch\ClientBuilder;
 
 class HomeController extends Controller
 {

@@ -130,6 +130,7 @@ Route::get('hd_video', 'HDVideoController@index')->middleware('verified');; //
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::any('/sh555', 'Shelltest@index');
 
 //Route::get('/cabinet', 'Cabinet\HomeController@index')->name('cabinet');
 Route::group(
