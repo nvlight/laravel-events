@@ -177,7 +177,7 @@ return [
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         App\Providers\SmsServiceProvider::class,
         App\Providers\CacheServiceProvider::class,
-
+        App\Providers\SearchServiceProvider::class,
 
     ],
 
