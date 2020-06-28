@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Search;
 
 use App\Models\Adverts\Advert\Advert;
-//use App\Services\Search\AdvertIndexer;
+use App\Services\Search\AdvertIndexer;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Illuminate\Console\Command;
 use Elasticsearch\Client;
