@@ -215,8 +215,7 @@
 
                             {{-- пока пусть будет сидеть тут --}}
                             @section('search')
-{{--                                @include('layouts.partials.search', ['category' => null, 'route' => route('adverts.index')])--}}
-                                @include('layouts.partials.search', ['category' => $category, 'route' => '?'])
+                                @include('layouts.partials.search', ['category' => null, 'route' => route('adverts.index')])
                             @show
 
                             @section('breadcrumbs', Breadcrumbs::render())
