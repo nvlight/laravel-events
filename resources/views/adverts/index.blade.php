@@ -1,5 +1,9 @@
 @extends('layouts.adverts')
 
+@section('search')
+    @include('layouts.partials.search', ['category' => $category, 'route' => '?'])
+@endsection
+
 @section('content')
 
     @if ($categories)
