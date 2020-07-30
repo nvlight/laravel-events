@@ -4,14 +4,12 @@
 
     <h3>YouTube - search</h3>
 
-    <div class="youtube_search">
+    <div class="youtube/search">
 
         @if($rs)
             <div class="row">
                 <div class="col-md-2">
-                    <form action="{{URL::to('youtube_search')}}" method="POST">
-                        @csrf
-
+                    <form action="{{URL::to('youtube/search')}}" method="GET">
                         <div class="form-group">
                             <label for="videoQueryString">{{$q['caption']}}</label>
                             <input type="text" name="yt-search-text" class="form-control"
@@ -115,7 +113,7 @@
                                 @foreach($items as $k => $v)
                                     <tr>
                                         <td>
-                                            <a href="{{URL::to('youtube_watch/'.$v['id']['videoId'])}}">
+                                            <a href="{{URL::to('youtube/watch/'.$v['id']['videoId'])}}">
                                                 <img src="{{$v['snippet']['thumbnails']['default']['url']}}" alt="">
                                             </a>
                                         </td>
@@ -130,7 +128,7 @@
                                             {{\Illuminate\Support\Carbon::parse($v['snippet']['publishedAt'])->format('d.m.Y h:i:s') }}
                                         </td>
                                         <td>
-                                            <a href="{{URL::to('youtube_watch/'.$v['id']['videoId'])}}">Watch!</a>
+                                            <a href="{{URL::to('youtube/watch/'.$v['id']['videoId'])}}">Watch!</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -138,8 +136,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <form class="d-inline-block" action="{{URL::to('youtube_search')}}" method="POST">
-                                @csrf
+                            <form class="d-inline-block" action="{{URL::to('youtube/search')}}" method="GET">
                                 <div style="display: none">
                                     <input type="text" name="yt-search-text" class="form-control"
                                            id="videoQueryString" placeholder="Enter search string"
@@ -193,8 +190,7 @@
                                 </div>
                                 <button type="submit" class="btn btn-success">Prev page</button>
                             </form>
-                            <form class="d-inline-block" action="{{URL::to('youtube_search')}}" method="POST">
-                                @csrf
+                            <form class="d-inline-block" action="{{URL::to('youtube/search')}}" method="GET">
                                 <div style="display: none">
                                     <input type="text" name="yt-search-text" class="form-control"
                                            id="videoQueryString" placeholder="Enter search string"
@@ -256,7 +252,11 @@
 
         @else
             <h5>Получили ошибки при обращении к серверу, попробуйте позднее</h5>
-            <p>{{$ytError}}</p>
+            <p>
+                @php
+                    dump($ytError);
+                @endphp
+            </p>
         @endif
     </div>
 

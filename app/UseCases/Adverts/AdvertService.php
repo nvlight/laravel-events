@@ -14,6 +14,7 @@ use App\Http\Requests\Adverts\RejectRequest;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
+
 class AdvertService
 {
     public function create($userId, $categoryId, $regionId, CreateRequest $request): Advert

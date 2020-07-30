@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 
 class YouTubeController extends Controller
 {
-    protected $youtube_api_key_0 = 'AIzaSyBHJRRzbJ88z7X5dlczeo9V9zGbTeNUCrM';
-    protected $youtube_api_key_2 = 'AIzaSyDSJ9CxBFXnNvbWBwQVHeM1plBUs9wcASA';
-    protected $youtube_api_key_3 = 'AIzaSyDPPfZT5_REcYGAetI3o72p9-MDiyUz8hg';
-    protected $youtube_api_key_1 = 'AIzaSyDYFcpaXb7QWG_CSVdQp62tikTmMW6aS-Y';
+    protected $youtube_api_key_1 = 'AIzaSyDhSNMOaEkPSxWpTKw6K0B5AHRrTFxYID0'; // api key 1
+    #protected $youtube_api_key_1 = 'AIzaSyBvRC-HZsd7slDS-KpgmIC7obvYh3jO2aE'; // api key 2
     protected $youytube_channelid_template = 'https://www.youtube.com/channel/';
 
     public function index(){
@@ -26,6 +24,18 @@ class YouTubeController extends Controller
         $jsonData = $this->ApiGetVideoByMethodCurl($ytVideoId);
 
         return view('youtube.show_player', compact('jsonData', 'ytVideoId'));
+    }
+
+    public function watch_redirect(Request $request)
+    {
+        //dump($request->get('video_id'));
+
+        return redirect( route('youtube.watch', [$request->get('video_id')]) );
+    }
+
+    public function search_redirect(Request $request)
+    {
+        return redirect( route('youtube.search', $request->all() ) )->with('q', $request->get('q'));
     }
 
     /*
@@ -62,92 +72,13 @@ class YouTubeController extends Controller
     }
 
     /*
-     * Получение видео (fOpen)
-     *
-     * */
-    public function ApiGetVideoByMethodFopen(string $video_id)
-    {
-        $video_id = 'wHObvCfiUyI';
-
-        $url = 'https://www.googleapis.com/youtube/v3/videos';
-        // part=snippet,contentDetails,statistics&fields=items(id,contentDetails,etag,snippet(publishedAt,title,description,thumbnails(medium),channelTitle,localized),statistics)";
-        $data = array (
-            'key' => $this->youtube_api_key_1,
-            'part' => 'snippet,contentDetails,statistics',
-            'fields' => 'items(id,contentDetails,etag,snippet(publishedAt,title,description,thumbnails(medium),channelTitle,localized),statistics)',
-            'id' => $video_id
-        );
-
-        $scu = $url . '?' . http_build_query($data);
-        $opts = array('http' =>
-            array(
-                'method' => 'GET',
-                'max_redirects' => '0',
-                'ignore_errors' => '1',
-            )
-        , 'ssl' => array(
-                'verify_peer' => true,
-                'cafile' => '/SRV/php721/extras/ssl/' . "cacert.pem",
-                'ciphers' => 'HIGH:TLSv1.2:TLSv1.1:TLSv1.0:!SSLv3:!SSLv2',
-                'CN_match' => 'www.googleapis.com',
-                'disable_compression' => true,
-            )
-        );
-
-        $context = stream_context_create($opts);
-        $stream = fopen($scu, 'r', false, $context);
-
-        // check ?
-        $response = json_decode(stream_get_contents($stream));
-
-        fclose($stream);
-
-        return $response;
-    }
-
-    /*
-     * Получение видео (fileGetContents)
-     *
-     * */
-    public function ApiGetVideoByMethodFileGetContents(string $video_id)
-    {
-        $params = array(
-            'id' => $video_id,
-            'key' => $this->youtube_api_key_1,
-            'part' => 'snippet,contentDetails,statistics',
-            'fields' => 'items(id,contentDetails,etag,snippet(publishedAt,title,description,thumbnails(default,medium,high),channelTitle,localized),statistics)'
-        );
-        $url = 'https://www.googleapis.com/youtube/v3/videos?' . http_build_query($params);
-
-        $opts = array('http' =>
-            array(
-                'method' => 'GET',
-                'max_redirects' => '0',
-                'ignore_errors' => '1',
-            )
-        , 'ssl' => array(
-                'verify_peer' => true,
-                'cafile' => '/SRV/php721/extras/ssl/' . "cacert.pem",
-                'ciphers' => 'HIGH:TLSv1.2:TLSv1.1:TLSv1.0:!SSLv3:!SSLv2',
-                //'CN_match' => $cn_match,
-                'disable_compression' => true,
-            )
-        );
-
-        $context = stream_context_create($opts);
-
-        // check ?
-        $json_result = file_get_contents ($url,false ,$context);
-
-        return $json_result;
-    }
-
-    /*
-     * Поиск видое по ключам
+     * Поиск видео по ключам
      *
      * */
     public function search(Request $request)
     {
+        //dump(session()->get('q'));
+
         $api_key = $this->youtube_api_key_1;
 
         $client = new \Google_Client();
@@ -209,9 +140,13 @@ class YouTubeController extends Controller
         $prevPageToken = "";
 
         //dd($request->all());
-        if($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if($_SERVER['REQUEST_METHOD'] === 'GET') {
 
-            $q['value'] = $request->post('yt-search-text') ?? '';
+            if (session('q')){
+                $q['value'] = session()->get('q');
+            }else{
+                $q['value'] = $request->get('yt-search-text') ?? '';
+            }
 
             //if (array_key_exists('yt-search-text', $_POST)){
             //    $q['value'] = $_POST['yt-search-text'];
@@ -267,19 +202,19 @@ class YouTubeController extends Controller
                 //die;
             }
 
-            //dump($request->post('safeSearch'));
+            //dump($request->get('safeSearch'));
             //dump($safeSearchArray);
-            if (array_key_exists($request->post('safeSearch'), $safeSearchArray)){
-                $safeSearch['key'] = $request->post('safeSearch');
-                $safeSearch['value'] = $safeSearchArray[$request->post('safeSearch')];
+            if (array_key_exists($request->get('safeSearch'), $safeSearchArray)){
+                $safeSearch['key'] = $request->get('safeSearch');
+                $safeSearch['value'] = $safeSearchArray[$request->get('safeSearch')];
             }
 
             // pageToken
-            if ($request->post('nextPageToken')){
-                $nextPageToken = $request->post('nextPageToken');
+            if ($request->get('nextPageToken')){
+                $nextPageToken = $request->get('nextPageToken');
             }
-            if ($request->post('prevPageToken')){
-                $prevPageToken = $request->post('prevPageToken');
+            if ($request->get('prevPageToken')){
+                $prevPageToken = $request->get('prevPageToken');
             }
         }
 
@@ -312,7 +247,7 @@ class YouTubeController extends Controller
             $rs = $youtube->search->listSearch($part, $filters);
         }catch (\Throwable $th){
             // ok...
-            $ytError = $th->getMessage();
+            $ytError = $th;
         }
         //dump($rs);
         //echo MGDebug::d($rs);
@@ -321,9 +256,12 @@ class YouTubeController extends Controller
             'rs' => $rs,
             'q' => $q,
             'part'=> $part,
-            'orderArray' => $orderArray, 'order' => $order,
-            'durationArray' => $durationArray, 'duration' => $duration,
-            'typeArray' => $typeArray, 'type' => $type,
+            'orderArray' => $orderArray,
+            'order' => $order,
+            'durationArray' => $durationArray,
+            'duration' => $duration,
+            'typeArray' => $typeArray,
+            'type' => $type,
             'maxResults' => $maxResults,
             'publishedBefore' => $publishedBefore,
             'publishedAfter' => $publishedAfter,

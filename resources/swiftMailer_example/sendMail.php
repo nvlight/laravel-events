@@ -65,7 +65,4 @@ function mailSendMessage(array $config, array $body)
 
 //$rs = sendMail($yandMailConfig,["ok. hellow. приехали!"]); // без русских символов сообщение не отправляет, очень умно!
 $rs = mailSendMessage($yandSwiftMailerConfig1, ['Ну, что сказать, было весело, ага!']);
-echo "<pre>";
-var_dump($rs);
-echo "</pre>";
-
+echo \App\Models\MGDebug::d($rs);

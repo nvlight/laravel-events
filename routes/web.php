@@ -69,9 +69,20 @@ Route::get('exchange-rate', 'ExchangeRateController@index')->middleware('verifie
 Route::get('exchange-rate-update', 'ExchangeRateController@getLastExchangeRateHtml')->middleware('verified');
 //Route::get('exchange-rate-test', 'ExchangeRateController@getLastExchangeRate')->middleware('verified');
 
-Route::get('youtube_watch/{ytVideoId}', 'YouTubeController@watch')->middleware('verified');
-Route::get('youtube_search', 'YouTubeController@search')->middleware('verified');
-Route::post('youtube_search', 'YouTubeController@search')->middleware('verified');
+//Route::get('youtube_watch/{ytVideoId}', 'YouTubeController@watch')->middleware('verified');
+//Route::get('youtube_search', 'YouTubeController@search')->middleware('verified');
+//Route::post('youtube_search', 'YouTubeController@search')->middleware('verified');
+Route::group([
+    'prefix' => 'youtube',
+    'as' => 'youtube.',
+    'middleware' => ['verified'],
+], function (){
+    Route::get('/','YouTubeController@index')->name('index');
+    Route::get('/search_redirect','YouTubeController@search_redirect')->name('search_redirect');
+    Route::get('/search','YouTubeController@search')->name('search');
+    Route::get('/watch/{ytVideoId}','YouTubeController@watch')->name('watch');
+    Route::get('/watch_redirect','YouTubeController@watch_redirect')->name('watch_redirect');
+});
 
 Route::get('document', 'DocumentController@index')->middleware('verified');
 Route::get('events-graphics', 'EventController@graphics_index')->middleware('verified');
@@ -126,11 +137,11 @@ Route::get('test_with_2', 'TestController@testwith2')->middleware('verified')->n
 
 Route::get('mgram', 'MGram@index');
 
-Route::get('hd_video', 'HDVideoController@index')->middleware('verified');; //
+Route::get('hd_video', 'HDVideoController@index')->middleware('verified'); //
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::any('/sh555', 'Shelltest@index');
+//Route::any('/sh555', 'Shelltest@index');
 
 //Route::get('/cabinet', 'Cabinet\HomeController@index')->name('cabinet');
 Route::group(
