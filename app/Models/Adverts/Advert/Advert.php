@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\Adverts\Advert\Advert
+ *
  * @property int $id
  * @property int $user_id
  * @property int $category_id
@@ -24,7 +26,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $updated_at
  * @property Carbon $published_at
  * @property Carbon $expires_at
- *
  * @property User $user
  * @property Region $region
  * @property Category $category
@@ -32,6 +33,31 @@ use Illuminate\Database\Eloquent\Model;
  * @property Photo[] $photos
  * @method Builder active()
  * @method Builder forUser(User $user)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $favorites
+ * @property-read int|null $favorites_count
+ * @property-read int|null $photos_count
+ * @property-read int|null $values_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert favoredByUser(\App\Models\User $user)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert forCategory(\App\Models\Adverts\Category $category)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert forRegion(\App\Models\Region $region)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereExpiresAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert wherePublishedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereRegionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereRejectReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Advert whereUserId($value)
+ * @mixin \Eloquent
  */
 class Advert extends Model
 {

@@ -55,6 +55,8 @@ Route::group([
     Route::get('/{adverts_path?}', 'AdvertController@index')->name('index')->where('adverts_path', '.+');
 });
 
+
+
 Route::get('/login/phone', 'Auth\LoginController@phone')->name('login.phone');
 Route::post('/login/phone', 'Auth\LoginController@verify');
 
@@ -101,11 +103,15 @@ Route::get('email/resend', 'Auth\VerificationController@resend')->name('verifica
 Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::get('/verify/{token}', 'Auth\RegisterController@verify')->name('register.verify');
 
+Route::get('/banner/get', 'BannerController@get')->name('banner.get');
+Route::get('/banner/{banner}/click', 'BannerController@click')->name('banner.click');
+
 Route::get('event-filter', 'EventController@filter')->middleware('verified');
 Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified');
 
 Route::resource('simple-test-system', 'SimpleTestSystem\CategoryController')
     ->middleware('verified')->middleware('can:admin-panel');
+
 Route::resource('simple-test-system-test', 'SimpleTestSystem\TestController')->middleware('verified');
 Route::resource('simple-test-system-question', 'SimpleTestSystem\QuestionController')->middleware('verified');
 
@@ -169,8 +175,6 @@ Route::group(
             Route::post('/phone/auth', 'PhoneController@auth')->name('phone.auth');
         });
 
-        //Route::resource('adverts', 'Adverts\AdvertController');
-
         Route::get('favorites', 'FavoriteController@index')->name('favorites.index');
         Route::delete('favorites/{advert}', 'FavoriteController@remove')->name('favorites.remove');
 
@@ -196,6 +200,30 @@ Route::group(
             Route::post('/{advert}/close', 'ManageController@close')->name('close');
             Route::delete('/{advert}/destroy', 'ManageController@destroy')->name('destroy');
         });
+
+        Route::group([
+            'prefix' => 'banners',
+            'as' => 'banners.',
+            'namespace' => 'Banners',
+            'middleware' => [App\Http\Middleware\FilledProfile::class],
+        ], function () {
+            Route::get('/', 'BannerController@index')->name('index');
+            Route::get('/create', 'CreateController@category')->name('create');
+            Route::get('/create/region/{category}/{region?}', 'CreateController@region')->name('create.region');
+            Route::get('/create/banner/{category}/{region?}', 'CreateController@banner')->name('create.banner');
+            Route::post('/create/banner/{category}/{region?}', 'CreateController@store')->name('create.banner.store');
+
+            Route::get('/show/{banner}', 'BannerController@show')->name('show');
+            Route::get('/{banner}/edit', 'BannerController@editForm')->name('edit');
+            Route::put('/{banner}/edit', 'BannerController@edit');
+            Route::get('/{banner}/file', 'BannerController@fileForm')->name('file');
+            Route::put('/{banner}/file', 'BannerController@file');
+            Route::post('/{banner}/send', 'BannerController@send')->name('send');
+            Route::post('/{banner}/cancel', 'BannerController@cancel')->name('cancel');
+            Route::post('/{banner}/order', 'BannerController@order')->name('order');
+            Route::delete('/{banner}/destroy', 'BannerController@destroy')->name('destroy');
+        });
+
     }
 );
 
@@ -217,11 +245,6 @@ Route::group(
         Route::group(['prefix' => 'adverts', 'as' => 'adverts.', 'namespace' => 'Adverts'], function () {
 
             Route::resource('categories', 'CategoryController');
-
-//            Route::post('/categories/{category}/first', 'CategoryController@first')->name('categories.first');
-//            Route::post('/categories/{category}/up', 'CategoryController@up')->name('categories.up');
-//            Route::post('/categories/{category}/down', 'CategoryController@down')->name('categories.down');
-//            Route::post('/categories/{category}/last', 'CategoryController@last')->name('categories.last');
 
             Route::group(['prefix' => 'categories/{category}', 'as' => 'categories.'], function () {
                 Route::post('/first', 'CategoryController@first')->name('first');
@@ -246,5 +269,18 @@ Route::group(
             });
 
         });
+
+        Route::group(['prefix' => 'banners', 'as' => 'banners.'], function () {
+            Route::get('/', 'BannerController@index')->name('index');
+            Route::get('/{banner}/show', 'BannerController@show')->name('show');
+            Route::get('/{banner}/edit', 'BannerController@editForm')->name('edit');
+            Route::put('/{banner}/edit', 'BannerController@edit');
+            Route::post('/{banner}/moderate', 'BannerController@moderate')->name('moderate');
+            Route::get('/{banner}/reject', 'BannerController@rejectForm')->name('reject');
+            Route::post('/{banner}/reject', 'BannerController@reject');
+            Route::post('/{banner}/pay', 'BannerController@pay')->name('pay');
+            Route::delete('/{banner}/destroy', 'BannerController@destroy')->name('destroy');
+        });
+
     }
 );

@@ -130,7 +130,7 @@
                                 @php $active_count = 0; @endphp
 
                                 @foreach ($mainMenuData as $menuKey => $menu)
-                                    @if (Auth::user()->isAdmin())
+                                    @if (Auth::user()->isAdmin() || Auth::user()->isUser())
                                         <li>
                                             <a href="{{url($menu['url'])}}">
                                                 <?=$menu['svg']?><span class="text">{{$menu['title']}}</span>

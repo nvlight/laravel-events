@@ -49,6 +49,17 @@ use App\Models\Adverts\Advert\Advert;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Adverts\Advert\Advert[] $favorites
+ * @property-read int|null $favorites_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePhoneAuth($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePhoneVerified($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePhoneVerifyToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User wherePhoneVerifyTokenExpire($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRole($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereVerifyToken($value)
  */
 class User extends Authenticatable // implements MustVerifyEmail
                                    // этот интерфейс делает авто-отправку письма если в диспетчере отдается событие создания

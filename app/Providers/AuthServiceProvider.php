@@ -8,6 +8,7 @@ use App\Policies\EventPolicy;
 use App\Policies\ShortUrlPolicy;
 use App\Models\ShortUrl\ShortUrl;
 use App\Models\Event\Event;
+use App\Models\Banner\Banner;
 use App\Models\Document\Document;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -61,12 +62,20 @@ class AuthServiceProvider extends ServiceProvider
             return $user->isAdmin() || $user->isModerator();
         });
 
+        Gate::define('manage-banners', function (User $user) {
+            return $user->isAdmin() || $user->isModerator();
+        });
+
         Gate::define('show-advert', function (User $user, Advert $advert) {
             return $user->isAdmin() || $user->isModerator() || $advert->user_id === $user->id;
         });
 
         Gate::define('manage-own-advert', function (User $user, Advert $advert) {
             return $advert->user_id === $user->id;
+        });
+
+        Gate::define('manage-own-banner', function (User $user, Banner $banner) {
+            return $banner->user_id === $user->id;
         });
     }
 }

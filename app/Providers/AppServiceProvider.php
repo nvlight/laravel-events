@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\Banner\CostCalculator;
+use Illuminate\Foundation\Application;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +15,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(CostCalculator::class, function (Application $app) {
+            $config = $app->make('config')->get('banner');
+            return new CostCalculator($config['price']);
+        });
     }
 
     /**

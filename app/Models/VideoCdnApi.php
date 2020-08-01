@@ -4,6 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\VideoCdnApi
+ *
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\VideoCdnApi newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\VideoCdnApi newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\VideoCdnApi query()
+ * @mixin \Eloquent
+ */
 class VideoCdnApi extends Model
 {
     public static $apiPrefix = "https://videocdn.tv/api/";

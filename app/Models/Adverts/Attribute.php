@@ -5,6 +5,8 @@ namespace App\Models\Adverts;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * App\Models\Adverts\Attribute
+ *
  * @property int $id
  * @property int $category_id
  * @property string $name
@@ -13,6 +15,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property boolean $required
  * @property array $variants
  * @property integer $sort
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute whereRequired($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute whereSort($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Attribute whereVariants($value)
+ * @mixin \Eloquent
  */
 class Attribute extends Model
 {
