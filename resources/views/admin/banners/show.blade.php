@@ -1,4 +1,4 @@
-@extends('adverts.app')
+@extends('layouts.adverts')
 
 @section('content')
     @include('admin.banners._nav')
@@ -78,6 +78,7 @@
     <div class="card">
         <div class="card-body">
             <img src="{{ asset('storage/' . $banner->file) }}" />
+{{--            <img src="{{ Storage::disk('local')->get($banner->file) }}" />--}}
         </div>
     </div>
 @endsection

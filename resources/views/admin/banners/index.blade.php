@@ -1,4 +1,4 @@
-@extends('adverts.app')
+@extends('layouts.adverts')
 
 @section('content')
     @include('admin.banners._nav')
