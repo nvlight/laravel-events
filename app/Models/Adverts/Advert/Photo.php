@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
  * App\Models\Adverts\Advert\Photo
  *
  * @property int $id
- * @property string file
  * @property int $advert_id
  * @property string $file
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Adverts\Advert\Photo newModelQuery()

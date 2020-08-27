@@ -271,7 +271,6 @@ Breadcrumbs::register('admin.adverts.adverts.reject', function (Crumbs $crumbs, 
     $crumbs->push($advert->title, route('admin.adverts.adverts.reject', $advert));
 });
 
-
 // Advert Categories
 
 Breadcrumbs::register('admin.adverts.categories.index', function (Crumbs $crumbs) {
