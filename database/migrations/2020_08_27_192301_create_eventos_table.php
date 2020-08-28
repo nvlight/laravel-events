@@ -16,7 +16,6 @@ class CreateEventosTable extends Migration
         Schema::create('evento_eventos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id')->references('id')->on('users')->onDelete('CASCADE');
-            $table->unsignedInteger('category_id')->references('id')->on('evento_categories')->onDelete('CASCADE');
             $table->text('description');
             $table->unsignedTinyInteger('status')->default(1);
             $table->date('date');

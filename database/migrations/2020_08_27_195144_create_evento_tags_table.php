@@ -22,10 +22,11 @@ class CreateEventoTagsTable extends Migration
         });
 
         Schema::create('evento_evento_tags', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedInteger('evento_id');
+            //$table->bigIncrements('id');
+            $table->unsignedInteger('evento_id')->references('id')->on('evento_eventos')->onDelete('CASCADE');
             $table->unsignedInteger('tag_id')->references('id')->on('evento_tags')->onDelete('CASCADE');
             $table->timestamps();
+            $table->primary(['evento_id', 'tag_id']);
         });
     }
 
