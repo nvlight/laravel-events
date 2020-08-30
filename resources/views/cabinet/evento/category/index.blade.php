@@ -2,6 +2,7 @@
 
 @section('content')
     <h2>Evento/Category/index</h2>
+    <p><a href="{{ route('cabinet.evento.category.create') }}">create new</a></p>
 
     @if($categories)
         <table>

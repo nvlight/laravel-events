@@ -14,5 +14,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Evento extends Model
 {
-    //
+    protected $table = 'evento_eventos';
+
+    protected $fillable = [
+        'user_id', 'description', 'date'
+    ];
 }

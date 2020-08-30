@@ -2,17 +2,9 @@
 
 @section('content')
     <h2>Evento/Tag/index</h2>
+    <p><a href="{{ route('cabinet.evento.tag.create') }}">create new</a></p>
 
     @if($tags)
-
-        @if (\Session::has('event_tag_deleted'))
-            <div class="alert alert-success">
-                <ul>
-                    <li>{{ \Session::get('event_tag_deleted') }}</li>
-                </ul>
-            </div>
-        @endif
-
         <table>
             <tr>
                 <th>name</th>

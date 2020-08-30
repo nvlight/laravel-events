@@ -309,4 +309,12 @@ Route::group([
         Route::get('/destroy/{category}', 'CategoryController@destroy')->name('destroy');
     });
 
+    Route::get('/', 'EventoController@index')->name('index');
+    Route::get('/create/', 'EventoController@create')->name('create');
+    Route::post('/store/', 'EventoController@store' )->name('store');
+    Route::get('/show/{evento}', 'EventoController@show')->name('show');
+    Route::get('/edit/{evento}', 'EventoController@edit')->name('edit');
+    Route::post('/update/{evento}', 'EventoController@update')->name('update');
+    Route::get('/destroy/{evento}', 'EventoController@destroy')->name('destroy');
+
 });
