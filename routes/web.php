@@ -283,16 +283,30 @@ Route::group(
 );
 
 Route::group([
-    'prefix' => 'cabinet/evento/tag', // url
-    'as' => 'cabinet.evento.tag.',    // route_name
+    'prefix' => 'cabinet/evento', // url
+    'as' => 'cabinet.evento.',    // route_name
     'namespace' => 'Evento',
     'middleware' => ['auth'],
 ], function () {
-    Route::get('/', 'TagController@index')->name('index');
-    Route::get('/create/', 'TagController@create')->name('create');
-    Route::post('/store/', 'TagController@store' )->name('store');
-    Route::get('/show/{tag}', 'TagController@show')->name('show');
-    Route::get('/edit/{tag}', 'TagController@edit')->name('edit');
-    Route::post('/update/{tag}', 'TagController@update')->name('update');
-    Route::get('/destroy/{tag}', 'TagController@destroy')->name('destroy');
+
+    Route::group(['prefix' => '/tag', 'as' => 'tag.'], function () {
+        Route::get('/', 'TagController@index')->name('index');
+        Route::get('/create/', 'TagController@create')->name('create');
+        Route::post('/store/', 'TagController@store' )->name('store');
+        Route::get('/show/{tag}', 'TagController@show')->name('show');
+        Route::get('/edit/{tag}', 'TagController@edit')->name('edit');
+        Route::post('/update/{tag}', 'TagController@update')->name('update');
+        Route::get('/destroy/{tag}', 'TagController@destroy')->name('destroy');
+    });
+
+    Route::group(['prefix' => '/category', 'as' => 'category.'], function () {
+        Route::get('/', 'CategoryController@index')->name('index');
+        Route::get('/create/', 'CategoryController@create')->name('create');
+        Route::post('/store/', 'CategoryController@store' )->name('store');
+        Route::get('/show/{category}', 'CategoryController@show')->name('show');
+        Route::get('/edit/{category}', 'CategoryController@edit')->name('edit');
+        Route::post('/update/{category}', 'CategoryController@update')->name('update');
+        Route::get('/destroy/{category}', 'CategoryController@destroy')->name('destroy');
+    });
+
 });

@@ -3,22 +3,11 @@
 @section('content')
     <h2>Evento/Tag/Create</h2>
 
-    <div class="card-header bg-success">
-        <h3 class="text-white text-center"><strong>Image Validation in Laravel</strong></h3>
-    </div>
     <div class="card-body">
         @if(count($errors) > 0)
             @foreach($errors->all() as $error)
                 <div class="alert alert-danger">{{ $error }}</div>
             @endforeach
-        @endif
-
-        @if (\Session::has('event_tag_created'))
-            <div class="alert alert-success">
-                <ul>
-                    <li>{{ \Session::get('event_tag_created') }}</li>
-                </ul>
-            </div>
         @endif
 
         <form action="{{ route('cabinet.evento.tag.store') }}" method="post" enctype="multipart/form-data">
@@ -32,7 +21,7 @@
                 <input type="text" name="color" class="form-control" value="{{ old('color') }}">
             </div>
             <div class="form-group">
-                <label><b>Imh :-</b></label>
+                <label><b>Img :-</b></label>
                 <input type="file" name="img" class="form-control" value="{{ old('img') }}">
             </div>
             <div class="form-group text-center">

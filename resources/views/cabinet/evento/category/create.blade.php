@@ -10,19 +10,24 @@
             @endforeach
         @endif
 
-        <form action="{{ route('cabinet.evento.tag.update', $tag) }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('cabinet.evento.category.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label><b>name :-</b></label>
-                <input type="text" name="name" class="form-control" value="{{ $tag->name }}">
+                <input type="text" name="name" class="form-control" value="{{ old('name') }}">
             </div>
             <div class="form-group">
-                <label><b>color :-</b></label>
-                <input type="text" name="color" class="form-control" value="{{ $tag->color }}">
+                <label><b>parent_id :-</b></label>
+                <select name="parent_id" id="">
+                    <option>0</option>
+                    @foreach($categoryIds as $id)
+                        <option>{{ $id }}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
-                <label><b>Imh :-</b></label>
-                <input type="file" name="img" class="form-control" value="{{ $tag->img }}">
+                <label><b>Img :-</b></label>
+                <input type="file" name="img" class="form-control" value="{{ old('img') }}">
             </div>
             <div class="form-group text-center">
                 <button class="btn btn-success" type="submit">Save</button>

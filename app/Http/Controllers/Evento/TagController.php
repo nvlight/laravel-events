@@ -17,7 +17,7 @@ class TagController extends Controller
 
     public function create()
     {
-        return view('cabinet.evento.tag.create.index');
+        return view('cabinet.evento.tag.create');
     }
 
     public function store(TagRequest $request)
