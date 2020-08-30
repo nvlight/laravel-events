@@ -55,8 +55,6 @@ Route::group([
     Route::get('/{adverts_path?}', 'AdvertController@index')->name('index')->where('adverts_path', '.+');
 });
 
-
-
 Route::get('/login/phone', 'Auth\LoginController@phone')->name('login.phone');
 Route::post('/login/phone', 'Auth\LoginController@verify');
 
@@ -281,6 +279,20 @@ Route::group(
             Route::post('/{banner}/pay', 'BannerController@pay')->name('pay');
             Route::delete('/{banner}/destroy', 'BannerController@destroy')->name('destroy');
         });
-
     }
 );
+
+Route::group([
+    'prefix' => 'cabinet/evento/tag', // url
+    'as' => 'cabinet.evento.tag.',    // route_name
+    'namespace' => 'Evento',
+    'middleware' => ['auth'],
+], function () {
+    Route::get('/', 'TagController@index')->name('index');
+    Route::get('/create/', 'TagController@create')->name('create');
+    Route::post('/store/', 'TagController@store' )->name('store');
+    Route::get('/show/{tag}', 'TagController@show')->name('show');
+    Route::get('/edit/{tag}', 'TagController@edit')->name('edit');
+    Route::post('/update/{tag}', 'TagController@update')->name('update');
+    Route::get('/destroy/{tag}', 'TagController@destroy')->name('destroy');
+});

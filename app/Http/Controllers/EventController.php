@@ -99,6 +99,7 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        //dd($event);
         //echo Debug::d($event->toArray()); die;
         //$this->authorize('view', $event);
         //abort_if(Gate::denies('view', $event), 403);
