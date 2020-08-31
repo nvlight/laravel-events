@@ -15,12 +15,14 @@ class CreateEventoCategoriesTable extends Migration
     {
         Schema::create('evento_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')->references('id')->on('users')->onDelete('CASCADE')->index();
+            $table->unsignedBigInteger('user_id')->index();
             $table->unsignedInteger('parent_id');
             $table->string('name')->index();
             $table->string('slug');
             $table->string('img')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
         });
     }
 

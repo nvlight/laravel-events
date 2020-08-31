@@ -15,11 +15,13 @@ class CreateEventoTagsTable extends Migration
     {
         Schema::create('evento_tags', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')->references('id')->on('users')->onDelete('CASCADE')->index();
+            $table->unsignedBigInteger('user_id')->index();
             $table->string('name')->index();
             $table->string('color',7);
             $table->string('img')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
         });
     }
 

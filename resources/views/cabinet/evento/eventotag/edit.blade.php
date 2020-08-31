@@ -1,7 +1,7 @@
 @extends('layouts.evento')
 
 @section('content')
-    <h2>Evento/Category/Edit</h2>
+    <h2>Evento/EventoTag/Edit</h2>
 
     <div class="card-body">
         @if(count($errors) > 0)
@@ -12,10 +12,8 @@
 
         <form action="{{ route('cabinet.evento.eventotag.update', $eventotag) }}" method="post" enctype="application/x-www-form-urlencoded">
             @csrf
-            <div class="form-group">
-                <label><b>evento_id :-</b></label>
-                <input type="text" name="evento_id" value="{{ $evento->id }}" disabled>
-            </div>
+            <input type="hidden" name="evento_id" value="{{ $evento->id }}">
+
             <div class="form-group">
                 <label><b>evento_name :-</b></label>
                 <span>{{ $evento->description }}</span>
@@ -25,7 +23,11 @@
                 <select name="tag_id" >
                     <option>0</option>
                     @foreach($tags as $tag)
-                        <option value="{{ $tag->id }}">
+                        <option value="{{ $tag->id }}"
+                            @if($eventotag->tag_id == $tag->id)
+                                selected
+                            @endif
+                        >
                             {{ $tag->name }}
                         </option>
                     @endforeach

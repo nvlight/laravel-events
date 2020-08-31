@@ -15,10 +15,14 @@ class CreateEventoEventoTagValuesTable extends Migration
     {
         Schema::create('evento_evento_tag_values', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('evento_evento_tags_id')->references('id')->on('evento_evento_tags')->onDelete('CASCADE');
+
+            $table->unsignedBigInteger('evento_evento_tags_id')->index();
+
             $table->bigInteger('value')->default(0);
             $table->string('caption',50)->nullable();
             $table->timestamps();
+
+            $table->foreign('evento_evento_tags_id')->references('id')->on('evento_evento_tags')->onDelete('CASCADE');
         });
     }
 

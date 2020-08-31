@@ -15,9 +15,13 @@ class CreateEventoEventoCategoriesTable extends Migration
     {
         Schema::create('evento_evento_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('evento_id')->references('id')->on('evento_eventos')->onDelete('CASCADE');
-            $table->unsignedInteger('category_id')->references('id')->on('evento_categories')->onDelete('CASCADE');
+            $table->unsignedBigInteger('evento_id')->index();
+            $table->unsignedBigInteger('category_id')->index();
             $table->timestamps();
+
+            $table->foreign('evento_id')->references('id')->on('evento_eventos')->onDelete('CASCADE');
+            $table->foreign('category_id')->references('id')->on('evento_categories')->onDelete('CASCADE');
+
             //$table->primary(['evento_id', 'category_id']);
         });
     }

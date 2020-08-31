@@ -7,6 +7,7 @@
     @if($tags)
         <table>
             <tr>
+                <th>id</th>
                 <th>name</th>
                 <th>color</th>
                 <th>img</th>
@@ -16,6 +17,7 @@
             </tr>
         @foreach($tags as $tag)
             <tr>
+                <td>{{$tag->id}}</td>
                 <td>{{$tag->name}}</td>
                 <td>{{$tag->color}}</td>
                 <td>{{$tag->img}}</td>

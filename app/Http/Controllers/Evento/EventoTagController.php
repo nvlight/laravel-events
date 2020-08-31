@@ -6,7 +6,6 @@ use App\Http\Requests\Evento\EventoTagRequest;
 use App\Models\Evento\Evento;
 use App\Models\Evento\EventoTag;
 use App\Models\Evento\Tag;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class EventoTagController extends Controller
@@ -45,7 +44,7 @@ class EventoTagController extends Controller
     {
         $attributes = $request->validated();
 
-        // нужно предусмотреть случай с дублированием Тега для Evento
+        // - нужно предусмотреть случай с дублированием Тега для Evento
 
         EventoTag::create($attributes);
 
@@ -66,10 +65,18 @@ class EventoTagController extends Controller
         return view('cabinet.evento.eventotag.edit', compact('eventotag', 'evento','tags'));
     }
 
-    public function update(Request $request, EventoTag $eventotag)
+    public function update(EventoTagRequest $request, EventoTag $eventotag)
     {
-        // нужно предусмотреть случай с дублированием Тега для Evento
+        // - нужно предусмотреть случай с дублированием Тега для Evento
 
+        $attributes = $request->validated();
+
+        // + нужно не дать user-у изменить evento_id, котоый имеет input=hidden
+        $attributes['evento_id'] = $eventotag->evento_id;
+
+        $eventotag->update($attributes);
+
+        return back();
     }
 
     public function destroy(EventoTag $eventotag)

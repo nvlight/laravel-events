@@ -15,10 +15,12 @@ class CreateEventoAttachmentsTable extends Migration
     {
         Schema::create('evento_attachments', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('evento_id')->references('id')->on('evento_eventos')->onDelete('CASCADE');
+            $table->unsignedBigInteger('evento_id')->index();
             $table->bigInteger('type');
             $table->string('file');
             $table->timestamps();
+
+            $table->foreign('evento_id')->references('id')->on('evento_eventos')->onDelete('CASCADE');
         });
     }
 
