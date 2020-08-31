@@ -10,7 +10,7 @@ class TagController extends Controller
 {
     public function index()
     {
-        $tags = Tag::all();
+        $tags = auth()->user()->eventoTags;
 
         return view('cabinet.evento.tag.index', compact('tags'));
     }
@@ -23,10 +23,11 @@ class TagController extends Controller
     public function store(TagRequest $request)
     {
         $attributes = $request->validated();
+        $attributes += ['user_id' => auth()->id()];
 
         Tag::create($attributes);
 
-        return back()->with('event_tag_created', 'event_tag_created');
+        return back();
     }
 
     public function show(Tag $tag)
@@ -45,13 +46,13 @@ class TagController extends Controller
 
         $tag->update($attributes);
 
-        return back()->with('event_tag_updated', 'event_tag_updated');
+        return back();
     }
 
     public function destroy(Tag $tag)
     {
         $tag->delete();
 
-        return back()->with('event_tag_deleted', 'event_tag_deleted');
+        return back();
     }
 }

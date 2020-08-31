@@ -25,4 +25,12 @@ use Illuminate\Database\Eloquent\Model;
 class EventoTag extends Model
 {
     protected $table = "evento_evento_tags";
+
+    protected $fillable = [
+      'evento_id', 'tag_id'
+    ];
+
+    public function evento(){
+        return $this->hasOne('App\Models\Evento\Evento','id','evento_id');
+    }
 }

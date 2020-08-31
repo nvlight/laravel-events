@@ -309,6 +309,16 @@ Route::group([
         Route::get('/destroy/{category}', 'CategoryController@destroy')->name('destroy');
     });
 
+    Route::group(['prefix' => '/eventotag', 'as' => 'eventotag.'], function () {
+        Route::get('/', 'EventoTagController@index')->name('index');
+        Route::get('/create/', 'EventoTagController@create')->name('create');
+        Route::post('/store/', 'EventoTagController@store' )->name('store');
+        Route::get('/show/{eventotag}', 'EventoTagController@show')->name('show');
+        Route::get('/edit/{eventotag}', 'EventoTagController@edit')->name('edit');
+        Route::post('/update/{eventotag}', 'EventoTagController@update')->name('update');
+        Route::get('/destroy/{eventotag}', 'EventoTagController@destroy')->name('destroy');
+    });
+
     Route::get('/', 'EventoController@index')->name('index');
     Route::get('/create/', 'EventoController@create')->name('create');
     Route::post('/store/', 'EventoController@store' )->name('store');

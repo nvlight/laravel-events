@@ -29,6 +29,6 @@ class Tag extends Model
     protected $table = 'evento_tags';
 
     protected $fillable = [
-        'name', 'color', 'img'
+        'name', 'color', 'img', 'user_id'
     ];
 }

@@ -31,6 +31,6 @@ class Category extends Model
     protected $table = 'evento_categories';
 
     protected $fillable = [
-        'name', 'parent_id', 'img', 'slug'
+        'name', 'parent_id', 'img', 'slug', 'user_id'
     ];
 }

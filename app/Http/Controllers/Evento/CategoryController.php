@@ -11,14 +11,14 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
+        $categories = auth()->user()->eventoCategories;
 
         return view('cabinet.evento.category.index', compact('categories'));
     }
 
     public function create()
     {
-        $categoryIds = Category::all()->pluck('id')->toArray();
+        $categoryIds = auth()->user()->eventoCategories()->pluck('id')->toArray();
 
         return view('cabinet.evento.category.create', compact('categoryIds'));
     }
@@ -28,6 +28,7 @@ class CategoryController extends Controller
         $attributes = $request->validated();
 
         $attributes += ['slug' => Str::slug($attributes['name'])];
+        $attributes += ['user_id' => auth()->id()];
 
         Category::create($attributes);
 

@@ -15,18 +15,11 @@ class CreateEventoTagsTable extends Migration
     {
         Schema::create('evento_tags', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('user_id')->references('id')->on('users')->onDelete('CASCADE')->index();
             $table->string('name')->index();
             $table->string('color',7);
             $table->string('img')->nullable();
             $table->timestamps();
-        });
-
-        Schema::create('evento_evento_tags', function (Blueprint $table) {
-            //$table->bigIncrements('id');
-            $table->unsignedInteger('evento_id')->references('id')->on('evento_eventos')->onDelete('CASCADE');
-            $table->unsignedInteger('tag_id')->references('id')->on('evento_tags')->onDelete('CASCADE');
-            $table->timestamps();
-            $table->primary(['evento_id', 'tag_id']);
         });
     }
 
@@ -38,6 +31,5 @@ class CreateEventoTagsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('evento_tags');
-        Schema::dropIfExists('evento_evento_tags');
     }
 }

@@ -9,7 +9,8 @@ use \Illuminate\Support\Str;
 $factory->define(Tag::class, function (Faker $faker) {
     return [
         'name' => Str::upper($faker->word()),
-        'color' => $faker->hexColor, // unique()->slug(2),
+        'user_id' => 34,
+        'color' => $faker->hexColor,
         'img' => null,
     ];
 });

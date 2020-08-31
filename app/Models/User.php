@@ -108,6 +108,18 @@ class User extends Authenticatable // implements MustVerifyEmail
         return $this->hasMany('App\Models\Event\Type');
     }
 
+    public function eventos(){
+        return $this->hasMany('App\Models\Evento\Evento');
+    }
+
+    public function eventoCategories(){
+        return $this->hasMany('App\Models\Evento\Category');
+    }
+
+    public function eventoTags(){
+        return $this->hasMany('App\Models\Evento\Tag');
+    }
+
     public static function register(string $name, string $email, string $password): self
     {
         return static::create([
