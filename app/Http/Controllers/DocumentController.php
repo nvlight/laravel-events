@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Document\Document;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Validator;
 
 class DocumentController extends Controller
@@ -36,7 +37,9 @@ class DocumentController extends Controller
     {
         $file_info = $request->file('uploadFile');
 
-        $saved_path = $file_info->store(config('services.documents.path2save'));
+        $saved_path = $file_info->store(
+            config('services.documents.path2save') . DIRECTORY_SEPARATOR . auth()->id()
+        );
 
         $attributes = [];
         $attributes += ['user_id' => auth()->id()];
@@ -79,7 +82,17 @@ class DocumentController extends Controller
     {
         abort_if(auth()->user()->cannot('delete', $document), 403);
 
-        $pathToFile = storage_path()."/app/".$document->realname;
+        //$pathToFile = storage_path()."/app/".$document->realname;
+        $pathToFile = storage_path('app') . DIRECTORY_SEPARATOR . $document->realname;
+        //dump($pathToFile);
+
+        //$allFiles = Storage::disk('local')->allFiles();
+        //dump($allFiles);
+        //dump(auth()->user()->email);
+        //dump(config('filesystems.disks.public.root'));
+        //dump(Storage::disk('local'));
+        //die;
+
         return response()->download($pathToFile, $document->filename);
     }
 }
