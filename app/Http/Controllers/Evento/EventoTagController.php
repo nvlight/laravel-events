@@ -22,6 +22,7 @@ class EventoTagController extends Controller
         $eventotags = EventoTag::
             leftJoin('evento_eventos','evento_eventos.id','=','evento_evento_tags.evento_id')
             ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
+            ->where('evento_eventos.user_id','=',auth()->id())
             ->select('evento_evento_tags.id', 'evento_evento_tags.evento_id', 'evento_evento_tags.tag_id',
                  'evento_eventos.description', 'evento_tags.name as tag_name')
             ->get();
@@ -49,11 +50,15 @@ class EventoTagController extends Controller
 
     public function show(EventoTag $eventotag)
     {
+        abort_if(auth()->user()->cannot('view', $eventotag), 403);
+
         return view('cabinet.evento.eventotag.show', compact('eventotag'));
     }
 
     public function edit(EventoTag $eventotag)
     {
+        abort_if(auth()->user()->cannot('update', $eventotag), 403);
+
         $evento = $eventotag->evento;
         //dd($evento);
         $tags = auth()->user()->eventoTags;
@@ -63,6 +68,8 @@ class EventoTagController extends Controller
 
     public function update(EventoTagRequest $request, EventoTag $eventotag)
     {
+        abort_if(auth()->user()->cannot('update', $eventotag), 403);
+
         // - нужно предусмотреть случай с дублированием Тега для Evento
 
         $attributes = $request->validated();
@@ -77,6 +84,8 @@ class EventoTagController extends Controller
 
     public function destroy(EventoTag $eventotag)
     {
+        abort_if(auth()->user()->cannot('delete', $eventotag), 403);
+
         $eventotag->delete();
 
         return back();

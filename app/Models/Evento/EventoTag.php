@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $tag_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\EventoTag newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\EventoTag newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\EventoTag query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\EventoTag whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\EventoTag whereEventoId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\EventoTag whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\EventoTag whereTagId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\EventoTag whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag whereEventoId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag whereTagId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class EventoTag extends Model
@@ -31,6 +31,7 @@ class EventoTag extends Model
     ];
 
     public function evento(){
-        return $this->hasOne('App\Models\App\Evento','id','evento_id');
+        return $this->hasOne('App\Models\Evento\Evento','id','evento_id');
     }
+
 }
