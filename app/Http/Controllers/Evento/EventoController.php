@@ -10,7 +10,7 @@ class EventoController extends Controller
 {
     public function index()
     {
-        $eventos = Evento::all();
+        $eventos = auth()->user()->eventos;
 
         return view('cabinet.evento.index', compact('eventos'));
     }
@@ -33,16 +33,22 @@ class EventoController extends Controller
 
     public function show(Evento $evento)
     {
+        abort_if(auth()->user()->cannot('view', $evento), 403);
+
         return view('cabinet.evento.show', compact('evento'));
     }
 
     public function edit(Evento $evento)
     {
+        abort_if(auth()->user()->cannot('update', $evento), 403);
+
         return view('cabinet.evento.edit', compact('evento'));
     }
 
     public function update(EventoRequest $request, Evento $evento)
     {
+        abort_if(auth()->user()->cannot('update', $evento), 403);
+
         $attributes = $request->validated();
 
         $evento->update($attributes);
@@ -52,6 +58,8 @@ class EventoController extends Controller
 
     public function destroy(Evento $evento)
     {
+        abort_if(auth()->user()->cannot('delete', $evento), 403);
+
         $evento->delete();
 
         return back();
