@@ -39,16 +39,22 @@ class TagController extends Controller
 
     public function show(Tag $tag)
     {
+        abort_if(auth()->user()->cannot('view', $tag), 403);
+
         return view('cabinet.evento.tag.show', compact('tag'));
     }
 
     public function edit(Tag $tag)
     {
+        abort_if(auth()->user()->cannot('update', $tag), 403);
+
         return view('cabinet.evento.tag.edit', compact('tag'));
     }
 
     public function update(TagRequest $request, Tag $tag)
     {
+        abort_if(auth()->user()->cannot('update', $tag), 403);
+
         $attributes = $request->validated();
 
         if ($request->hasFile('img')){
@@ -66,6 +72,8 @@ class TagController extends Controller
 
     public function destroy(Tag $tag)
     {
+        abort_if(auth()->user()->cannot('delete', $tag), 403);
+
         $tag->delete();
 
         $this->deleteImg($tag);

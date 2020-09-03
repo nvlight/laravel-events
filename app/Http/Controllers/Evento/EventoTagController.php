@@ -26,10 +26,6 @@ class EventoTagController extends Controller
                  'evento_eventos.description', 'evento_tags.name as tag_name')
             ->get();
 
-        //dump($tags);
-        //dump($eventos);
-        //dump($eventotags);
-
         return view('cabinet.evento.eventotag.index', compact('eventotags'));
     }
     public function create()
