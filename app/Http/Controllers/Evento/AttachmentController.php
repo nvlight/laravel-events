@@ -30,6 +30,7 @@ class AttachmentController extends Controller
     public function store(AttachmentStoreRequest $request)
     {
         $attributes = $request->validated();
+
         $attributes += ['user_id' => auth()->id()];
         $attributes += ['evento_id' => $request->get('evento_id')];
 
@@ -80,11 +81,15 @@ class AttachmentController extends Controller
 
     public function show(Attachment $attachment)
     {
+        abort_if(auth()->user()->cannot('view', $attachment), 403);
+
         return view('cabinet.evento.attachment.show', compact('attachment'));
     }
 
     public function edit(Attachment $attachment)
     {
+        abort_if(auth()->user()->cannot('update', $attachment), 403);
+
         $eventos = auth()->user()->eventos;
         $fileName = $attachment->originalname ? $attachment->originalname : "";
 
@@ -93,6 +98,8 @@ class AttachmentController extends Controller
 
     public function update(AttachmentUpdateRequest $request, Attachment $attachment)
     {
+        abort_if(auth()->user()->cannot('update', $attachment), 403);
+
         $attributes = $request->validated();
 
         if ($request->hasFile('file'))
@@ -144,6 +151,8 @@ class AttachmentController extends Controller
 
     public function destroy(Attachment $attachment)
     {
+        abort_if(auth()->user()->cannot('delete', $attachment), 403);
+
         $attachment->delete();
         $this->deleteFile($attachment->file);
 

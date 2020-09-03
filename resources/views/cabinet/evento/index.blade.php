@@ -5,6 +5,7 @@
     <p><a href="{{ route('cabinet.evento.create') }}">create new evento</a></p>
     <p><a href="{{ route('cabinet.evento.category.index') }}">category index</a></p>
     <p><a href="{{ route('cabinet.evento.tag.index') }}">tag index</a></p>
+    <p><a href="{{ route('cabinet.evento.attachment.index') }}">attachment index</a></p>
 
     @if($eventos)
         <table>
