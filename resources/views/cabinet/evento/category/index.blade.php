@@ -7,6 +7,7 @@
     @if($categories)
         <table>
             <tr>
+                <th>id</th>
                 <th>parent_id</th>
                 <th>name</th>
                 <th>img</th>
@@ -16,6 +17,7 @@
             </tr>
         @foreach($categories as $category)
             <tr>
+                <td>{{$category->id}}</td>
                 <td>{{$category->parent_id}}</td>
                 <td>{{$category->name}}</td>
                 <td>{{$category->img}}</td>

@@ -44,11 +44,15 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
+        abort_if(auth()->user()->cannot('view', $category), 403);
+
         return view('cabinet.evento.category.show', compact('category'));
     }
 
     public function edit(Category $category)
     {
+        abort_if(auth()->user()->cannot('update', $category), 403);
+
         $categoryIds = Category::all()->pluck('id')->toArray();
 
         return view('cabinet.evento.category.edit', compact('category', 'categoryIds'));
@@ -56,6 +60,8 @@ class CategoryController extends Controller
 
     public function update(CategoryRequest $request, Category $category)
     {
+        abort_if(auth()->user()->cannot('update', $category), 403);
+
         $attributes = $request->validated();
 
         $attributes['slug'] = Str::slug($attributes['name']);
@@ -75,6 +81,8 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        abort_if(auth()->user()->cannot('delete', $category), 403);
+
         $category->delete();
 
         $this->deleteImg($category);

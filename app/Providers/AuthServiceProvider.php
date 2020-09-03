@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Evento\Category;
 use App\Models\Evento\Evento;
 use App\Models\User;
 use App\Policies\DocumentPolicy;
+use App\Policies\Evento\CategoryPolicy;
 use App\Policies\Evento\EventoPolicy;
 use App\Policies\EventPolicy;
 use App\Policies\ShortUrlPolicy;
@@ -34,6 +36,7 @@ class AuthServiceProvider extends ServiceProvider
         ShortUrl::class => ShortUrlPolicy::class,
         Event::class => EventPolicy::class,
         Evento::class => EventoPolicy::class,
+        Category::class => CategoryPolicy::class,
     ];
 
     /**
