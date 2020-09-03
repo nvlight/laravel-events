@@ -319,6 +319,17 @@ Route::group([
         Route::get('/destroy/{eventotag}', 'EventoTagController@destroy')->name('destroy');
     });
 
+    Route::group(['prefix' => '/attachment', 'as' => 'attachment.'], function () {
+        Route::get('/', 'AttachmentController@index')->name('index');
+        Route::get('/create/', 'AttachmentController@create')->name('create');
+        Route::post('/store/', 'AttachmentController@store' )->name('store');
+        Route::get('/show/{attachment}', 'AttachmentController@show')->name('show');
+        Route::get('/edit/{attachment}', 'AttachmentController@edit')->name('edit');
+        Route::post('/update/{attachment}', 'AttachmentController@update')->name('update');
+        Route::get('/destroy/{attachment}', 'AttachmentController@destroy')->name('destroy');
+        Route::get('/download/{attachment}', 'AttachmentController@download')->name('download');
+    });
+
     Route::get('/', 'EventoController@index')->name('index');
     Route::get('/create/', 'EventoController@create')->name('create');
     Route::post('/store/', 'EventoController@store' )->name('store');

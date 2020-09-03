@@ -120,6 +120,10 @@ class User extends Authenticatable // implements MustVerifyEmail
         return $this->hasMany('App\Models\Evento\Tag');
     }
 
+    public function eventoAttachments(){
+        return $this->hasMany('App\Models\Evento\Attachment');
+    }
+
     public static function register(string $name, string $email, string $password): self
     {
         return static::create([
