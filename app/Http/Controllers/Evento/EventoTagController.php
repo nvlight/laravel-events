@@ -12,13 +12,6 @@ class EventoTagController extends Controller
 {
     public function index()
     {
-        // не можем получить нужны поля, поэтому вариант не подходит
-        //$eventos = auth()->user()->eventos()->pluck('id');
-        //$tags = auth()->user()->eventoTags()->pluck('id');
-        //$eventotags = EventoTag::whereIn('evento_id',$eventos)
-        //    ->whereIn('tag_id',$tags)
-        //    ->get();
-
         $eventotags = EventoTag::
             leftJoin('evento_eventos','evento_eventos.id','=','evento_evento_tags.evento_id')
             ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')

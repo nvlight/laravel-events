@@ -340,6 +340,17 @@ Route::group([
         Route::get('/download/{attachment}', 'AttachmentController@download')->name('download');
     });
 
+    Route::group(['prefix' => '/eventotagvalue', 'as' => 'eventotagvalue.'], function () {
+        Route::get('/', 'EventoTagValueController@index')->name('index');
+        Route::get('/create/', 'EventoTagValueController@create')->name('create');
+        Route::post('/store/', 'EventoTagValueController@store' )->name('store');
+        Route::get('/show/{eventoTagValue}', 'EventoTagValueController@show')->name('show');
+        Route::get('/edit/{eventoTagValue}', 'EventoTagValueController@edit')->name('edit');
+        Route::post('/update/{eventoTagValue}', 'EventoTagValueController@update')->name('update');
+        Route::get('/destroy/{eventoTagValue}', 'EventoTagValueController@destroy')->name('destroy');
+        Route::get('/download/{eventoTagValue}', 'EventoTagValueController@download')->name('download');
+    });
+
     Route::get('/', 'EventoController@index')->name('index');
     Route::get('/create/', 'EventoController@create')->name('create');
     Route::post('/store/', 'EventoController@store' )->name('store');
