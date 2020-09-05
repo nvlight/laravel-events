@@ -2,6 +2,7 @@
 
 @section('content')
     <h2>Evento/EventoTagValue/index</h2>
+    <p><a href="{{ route('cabinet.evento.eventotagvalue.create') }}">eventoTagValue create</a></p>
 
     @if($eventoTagValues)
         <table>
