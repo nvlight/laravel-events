@@ -1,7 +1,7 @@
 @extends('layouts.evento')
 
 @section('content')
-    <h2>Evento/Tag/Create</h2>
+    <h2>Evento/Category/Create</h2>
 
     <div class="card-body">
         @if(count($errors) > 0)
