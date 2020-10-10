@@ -3,6 +3,7 @@
 namespace App\Models\Evento;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 /**
  * App\Models\App\Evento
@@ -19,4 +20,8 @@ class Evento extends Model
     protected $fillable = [
         'user_id', 'description', 'date'
     ];
+
+    public function getDateAttribute() {
+        return $this->attributes['date'] = (new Carbon($this->attributes['date']))->format('d.m.Y');
+    }
 }

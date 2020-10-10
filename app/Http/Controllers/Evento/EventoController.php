@@ -5,11 +5,27 @@ namespace App\Http\Controllers\Evento;
 use App\Http\Requests\Evento\EventoRequest;
 use App\Models\Evento\Evento;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Collection;
 
 class EventoController extends Controller
 {
+    /**/
+    private function getEventoTree(Collection $eventos)
+    {
+        $eventosWithAllColumnsArray = $eventos->toArray();
+
+        $eventosWithAllColumnsArrayFormatted = [];
+        foreach($eventosWithAllColumnsArray as $j => $v){
+            $eventosWithAllColumnsArrayFormatted[$v['evento_id']][$v['evento_evento_category_id']][] = $v;
+        }
+
+        return $eventosWithAllColumnsArrayFormatted;
+    }
+
     public function index()
     {
+        //Evento::all()->dd();
+
         $eventos = auth()->user()->eventos;
 
         $eventosWithAllColumns = Evento::
@@ -21,7 +37,7 @@ class EventoController extends Controller
             ->where('evento_eventos.user_id','=',auth()->id())
             ->where('evento_categories.user_id','=',auth()->id())
             ->where('evento_tags.user_id','=',auth()->id())
-            ->select('evento_eventos.id as evento_id', 'evento_eventos.description as evento_description', 'evento_eventos.date as evento_date',
+            ->select('evento_eventos.id as evento_id', 'evento_eventos.description as evento_description', 'evento_eventos.date as evento_date', 'evento_eventos.date as date',
                 'evento_categories.id as evento_category_id', 'evento_categories.name as evento_category_name',
                 'evento_evento_categories.id as evento_evento_category_id',
                 'evento_tags.id as evento_tag_id', 'evento_tags.name as evento_tag_name', 'evento_tags.color as evento_tag_color',
@@ -32,8 +48,12 @@ class EventoController extends Controller
             )
             ->orderBy('evento_eventos.date')
             ->get();
+        //dump($eventosWithAllColumns);
 
-        return view('cabinet.evento.index', compact('eventos','eventosWithAllColumns'));
+        $eventosWithAllColumnsArrayFormatted = $this->getEventoTree($eventosWithAllColumns);
+        //dd($eventosWithAllColumnsArrayFormatted);
+
+        return view('cabinet.evento.index', compact('eventos','eventosWithAllColumns', 'eventosWithAllColumnsArrayFormatted'));
     }
 
     public function create()

@@ -6,10 +6,10 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel-Evento') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
+    <!-- Styles -->
     <link href="{{ asset('bootstrap-5.0.0-alpha2-dist/css/bootstrap.css') }}" rel="stylesheet">
-{{--    <link rel="stylesheet" href="{{asset('css/tailwindcss/tailwindcss.css')}}">--}}
 
 </head>
 <body>

@@ -282,12 +282,13 @@ Route::group(
     }
 );
 
-Route::group([
-    'prefix' => 'cabinet/evento', // url
-    'as' => 'cabinet.evento.',    // route_name
-    'namespace' => 'Evento',
-    'middleware' => ['auth'],
-], function () {
+Route::group(
+    [
+        'prefix' => 'cabinet/evento', // url
+        'as' => 'cabinet.evento.',    // route_name
+        'namespace' => 'Evento',
+        'middleware' => ['auth'],
+    ], function () {
 
     Route::group(['prefix' => '/tag', 'as' => 'tag.'], function () {
         Route::get('/', 'TagController@index')->name('index');
@@ -359,4 +360,13 @@ Route::group([
     Route::post('/update/{evento}', 'EventoController@update')->name('update');
     Route::get('/destroy/{evento}', 'EventoController@destroy')->name('destroy');
 
+});
+
+Route::group([
+    'prefix' => 'bootstrap5', // url
+    'as' => 'bootstrap5.',    // route_name
+    'namespace' => 'bootstrap5',
+    'middleware' => ['auth'],
+], function () {
+    Route::get('/', [App\Http\Controllers\Bootstrap5\Bootstrap5::class, 'index'])->name('index');
 });
