@@ -35,8 +35,8 @@ class EventoController extends Controller
             ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
             ->leftJoin('evento_evento_tag_values','evento_evento_tag_values.evento_evento_tags_id','=','evento_evento_tags.id')
             ->where('evento_eventos.user_id','=',auth()->id())
-            ->where('evento_categories.user_id','=',auth()->id())
-            ->where('evento_tags.user_id','=',auth()->id())
+            //->where('evento_categories.user_id','=',auth()->id())
+            //->where('evento_tags.user_id','=',auth()->id())
             ->select('evento_eventos.id as evento_id', 'evento_eventos.description as evento_description', 'evento_eventos.date as evento_date', 'evento_eventos.date as date',
                 'evento_categories.id as evento_category_id', 'evento_categories.name as evento_category_name',
                 'evento_evento_categories.id as evento_evento_category_id',
@@ -67,9 +67,11 @@ class EventoController extends Controller
 
         $attributes += ['user_id' => auth()->id()];
 
-        Evento::create($attributes);
+        $evento = Evento::create($attributes);
 
-        return back();
+        session()->flash('created', 'sucess created');
+
+        return redirect()->route('cabinet.evento.edit', $evento);
     }
 
     public function show(Evento $evento)
@@ -94,6 +96,8 @@ class EventoController extends Controller
 
         $evento->update($attributes);
 
+        session()->flash('saved', 'sucess updated');
+
         return back();
     }
 
@@ -103,6 +107,8 @@ class EventoController extends Controller
 
         $evento->delete();
 
-        return back();
+        session()->flash('deleted', 'sucess deleted');
+
+        return redirect()->route('cabinet.evento.index');
     }
 }

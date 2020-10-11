@@ -14,6 +14,12 @@
                 <a class="" href="{{ route('cabinet.evento.attachment.index') }}">attachment/index</a>
             </p>
 
+            @if(session()->has('deleted'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session()->get('deleted') }}
+                </div>
+            @endif
+
             @if($eventosWithAllColumnsArrayFormatted)
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped table-hover ">
@@ -24,6 +30,7 @@
                             <th class="">categories</th>
                             <th class="">tags/vals/caps</th>
                             <th class="">actions</th>
+                            <th>attachments</th>
                         </tr>
                         @foreach($eventosWithAllColumnsArrayFormatted as $eventoKey => $eventoId)
                             @foreach($eventoId as $categoryKey => $eventoCategoryId)
@@ -31,7 +38,11 @@
                                     <td class="">{{$eventoCategoryId[0]['evento_id'] }}</td>
                                     <td class="">{{$eventoCategoryId[0]['evento_description'] }}</td>
                                     <td class="">{{$eventoCategoryId[0]['date'] }}</td>
-                                    <td class="">{{$eventoCategoryId[0]['evento_category_name'] }}</td>
+                                    <td class="">
+                                        {{$eventoCategoryId[0]['evento_category_name'] }}
+                                        <br>
+                                        <a href="">add category</a>
+                                    </td>
 
                                     <td class="">
                                         <div class="">
@@ -51,16 +62,21 @@
 
                                             @endforeach
                                         </div>
+                                        <a href="">add tag</a>
+                                        <a href="">add tagValue</a>
                                     </td>
                                     <td class="border px-4 py-2">
                                         @php //$fistCategoryForEventoId = array_key_first($eventoId); dd($eventoId[$fistCategoryForEventoId][0]['evento_id']); @endphp
                                         <?php //dd($eventoId); ?>
-                                        <a href="{{ route('cabinet.evento.show',    $eventoKey ) }}" class="">show </a>
-                                        <a href="{{ route('cabinet.evento.edit',    $eventoKey ) }}" class="">update </a>
-                                        <a href="{{ route('cabinet.evento.destroy', $eventoKey ) }}" class="">delete </a>
-                                        <a href="">add tag /</a>
-                                        <a href="">add tagValue /</a>
-                                        <a href="">add attachment /</a>
+                                        <a href="{{ route('cabinet.evento.show',    $eventoKey ) }}" class="">show</a>
+                                        <a href="{{ route('cabinet.evento.edit',    $eventoKey ) }}" class="">edit</a>
+                                        <a href="{{ route('cabinet.evento.destroy', $eventoKey ) }}" class="">delete</a>
+                                        <br>
+
+
+                                    </td>
+                                    <td>
+                                        <a href="">add new</a>
                                     </td>
                                 </tr>
                             @endforeach

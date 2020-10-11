@@ -65,6 +65,14 @@
             ],
             [
                 'role' => 'user',
+                'url' => 'cabinet/evento',
+                'title' => 'Evento',
+                'svg_class_1' => $mainMenuSVGclass1,
+                //'svg' => '<svg height="32" width="28" class="octicon device-camera-video __SVG_REPLACE_CLASS__" enable-background="new 0 0 24 24"version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path clip-rule="evenodd" d="M22.506,21v0.016L17,15.511V19c0,1.105-0.896,2-2,2h-1.5H3H2c-1.104,0-2-0.895-2-2  v-1l0,0V6l0,0V5c0-1.104,0.896-1.999,2-1.999h1l0,0h10.5l0,0H15c1.104,0,2,0.895,2,1.999v3.516l5.5-5.5V3.001  c0.828,0,1.5,0.671,1.5,1.499v15C24,20.327,23.331,20.996,22.506,21z" fill-rule="evenodd"/></svg>',
+                'svg' => '<svg height="32" width="28" class="octicon octicon-ruby __SVG_REPLACE_CLASS__" viewBox="0 0 16 16" version="1.1" aria-hidden="true"><path fill-rule="evenodd" d="M13 6l-5 5V4h3l2 2zm3 0l-8 8-8-8 4-4h8l4 4zm-8 6.5L14.5 6l-3-3h-7l-3 3L8 12.5z"></path></svg>',
+            ],
+            [
+                'role' => 'user',
                 'url' => 'youtube',
                 'title' => 'Youtube',
                 'svg_class_1' => $mainMenuSVGclass1,
@@ -104,7 +112,6 @@
                 'svg_class_1' => $mainMenuSVGclass1,
                 'svg' => '<svg height="32" width="28" class="octicon device-camera-video __SVG_REPLACE_CLASS__" enable-background="new 0 0 24 24"version="1.1" viewBox="0 0 24 24" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path clip-rule="evenodd" d="M22.506,21v0.016L17,15.511V19c0,1.105-0.896,2-2,2h-1.5H3H2c-1.104,0-2-0.895-2-2  v-1l0,0V6l0,0V5c0-1.104,0.896-1.999,2-1.999h1l0,0h10.5l0,0H15c1.104,0,2,0.895,2,1.999v3.516l5.5-5.5V3.001  c0.828,0,1.5,0.671,1.5,1.499v15C24,20.327,23.331,20.996,22.506,21z" fill-rule="evenodd"/></svg>',
             ],
-
         ];
         foreach($mainMenuData as &$menu)
             if (array_key_exists('svg_class_1', $menu))
