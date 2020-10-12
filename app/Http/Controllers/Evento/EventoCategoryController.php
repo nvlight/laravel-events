@@ -90,31 +90,24 @@ class EventoCategoryController extends Controller
     }
 
     // toDo -- remove later
-    public function createAjaxTest(Request $request)
+    public function destroyAjaxTest(EventoCategory $eventocategory)
     {
-        $rs = ['success' => 1, 'message' => 'category success added'];
-        try{
-            $attributes['evento_id'] = 23;
-            $attributes['category_id'] = 13;
-            $eventoCategory = EventoCategory::create($attributes);
-            $rs['category_name'] = Category::where('id', '=', $eventoCategory->category_id)
-                ->first()->name;
-        }catch (\Exception $e){
-            $rs = ['success' => 0, 'message' => 'error'];
-            logger('error with ' . __METHOD__ . ' '
-                . implode(' | ', [
-                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-                ])
-            );
+        $rs = ['success' => 1, 'message' => 'eventocategory success deleted!'];
+        if (auth()->user()->cannot('delete', $eventocategory)){
+            $rs = ['success' => 0, 'message' => 'cant delete not my own eventocategory'];
         }
-        dump($rs);
+
+        $eventocategory->delete();
+
+        die(json_encode($rs));
     }
 
-    public function createAjax(Request $request)
+    /**
+     *  Получение списка категорий пользователя
+     */
+    public function createAjax()
     {
-        //dump($request);
         $categories = auth()->user()->eventoCategories->toArray();
-        //dump($categories);
 
         $categoriesWithNeedColumns = [];
         $needColumns = ['id', 'parent_id', 'name'];
@@ -133,11 +126,13 @@ class EventoCategoryController extends Controller
         die(json_encode($categoriesWithNeedColumns));
     }
 
+    /**
+     *  Сохранение новой категории
+     */
     public function storeAjax(EventoCategoryRequest $request)
     {
         // todo - подделка evento_id
         // todo - дублирование category - пока возможна работа только с одной категорией.
-
         //dd($request->all());
 
         $attributes = $request->validated();
@@ -145,8 +140,9 @@ class EventoCategoryController extends Controller
         $rs = ['success' => 1, 'message' => 'category success added'];
         try{
             $eventoCategory = EventoCategory::create($attributes);
-            $rs['category_name'] = Category::where('id', '=', $eventoCategory->category_id)
-                ->first()->name;
+            $rsCategory = Category::where('id', '=', $eventoCategory->category_id)->first();
+            $rs['category_name'] = $rsCategory->name;
+            $rs['eventocategory_id'] = $eventoCategory->id;
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
             logger('error with ' . __METHOD__ . ' '
@@ -158,4 +154,20 @@ class EventoCategoryController extends Controller
 
         die(json_encode($rs));
     }
+
+    /**
+     *  Удаление категории
+     */
+    public function destroyAjax(EventoCategory $eventocategory)
+    {
+        $rs = ['success' => 1, 'message' => 'eventocategory success deleted!'];
+        if (auth()->user()->cannot('delete', $eventocategory)){
+            $rs = ['success' => 0, 'message' => 'cant delete not my own eventocategory'];
+        }
+
+        $eventocategory->delete();
+
+        die(json_encode($rs));
+    }
+
 }

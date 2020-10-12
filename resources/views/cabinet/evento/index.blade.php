@@ -42,13 +42,16 @@
                                     <td class="">{{$eventoCategoryId[0]['evento_description'] }}</td>
                                     <td class="">{{$eventoCategoryId[0]['date'] }}</td>
                                     <td class="category_td">
-                                        {{ $eventoCategoryId[0]['evento_category_name'] }}
-                                        <br>
+                                        @if($eventoCategoryId[0]['evento_category_name'])
+                                            <div>
+                                                {{ $eventoCategoryId[0]['evento_category_name'] }} <a href="{{ route('cabinet.evento.eventocategory.destroy', $eventoCategoryId[0]['evento_evento_category_id']) }}" class="delete_category" data-categoryId="{{ $eventoCategoryId[0]['evento_evento_category_id'] }}">delete</a>
+                                            </div>
+                                        @endif
+
                                         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-category-modal">
                                             add category
                                         </button>
                                     </td>
-
                                     <td class="">
                                         <div class="">
                                             @foreach($eventoCategoryId as $eventoTagId => $eventoTags)
@@ -115,8 +118,8 @@
                 </div>
                 <form action="{{ route('cabinet.evento.eventocategory.store_ajax') }}" method="POST" name="addCategoryForm">
                     <div class="modal-body">
-                        <p>Modal body text goes here.</p>
-                        <select name="categories">
+                        <p>Choose need category</p>
+                        <select name="categories" class="form-select">
                         </select>
                     </div>
                     <div class="modal-footer">
