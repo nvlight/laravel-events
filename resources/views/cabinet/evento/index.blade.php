@@ -3,6 +3,9 @@
 @section('content')
     <main>
         <div class="container">
+            <p>
+                <a href="{{ url('/') }}">Home</a>
+            </p>
             <h1 class="">Evento/index</h1>
             <p class="">
                 <a class="" href="{{ route('cabinet.evento.create') }}">create new evento</a>
@@ -22,7 +25,7 @@
 
             @if($eventosWithAllColumnsArrayFormatted)
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover ">
+                    <table class="table table-bordered table-striped ">
                         <tr>
                             <th class="">#</th>
                             <th class="">Description</th>
@@ -34,14 +37,16 @@
                         </tr>
                         @foreach($eventosWithAllColumnsArrayFormatted as $eventoKey => $eventoId)
                             @foreach($eventoId as $categoryKey => $eventoCategoryId)
-                                <tr>
-                                    <td class="">{{$eventoCategoryId[0]['evento_id'] }}</td>
+                                <tr data-evento-id="{{$eventoCategoryId[0]['evento_id'] }}">
+                                    <td class="evento_id">{{$eventoCategoryId[0]['evento_id'] }}</td>
                                     <td class="">{{$eventoCategoryId[0]['evento_description'] }}</td>
                                     <td class="">{{$eventoCategoryId[0]['date'] }}</td>
-                                    <td class="">
-                                        {{$eventoCategoryId[0]['evento_category_name'] }}
+                                    <td class="category_td">
+                                        {{ $eventoCategoryId[0]['evento_category_name'] }}
                                         <br>
-                                        <a href="">add category</a>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-category-modal">
+                                            add category
+                                        </button>
                                     </td>
 
                                     <td class="">
@@ -50,7 +55,7 @@
                                                 @php //dd($eventoCategoryId); @endphp
 
                                                 <div class="lead d-flex mt-1" >
-                                                    <small class="badge p-2" style="background-color: {{ $eventoTags['evento_tag_color'] }};">
+                                                    <small class="badge p-2" style="background-color: {{ $eventoTags['evento_tag_color'] ?? '#fff' }};">
                                                         <span class="">{{ $eventoTags['evento_tag_name'] }}</span>
                                                         @if ($eventoTags['evento_evento_tag_value_value'] !== null && $eventoTags['evento_evento_tag_value_value'] !== 0)
                                                             <span class="badge bg-secondary" role="button" >
@@ -62,8 +67,13 @@
 
                                             @endforeach
                                         </div>
-                                        <a href="">add tag</a>
-                                        <a href="">add tagValue</a>
+                                        <br>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-tag-modal">
+                                            add tag
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-tagvalue-modal">
+                                            add tag value
+                                        </button>
                                     </td>
                                     <td class="border px-4 py-2">
                                         @php //$fistCategoryForEventoId = array_key_first($eventoId); dd($eventoId[$fistCategoryForEventoId][0]['evento_id']); @endphp
@@ -96,72 +106,64 @@
         </div>
     </footer>
 
-    <script>
-        var currentDeleteItemHref = null;
-        let deleteItemA = document.querySelectorAll('a.deleteItem');
-        if (deleteItemA.length){
-            for (let i=0; i<deleteItemA.length; i++){
-                deleteItemA[i].onclick = function (e) {
-                    e.stopImmediatePropagation();
-                    if (deleteItemA[i].hasAttribute('href')){
-                        let href = deleteItemA[i].getAttribute('href');
-                        currentDeleteItemHref = href;
-                        //console.log(href);
-                        dialogOpenBtnHandler();
+    <div class="modal fade" id="add-category-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add category for Evento</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('cabinet.evento.eventocategory.store_ajax') }}" method="POST" name="addCategoryForm">
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                        <select name="categories">
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        @csrf
+                        <input type="hidden" name="evento_id" value="0">
+                        <input type="hidden" name="category_id" value="0">
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-                        let deleteConfirmBtn = document.querySelector('.deleteConfirmBtn');
-                        if (deleteConfirmBtn){
-                            deleteConfirmBtn.onclick = function () {
-                                deleteConfirmBtnHandler(currentDeleteItemHref);
-                            }
-                        }
-                    }
-                    return false;
-                }
-            }
-        }
+    <div class="modal fade" id="add-tag-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add tag for Evento</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        let openDeactivateDialog = document.querySelector('#openDeactivateDialog');
-        if (openDeactivateDialog){
-            openDeactivateDialog.addEventListener('click', dialogOpenBtnHandler)
-        }
-
-        let cancelBtn = document.querySelector('.cancelBtn');
-        if (cancelBtn){
-            cancelBtn.addEventListener('click', dialogCloseBtnHandler);
-        }
-
-        let closeMainDialogOnDarkSide = document.querySelector('#main_dialog');
-        if (closeMainDialogOnDarkSide){
-            closeMainDialogOnDarkSide.onclick = function(e) {
-                //console.log(e.target.classList + ' clicked ' + Math.random(100));
-                let targetClass = '#main_dialog';
-                let isFindTarget = document.querySelector(targetClass);
-
-                if (e.target.classList.contains('modalBg') && isFindTarget ){
-                    isFindTarget.classList.toggle('d-none');
-                }
-            };
-        }
-
-        function dialogOpenBtnHandler() {
-            let targetClass = '#main_dialog';
-            let isFindTarget = document.querySelector(targetClass);
-            if (isFindTarget){
-                isFindTarget.classList.toggle('d-none');
-            }
-        }
-        function dialogCloseBtnHandler() {
-            let targetClass = '#main_dialog';
-            let isFindTarget = document.querySelector(targetClass);
-            if (isFindTarget){
-                isFindTarget.classList.toggle('d-none');
-            }
-        }
-        function deleteConfirmBtnHandler(href) {
-            document.location.href = href;
-        }
-
-    </script>
-
+    <div class="modal fade" id="add-tagvalue-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add tag value for Evento tag</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

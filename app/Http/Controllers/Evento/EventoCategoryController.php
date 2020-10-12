@@ -9,6 +9,8 @@ use App\Models\Evento\EventoCategory;
 use App\Models\Evento\EventoTag;
 use App\Models\Evento\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use PHPUnit\Util\Json;
 
 class EventoCategoryController extends Controller
 {
@@ -24,6 +26,7 @@ class EventoCategoryController extends Controller
 
         return view('cabinet.evento.eventocategory.index', compact('eventocategories'));
     }
+
     public function create()
     {
         $eventos = auth()->user()->eventos;
@@ -36,7 +39,7 @@ class EventoCategoryController extends Controller
     {
         $attributes = $request->validated();
 
-        // - нужно предусмотреть случай с дублированием Тега для Evento
+        // todo - нужно предусмотреть случай с дублированием Тега для Evento
 
         EventoCategory::create($attributes);
 
@@ -69,7 +72,7 @@ class EventoCategoryController extends Controller
 
         $attributes = $request->validated();
 
-        // + нужно не дать user-у изменить evento_id, котоый имеет input=hidden
+        // todo + нужно не дать user-у изменить evento_id, котоый имеет input=hidden
         $attributes['evento_id'] = $eventocategory->evento_id;
 
         $eventocategory->update($attributes);
@@ -84,5 +87,75 @@ class EventoCategoryController extends Controller
         $eventocategory->delete();
 
         return back();
+    }
+
+    // toDo -- remove later
+    public function createAjaxTest(Request $request)
+    {
+        $rs = ['success' => 1, 'message' => 'category success added'];
+        try{
+            $attributes['evento_id'] = 23;
+            $attributes['category_id'] = 13;
+            $eventoCategory = EventoCategory::create($attributes);
+            $rs['category_name'] = Category::where('id', '=', $eventoCategory->category_id)
+                ->first()->name;
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'error'];
+            logger('error with ' . __METHOD__ . ' '
+                . implode(' | ', [
+                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+                ])
+            );
+        }
+        dump($rs);
+    }
+
+    public function createAjax(Request $request)
+    {
+        //dump($request);
+        $categories = auth()->user()->eventoCategories->toArray();
+        //dump($categories);
+
+        $categoriesWithNeedColumns = [];
+        $needColumns = ['id', 'parent_id', 'name'];
+        foreach ($categories as $category){
+            $tmp = [];
+            foreach($needColumns as $column){
+                if (isset($category[$column])){
+                    $tmp[$column] = $category[$column];
+                }
+            }
+            if ($tmp){
+                $categoriesWithNeedColumns[] = $tmp;
+            }
+        }
+
+        die(json_encode($categoriesWithNeedColumns));
+    }
+
+    public function storeAjax(EventoCategoryRequest $request)
+    {
+        // todo - подделка evento_id
+        // todo - дублирование category - пока возможна работа только с одной категорией.
+
+        //dd($request->all());
+
+        $attributes = $request->validated();
+
+        $rs = ['success' => 1, 'message' => 'category success added'];
+        try{
+            $eventoCategory = EventoCategory::create($attributes);
+            $rs['category_name'] = Category::where('id', '=', $eventoCategory->category_id)
+                ->first()->name;
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'error'];
+            logger('error with ' . __METHOD__ . ' '
+                . implode(' | ', [
+                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+                ])
+            );
+        }
+
+        die(json_encode($rs));
     }
 }

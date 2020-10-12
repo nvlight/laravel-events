@@ -328,6 +328,12 @@ Route::group(
         Route::get('/edit/{eventocategory}', 'EventoCategoryController@edit')->name('edit');
         Route::post('/update/{eventocategory}', 'EventoCategoryController@update')->name('update');
         Route::get('/destroy/{eventocategory}', 'EventoCategoryController@destroy')->name('destroy');
+
+        // toDo -- remove them after
+        Route::get('/create_ajax_test/', 'EventoCategoryController@createAjaxTest' )->name('create_ajax_test');
+
+        Route::post('/create_ajax/', 'EventoCategoryController@createAjax' )->name('create_ajax');
+        Route::post('/store_ajax/', 'EventoCategoryController@storeAjax' )->name('store_ajax');
     });
 
     Route::group(['prefix' => '/attachment', 'as' => 'attachment.'], function () {
@@ -351,6 +357,10 @@ Route::group(
         Route::get('/destroy/{eventoTagValue}', 'EventoTagValueController@destroy')->name('destroy');
         Route::get('/download/{eventoTagValue}', 'EventoTagValueController@download')->name('download');
     });
+
+    //Route::group(['prefix' => '/api', 'as' => 'api.'], function () {
+    //    Route::post('/update/{eventoTagValue}', 'EventoTagValueController@update')->name('update');
+    //});
 
     Route::get('/', 'EventoController@index')->name('index');
     Route::get('/create/', 'EventoController@create')->name('create');
