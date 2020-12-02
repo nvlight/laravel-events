@@ -11,6 +11,11 @@
 |
 */
 
+$router->get('/chich', function () use ($router){
+    //dump($router);
+    return 'marin!';
+});
+
 Route::get('/', function () {
 
     $logined = auth()->id();
@@ -370,10 +375,31 @@ Route::group(
 });
 
 Route::group([
-    'prefix' => 'bootstrap5', // url
-    'as' => 'bootstrap5.',    // route_name
+    'prefix' => 'bootstrap5', // prefix for url
+    'as' => 'bootstrap5.',    // prefix for names
     'namespace' => 'bootstrap5',
     'middleware' => ['auth'],
 ], function () {
     Route::get('/', [App\Http\Controllers\Bootstrap5\Bootstrap5::class, 'index'])->name('index');
+});
+
+Route::get('test_get_query', function(){
+//    $userChunk = \App\Models\User::where('id','>=',0)->chunk(10,
+//        function($param){
+//            $userChunk = $param;
+//            dump($param);
+//        });
+//    dd($userChunk);
+    $users = \App\Models\User::query(
+        \App\Models\User::getQuery()->toSql())
+        ->forSitemap()
+        ->get()
+    ;
+    dump($users);
+    $users = \App\Models\User::
+        forSitemap()
+        ->getQuery()
+        ->get()
+    ;
+    dump($users);
 });

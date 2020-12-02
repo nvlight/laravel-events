@@ -320,4 +320,8 @@ class User extends Authenticatable // implements MustVerifyEmail
         return $this->belongsToMany(Advert::class, 'advert_favorites', 'user_id', 'advert_id');
     }
 
+    public function scopeForSitemap($query) {
+        return $query->select('phone','last_name')->where('status','active');
+    }
+
 }

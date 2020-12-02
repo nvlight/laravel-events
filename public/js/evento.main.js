@@ -17,7 +17,7 @@ function removeOptions(selectElement) {
 }
 
 function saveCurrentDataEventoId(){
-    var btnsAddCat = document.querySelectorAll('button[data-target="#add-category-modal"]');
+    var btnsAddCat = document.querySelectorAll('svg[data-target="#add-category-modal"]');
     for(let i=0; i<btnsAddCat.length; i++){
         btnsAddCat[i].addEventListener('click', function (e) {
             currentEventoId = this.parentElement.parentElement.getAttribute('data-evento-id');
@@ -28,53 +28,57 @@ function saveCurrentDataEventoId(){
 saveCurrentDataEventoId();
 
 var addCategoryModal = document.getElementById('add-category-modal');
-var myAddCategoryModal = new bootstrap.Modal(document.getElementById('add-category-modal'), {keyboard: false});
-addCategoryModal.addEventListener('shown.bs.modal', function (e) {
+if (addCategoryModal){
+    var myAddCategoryModal = new bootstrap.Modal(document.getElementById('add-category-modal'), {keyboard: false});
+}
+if (addCategoryModal) {
+    addCategoryModal.addEventListener('shown.bs.modal', function (e) {
 
-    //console.log(e);
-    //console.log(e.target.id);
-    const url = "/cabinet/evento/eventocategory/create_ajax/";
-    const params = "_token=" + token;
+        //console.log(e);
+        //console.log(e.target.id);
+        const url = "/cabinet/evento/eventocategory/create_ajax/";
+        const params = "_token=" + token;
 
-    const request = new XMLHttpRequest();
-    request.open("POST", url);
-    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    request.addEventListener("readystatechange", () => {
-        if(request.readyState === 4 && request.status === 200) {
-            let rs = JSON.parse(request.responseText);
-            if (rs.length){
-                var categoriesSelect = document.querySelector('form[name=addCategoryForm] select[name=categories]');
-                if (categoriesSelect){
-                    // очищение и заполнение селекта из полученных категорий
-                    removeOptions(categoriesSelect);
-                    for(let i=0; i<rs.length; i++){
-                        var option = document.createElement("option");
-                        option.text = rs[i]['name'];
-                        option.value = rs[i]['id'];
-                        categoriesSelect.add(option);
-                    }
-                    // первоначальное заполнение евенто_ид и категори_ид
-                    if (categoriesSelect.selectedOptions.length){
-                        let categoryId = categoriesSelect.selectedOptions[0].value;
-
-                        let eventoIdFormInput   = document.querySelector('form[name=addCategoryForm] input[name=evento_id]');
-                        let categoryIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=category_id]');
-
-                        if (categoryId && categoryIdFormInput){
-                            categoryIdFormInput.value = categoryId;
+        const request = new XMLHttpRequest();
+        request.open("POST", url);
+        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        request.addEventListener("readystatechange", () => {
+            if (request.readyState === 4 && request.status === 200) {
+                let rs = JSON.parse(request.responseText);
+                if (rs.length) {
+                    var categoriesSelect = document.querySelector('form[name=addCategoryForm] select[name=categories]');
+                    if (categoriesSelect) {
+                        // очищение и заполнение селекта из полученных категорий
+                        removeOptions(categoriesSelect);
+                        for (let i = 0; i < rs.length; i++) {
+                            var option = document.createElement("option");
+                            option.text = rs[i]['name'];
+                            option.value = rs[i]['id'];
+                            categoriesSelect.add(option);
                         }
-                        eventoIdFormInput.value = currentEventoId;
+                        // первоначальное заполнение евенто_ид и категори_ид
+                        if (categoriesSelect.selectedOptions.length) {
+                            let categoryId = categoriesSelect.selectedOptions[0].value;
 
-                        // all data prepared for add
-                        var addCategoryData = 'evento_id=' + currentEventoId + '&category_id=' + categoryId;
-                        //console.log(addCategoryData);
+                            let eventoIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=evento_id]');
+                            let categoryIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=category_id]');
+
+                            if (categoryId && categoryIdFormInput) {
+                                categoryIdFormInput.value = categoryId;
+                            }
+                            eventoIdFormInput.value = currentEventoId;
+
+                            // all data prepared for add
+                            var addCategoryData = 'evento_id=' + currentEventoId + '&category_id=' + categoryId;
+                            //console.log(addCategoryData);
+                        }
                     }
                 }
             }
-        }
+        });
+        request.send(params);
     });
-    request.send(params);
-});
+}
 
 
 // сохранение категории - перехват сабмита и отправка xhr запроса.
@@ -114,7 +118,13 @@ if (addCategoryForm) {
                             let need_tr = document.querySelector('tr[data-evento-id="'+currentEventoId+'"] .category_td');
 
                             // добавление ссылки, который будет производить удаление через перезагрузку страницы
-                            let delete_link = '<a href="/cabinet/evento/eventocategory/destroy/' + rs['eventocategory_id'] + '" class="delete_category" data-categoryId="' + rs['eventocategory_id'] + '">delete</a>';
+                            //let delete_link = '<a href="/cabinet/evento/eventocategory/destroy/' + rs['eventocategory_id'] + '" class="delete_category" data-categoryId="' + rs['eventocategory_id'] + '">delete</a>';
+                            let delete_link = '<a href="/cabinet/evento/eventocategory/destroy/' + rs['eventocategory_id'] + '"' +
+                                                   'class="delete_category" data-categoryId="' + rs['eventocategory_id'] + '">' +
+                                                    '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">' +
+                                                        '<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>' +
+                                                    '</svg>' +
+                                                '</a>';
                             let delete_link_div_wrapper = '<div>' + rs['category_name'] + ' ' + delete_link + '</div>';
                             need_tr.innerHTML =  delete_link_div_wrapper + need_tr.innerHTML;
 
@@ -232,4 +242,20 @@ function dialogCloseBtnHandler() {
 }
 function deleteConfirmBtnHandler(href) {
     document.location.href = href;
+}
+
+// evento delete confirmation
+let eventoDeleteLinks = document.querySelectorAll('.evento_delete');
+if (eventoDeleteLinks.length){
+    for(let i=0; i<eventoDeleteLinks.length; i++){
+        eventoDeleteLinks[i].onclick = function (e) {
+            e.stopImmediatePropagation();
+
+            if (!confirm('Delete item?')){
+                return false;
+            }
+
+            console.log('item deleted!');
+        };
+    }
 }

@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\Region;
 use Faker\Generator as Faker;
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-$factory->define(\App\Models\Region::class, function (Faker $faker) {
+$factory->define(Region::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->city,
         'slug' => $faker->unique()->slug(2),

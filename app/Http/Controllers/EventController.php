@@ -879,6 +879,7 @@ class EventController extends Controller
                 ->join('categories','categories.id', '=', 'events.category_id')
                 ->where('users.id','=',auth()->id())
             ;
+            //dump($events);
 
             $description = preg_replace('/[^a-zа-я\d_-]+/ui','',$description);
             if (mb_strlen($description) >= 3 ) {
@@ -897,7 +898,8 @@ class EventController extends Controller
                     'types.name as type_name', 'types.color')
                 //->groupBy('events.id', 'events.amount', 'types.id', 'date')
                 ->orderBy('date','desc');
-
+            //dump($events->toSql());
+            //dump($events->get());
             $events_count = $events->count();
 
             $events = $events

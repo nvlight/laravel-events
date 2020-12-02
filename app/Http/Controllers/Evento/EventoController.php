@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Evento;
 use App\Http\Requests\Evento\EventoRequest;
 use App\Models\Evento\Evento;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class EventoController extends Controller
@@ -14,11 +15,29 @@ class EventoController extends Controller
     {
         $eventosWithAllColumnsArray = $eventos->toArray();
 
+        //dump($eventosWithAllColumnsArray);
+
         $eventosWithAllColumnsArrayFormatted = [];
-        foreach($eventosWithAllColumnsArray as $j => $v){
-            $eventosWithAllColumnsArrayFormatted[$v['evento_id']][$v['evento_evento_category_id']][] = $v;
+        foreach($eventosWithAllColumnsArray as $j => $v)
+        {
+            $eventoId = $v['evento_id'];
+            $eventosWithAllColumnsArrayFormatted[$eventoId]['evento'] = $v;
+
+            //$eventosWithAllColumnsArrayFormatted[$v['evento_id']][$v['evento_evento_category_id']][] = $v;
+
+            $categories = [];
+            $tags = [];
+            foreach($eventosWithAllColumnsArray as $l => $g){
+                if ($g['evento_id'] === $eventoId && $g['evento_category_id']){
+                    $categories[] = $g;
+                }
+            }
+
+            $eventosWithAllColumnsArrayFormatted[$eventoId]['categories'] = $categories;
+            $eventosWithAllColumnsArrayFormatted[$eventoId]['tags']       = $tags;
         }
 
+        //dd($eventosWithAllColumnsArrayFormatted);
         return $eventosWithAllColumnsArrayFormatted;
     }
 
@@ -93,6 +112,7 @@ class EventoController extends Controller
         abort_if(auth()->user()->cannot('update', $evento), 403);
 
         $attributes = $request->validated();
+        $attributes['date'] = (new Carbon($attributes['date']))->format('Y-m-d');
 
         $evento->update($attributes);
 

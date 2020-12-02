@@ -38,6 +38,7 @@
                 <div class="form-group mt-2">
                     <button class="btn btn-success" type="submit">Save</button>
                     <a class="btn btn-danger" href="{{ route('cabinet.evento.destroy', $evento) }}">Delete</a>
+                    <a class="btn btn-primary" href="{{ route('cabinet.evento.create') }}">New Evento</a>
                 </div>
             </form>
         </table>

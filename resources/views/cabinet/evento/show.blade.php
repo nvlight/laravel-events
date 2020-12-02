@@ -14,7 +14,7 @@
             @endforeach
         </table>
         <div class="form-group mt-2">
-            <a class="btn btn-" href="{{ route('cabinet.evento.edit', $evento) }}">Edit</a>
+            <a class="btn btn-primary" href="{{ route('cabinet.evento.edit', $evento) }}">Edit</a>
             <a class="btn btn-danger" href="{{ route('cabinet.evento.destroy', $evento) }}">Delete</a>
         </div>
     </div>

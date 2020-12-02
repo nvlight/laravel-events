@@ -1,10 +1,11 @@
 <?php
 
 use Faker\Generator as Faker;
+use App\Models\Adverts\Category;
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-$factory->define(\App\Models\Adverts\Category::class, function (Faker $faker) {
+$factory->define(Category::class, function (Faker $faker) {
     return [
         'name' => $faker->unique()->name,
         'slug' => $faker->unique()->slug(2),
