@@ -313,6 +313,8 @@ Route::group(
         Route::get('/edit/{category}', 'CategoryController@edit')->name('edit');
         Route::post('/update/{category}', 'CategoryController@update')->name('update');
         Route::get('/destroy/{category}', 'CategoryController@destroy')->name('destroy');
+
+        Route::post('/store_ajax/', 'CategoryController@storeAjax' )->name('store_ajax');
     });
 
     Route::group(['prefix' => '/eventotag', 'as' => 'eventotag.'], function () {
@@ -337,7 +339,7 @@ Route::group(
         // toDo -- remove them after
         Route::get('/destroy_ajax_test/{eventocategory}', 'EventoCategoryController@destroyAjaxTest')->name('destroy_ajax_test');
 
-        Route::post('/create_ajax/', 'EventoCategoryController@createAjax' )->name('create_ajax');
+        Route::post('/get_user_categories/', 'EventoCategoryController@getUserCategories' )->name('get_user_categories');
         Route::post('/store_ajax/', 'EventoCategoryController@storeAjax' )->name('store_ajax');
         Route::delete('/destroy_ajax/{eventocategory}', 'EventoCategoryController@destroyAjax')->name('destroy_ajax');
     });

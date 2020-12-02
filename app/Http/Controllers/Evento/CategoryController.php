@@ -42,6 +42,36 @@ class CategoryController extends Controller
         return back();
     }
 
+    public function storeAjax(CategoryRequest $request)
+    {
+        $attributes = $request->validated();
+
+        $rs = ['success' => 1, 'message' => 'Категория добавлена!'];
+        try{
+            $attributes += ['slug' => Str::slug($attributes['name'])];
+            $attributes += ['user_id' => auth()->id()];
+
+            $category = Category::create($attributes);
+            $rs['category_name'] = $category->name;
+
+            if ($request->hasFile('img')){
+                $savedImgPath = $request->file('img')
+                    ->store(auth()->id(), ['disk' => 'local'] );
+                $attributes['img'] = $savedImgPath;
+            }
+
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'error'];
+            logger('error with ' . __METHOD__ . ' '
+                . implode(' | ', [
+                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+                ])
+            );
+        }
+
+        die(json_encode($rs));
+    }
+
     public function show(Category $category)
     {
         abort_if(auth()->user()->cannot('view', $category), 403);

@@ -5,10 +5,10 @@ if (findToken){
         token = findToken.getAttribute('content');
     }
 }
+let resultMessageInner = document.querySelector('form[name=addStandaloneCategoryForm] .resultMessage');
 
 /// ################################################
 // add category for evento
-
 function removeOptions(selectElement) {
     var i, L = selectElement.options.length - 1;
     for(i = L; i >= 0; i--) {
@@ -27,56 +27,60 @@ function saveCurrentDataEventoId(){
 }
 saveCurrentDataEventoId();
 
+//
+function getUserCategories()
+{
+    const url = "/cabinet/evento/eventocategory/get_user_categories/";
+    const params = "_token=" + token;
+
+    const request = new XMLHttpRequest();
+    request.open("POST", url);
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.addEventListener("readystatechange", () => {
+        if (request.readyState === 4 && request.status === 200) {
+            let rs = JSON.parse(request.responseText);
+            if (rs.length) {
+                var categoriesSelect = document.querySelector('form[name=addCategoryForm] select[name=categories]');
+                if (categoriesSelect) {
+                    // очищение и заполнение селекта из полученных категорий
+                    removeOptions(categoriesSelect);
+                    for (let i = 0; i < rs.length; i++) {
+                        var option = document.createElement("option");
+                        option.text = rs[i]['name'];
+                        option.value = rs[i]['id'];
+                        categoriesSelect.add(option);
+                    }
+                    // первоначальное заполнение евенто_ид и категори_ид
+                    if (categoriesSelect.selectedOptions.length) {
+                        let categoryId = categoriesSelect.selectedOptions[0].value;
+
+                        let eventoIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=evento_id]');
+                        let categoryIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=category_id]');
+
+                        if (categoryId && categoryIdFormInput) {
+                            categoryIdFormInput.value = categoryId;
+                        }
+                        eventoIdFormInput.value = currentEventoId;
+                    }
+                }
+            }
+        }
+    });
+    request.send(params);
+}
+
+// сохранение категории для Евенто, не просто для категории
 var addCategoryModal = document.getElementById('add-category-modal');
 if (addCategoryModal){
     var myAddCategoryModal = new bootstrap.Modal(document.getElementById('add-category-modal'), {keyboard: false});
 }
 if (addCategoryModal) {
-    addCategoryModal.addEventListener('shown.bs.modal', function (e) {
-
-        //console.log(e);
-        //console.log(e.target.id);
-        const url = "/cabinet/evento/eventocategory/create_ajax/";
-        const params = "_token=" + token;
-
-        const request = new XMLHttpRequest();
-        request.open("POST", url);
-        request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        request.addEventListener("readystatechange", () => {
-            if (request.readyState === 4 && request.status === 200) {
-                let rs = JSON.parse(request.responseText);
-                if (rs.length) {
-                    var categoriesSelect = document.querySelector('form[name=addCategoryForm] select[name=categories]');
-                    if (categoriesSelect) {
-                        // очищение и заполнение селекта из полученных категорий
-                        removeOptions(categoriesSelect);
-                        for (let i = 0; i < rs.length; i++) {
-                            var option = document.createElement("option");
-                            option.text = rs[i]['name'];
-                            option.value = rs[i]['id'];
-                            categoriesSelect.add(option);
-                        }
-                        // первоначальное заполнение евенто_ид и категори_ид
-                        if (categoriesSelect.selectedOptions.length) {
-                            let categoryId = categoriesSelect.selectedOptions[0].value;
-
-                            let eventoIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=evento_id]');
-                            let categoryIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=category_id]');
-
-                            if (categoryId && categoryIdFormInput) {
-                                categoryIdFormInput.value = categoryId;
-                            }
-                            eventoIdFormInput.value = currentEventoId;
-
-                            // all data prepared for add
-                            var addCategoryData = 'evento_id=' + currentEventoId + '&category_id=' + categoryId;
-                            //console.log(addCategoryData);
-                        }
-                    }
-                }
-            }
-        });
-        request.send(params);
+    addCategoryModal.addEventListener('shown.bs.modal', function (e)
+    {
+        if (resultMessageInner){
+            resultMessageInner.classList.add('d-none');
+        }
+        getUserCategories();
     });
 }
 
@@ -259,3 +263,55 @@ if (eventoDeleteLinks.length){
         };
     }
 }
+
+
+
+// #### add standalone category
+var addStandAloneCategoryBtnFind = document.querySelector('#addStandAloneCategoryBtnId');
+if (addStandAloneCategoryBtnFind){
+    addStandAloneCategoryBtnFind.onclick = function () {
+        const categoryAddRequestUrl = "/cabinet/evento/category/store_ajax/";
+        let name = 'default';
+        let parent_id = 0;
+
+        let realName = document.querySelector('form[name=addStandaloneCategoryForm] input[name=name]');
+        let realParentId = document.querySelector('form[name=addStandaloneCategoryForm] input[name=category_id]');
+        if (realName){
+            name = realName.value;
+        }
+        if (realParentId){
+            parent_id = realParentId.value;
+        }
+
+        const categoryAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id;
+
+        const categoryAddRequest = new XMLHttpRequest();
+        categoryAddRequest.open("POST", categoryAddRequestUrl);
+        categoryAddRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        categoryAddRequest.addEventListener("readystatechange", () => {
+            if (categoryAddRequest.readyState === 4 && categoryAddRequest.status === 200) {
+                let rs = JSON.parse(categoryAddRequest.responseText);
+                // теперь нужно показать успешность добавления, а также обновить селект сверху!
+                getUserCategories();
+                if (rs['success']){
+                    if (resultMessageInner){
+                        resultMessageInner.classList.remove('d-none');
+                        resultMessageInner.classList.remove('text-danger');
+                        resultMessageInner.classList.add('text-success');
+                        resultMessageInner.innerHTML = rs['message'];
+                        if (realName){
+                            realName.value = ''; 
+                        }
+                    }else{
+                        resultMessageInner.classList.remove('d-none');
+                        resultMessageInner.classList.add('text-danger');
+                        resultMessageInner.classList.remove('text-success');
+                        resultMessageInner.innerHTML = rs['message'];
+                    }
+                }
+            }
+        });
+        categoryAddRequest.send(categoryAddRequestParams);
+    }
+}
+// #### END

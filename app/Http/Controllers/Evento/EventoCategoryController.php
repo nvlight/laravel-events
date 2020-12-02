@@ -105,7 +105,7 @@ class EventoCategoryController extends Controller
     /**
      *  Получение списка категорий пользователя
      */
-    public function createAjax()
+    public function getUserCategories()
     {
         $categories = auth()->user()->eventoCategories->toArray();
 

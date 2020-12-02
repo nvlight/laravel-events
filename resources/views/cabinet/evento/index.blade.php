@@ -1,6 +1,34 @@
 @extends('layouts.evento')
 
 @section('content')
+    <style>
+        .accordion-item:first-of-type .accordion-button {
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+        }
+        .accordion-button:not(.collapsed) {
+            color: #0c63e4;
+            background-color: #e7f1ff;
+        }
+        [type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+            cursor: pointer;
+        }
+        .accordion-button {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            color: #212529;
+            background-color: transparent;
+            border: 1px solid rgba(0,0,0,.125);
+            border-radius: 0;
+            overflow-anchor: none;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,border-radius .15s ease;
+        }
+    </style>
+
     <main>
         <div class="container">
             <p>
@@ -133,23 +161,64 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add category for Evento</h5>
+                    <h5 class="modal-title">Add Evento Category && Add Standalone Category</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('cabinet.evento.eventocategory.store_ajax') }}" method="POST" name="addCategoryForm">
-                    <div class="modal-body">
-                        <p>Choose need category</p>
-                        <select name="categories" class="form-select">
-                        </select>
+
+                <div class="modal-body">
+                    <div class="accordion" id="accordionEventoCategory">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button btn-sm" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Add Evento Category
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-parent="#accordionEventoCategory">
+                                <div class="accordion-body">
+                                    <form action="{{ route('cabinet.evento.eventocategory.store_ajax') }}" method="POST" name="addCategoryForm">
+                                        <div class="modal-body">
+                                            <label for="addEventoCategoryModalId">Choose need category</label>
+                                            <select id="addEventoCategoryModalId" name="categories" class="form-select">
+                                            </select>
+                                        </div>
+                                        <div class="modal-footer">
+                                            @csrf
+                                            <input type="hidden" name="evento_id" value="0">
+                                            <input type="hidden" name="category_id" value="0">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">add category for Evento</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Add Standalone Category
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-parent="#accordionEventoCategory">
+                                <div class="accordion-body">
+                                    <form action="{{ route('cabinet.evento.category.store_ajax') }}" method="POST" name="addStandaloneCategoryForm">
+                                        @csrf
+                                        <input type="hidden" name="category_id" value="0">
+                                        <div class="modal-body">
+                                            <label for="addCategoryModalId">Category</label>
+                                            <input class="form-control" id="addCategoryModalId" type="text" name="name" value="" placeholder="type category">
+                                            <p class="message-text resultMessage d-none">Добавлено!</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button id="addStandAloneCategoryBtnId" type="button" class="btn btn-primary">add category</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        @csrf
-                        <input type="hidden" name="evento_id" value="0">
-                        <input type="hidden" name="category_id" value="0">
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
