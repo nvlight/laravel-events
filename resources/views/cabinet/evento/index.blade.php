@@ -57,8 +57,8 @@
                         <tr>
                             <th class="">#</th>
                             <th class="">categories</th>
-                            <th class="">Date</th>
                             <th class="">Description</th>
+                            <th class="">Date</th>
                             <th class="">tags/vals/caps</th>
                             <th class="">actions</th>
                             <th>attachments</th>
@@ -93,22 +93,25 @@
                                 <td class="">{{ $evento['evento']['evento_description'] }}</td>
                                 <td class="">{{ $evento['evento']['date'] }}</td>
 
-                                <td class="">
+                                <td class="tag_td">
                                     <div class="">
-{{--                                        @foreach($eventoCategoryId as $eventoTagId => $eventoTags)--}}
-{{--                                            @php //dd($eventoCategoryId); @endphp--}}
-
-{{--                                            <div class="lead d-flex mt-1" >--}}
-{{--                                                <small class="badge p-2" style="background-color: {{ $eventoTags['evento_tag_color'] ?? '#fff' }};">--}}
-{{--                                                    <span class="">{{ $eventoTags['evento_tag_name'] }}</span>--}}
-{{--                                                    @if ($eventoTags['evento_evento_tag_value_value'] !== null && $eventoTags['evento_evento_tag_value_value'] !== 0)--}}
-{{--                                                        <span class="badge bg-secondary" role="button" >--}}
-{{--                                                            {{ $eventoTags['evento_evento_tag_value_value'] }}--}}
-{{--                                                        </span>--}}
-{{--                                                    @endif--}}
-{{--                                                </small>--}}
-{{--                                            </div>--}}
-{{--                                        @endforeach--}}
+                                        @if(count($evento['tags']))
+                                            @foreach($evento['tags'] as $k => $tag)
+                                                <div>
+                                                    {{ $tag['evento_tag_name'] }}
+                                                    @if ($tag['evento_evento_tag_value_value'])
+                                                        ({{ $tag['evento_evento_tag_value_value'] }})
+                                                    @endif
+                                                    <?php // {{ route('cabinet.evento.eventocategory.destroy', $category['evento_evento_category_id']) }} ?>
+                                                    <a href=""
+                                                       class="delete_tag" data-tagId="{{ $tag['evento_evento_tag_id'] }}">
+                                                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">
+                                                            <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                                                        </svg>
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
                                     {{-- add new tag Icon --}}
                                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
@@ -227,15 +230,75 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add tag for Evento</h5>
+                    <h5 class="modal-title">Add Evento Tag && Add Standalone Tag</h5>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
+
                 <div class="modal-body">
-                    <p>Modal body text goes here.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <div class="accordion" id="accordionEventoTag">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading3">
+                                <button class="accordion-button btn-sm" type="button" data-toggle="collapse" data-target="#collapse3" aria-expanded="true" aria-controls="collapse3">
+                                    Add Evento Tag
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse show" aria-labelledby="heading3" data-parent="#accordionEventoTag">
+                                <div class="accordion-body">
+                                    <form action="{{ route('cabinet.evento.eventotag.store_ajax') }}" method="POST" name="addTagForm">
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <label class="mr-3" for="addEventoTagModalId">Choose need tag</label>
+                                                <select id="addEventoTagModalId" name="tags" class="form-select">
+                                                </select>
+                                            </div>
+                                            <div class="input-group ">
+                                                <label class="mr-3" for="addEventoTagValueModalId">Tag Value</label>
+                                                <input id="addEventoTagValueModalId" type="text" name="value" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            @csrf
+                                            <input type="hidden" name="evento_id" value="0">
+                                            <input type="hidden" name="tag_id" value="0">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">add tag for Evento</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading4">
+                                <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                                    Add Standalone Tag
+                                </button>
+                            </h2>
+                            <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-parent="#accordionEventoTag">
+                                <div class="accordion-body">
+                                    <form action="{{ route('cabinet.evento.eventotag.store_ajax') }}" method="POST" name="addStandaloneTagForm">
+                                        @csrf
+                                        <input type="hidden" name="tag_id" value="0">
+                                        <div class="modal-body">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" id="addTagModalId">Tag name</span>
+                                                <input class="form-control" type="text" name="name" value="" placeholder="type tag">
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="addTagModalId">Tag color</span>
+                                                <input class="form-control" type="text" name="color" value="" placeholder="type tag color">
+                                            </div>
+                                            <p class="message-text resultMessage d-none">Добавлено!</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button id="addStandAloneTagBtnId" type="button" class="btn btn-primary">add tag</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>

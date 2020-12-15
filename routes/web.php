@@ -303,6 +303,8 @@ Route::group(
         Route::get('/edit/{tag}', 'TagController@edit')->name('edit');
         Route::post('/update/{tag}', 'TagController@update')->name('update');
         Route::get('/destroy/{tag}', 'TagController@destroy')->name('destroy');
+
+        Route::post('/store_ajax/', 'TagController@storeAjax' )->name('store_ajax');
     });
 
     Route::group(['prefix' => '/category', 'as' => 'category.'], function () {
@@ -325,6 +327,10 @@ Route::group(
         Route::get('/edit/{eventotag}', 'EventoTagController@edit')->name('edit');
         Route::post('/update/{eventotag}', 'EventoTagController@update')->name('update');
         Route::get('/destroy/{eventotag}', 'EventoTagController@destroy')->name('destroy');
+
+        Route::post('/store_ajax/', 'EventoTagController@storeAjax' )->name('store_ajax');
+        Route::post('/get_user_tags/', 'EventoTagController@getUserTags' )->name('get_user_tags');
+        Route::delete('/destroy_ajax/{eventotag}', 'EventoTagController@destroyAjax')->name('destroy_ajax');
     });
 
     Route::group(['prefix' => '/eventocategory', 'as' => 'eventocategory.'], function () {
@@ -385,23 +391,7 @@ Route::group([
     Route::get('/', [App\Http\Controllers\Bootstrap5\Bootstrap5::class, 'index'])->name('index');
 });
 
-Route::get('test_get_query', function(){
-//    $userChunk = \App\Models\User::where('id','>=',0)->chunk(10,
-//        function($param){
-//            $userChunk = $param;
-//            dump($param);
-//        });
-//    dd($userChunk);
-    $users = \App\Models\User::query(
-        \App\Models\User::getQuery()->toSql())
-        ->forSitemap()
-        ->get()
-    ;
-    dump($users);
-    $users = \App\Models\User::
-        forSitemap()
-        ->getQuery()
-        ->get()
-    ;
+Route::get('eloquent_test', function(){
+    $users = App\Models\User::avg('phone_verified');
     dump($users);
 });

@@ -23,7 +23,7 @@
             @if(($events_count))
                 <p>Найдено записей: {{($events_count)}}</p>
             @endif
-            <table class="table table-bordered table-striped table-cover">
+            <table class="table table-bordered table-striped table-responsive">
                 <tr>
                     <th>№</th>
                     <th>Категория</th>

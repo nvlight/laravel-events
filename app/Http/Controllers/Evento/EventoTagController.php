@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Evento;
 use App\Http\Requests\Evento\EventoTagRequest;
 use App\Models\Evento\Evento;
 use App\Models\Evento\EventoTag;
+use App\Models\Evento\EventoTagValue;
 use App\Models\Evento\Tag;
 use App\Http\Controllers\Controller;
 
@@ -39,6 +40,59 @@ class EventoTagController extends Controller
         EventoTag::create($attributes);
 
         return back();
+    }
+
+    public function storeAjax(EventoTagRequest $request)
+    {
+        // todo
+
+        $attributes = $request->validated();
+
+        $rs = ['success' => 1, 'message' => 'tag success added'];
+        try{
+            if ($request->has('value') && ( $request->get('value') !== null) ){
+                // нужно написать транзакцию, чтобы сразу же записать в таблицу EventoTagValue!
+                $tagValue = $request->get('value');
+                $result = null;
+                \DB::transaction(function () use($attributes, $tagValue, &$result) {
+                    $eventoTag = EventoTag::create($attributes);
+                    $rsTag = Tag::where('id', '=', $eventoTag->tag_id)->first();
+                    $rs['tag_name'] = $rsTag->name;
+                    $rs['eventotag_id'] = $eventoTag->id;
+
+                    $etv = EventoTagValue::find($eventoTag->id);
+                    if (!$etv){
+                        $etv = new EventoTagValue();
+                        $etv->evento_evento_tags_id = $eventoTag->id;
+                        $etv->value = $tagValue;
+                        $etv->save();
+                    }else{
+                        $etv->value = $tagValue;
+                        $etv->save();
+                    }
+                    $rs = ['success' => 1, 'message' => 'tag success added'];
+                    $rs['tag_name'] = $rsTag->name;
+                    $rs['tag_value'] = $tagValue;
+                    $rs['eventotag_id'] = $eventoTag->id;
+                    $result = $rs;
+                });
+                die(json_encode($result));
+            }else{
+                $eventoTag = EventoTag::create($attributes);
+                $rsTag = Tag::where('id', '=', $eventoTag->tag_id)->first();
+                $rs['tag_name'] = $rsTag->name;
+                $rs['eventotag_id'] = $eventoTag->id;
+            }
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'error'];
+            logger('error with ' . __METHOD__ . ' '
+                . implode(' | ', [
+                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+                ])
+            );
+        }
+
+        die(json_encode($rs));
     }
 
     public function show(EventoTag $eventotag)
@@ -82,5 +136,44 @@ class EventoTagController extends Controller
         $eventotag->delete();
 
         return back();
+    }
+
+    /**
+     *  Удаление категории
+     */
+    public function destroyAjax(EventoTag $eventotag)
+    {
+        $rs = ['success' => 1, 'message' => 'eventotag success deleted!'];
+        if (auth()->user()->cannot('delete', $eventotag)){
+            $rs = ['success' => 0, 'message' => 'cant delete not my own eventotag'];
+        }
+
+        $eventotag->delete();
+
+        die(json_encode($rs));
+    }
+
+    /**
+     *  Получение списка категорий пользователя
+     */
+    public function getUserTags()
+    {
+        $categories = auth()->user()->eventoTags->toArray();
+
+        $tagsWithNeedColumns = [];
+        $needColumns = ['id', 'parent_id', 'name'];
+        foreach ($categories as $category){
+            $tmp = [];
+            foreach($needColumns as $column){
+                if (isset($category[$column])){
+                    $tmp[$column] = $category[$column];
+                }
+            }
+            if ($tmp){
+                $tagsWithNeedColumns[] = $tmp;
+            }
+        }
+
+        die(json_encode($tagsWithNeedColumns));
     }
 }

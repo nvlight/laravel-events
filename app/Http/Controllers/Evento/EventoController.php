@@ -26,10 +26,16 @@ class EventoController extends Controller
             //$eventosWithAllColumnsArrayFormatted[$v['evento_id']][$v['evento_evento_category_id']][] = $v;
 
             $categories = [];
-            $tags = [];
             foreach($eventosWithAllColumnsArray as $l => $g){
                 if ($g['evento_id'] === $eventoId && $g['evento_category_id']){
-                    $categories[] = $g;
+                    $categories[$g['evento_evento_category_id']] = $g;
+                }
+            }
+
+            $tags = [];
+            foreach($eventosWithAllColumnsArray as $l => $g){
+                if ($g['evento_id'] === $eventoId && $g['evento_tag_id']){
+                    $tags[$g['evento_evento_tag_id']] = $g;
                 }
             }
 
@@ -37,6 +43,9 @@ class EventoController extends Controller
             $eventosWithAllColumnsArrayFormatted[$eventoId]['tags']       = $tags;
         }
 
+        //echo "<pre>";
+        //(print_r($eventosWithAllColumnsArrayFormatted));
+        //echo "</pre>";
         //dd($eventosWithAllColumnsArrayFormatted);
         return $eventosWithAllColumnsArrayFormatted;
     }

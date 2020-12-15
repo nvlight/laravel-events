@@ -6,6 +6,7 @@ use App\Models\Evento\Tag;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Evento\TagRequest;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TagController extends Controller
 {
@@ -35,6 +36,36 @@ class TagController extends Controller
         Tag::create($attributes);
 
         return back();
+    }
+
+    public function storeAjax(TagRequest $request)
+    {
+        $attributes = $request->validated();
+
+        $rs = ['success' => 1, 'message' => 'Тег добавлен!'];
+        try{
+            $attributes += ['slug' => Str::slug($attributes['name'])];
+            $attributes += ['user_id' => auth()->id()];
+
+            $category = Tag::create($attributes);
+            $rs['tag_name'] = $category->name;
+
+            if ($request->hasFile('img')){
+                $savedImgPath = $request->file('img')
+                    ->store(auth()->id(), ['disk' => 'local'] );
+                $attributes['img'] = $savedImgPath;
+            }
+
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'error'];
+            logger('error with ' . __METHOD__ . ' '
+                . implode(' | ', [
+                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+                ])
+            );
+        }
+
+        die(json_encode($rs));
     }
 
     public function show(Tag $tag)
