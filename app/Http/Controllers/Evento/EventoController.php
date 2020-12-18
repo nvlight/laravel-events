@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Evento;
 use App\Http\Requests\Evento\EventoRequest;
 use App\Models\Evento\Evento;
 use App\Http\Controllers\Controller;
+use App\Models\MGDebug;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class EventoController extends Controller
 {
@@ -50,11 +53,10 @@ class EventoController extends Controller
         return $eventosWithAllColumnsArrayFormatted;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         //Evento::all()->dd();
-
-        $eventos = auth()->user()->eventos;
+        //$eventos = auth()->user()->eventos;
 
         $eventosWithAllColumns = Evento::
               leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
@@ -74,14 +76,24 @@ class EventoController extends Controller
                 'evento_evento_tag_values.value as evento_evento_tag_value_value',
                 'evento_evento_tag_values.caption as evento_evento_tag_value_caption'
             )
-            ->orderBy('evento_eventos.date')
-            ->get();
-        //dump($eventosWithAllColumns);
+            ->orderBy('evento_eventos.date');
 
-        $eventosWithAllColumnsArrayFormatted = $this->getEventoTree($eventosWithAllColumns);
-        //dd($eventosWithAllColumnsArrayFormatted);
+        $eventosTree = $this->getEventoTree($eventosWithAllColumns->get());
 
-        return view('cabinet.evento.index', compact('eventos','eventosWithAllColumns', 'eventosWithAllColumnsArrayFormatted'));
+        $perPage = 5;
+        $currentPage = $request->input('page');
+        $currentPage = $currentPage == null ? 1 : $currentPage;
+        $offset = $currentPage == 1 ? 0 : $currentPage * $perPage - $perPage;
+
+        $eventos = array_slice($eventosTree, $offset, $perPage);
+
+        $paginator = new LengthAwarePaginator(
+            $eventos, count($eventosTree), $perPage, $currentPage,
+            ['path' => 'evento', 'pageName' => 'page']
+        );
+
+        return view('cabinet.evento.index',
+            compact('eventos', 'paginator'));
     }
 
     public function create()

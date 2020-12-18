@@ -51,7 +51,7 @@
                 </div>
             @endif
 
-            @if($eventosWithAllColumnsArrayFormatted)
+            @if($eventos)
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped ">
                         <tr>
@@ -63,10 +63,10 @@
                             <th class="">actions</th>
                             <th>attachments</th>
                         </tr>
-                        @foreach($eventosWithAllColumnsArrayFormatted as $eventoKey => $evento)
+                        @foreach($eventos as $eventoKey => $evento)
                             <?php //dd($evento); ?>
-                            <tr data-evento-id="{{ $eventoKey }}">
-                                <td class="evento_id">{{ $eventoKey }}</td>
+                            <tr data-evento-id="{{ $evento['evento']['evento_id'] }}">
+                                <td class="evento_id">{{ $evento['evento']['evento_id'] }}</td>
                                 <td class="category_td">
                                     <?php //dump($evento['categories']); ?>
                                     @if(count($evento['categories']))
@@ -122,18 +122,18 @@
                                 <td class="border px-4 py-2">
                                     @php //$fistCategoryForEventoId = array_key_first($eventoId); dd($eventoId[$fistCategoryForEventoId][0]['evento_id']); @endphp
                                     <?php //dd($eventoId); ?>
-                                    <a href="{{ route('cabinet.evento.show',    $eventoKey ) }}" class="" style="text-decoration: none; color: green;">
+                                    <a href="{{ route('cabinet.evento.show',    $evento['evento']['evento_id'] ) }}" class="" style="text-decoration: none; color: green;">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-square-text" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2.5a2 2 0 0 1 1.6.8L8 14.333 9.9 11.8a2 2 0 0 1 1.6-.8H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                                             <path fill-rule="evenodd" d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
                                         </svg>
                                     </a>
-                                    <a href="{{ route('cabinet.evento.edit',    $eventoKey ) }}" class="" style="text-decoration: none; color: mediumslateblue;" title="редактировать">
+                                    <a href="{{ route('cabinet.evento.edit',    $evento['evento']['evento_id'] ) }}" class="" style="text-decoration: none; color: mediumslateblue;" title="редактировать">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pen-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M13.498.795l.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001z"/>
                                         </svg>
                                     </a>
-                                    <a href="{{ route('cabinet.evento.destroy', $eventoKey ) }}" class="evento_delete" style="text-decoration: none; color: #C6443C;">
+                                    <a href="{{ route('cabinet.evento.destroy', $evento['evento']['evento_id'] ) }}" class="evento_delete" style="text-decoration: none; color: #C6443C;">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
                                         </svg>
@@ -146,6 +146,9 @@
                         @endforeach
                     </table>
                 </div>
+
+                {{ $paginator->links() }}
+
             @endif
 
         </div>
