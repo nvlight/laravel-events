@@ -317,6 +317,8 @@ Route::group(
         Route::get('/destroy/{category}', 'CategoryController@destroy')->name('destroy');
 
         Route::post('/store_ajax/', 'CategoryController@storeAjax' )->name('store_ajax');
+        Route::get('/index_ajax/', 'CategoryController@indexAjax' )->name('index_ajax');
+        Route::get('/destroy_ajax/{category}', 'CategoryController@destroyAjax')->name('destroy_ajax');
     });
 
     Route::group(['prefix' => '/eventotag', 'as' => 'eventotag.'], function () {

@@ -6,6 +6,7 @@ use App\Http\Requests\Evento\CategoryRequest;
 use App\Models\Evento\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
 class CategoryController extends Controller
@@ -15,6 +16,20 @@ class CategoryController extends Controller
         $categories = auth()->user()->eventoCategories;
 
         return view('cabinet.evento.category.index', compact('categories'));
+    }
+
+    public function indexAjax()
+    {
+        $categories = auth()->user()->eventoCategories;
+
+        $rs = ['success' => 1, 'message' => 'Категория добавлена!'];
+
+        $catsRender = View::make('cabinet.evento.ajax.category_list', compact('categories'))
+            ->render();
+
+        $rs['categories'] = $catsRender;
+
+        die(json_encode($rs));
     }
 
     public function create()
@@ -118,6 +133,26 @@ class CategoryController extends Controller
         $this->deleteImg($category);
 
         return back();
+    }
+
+    public function destroyAjax(Category $category)
+    {
+        abort_if(auth()->user()->cannot('delete', $category), 403);
+
+        try{
+            $category->delete();
+            $this->deleteImg($category);
+            $rs = ['success' => 1, 'message' => 'Category deleted!'];
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'error'];
+            logger('error with ' . __METHOD__ . ' '
+                . implode(' | ', [
+                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+                ])
+            );
+        }
+
+        die(json_encode($rs));
     }
 
     protected function deleteImg(Category $category)

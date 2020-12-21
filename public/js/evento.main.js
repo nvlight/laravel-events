@@ -70,6 +70,63 @@ function getUserCategories()
     request.send(params);
 }
 
+function getCategories()
+{
+    const url = "/cabinet/evento/category/index_ajax/";
+    const params = "_token=" + token;
+
+    const request = new XMLHttpRequest();
+    request.open("GET", url);
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.addEventListener("readystatechange", () => {
+        if (request.readyState === 4 && request.status === 200) {
+            let rs = JSON.parse(request.responseText);
+            if (rs['success'] === 1) {
+                let crudCats = document.querySelector('.crud_categories');
+                if (crudCats){
+                    crudCats.innerHTML = rs['categories']
+                    deleteCategoryForCrud();
+                }
+            }
+        }
+    });
+    request.send(params);
+}
+
+// category delete links
+function deleteCategoryForCrud()
+{
+    let deleteCategoryTagAForCrud = document.querySelectorAll('a.category_delete_for_crud');
+    if (deleteCategoryTagAForCrud.length) {
+        for (let i = 0; i < deleteCategoryTagAForCrud.length; i++) {
+            deleteCategoryTagAForCrud[i].onclick = function (e) {
+                e.stopImmediatePropagation();
+
+                let href = "/cabinet/evento/category/destroy_ajax/" + this.getAttribute('data-id');
+
+                const params = "_token=" + token;
+
+                const request = new XMLHttpRequest();
+                request.open("GET", href);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.addEventListener("readystatechange", () => {
+                    if (request.readyState === 4 && request.status === 200) {
+                        let rs = JSON.parse(request.responseText);
+                        if (rs['success'] === 1) {
+                            getCategories();
+                        }else{
+                            getCategories();
+                        }
+                    }
+
+                });
+                request.send(params);
+                return false;
+            }
+        }
+    }
+}
+
 //
 function getUserTags()
 {
@@ -119,10 +176,11 @@ if (addCategoryModal){
 
     addCategoryModal.addEventListener('shown.bs.modal', function (e)
     {
-        if (resultMessageInnerForStandaloneCategory){
-            resultMessageInnerForStandaloneCategory.classList.add('d-none');
-        }
+        // +plus плюсик нажат!
+        getCategories();
+        showCategoryAddSuccessMessage();
         getUserCategories();
+        hideCategoryAddSuccessMessage();
     });
 }
 
@@ -450,6 +508,7 @@ if (addStandAloneCategoryBtnFind){
                 let rs = JSON.parse(categoryAddRequest.responseText);
                 // теперь нужно показать успешность добавления, а также обновить селект сверху!
                 getUserCategories();
+                getCategories();
                 if (rs['success']){
                     if (resultMessageInnerForStandaloneCategory){
                         resultMessageInnerForStandaloneCategory.classList.remove('d-none');
@@ -459,6 +518,7 @@ if (addStandAloneCategoryBtnFind){
                         if (realName){
                             realName.value = '';
                         }
+                        waitAndHideCategoryAddSuccessMessage();
                     }else{
                         resultMessageInnerForStandaloneCategory.classList.remove('d-none');
                         resultMessageInnerForStandaloneCategory.classList.add('text-danger');
@@ -531,3 +591,22 @@ if (addStandAloneTagBtnFind){
     }
 }
 // #### END
+
+
+// ### show/hide && wait/hide CategoryAddSuccessMessage
+function hideCategoryAddSuccessMessage()
+{
+    if (resultMessageInnerForStandaloneCategory){
+        resultMessageInnerForStandaloneCategory.classList.add('d-none');
+    }
+}
+function showCategoryAddSuccessMessage()
+{
+    if (resultMessageInnerForStandaloneCategory){
+        resultMessageInnerForStandaloneCategory.classList.remove('d-none');
+    }
+}
+function waitAndHideCategoryAddSuccessMessage(time=2000)
+{
+    setTimeout(hideCategoryAddSuccessMessage, time);
+}

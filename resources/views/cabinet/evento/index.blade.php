@@ -167,7 +167,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Evento Category && Add Standalone Category</h5>
+                    <h6 class="modal-title">Add Evento Category && CRUD for Category</h6>
                     <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -201,7 +201,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingTwo">
                                 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Add Standalone Category
+                                    Category CRUD
                                 </button>
                             </h2>
                             <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-parent="#accordionEventoCategory">
@@ -210,15 +210,20 @@
                                         @csrf
                                         <input type="hidden" name="category_id" value="0">
                                         <div class="modal-body">
-                                            <label for="addCategoryModalId">Category</label>
-                                            <input class="form-control" id="addCategoryModalId" type="text" name="name" value="" placeholder="type category">
+                                            <label for="addCategoryModalId">New Category</label>
+                                            <input class="form-control" id="addCategoryModalId" type="text" name="name" value="" placeholder="type category name">
                                             <p class="message-text resultMessage d-none">Добавлено!</p>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <div class="" style="display: flex;justify-content: flex-end;">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right: 0.3em;">Close</button>
                                             <button id="addStandAloneCategoryBtnId" type="button" class="btn btn-primary">add category</button>
                                         </div>
+                                        <div class="crud_categories">
+
+                                        </div>
+
                                     </form>
+
                                 </div>
                             </div>
                         </div>

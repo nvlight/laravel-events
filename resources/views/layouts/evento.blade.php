@@ -18,6 +18,7 @@
     </div>
 
     <script src="{{ asset('bootstrap-5.0.0-alpha2-dist/js/bootstrap.js') }}"></script>
+
     <script src="{{ asset('js/evento.main.js') }}"></script>
 </body>
 </html>
