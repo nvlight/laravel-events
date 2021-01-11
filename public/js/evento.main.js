@@ -1,5 +1,7 @@
 var currentEventoId = 0, token = "some token...";
 var findToken = document.head.querySelector('meta[name="csrf-token"]');
+var addStandAloneCategoryBtnFind = document.querySelector('#addStandAloneCategoryBtnId');
+var editCategoryInputText = "";
 if (findToken){
     if (findToken.hasAttribute('content')){
         token = findToken.getAttribute('content');
@@ -7,6 +9,129 @@ if (findToken){
 }
 let resultMessageInnerForStandaloneCategory = document.querySelector('form[name=addStandaloneCategoryForm] .resultMessage');
 let resultMessageInnerForStandaloneTag = document.querySelector('form[name=addStandaloneTagForm] .resultMessage');
+
+//
+function categoryAddEditButtonCatch()
+{
+    var categoryAddEditButton = document.querySelectorAll('.category-add--edit-button');
+    console.log('categoryAddEditButton: '+categoryAddEditButton.length);
+
+    for(let i=0; i<categoryAddEditButton.length; i++){
+        // categoryAddEditButton[i].onclick = function (e) {
+        //     e.stopImmediatePropagation();
+        //     console.log(e);
+        //     console.log(e.target.parentElement.parentElement.id);
+        //     console.log('a stop!');
+        //     return false;
+        // }
+        categoryAddEditButton[i].addEventListener('click', categoryAddEditButtonHandler);
+    }
+}
+
+function removeOldAddCategoryButtons()
+{
+    let oldButtons = document.querySelectorAll('.add-category-crud--buttons');
+    if (oldButtons){
+        for(let i=0; i<oldButtons.length; i++){
+            oldButtons[i].remove();
+        }
+    }
+}
+
+function categoryAddEditButtonHandler(e)
+{
+    e.stopImmediatePropagation();
+    //console.log(e);
+    //console.log(e.target);
+    //console.log(e.target.parentElement);
+    let needTr = e.target.parentElement.parentElement;
+    //console.log(needTr);
+
+    if (needTr){
+        let nameTd = needTr.querySelector('.add-category-crud--name-field');
+        //console.log(nameTd);
+        if (nameTd){
+            // delete old div with confirm/cancel buttons.
+            removeOldAddCategoryButtons();
+            deleteInputForChangeCategoryText();
+
+            nameTd.innerHTML = nameTd.innerHTML;
+
+            addInputTagForEditCategoryText(needTr);
+            addButtonsForAddCategoryTd(nameTd);
+        }
+    }
+
+    //console.log(e.target.parentElement.parentElement.getAttribute('class'));
+    return false;
+}
+
+function deleteInputForChangeCategoryText()
+{
+    let input = document.querySelectorAll('.add-category-crud--name-field .text');
+    if (input){
+        for(let i=0; i<input.length; i++){
+            let innerInput = input[i].querySelector('input');
+            if (innerInput){
+                //input[i].innerHTML = innerInput.value;
+                input[i].innerHTML = editCategoryInputText;
+                break;
+            }
+        }
+    }
+}
+
+function addFocusForEditCategoryInput()
+{
+    let input = document.querySelector("input[name='crudEditCategoryInput']");
+    if (input){
+        editCategoryInputText = input.value;
+        input.focus();
+        console.log('current_input:'+editCategoryInputText);
+    }
+}
+
+function addInputTagForEditCategoryText(needTr)
+{
+    let categoryText = needTr.querySelector('.add-category-crud--name-field .text');
+    if (categoryText){
+        let newText = "<input class='form-control' name='crudEditCategoryInput' value='" + categoryText.innerHTML +  "' placeholder='type new category'>";
+        //console.log(newText);
+
+        // save current input value
+        editCategoryInputText = categoryText.innerHTML;
+
+        categoryText.innerHTML = newText;
+    }
+}
+
+function addButtonsForAddCategoryTd(nameTd)
+{
+    const url = "/cabinet/evento/category/get_change_category_buttons/";
+    const params = "_token=" + token;
+
+    const request = new XMLHttpRequest();
+    request.open("GET", url);
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.addEventListener("readystatechange", () => {
+        if (request.readyState === 4 && request.status === 200) {
+            let rs = JSON.parse(request.responseText);
+            //console.log('rs.length : '+rs.length);
+            if (rs.success) {
+                //console.log('we found him! '+rs.buttons)
+                nameTd.innerHTML = nameTd.innerHTML + rs.buttons;
+            }
+            addFocusForEditCategoryInput();
+            addCategoryCrudCancelHandler();
+            changeCategoryCrudHandle();
+        }
+    });
+    //request.addEventListener("load", () => { categoryAddEditButtonCatch(); });
+
+    request.send(params);
+}
+
+
 
 /// ################################################
 // add category for evento
@@ -64,9 +189,13 @@ function getUserCategories()
                         eventoIdFormInput.value = currentEventoId;
                     }
                 }
+                //
             }
+            //
         }
     });
+    //request.addEventListener("load", () => { categoryAddEditButtonCatch();});
+    //categoryAddEditButtonCatch();
     request.send(params);
 }
 
@@ -121,9 +250,15 @@ function deleteCategoryForCrud()
 
                 });
                 request.send(params);
+
+                getUserCategories();
+
                 return false;
             }
         }
+        removeOldAddCategoryButtons();
+        deleteInputForChangeCategoryText();
+        categoryAddEditButtonCatch();
     }
 }
 
@@ -198,7 +333,16 @@ if (addTagModal){
     });
 }
 
+// перехват кнопки ентер при добавлении CRUD категории
+// addStandaloneCategoryForm
+var addCategoryFormOnSubmit = document.querySelector('form[name=addStandaloneCategoryForm11111]');
+if (addCategoryFormOnSubmit){
 
+    if (addStandAloneCategoryBtnFind){
+        addEventListener('submit', addStandAloneCategoryBtnFindClick);
+        //addStandAloneCategoryBtnFind.onsubmit = addStandAloneCategoryBtnFindClick;
+    }
+}
 
 // сохранение категории - перехват сабмита и отправка xhr запроса.
 var addCategoryForm = document.querySelector('form[name=addCategoryForm]');
@@ -244,7 +388,8 @@ if (addCategoryForm) {
                                                         '<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>' +
                                                     '</svg>' +
                                                 '</a>';
-                            let delete_link_div_wrapper = '<div>' + rs['category_name'] + ' ' + delete_link + '</div>';
+                            let textHtml = '<span class="categoryNameText" data-textvalue="'+rs['category_name']+'">'+rs['category_name']+'</span>';
+                            let delete_link_div_wrapper = '<div>' + textHtml + delete_link + '</div>';
                             need_tr.innerHTML =  delete_link_div_wrapper + need_tr.innerHTML;
 
                             deleteEventoCategoryAddHandler();
@@ -275,6 +420,7 @@ if (addTagForm) {
                 let eventoIdFormInput = document.querySelector('form[name=addTagForm] input[name=evento_id]');
                 let tagIdFormInput = document.querySelector('form[name=addTagForm] input[name=tag_id]');
                 let tagValue = document.querySelector('form[name=addTagForm] input[name=value]');
+                let tagCaption = document.querySelector('form[name=addTagForm] input[name=caption]');
 
                 if (tagId && tagIdFormInput){
                     tagIdFormInput.value = tagId;
@@ -283,9 +429,12 @@ if (addTagForm) {
                 if (!tagValue){
                     tagValue.value = null;
                 }
+                if (!tagCaption){
+                    tagCaption.value = null;
+                }
 
                 // all data prepared for add
-                var addTagData = '&evento_id=' + currentEventoId + '&tag_id=' + tagId + '&value=' + tagValue.value;
+                var addTagData = '&evento_id=' + currentEventoId + '&tag_id=' + tagId + '&value=' + tagValue.value + '&caption=' + tagCaption.value
                 //console.log(addTagData);
 
                 // xhr
@@ -481,55 +630,69 @@ if (eventoDeleteLinks.length){
     }
 }
 
-// #### add standalone category
-var addStandAloneCategoryBtnFind = document.querySelector('#addStandAloneCategoryBtnId');
-if (addStandAloneCategoryBtnFind){
-    addStandAloneCategoryBtnFind.onclick = function () {
-        const categoryAddRequestUrl = "/cabinet/evento/category/store_ajax/";
-        let name = 'default';
-        let parent_id = 0;
+function addStandAloneCategoryBtnFindClick(e)
+{
+    e.preventDefault();
 
-        let realName = document.querySelector('form[name=addStandaloneCategoryForm] input[name=name]');
-        let realParentId = document.querySelector('form[name=addStandaloneCategoryForm] input[name=category_id]');
-        if (realName){
-            name = realName.value;
-        }
-        if (realParentId){
-            parent_id = realParentId.value;
-        }
+    const categoryAddRequestUrl = "/cabinet/evento/category/store_ajax/";
+    let name = 'default';
+    let parent_id = 0;
 
-        const categoryAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id;
+    let realName = document.querySelector('form[name=addStandaloneCategoryForm] input[name=name]');
+    let realParentId = document.querySelector('form[name=addStandaloneCategoryForm] input[name=category_id]');
+    if (realName){
+        name = realName.value;
+    }
+    if (realParentId){
+        parent_id = realParentId.value;
+    }
 
-        const categoryAddRequest = new XMLHttpRequest();
-        categoryAddRequest.open("POST", categoryAddRequestUrl);
-        categoryAddRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        categoryAddRequest.addEventListener("readystatechange", () => {
-            if (categoryAddRequest.readyState === 4 && categoryAddRequest.status === 200) {
-                let rs = JSON.parse(categoryAddRequest.responseText);
-                // теперь нужно показать успешность добавления, а также обновить селект сверху!
-                getUserCategories();
-                getCategories();
-                if (rs['success']){
-                    if (resultMessageInnerForStandaloneCategory){
-                        resultMessageInnerForStandaloneCategory.classList.remove('d-none');
-                        resultMessageInnerForStandaloneCategory.classList.remove('text-danger');
-                        resultMessageInnerForStandaloneCategory.classList.add('text-success');
-                        resultMessageInnerForStandaloneCategory.innerHTML = rs['message'];
-                        if (realName){
-                            realName.value = '';
-                        }
-                        waitAndHideCategoryAddSuccessMessage();
-                    }else{
-                        resultMessageInnerForStandaloneCategory.classList.remove('d-none');
-                        resultMessageInnerForStandaloneCategory.classList.add('text-danger');
-                        resultMessageInnerForStandaloneCategory.classList.remove('text-success');
-                        resultMessageInnerForStandaloneCategory.innerHTML = rs['message'];
+    console.log('name: '+name);
+    console.log('parent_id: '+parent_id);
+
+    const categoryAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id;
+
+    const categoryAddRequest = new XMLHttpRequest();
+    categoryAddRequest.open("POST", categoryAddRequestUrl);
+    categoryAddRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    categoryAddRequest.addEventListener("readystatechange", () => {
+        if (categoryAddRequest.readyState === 4 && categoryAddRequest.status === 200) {
+            let rs = JSON.parse(categoryAddRequest.responseText);
+            // теперь нужно показать успешность добавления, а также обновить селект сверху!
+            getUserCategories();
+            getCategories();
+            if (rs['success']){
+                if (resultMessageInnerForStandaloneCategory){
+                    resultMessageInnerForStandaloneCategory.classList.remove('d-none');
+                    resultMessageInnerForStandaloneCategory.classList.remove('text-danger');
+                    resultMessageInnerForStandaloneCategory.classList.add('text-success');
+                    resultMessageInnerForStandaloneCategory.innerHTML = rs['message'];
+                    if (realName){
+                        realName.value = '';
                     }
+                    waitAndHideCategoryAddSuccessMessage();
+                }else{
+                    resultMessageInnerForStandaloneCategory.classList.remove('d-none');
+                    resultMessageInnerForStandaloneCategory.classList.add('text-danger');
+                    resultMessageInnerForStandaloneCategory.classList.remove('text-success');
+                    resultMessageInnerForStandaloneCategory.innerHTML = rs['message'];
                 }
             }
-        });
-        categoryAddRequest.send(categoryAddRequestParams);
-    }
+
+            //
+            removeOldAddCategoryButtons();
+            deleteInputForChangeCategoryText();
+            categoryAddEditButtonCatch();
+        }
+    });
+    categoryAddRequest.send(categoryAddRequestParams);
+
+    return false;
+}
+
+// #### add standalone category
+if (addStandAloneCategoryBtnFind){
+    addStandAloneCategoryBtnFind.onclick = addStandAloneCategoryBtnFindClick;
 }
 // #### END
 
@@ -609,4 +772,105 @@ function showCategoryAddSuccessMessage()
 function waitAndHideCategoryAddSuccessMessage(time=2000)
 {
     setTimeout(hideCategoryAddSuccessMessage, time);
+}
+
+//
+function addCategoryCrudCancelHandler()
+{
+    let cancel = document.querySelector('.add-category-crud--cancel');
+    if (cancel){
+        cancel.addEventListener('click', function () {
+            deleteInputForChangeCategoryText();
+            removeOldAddCategoryButtons();
+        });
+    }
+}
+
+function changeCategoryCrudHandlerAjax(categoryId, name)
+{
+    const requestUrl = "/cabinet/evento/category/edit_category/"+categoryId;
+    const params = "_token=" + token + '&name=' + name + '&parent_id=' + 0 + '&color=' + '#ccc';
+
+    //console.log('name: '+name);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", requestUrl);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']){
+                //console.log('name: '+name);
+                //console.log('name: '+rs['name']);
+
+                // search tr
+                let nameHtml = document.querySelector('.add-category--tr_id-'+rs['categoryId']+ ' .add-category-crud--name-field .text');
+                //console.log('needTr: '+nameHtml);
+                nameHtml.innerHTML = rs['name'];
+
+                deleteInputForChangeCategoryText();
+                removeOldAddCategoryButtons();
+
+                // нужно заменить тексты всех категорий, которые совпадают с тем, что был заменен!
+                changeAllCategorysByName(editCategoryInputText, rs['name']);
+
+                // раз имя категории изменено, нужно обновить и категории, которые может добавить пользователь
+                getUserCategories();
+            }else{
+                // show error in html ...
+            }
+        }
+    });
+    xhr.send(params);
+}
+
+function changeCategoryCrudHandle()
+{
+    let confirm = document.querySelector('.add-category-crud--confirm');
+    if (confirm){
+        confirm.addEventListener('click', changeCategoryCrudHandler);
+    }
+}
+function changeCategoryCrudHandler(e)
+{
+    let confirm = document.querySelector('.add-category-crud--confirm');
+    if (confirm){
+        let needTr = confirm.parentElement.parentElement.parentElement;
+
+        let categoryId = 0;
+        let name = '';
+
+        let nameSearch = needTr.querySelector('.add-category-crud--name-field .text input[name=crudEditCategoryInput]');
+        if (nameSearch){
+            //console.log(name);
+            name = nameSearch.value;
+        }
+
+        let categoryTd = needTr.querySelector('.categoryId');
+        if (categoryTd) {
+            categoryId = +categoryTd.innerHTML;
+            //console.log('catId: '+categoryId);
+        }
+
+        // save also current category input value
+
+        changeCategoryCrudHandlerAjax(categoryId, name);
+    }
+}
+
+function changeAllCategorysByName(oldName, newName)
+{
+    console.log('oldName: '+oldName);
+    //console.log('newName: '+newName);
+    let allCatsSelector = 'span[class=categoryNameText][data-textValue="'+oldName+'"]';
+    let allCats = document.querySelectorAll(allCatsSelector);
+    console.log(allCatsSelector);
+    console.log(allCats);
+
+    if (allCats){
+        for(let i=0; i<allCats.length; i++){
+            allCats[i].innerHTML = newName;
+            allCats[i].setAttribute('data-textValue', newName);
+        }
+    }
 }

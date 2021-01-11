@@ -52,9 +52,10 @@ class EventoTagController extends Controller
         try{
             if ($request->has('value') && ( $request->get('value') !== null) ){
                 // нужно написать транзакцию, чтобы сразу же записать в таблицу EventoTagValue!
-                $tagValue = $request->get('value');
+                $tagValue   = $request->get('value');
+                $tagCaption = $request->get('caption');
                 $result = null;
-                \DB::transaction(function () use($attributes, $tagValue, &$result) {
+                \DB::transaction(function () use($attributes, $tagValue, $tagCaption, &$result) {
                     $eventoTag = EventoTag::create($attributes);
                     $rsTag = Tag::where('id', '=', $eventoTag->tag_id)->first();
                     $rs['tag_name'] = $rsTag->name;
@@ -65,6 +66,7 @@ class EventoTagController extends Controller
                         $etv = new EventoTagValue();
                         $etv->evento_evento_tags_id = $eventoTag->id;
                         $etv->value = $tagValue;
+                        $etv->caption = $tagCaption;
                         $etv->save();
                     }else{
                         $etv->value = $tagValue;

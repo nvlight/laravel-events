@@ -27,6 +27,24 @@
             overflow-anchor: none;
             transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,border-radius .15s ease;
         }
+        .color-green{
+            color: green;
+        }
+        .color-red{
+            color: red;
+        }
+        .w20{
+            width: 20px;
+        }
+        .h20{
+            height: 20px;
+        }
+        .curp{
+            cursor: pointer;
+        }
+        .add-category-crud--buttons{
+
+        }
     </style>
 
     <main>
@@ -34,7 +52,8 @@
             <p>
                 <a href="{{ url('/') }}">Home</a>
             </p>
-            <h1 class="">Evento/index</h1>
+            <h2 class="">Evento/index</h2>
+
             <p class="d-flex justify-content-around">
                 <a class="" href="{{ route('cabinet.evento.create') }}">create evento</a>
                 <a class="" href="{{ route('cabinet.evento.category.index') }}">category</a>
@@ -72,7 +91,7 @@
                                     @if(count($evento['categories']))
                                         @foreach($evento['categories'] as $k => $category)
                                             <div>
-                                                {{ $category['evento_category_name'] }}
+                                                <span class="categoryNameText" data-textValue="{{ $category['evento_category_name'] }}">{{ $category['evento_category_name'] }}</span>
                                                 <?php // {{ route('cabinet.evento.eventocategory.destroy', $category['evento_evento_category_id']) }} ?>
                                                 <a href=""
                                                    class="delete_category" data-categoryId="{{ $category['evento_evento_category_id'] }}">
@@ -216,7 +235,7 @@
                                         </div>
                                         <div class="" style="display: flex;justify-content: flex-end;">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right: 0.3em;">Close</button>
-                                            <button id="addStandAloneCategoryBtnId" type="button" class="btn btn-primary">add category</button>
+                                            <button id="addStandAloneCategoryBtnId" type="submit" class="btn btn-primary">add category</button>
                                         </div>
                                         <div class="crud_categories">
 
@@ -259,9 +278,13 @@
                                                 <select id="addEventoTagModalId" name="tags" class="form-select">
                                                 </select>
                                             </div>
-                                            <div class="input-group ">
+                                            <div class="input-group mb-3">
                                                 <label class="mr-3" for="addEventoTagValueModalId">Tag Value</label>
                                                 <input id="addEventoTagValueModalId" type="text" name="value" class="form-control">
+                                            </div>
+                                            <div class="input-group mb-3">
+                                                <label class="mr-3" for="addEventoTagCaptionModalId">Tag Caption</label>
+                                                <input id="addEventoTagCaptionModalId" type="text" name="caption" class="form-control">
                                             </div>
                                         </div>
                                         <div class="modal-footer">

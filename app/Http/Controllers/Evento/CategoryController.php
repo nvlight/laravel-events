@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Evento;
 use App\Http\Requests\Evento\CategoryRequest;
 use App\Models\Evento\Category;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
@@ -59,10 +60,11 @@ class CategoryController extends Controller
 
     public function storeAjax(CategoryRequest $request)
     {
-        $attributes = $request->validated();
-
-        $rs = ['success' => 1, 'message' => 'Категория добавлена!'];
         try{
+            $rs = ['success' => 1, 'message' => 'Категория добавлена!'];
+
+            $attributes = $request->validated();
+
             $attributes += ['slug' => Str::slug($attributes['name'])];
             $attributes += ['user_id' => auth()->id()];
 
@@ -163,4 +165,45 @@ class CategoryController extends Controller
         return false;
     }
 
+    public function getChangeCategoryButtonsHtml()
+    {
+        $buttonsHtml[0] = View::make('cabinet.evento.other.button.confirm-button',
+            ['class' => 'add-category-crud--confirm color-green curp'])
+                ->render();
+
+        $buttonsHtml[1] = View::make('cabinet.evento.other.button.cancel-button',
+            ['class' => 'add-category-crud--cancel color-red curp'])
+                ->render();
+
+        $rs['buttons'] = <<<CONCAT_BTNS
+ <div class="add-category-crud--buttons">
+    {$buttonsHtml[0]}
+    {$buttonsHtml[1]}
+</div>
+CONCAT_BTNS;
+
+        $rs['success'] = 1;
+
+        die(json_encode($rs));
+    }
+
+    public function editCategoryAjax(Category $category, Request $request)
+    {
+        try {
+            $category->name = $request->input('name');
+            $category->save();
+            $result = ['success' => 1,
+                'name' => $category->name, 'categoryId' => $category->id
+            ];
+        }catch (\Exception $e){
+            $result = ['success' => 0, 'message' => 'error'];
+            logger('error with ' . __METHOD__ . ' '
+                . implode(' | ', [
+                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+                ])
+            );
+        }
+
+        die(json_encode($result));
+    }
 }
