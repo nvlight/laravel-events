@@ -333,17 +333,6 @@ if (addTagModal){
     });
 }
 
-// перехват кнопки ентер при добавлении CRUD категории
-// addStandaloneCategoryForm
-var addCategoryFormOnSubmit = document.querySelector('form[name=addStandaloneCategoryForm11111]');
-if (addCategoryFormOnSubmit){
-
-    if (addStandAloneCategoryBtnFind){
-        addEventListener('submit', addStandAloneCategoryBtnFindClick);
-        //addStandAloneCategoryBtnFind.onsubmit = addStandAloneCategoryBtnFindClick;
-    }
-}
-
 // сохранение категории - перехват сабмита и отправка xhr запроса.
 var addCategoryForm = document.querySelector('form[name=addCategoryForm]');
 if (addCategoryForm) {
