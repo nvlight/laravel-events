@@ -14,16 +14,8 @@ let resultMessageInnerForStandaloneTag = document.querySelector('form[name=addSt
 function categoryAddEditButtonCatch()
 {
     var categoryAddEditButton = document.querySelectorAll('.category-add--edit-button');
-    console.log('categoryAddEditButton: '+categoryAddEditButton.length);
 
     for(let i=0; i<categoryAddEditButton.length; i++){
-        // categoryAddEditButton[i].onclick = function (e) {
-        //     e.stopImmediatePropagation();
-        //     console.log(e);
-        //     console.log(e.target.parentElement.parentElement.id);
-        //     console.log('a stop!');
-        //     return false;
-        // }
         categoryAddEditButton[i].addEventListener('click', categoryAddEditButtonHandler);
     }
 }
@@ -52,13 +44,13 @@ function categoryAddEditButtonHandler(e)
         //console.log(nameTd);
         if (nameTd){
             // delete old div with confirm/cancel buttons.
+            // todo!
             removeOldAddCategoryButtons();
             deleteInputForChangeCategoryText();
 
-            nameTd.innerHTML = nameTd.innerHTML;
+            let catTextWithForm = addInputTagForEditCategoryText(needTr);
 
-            addInputTagForEditCategoryText(needTr);
-            addButtonsForAddCategoryTd(nameTd);
+            addButtonsForAddCategoryTd(needTr, nameTd, catTextWithForm);
         }
     }
 
@@ -66,8 +58,22 @@ function categoryAddEditButtonHandler(e)
     return false;
 }
 
+function catchEnterPressForEditInputCategoryText() {
+    var form = document.querySelector('form[name=crudNameEditForm]');
+    if (form) {
+        form.onsubmit = function (e) {
+
+            // check this?
+            changeCategoryCrudHandler(e);
+
+            return false;
+        }
+    }
+}
+
 function deleteInputForChangeCategoryText()
 {
+    // todo2
     let input = document.querySelectorAll('.add-category-crud--name-field .text');
     if (input){
         for(let i=0; i<input.length; i++){
@@ -87,7 +93,7 @@ function addFocusForEditCategoryInput()
     if (input){
         editCategoryInputText = input.value;
         input.focus();
-        console.log('current_input:'+editCategoryInputText);
+        //console.log('current_input:'+editCategoryInputText);
     }
 }
 
@@ -95,17 +101,27 @@ function addInputTagForEditCategoryText(needTr)
 {
     let categoryText = needTr.querySelector('.add-category-crud--name-field .text');
     if (categoryText){
-        let newText = "<input class='form-control' name='crudEditCategoryInput' value='" + categoryText.innerHTML +  "' placeholder='type new category'>";
-        //console.log(newText);
-
         // save current input value
         editCategoryInputText = categoryText.innerHTML;
 
-        categoryText.innerHTML = newText;
+        let input = document.createElement('input');
+        input.setAttribute('class', 'form-control test-classs');
+        input.setAttribute('name', 'crudEditCategoryInput');
+        input.setAttribute('value',categoryText.innerHTML);
+        input.setAttribute('placeholder', 'type new category');
+
+        let form = document.createElement('form');
+        form.setAttribute('name', 'crudNameEditForm');
+        form.setAttribute('class', 'crudNameEditForm');
+        form.appendChild(input);
+
+        categoryText.innerHTML = "";
+        categoryText.appendChild(form);
     }
+    return categoryText;
 }
 
-function addButtonsForAddCategoryTd(nameTd)
+function addButtonsForAddCategoryTd(needTr, nameTd, catTextWithForm)
 {
     const url = "/cabinet/evento/category/get_change_category_buttons/";
     const params = "_token=" + token;
@@ -118,8 +134,23 @@ function addButtonsForAddCategoryTd(nameTd)
             let rs = JSON.parse(request.responseText);
             //console.log('rs.length : '+rs.length);
             if (rs.success) {
-                //console.log('we found him! '+rs.buttons)
-                nameTd.innerHTML = nameTd.innerHTML + rs.buttons;
+                nameTd.innerHTML = '<div class="text">' + catTextWithForm.innerHTML + '</div>' + rs.buttons;
+
+                // again
+                var input = document.querySelector('input[name="crudEditCategoryInput"');
+                var div = input.parentElement;
+
+                var form = document.createElement('form');
+                form.setAttribute('name', 'crudNameEditForm');
+                form.setAttribute('class', 'crudNameEditForm');
+                form.appendChild(input);
+
+                div.innerHTML = '';
+
+                div.append(form);
+
+                // добавление перехвата - enter по полю редактирования
+                catchEnterPressForEditInputCategoryText();
             }
             addFocusForEditCategoryInput();
             addCategoryCrudCancelHandler();
@@ -242,20 +273,28 @@ function deleteCategoryForCrud()
                     if (request.readyState === 4 && request.status === 200) {
                         let rs = JSON.parse(request.responseText);
                         if (rs['success'] === 1) {
+                            // <div class="eventoCategoryDiv" data-eventoCategoryId="{{ $category['evento_evento_category_id'] }}">
+                            if (rs['evIds'] && rs['evIds'].length){
+                                for(let i=0; i<rs['evIds'].length; i++){
+                                    var tmpGetEventoCategoryDiv = null;
+                                    tmpGetEventoCategoryDiv = document.querySelector('div.eventoCategoryDiv[data-eventoCategoryId="'+rs['evIds'][i]+'"]');
+                                    if (tmpGetEventoCategoryDiv){
+                                        tmpGetEventoCategoryDiv.remove();
+                                    }
+                                }
+                            }
                             getCategories();
-                        }else{
-                            getCategories();
+                            getUserCategories();
                         }
                     }
 
                 });
                 request.send(params);
 
-                getUserCategories();
-
                 return false;
             }
         }
+        // todo
         removeOldAddCategoryButtons();
         deleteInputForChangeCategoryText();
         categoryAddEditButtonCatch();
@@ -378,7 +417,7 @@ if (addCategoryForm) {
                                                     '</svg>' +
                                                 '</a>';
                             let textHtml = '<span class="categoryNameText" data-textvalue="'+rs['category_name']+'">'+rs['category_name']+'</span>';
-                            let delete_link_div_wrapper = '<div>' + textHtml + delete_link + '</div>';
+                            let delete_link_div_wrapper = '<div class="eventoCategoryDiv" data-eventocategoryid="'+rs['eventocategory_id']+'">' + textHtml + delete_link + '</div>';
                             need_tr.innerHTML =  delete_link_div_wrapper + need_tr.innerHTML;
 
                             deleteEventoCategoryAddHandler();
@@ -636,8 +675,8 @@ function addStandAloneCategoryBtnFindClick(e)
         parent_id = realParentId.value;
     }
 
-    console.log('name: '+name);
-    console.log('parent_id: '+parent_id);
+    //console.log('name: '+name);
+    //console.log('parent_id: '+parent_id);
 
     const categoryAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id;
 
@@ -668,7 +707,7 @@ function addStandAloneCategoryBtnFindClick(e)
                 }
             }
 
-            //
+            // todo
             removeOldAddCategoryButtons();
             deleteInputForChangeCategoryText();
             categoryAddEditButtonCatch();
@@ -849,12 +888,12 @@ function changeCategoryCrudHandler(e)
 
 function changeAllCategorysByName(oldName, newName)
 {
-    console.log('oldName: '+oldName);
+    //console.log('oldName: '+oldName);
     //console.log('newName: '+newName);
     let allCatsSelector = 'span[class=categoryNameText][data-textValue="'+oldName+'"]';
     let allCats = document.querySelectorAll(allCatsSelector);
-    console.log(allCatsSelector);
-    console.log(allCats);
+    //console.log(allCatsSelector);
+    //console.log(allCats);
 
     if (allCats){
         for(let i=0; i<allCats.length; i++){

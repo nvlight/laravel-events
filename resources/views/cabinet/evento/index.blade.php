@@ -90,7 +90,7 @@
                                     <?php //dump($evento['categories']); ?>
                                     @if(count($evento['categories']))
                                         @foreach($evento['categories'] as $k => $category)
-                                            <div>
+                                            <div class="eventoCategoryDiv" data-eventoCategoryId="{{ $category['evento_evento_category_id'] }}">
                                                 <span class="categoryNameText" data-textValue="{{ $category['evento_category_name'] }}">{{ $category['evento_category_name'] }}</span>
                                                 <?php // {{ route('cabinet.evento.eventocategory.destroy', $category['evento_evento_category_id']) }} ?>
                                                 <a href=""

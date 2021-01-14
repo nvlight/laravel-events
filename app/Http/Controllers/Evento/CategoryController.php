@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Evento;
 use App\Http\Requests\Evento\CategoryRequest;
 use App\Models\Evento\Category;
 use App\Http\Controllers\Controller;
+use App\Models\Evento\EventoCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
@@ -142,9 +143,16 @@ class CategoryController extends Controller
         abort_if(auth()->user()->cannot('delete', $category), 403);
 
         try{
+            // теперь нужно получить id-шники, которые соответствуют таблице eventoCategory
+            $evIds = EventoCategory::where('category_id', $category->id)
+                ->pluck('id');
+
             $category->delete();
             $this->deleteImg($category);
-            $rs = ['success' => 1, 'message' => 'Category deleted!'];
+            $rs = ['success' => 1, 'message' => 'Category deleted!', 'id' => $category->id];
+
+            $rs['evIds'] = $evIds;
+
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
             logger('error with ' . __METHOD__ . ' '
