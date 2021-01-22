@@ -1,4 +1,4 @@
-@if(isset($gcer['success']))
+@if((isset($gcer['success']) && $gcer['success'] ))
     <h5>Курс на - {{\Illuminate\Support\Carbon::parse($gcer['data']['Date'])->format('d.m.Y h:m:s')}}</h5>
 
     @if(array_key_exists('Valute', $gcer['data']))

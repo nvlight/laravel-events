@@ -34,10 +34,26 @@ class ExchangeRateController extends Controller
         return view('exchange-rate.index', compact('gcer'));
     }
 
-    //
     public function getLastExchangeRateHtml()
     {
         $gcer = $this->getExchangeRate();
+        if ( !$gcer['success']){
+            $this->updateExchangeRate();
+            $gcer = $this->getExchangeRate();
+        }
+
+        //*
+        if ($gcer['success']){
+            $diffs = $this->getExchangeRateDiffs($gcer);
+            if ($this->isUpdateExchangeRateConditionPass($diffs)['success']){
+                //dd($diffs);
+                $this->updateExchangeRate();
+                logger('isUpdateExchangeRateConditionPass --> updateExchangeRate');
+                $gcer = $this->getExchangeRate();
+            }
+        }
+        //*/
+
         //dd($gcer);
 
         $gcerResultHtmlRender = View::make('exchange-rate.get_last', compact('gcer') )->render();
@@ -49,7 +65,7 @@ class ExchangeRateController extends Controller
 
     protected function isLocalExchangeRateExists(){
         if ( !(Storage::disk('local')->exists($this->fileName)) ){
-            return ['success' => 0, 'message', 'file is not exists'];
+            return ['success' => 0, 'message' => 'file is not exists'];
         }
         return ['success' => 1];
     }
@@ -61,7 +77,7 @@ class ExchangeRateController extends Controller
     protected function getExchangeRateJsonDecoded(){
         $json = json_decode($this->getExchangeRateFile(), true);
         if (!$json){
-            return ['success' => 0, 'message', 'json_decode is null'];
+            return ['success' => 0, 'message' => 'json_decode is null'];
         }
 
         return ['success' => 1, 'json_decode' => $json];
@@ -79,79 +95,155 @@ class ExchangeRateController extends Controller
         return ['success' => $success, 'last_error_key' => $lastErrorKey];
     }
 
-    public function test(){
-        return $this->getExchangeRate();
+    public function isUpdateExchangeRateConditionPass($diff){
+        if ($diff['success']){
+            if ( isset($diff['diff']['diffInDays']) && $diff['diff']['diffInDays'] >= 2){
+                return ['success' => 1, 'condition is passed'];
+            }
+        }
+        return ['success' => 0,  'message' => 'condition is NOT passed'];
     }
 
-    public function updateExchangeRate(){
+    public function getExchangeRateDiffs($currentJson){
+        //$currentJson = $this->getExchangeRate();
+
+        if ($currentJson['success']){
+            $timeZone = env('TIMEZONE');
+            //dump($currentJson['data']['Date']);
+
+            // example for test
+            //$customDateTime = "2021-01-20T11:30:00+03:00";
+            //$erDateTime = Carbon\Carbon::parse($customDateTime)->timezone($timeZone);
+            $erDateTime = Carbon::parse($currentJson['data']['Date'])->timezone($timeZone);
+            $nowDateTime = Carbon::now($timeZone);
+            //dump($nowDateTime);
+
+            $rs['diffInDays'] =    $erDateTime->diffInDays($nowDateTime);
+            $rs['diffInMinutes'] = $erDateTime->diffInMinutes($nowDateTime);
+            $rs['diffInSeconds'] = $erDateTime->diffInSeconds($nowDateTime);
+
+            //dump($rs);
+
+            return ['success' => 1, 'diff' => $rs];
+        }
+
+        return ['success' => 0, 'result of saved getExchangeRate json file is empty or incorrect format'];
+    }
+
+    public function updateExchangeRate2(){
         $result = ['success' => 1];
         try {
             $newFile = file_get_contents($this->url, false, stream_context_create($this->streamContextOptions));
             $jsonDecode = json_decode($newFile);
-            dump($jsonDecode);
+            //dump($jsonDecode);
+
+            $message = 'updateExchangeRate is done!';
 
             if ( $jsonDecode){
                 Storage::disk('local')->put($this->fileName, $newFile);
+                $message = "jsonDecode is stored";
             }else{
-                Storage::disk('local')->delete($this->fileName);
+                //Storage::disk('local')->delete($this->fileName);
+                $message = 'updateExchangeRate is failed - json_decode is null';
             }
 
-            $message = 'updateExchangeRate is done!';
             $result['message'] = $message;
             logger($message);
         }catch (\Exception $e){
             $message = 'updateExchangeRate is failed!';
             $result['message'] = $message;
+            $result['success'] = 0;
             logger($message);
         }
 
         return $result;
     }
 
-    private function updateExchangeRate__test(){
-        $newFile = file_get_contents($this->url, false, stream_context_create($this->streamContextOptions));
-        $jsonDecode = json_decode($newFile);
-        dump($jsonDecode);
+    public function updateExchangeRate(){
+        $result = ['success' => 1];
+        try {
+            $newFile = $this->file_get_contents_curl($this->url);
+            $jsonDecode = json_decode($newFile);
+            //dump($jsonDecode);
 
-        if ( $jsonDecode){
-            Storage::disk('local')->put($this->fileName, $newFile);
-        }else{
-            Storage::disk('local')->delete($this->fileName);
+            if ( $jsonDecode){
+                Storage::disk('local')->put($this->fileName, $newFile);
+                $message = "jsonDecode is stored";
+            }else{
+                //Storage::disk('local')->delete($this->fileName);
+                $message = 'updateExchangeRate is failed - json_decode is null';
+            }
+
+            $result['message'] = $message;
+            logger($message);
+        }catch (\Exception $e){
+            $message = 'updateExchangeRate is failed!';
+            $result['message'] = $message;
+            $result['success'] = 0;
+            logger($message);
         }
+
+        return $result;
+    }
+
+    private function file_get_contents_curl( $url ) {
+
+        $ch = curl_init();
+
+        curl_setopt( $ch, CURLOPT_AUTOREFERER, TRUE );
+        curl_setopt( $ch, CURLOPT_HEADER, 0 );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt( $ch, CURLOPT_URL, $url );
+        curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, TRUE );
+
+        $data = curl_exec( $ch );
+        curl_close( $ch );
+
+        return $data;
+
     }
 
     public function getExchangeRate()
     {
         $exists = $this->isLocalExchangeRateExists();
-        if ($exists['success']){
-            $file = $this->getExchangeRateJsonDecoded();
-            if ($file['success']){
-                $pass = $this->isLocalExchangeRateCheckPass($file['json_decode'] , $this->needJsonArrayKeys);
-                if ($pass['success']){
+        if ( !$exists['success']){
+            //$this->updateExchangeRateWithLog('isLocalExchangeRateExists --> updateExchangeRate');
+            logger($exists['message']);
+            return $exists;
+        }
 
-                    return ['success' => 1, 'data' => $file['json_decode'] ] ;
-                }
-                return $pass;
-            }
+        $file = $this->getExchangeRateJsonDecoded();
+        if ( !$file['success']){
+            //$this->updateExchangeRateWithLog('getExchangeRateJsonDecoded --> updateExchangeRate');
+            logger($file['message']);
             return $file;
         }
-        return $exists;
+
+        $pass = $this->isLocalExchangeRateCheckPass($file['json_decode'] , $this->needJsonArrayKeys);
+        if ( !$pass['success']) {
+            //$this->updateExchangeRateWithLog('isLocalExchangeRateCheckPass --> updateExchangeRate');
+            logger($pass['message']);
+            return $pass;
+        }
+
+        return ['success' => 1, 'data' => $file['json_decode'] ] ;
     }
 
-    public function testDateDiffs(){
+    public function test(){
 
-        $d1 = "2021-01-23T11:30:00+03:00";
-        $d2 = "2021-01-22T11:30:00+05:00";
+        $er = $this->getExchangeRate();
 
-        $dp1 = Carbon::parse($d1);
-        $dp2 = Carbon::parse($d2)->format('d.m.Y h:m:s');
-        $dp3 = Carbon::now('Europe/Moscow');
+        if ($er['success']) {
+            $diffs = $this->getExchangeRateDiffs($er);
+            dump($diffs);
 
-        $rs['diffInDays'] = $dp1->diffInDays($dp2);
-        $rs['diffInMinutes'] = $dp1->diffInMinutes($dp2);
-        $rs['diffInSeconds'] = $dp1->diffInSeconds($dp2);
+            $result = $this->isUpdateExchangeRateConditionPass($diffs);
+            dump($result);
+        }
+    }
 
-        dump($rs);
+    public function test2(){
+        return $this->updateExchangeRate();
     }
 
 }

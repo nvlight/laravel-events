@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\SimpleTestSystem;
 
-use App\Debug;
 use App\Models\SimpleTestSystem\Question;
 use App\Models\SimpleTestSystem\SavedSelectedQst;
 use App\Models\SimpleTestSystem\SelectedQsts;
@@ -1180,7 +1179,7 @@ class HhController extends Controller
                                 $tmp_rs['answer_ids'] = $ids;
                                 break;
                         }
-                        $$k[] = $tmp_rs;
+                        ${$k}[] = $tmp_rs;
                     }
                 }
             }

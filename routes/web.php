@@ -72,8 +72,8 @@ Route::post('event_copy/{event}','EventController@copyAndPast')->middleware('ver
 
 Route::get('exchange-rate', 'ExchangeRateController@index')->middleware('verified');
 Route::get('exchange-rate-update', 'ExchangeRateController@getLastExchangeRateHtml')->middleware('verified');
-Route::get('exchange-rate-test', 'ExchangeRateController@getLastExchangeRateHtml')->middleware('verified');
-Route::get('exchange-rate-test-dateDiffs', 'ExchangeRateController@testDateDiffs')->middleware('verified');
+Route::get('exchange-rate-test', 'ExchangeRateController@test')->middleware('verified');
+Route::get('exchange-rate-test2', 'ExchangeRateController@test2')->middleware('verified');
 
 //Route::get('youtube_watch/{ytVideoId}', 'YouTubeController@watch')->middleware('verified');
 //Route::get('youtube_search', 'YouTubeController@search')->middleware('verified');
@@ -395,11 +395,3 @@ Route::group([
 ], function () {
     Route::get('/', [App\Http\Controllers\Bootstrap5\Bootstrap5::class, 'index'])->name('index');
 });
-
-Route::get('eloquent_test', function(){
-    $users = App\Models\User::avg('phone_verified');
-    dump($users);
-});
-
-
-
