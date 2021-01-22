@@ -10,63 +10,95 @@
 @endphp
 
 <script>
+var exchangerRateTagFind = document.querySelector('.result-exchange-rate');
+var btnUpdateRate = document.querySelector('#btnUpdateRate');
+var exchangeRateUpdateSvgTag = document.querySelector('.exchangeRateUpdateSvg');
+var url = '<?=$url?>';
 
-let url = '<?=$url?>';
-//console.log('current url: ' + url);
+function setTagInnerHtml(tag, html){
+    if (tag){
+        tag.innerHTML = html;
+    }
+}
 
-function updateRate2(url)
-{
+function addClassByTag(tag, className) {
+    if (tag){
+        tag.classList.add(className);
+    }
+}
+
+function removeClassByTag(tag, className) {
+    if (tag){
+        tag.classList.remove(className);
+    }
+}
+
+function updateRate3(url) {
     fetch(url)
         .then(response => response.json())
-        .then(data => {
-
-            console.log('json_parsed: '+JSON.parse(data));
-
-            {{--let el = document.querySelector(".result-exchange-rate");--}}
-            {{--el.innerHTML = data['html'];--}}
-
-            {{-- Автоматический подсчет курса по вводу нужного значения --}}
-            {{--$('[class^=amount-computed]').on('keyup', function(e) {--}}
-            {{--    let parent_tr = $(this).parent().parent();--}}
-            {{--    let value = parent_tr.find('.Value').text();--}}
-            {{--    let nominal = parent_tr.find('.Nominal').text();--}}
-            {{--    let computed = ( (value * 1) / (nominal * 1) ) * ( $(this).val() * 1);--}}
-            {{--    parent_tr.find('.exchange-rate-result').val(computed.toFixed(2));--}}
-            {{--    //console.log(value + ' : ' + nominal + ' --- ' + computed.toFixed(2));--}}
-            {{--});--}}
-
+        .then(response => {
+            calculateRateRow();
         });
+}
+
+function updateRate2(url) {
+    axios.get(url)
+        .then(response => {
+            //console.log("response", response.data.html)
+            let el = document.querySelector(".result-exchange-rate");
+            console.log('response_success:'+response.data['success']);
+            console.log('response_success:'+response.data.data['success']);
+            //el.innerHTML = response.data['data'].html;
+            calculateRateRow();
+        })
+        .catch(error => console.log('updateRate___error: ' + error));
+}
+
+function btnUpdateRateHandler(){
+    var btnUpdateRate = document.getElementById('btnUpdateRate');
+    btnUpdateRate.addEventListener('click', function() {
+        setTagInnerHtml(exchangerRateTagFind, "");
+        updateRateHandler()
+    });
 }
 
 function updateRate(url)
 {
-    axios.get(url)
-        .then(response => {
-            //console.log("response", response.data.html)
+    const request = new XMLHttpRequest();
+    request.open("GET", url);
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.addEventListener("readystatechange", () => {
+        if (request.readyState === 4 && request.status === 200) {
+            removeClassByTag(exchangeRateUpdateSvgTag, 'd-block');
+            addClassByTag(exchangeRateUpdateSvgTag, 'd-none');
 
-            let el = document.querySelector(".result-exchange-rate");
-            el.innerHTML = response.data.html;
-
-            {{-- Автоматический подсчет курса по вводу нужного значения --}}
-            $('[class^=amount-computed]').on('keyup', function(e) {
-                let parent_tr = $(this).parent().parent();
-                let value = parent_tr.find('.Value').text();
-                let nominal = parent_tr.find('.Nominal').text();
-                let computed = ( (value * 1) / (nominal * 1) ) * ( $(this).val() * 1);
-                parent_tr.find('.exchange-rate-result').val(computed.toFixed(2));
-                //console.log(value + ' : ' + nominal + ' --- ' + computed.toFixed(2));
-            });
-        })
-        .catch(error => console.log('updateRate: ' + error));
+            let rs = JSON.parse(request.response);
+            setTagInnerHtml(exchangerRateTagFind, rs.html)
+            calculateRateRow();
+        }
+    });
+    request.send();
 }
 
-updateRate(url);
+function calculateRateRow(){
+    {{-- Автоматический подсчет курса по вводу нужного значения --}}
+    $('[class^=amount-computed]').on('keyup', function(e) {
+        let parent_tr = $(this).parent().parent();
+        let value = parent_tr.find('.Value').text();
+        let nominal = parent_tr.find('.Nominal').text();
+        let computed = ( (value * 1) / (nominal * 1) ) * ( $(this).val() * 1);
+        parent_tr.find('.exchange-rate-result').val(computed.toFixed(2));
+        //console.log(value + ' : ' + nominal + ' --- ' + computed.toFixed(2));
+    });
+}
 
-let btnUpdateRate = document.getElementById('btnUpdateRate');
-
-btnUpdateRate.addEventListener('click', function() {
-    //updateRate2(url);
+function updateRateHandler(){
+    removeClassByTag(exchangeRateUpdateSvgTag, 'd-none');
+    addClassByTag(exchangeRateUpdateSvgTag, 'd-block');
     updateRate(url);
-});
+}
+
+btnUpdateRateHandler();
+updateRateHandler();
 
 </script>

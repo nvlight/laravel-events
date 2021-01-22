@@ -1,79 +1,69 @@
-<div class="result-exchange-rate">
+@if(isset($gcer['success']))
+    <h5>Курс на - {{\Illuminate\Support\Carbon::parse($gcer['data']['Date'])->format('d.m.Y h:m:s')}}</h5>
 
-    <h3 class="flex flex-column">Курсы валют <button id="btnUpdateRate" class="btn btn-success">Update Rates!</button></h3>
-    <p></p>
+    @if(array_key_exists('Valute', $gcer['data']))
+        <table class="table table-striped table-bordered">
 
-    @php
-        //dump($_SERVER);
-        //dump($gcer);
-    @endphp
+            @if (count($gcer['data']['Valute'][array_keys($gcer['data']['Valute'])[0]]))
+                {{-- выводим шапку с названиями полей tr > th --}}
+                <?php $tmp = $gcer['data']['Valute'][array_keys($gcer['data']['Valute'])[0]]; $columns = []; ?>
+                    @if(count($tmp))
+                        <tr>
+                            @foreach( array_keys($tmp) as $k => $v )
+                                <?php $columns[] = $v; ?>
+                                @switch($v)
+                                    @case('ID')
+                                        @break
+                                    @default
+                                        <th>{{$v}}</th>
+                                @endswitch
+                            @endforeach
+                            <th>computed</th>
+                            <th>result</th>
+                        </tr>
+                    @endif
 
-
-    @if($gcer !== null)
-        <h5>Курс на - {{\Illuminate\Support\Carbon::parse($gcer['Date'])->format('d.m.Y h:m:s')}}</h5>
-{{--        <div><span></span>{{\Illuminate\Support\Carbon::parse($gcer['Date'])->diffInDays(now(), false)}}</div>--}}
-        @if(array_key_exists('Valute', $gcer))
-            <table class="table table-striped table-bordered">
-
-                @if (count($gcer['Valute'][array_keys($gcer['Valute'])[0]]))
-                    {{-- выводим шапку с названиями полей tr > th --}}
-                    <?php $tmp = $gcer['Valute'][array_keys($gcer['Valute'])[0]]; $columns = []; ?>
-                        @if(count($tmp))
+                <?php
+                    //dd($columns); //dd(array_keys($gcer['data']['Valute']))
+                ?>
+                {{-- вывод основных данных --}}
+                @foreach(array_keys($gcer['data']['Valute']) as $k => $v)
+                    @if (count($columns))
+                        @if(in_array($gcer['data']['Valute'][$v]['NumCode'], config('services.cbr.white_list') ) )
                             <tr>
-                                @foreach( array_keys($tmp) as $k => $v )
-                                    <?php $columns[] = $v; ?>
-                                    @switch($v)
+                                @foreach($columns as $column)
+
+                                    @switch($column)
                                         @case('ID')
                                             @break
+                                        @case('Value')
+                                            <td class="Value">{{$gcer['data']['Valute'][$v][$column]}}</td>
+                                            @break
+                                        @case('Nominal')
+                                            <td class="Nominal">{{$gcer['data']['Valute'][$v][$column]}}</td>
+                                        @break
                                         @default
-                                            <th>{{$v}}</th>
+                                            <td>{{$gcer['data']['Valute'][$v][$column]}}</td>
                                     @endswitch
+
                                 @endforeach
-                                <th>computed</th>
-                                <th>result</th>
+
+                                <td>
+                                    <input type="text" class="amount-computed-{{$gcer['data']['Valute'][$v]['ID']}} exchange-rate-computed" value="">
+                                </td>
+                                <td>
+                                    <input type="text" class="amount-result-{{$gcer['data']['Valute'][$v]['ID']}} exchange-rate-result" disabled="">
+                                </td>
                             </tr>
                         @endif
+                    @endif
+                @endforeach
+            @else
+                <p>Нет данных для вывода</p>
+            @endif
 
-                    <?php //dd($columns); //dd(array_keys($gcer['Valute'])) ?>
-                    {{-- вывод основных данных --}}
-                    @foreach(array_keys($gcer['Valute']) as $k => $v)
-                        @if (count($columns))
-                            @if(in_array($gcer['Valute'][$v]['NumCode'], config('services.cbr.white_list') ) )
-                                <tr>
-                                    @foreach($columns as $column)
-
-                                        @switch($column)
-                                            @case('ID')
-                                                @break
-                                            @case('Value')
-                                                <td class="Value">{{$gcer['Valute'][$v][$column]}}</td>
-                                                @break
-                                            @case('Nominal')
-                                                <td class="Nominal">{{$gcer['Valute'][$v][$column]}}</td>
-                                            @break
-                                            @default
-                                                <td>{{$gcer['Valute'][$v][$column]}}</td>
-                                        @endswitch
-
-                                    @endforeach
-
-                                    <td>
-                                        <input type="text" class="amount-computed-{{$gcer['Valute'][$v]['ID']}} exchange-rate-computed" value="">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="amount-result-{{$gcer['Valute'][$v]['ID']}} exchange-rate-result" disabled="">
-                                    </td>
-                                </tr>
-                            @endif
-                        @endif
-                    @endforeach
-                @else
-                    <p>Нет данных для вывода</p>
-                @endif
-
-            </table>
-        @endif
-    @else
-        <h4>Ошибка при получении курсов валют</h4>
+        </table>
     @endif
-</div>
+@else
+    <h5 class="exchangeRateError">Данные не найдены, попробуйте позднее или нажмите на кнопку UpdateRates</h5>
+@endif

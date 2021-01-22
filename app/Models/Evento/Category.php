@@ -25,6 +25,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\Category whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\App\Category whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property int $user_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereUserId($value)
  */
 class Category extends Model
 {

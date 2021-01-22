@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoCategory whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoCategory whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Evento\Evento|null $evento
  */
 class EventoCategory extends Model
 {

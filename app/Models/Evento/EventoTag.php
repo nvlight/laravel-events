@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag whereTagId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Evento\EventoTag whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Evento\Evento|null $evento
  */
 class EventoTag extends Model
 {

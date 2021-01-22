@@ -60,6 +60,15 @@ use App\Models\Adverts\Advert\Advert;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User whereVerifyToken($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Evento\Attachment[] $eventoAttachments
+ * @property-read int|null $evento_attachments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Evento\Category[] $eventoCategories
+ * @property-read int|null $evento_categories_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Evento\Tag[] $eventoTags
+ * @property-read int|null $evento_tags_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Evento\Evento[] $eventos
+ * @property-read int|null $eventos_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User forSitemap()
  */
 class User extends Authenticatable // implements MustVerifyEmail
                                    // этот интерфейс делает авто-отправку письма если в диспетчере отдается событие создания

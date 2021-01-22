@@ -59,7 +59,7 @@ return [
 
     'cbr' => [
         'path2save' => 'exchange_rate',
-        'url_json' => 'http://www.cbr-xml-daily.ru/daily_json.js',
+        'url_json' =>  env('EVENTO_EXCHANGE_RATE_URL', 'http://www.cbr-xml-daily.ru/daily_json.js'),
         'timeout' => 3,
         'filename' => 'cbr-xml-daily.json_decoded',
         'white_list' => ['933','840',826,978,156,980],
