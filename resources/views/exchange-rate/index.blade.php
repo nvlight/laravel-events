@@ -14,67 +14,6 @@
             </button>
         </h3>
 
-        <div>
-            <?php
-            /*
-            $exchangeRateController = new \App\Http\Controllers\ExchangeRateController();
-            $currentJson = $exchangeRateController->getExchangeRate();
-            dump($currentJson['data']);
-
-            $timeZone = env('TIMEZONE');
-
-            $erDateTime = Carbon\Carbon::parse($currentJson['data']['Date'])->timezone($timeZone);
-            //$customDateTime = "2021-01-20T11:30:00+03:00";
-            //$erDateTime = Carbon\Carbon::parse($customDateTime)->timezone($timeZone);
-            $nowDateTime = Carbon\Carbon::now($timeZone);
-
-            $rs['diffInDays'] =    $nowDateTime->diffInDays($erDateTime);
-            $rs['diffInMinutes'] = $nowDateTime->diffInMinutes($erDateTime);
-            $rs['diffInSeconds'] = $nowDateTime->diffInSeconds($erDateTime);
-
-            dump($rs);
-            */
-
-            /*
-
-            function file_get_contents_curl( $url ) {
-
-                $ch = curl_init();
-
-                curl_setopt( $ch, CURLOPT_AUTOREFERER, TRUE );
-                curl_setopt( $ch, CURLOPT_HEADER, 0 );
-                curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-                curl_setopt( $ch, CURLOPT_URL, $url );
-                curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, TRUE );
-
-                $data = curl_exec( $ch );
-                curl_close( $ch );
-
-                return $data;
-
-            }
-
-            $arrContextOptions=array(
-                "ssl"=>array(
-                    "verify_peer"=>false,
-                    "verify_peer_name"=>false,
-                ),
-            );
-            //$file = file_get_contents('https://www.cbr-xml-daily.ru/daily_json.js', false, stream_context_create($arrContextOptions));
-            $file = file_get_contents_curl('https://www.cbr-xml-daily.ru/daily_json.js');
-            if ($file !== false){
-                $json = json_decode($file, true);
-                dump($json);
-                if ($json){
-                    $date = \Illuminate\Support\Carbon::parse($json['Date'])->format('d.m.Y h:m:s');
-                    dump($date);
-                }
-            }
-            //*/
-
-            ?>
-        </div>
-
         <div class="result-exchange-rate">
             @include('exchange-rate.block_exchange_table')
         </div>

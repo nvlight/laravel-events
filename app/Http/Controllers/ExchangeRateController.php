@@ -105,7 +105,6 @@ class ExchangeRateController extends Controller
     }
 
     public function getExchangeRateDiffs($currentJson){
-        //$currentJson = $this->getExchangeRate();
 
         if ($currentJson['success']){
             $timeZone = env('TIMEZONE');
@@ -136,8 +135,6 @@ class ExchangeRateController extends Controller
             $newFile = file_get_contents($this->url, false, stream_context_create($this->streamContextOptions));
             $jsonDecode = json_decode($newFile);
             //dump($jsonDecode);
-
-            $message = 'updateExchangeRate is done!';
 
             if ( $jsonDecode){
                 Storage::disk('local')->put($this->fileName, $newFile);
@@ -207,43 +204,23 @@ class ExchangeRateController extends Controller
     {
         $exists = $this->isLocalExchangeRateExists();
         if ( !$exists['success']){
-            //$this->updateExchangeRateWithLog('isLocalExchangeRateExists --> updateExchangeRate');
-            logger($exists['message']);
+            logger('getExchangeRate: ' . $exists['message']);
             return $exists;
         }
 
         $file = $this->getExchangeRateJsonDecoded();
         if ( !$file['success']){
-            //$this->updateExchangeRateWithLog('getExchangeRateJsonDecoded --> updateExchangeRate');
-            logger($file['message']);
+            logger('getExchangeRate: ' . $file['message']);
             return $file;
         }
 
         $pass = $this->isLocalExchangeRateCheckPass($file['json_decode'] , $this->needJsonArrayKeys);
         if ( !$pass['success']) {
-            //$this->updateExchangeRateWithLog('isLocalExchangeRateCheckPass --> updateExchangeRate');
-            logger($pass['message']);
+            logger('getExchangeRate: ' . $pass['message']);
             return $pass;
         }
 
         return ['success' => 1, 'data' => $file['json_decode'] ] ;
-    }
-
-    public function test(){
-
-        $er = $this->getExchangeRate();
-
-        if ($er['success']) {
-            $diffs = $this->getExchangeRateDiffs($er);
-            dump($diffs);
-
-            $result = $this->isUpdateExchangeRateConditionPass($diffs);
-            dump($result);
-        }
-    }
-
-    public function test2(){
-        return $this->updateExchangeRate();
     }
 
 }
