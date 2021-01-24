@@ -24,7 +24,7 @@ class CategoryController extends Controller
     {
         $categories = auth()->user()->eventoCategories;
 
-        $rs = ['success' => 1, 'message' => 'Категория добавлена!'];
+        $rs = ['success' => 1, 'message' => 'Категории получены!'];
 
         $catsRender = View::make('cabinet.evento.ajax.category_list', compact('categories'))
             ->render();

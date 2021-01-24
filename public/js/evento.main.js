@@ -256,10 +256,10 @@ function getCategories()
 // category delete links
 function deleteCategoryForCrud()
 {
-    let deleteCategoryTagAForCrud = document.querySelectorAll('a.category_delete_for_crud');
-    if (deleteCategoryTagAForCrud.length) {
-        for (let i = 0; i < deleteCategoryTagAForCrud.length; i++) {
-            deleteCategoryTagAForCrud[i].onclick = function (e) {
+    let deleteCategoryForCrud = document.querySelectorAll('a.category_delete_for_crud');
+    if (deleteCategoryForCrud.length) {
+        for (let i = 0; i < deleteCategoryForCrud.length; i++) {
+            deleteCategoryForCrud[i].onclick = function (e) {
                 e.stopImmediatePropagation();
 
                 let href = "/cabinet/evento/category/destroy_ajax/" + this.getAttribute('data-id');
@@ -314,7 +314,7 @@ function getUserTags()
         if (request.readyState === 4 && request.status === 200) {
             let rs = JSON.parse(request.responseText);
             if (rs.length) {
-                var categoriesSelect = document.querySelector('form[name=addTagForm] select[name=tags]');
+                var categoriesSelect = document.querySelector('form[name=addEventoTagForm] select[name=tags]');
                 if (categoriesSelect) {
                     // очищение и заполнение селекта из полученных категорий
                     removeOptions(categoriesSelect);
@@ -328,8 +328,8 @@ function getUserTags()
                     if (categoriesSelect.selectedOptions.length) {
                         let categoryId = categoriesSelect.selectedOptions[0].value;
 
-                        let eventoIdFormInput = document.querySelector('form[name=addTagForm] input[name=evento_id]');
-                        let categoryIdFormInput = document.querySelector('form[name=addTagForm] input[name=tag_id]');
+                        let eventoIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=evento_id]');
+                        let categoryIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=tag_id]');
 
                         if (categoryId && categoryIdFormInput) {
                             categoryIdFormInput.value = categoryId;
@@ -350,10 +350,12 @@ if (addCategoryModal){
 
     addCategoryModal.addEventListener('shown.bs.modal', function (e)
     {
+        console.log('+ for category modal');
+
         // +plus плюсик нажат!
         getCategories();
-        showCategoryAddSuccessMessage();
         getUserCategories();
+        showCategoryAddSuccessMessage();
         hideCategoryAddSuccessMessage();
     });
 }
@@ -365,10 +367,15 @@ if (addTagModal){
 
     addTagModal.addEventListener('shown.bs.modal', function (e)
     {
+        console.log('+ for tag modal');
+
+        addEventoTagForm.reset();
+
         if (resultMessageInnerForStandaloneTag){
             resultMessageInnerForStandaloneTag.classList.add('d-none');
         }
         getUserTags();
+        getTags();
     });
 }
 
@@ -435,20 +442,20 @@ if (addCategoryForm) {
 }
 
 // сохранение тега (+значение) - перехват сабмита и отправка xhr запроса.
-var addTagForm = document.querySelector('form[name=addTagForm]');
-if (addTagForm) {
-    addTagForm.onsubmit = function (e) {
+var addEventoTagForm = document.querySelector('form[name=addEventoTagForm]');
+if (addEventoTagForm) {
+    addEventoTagForm.onsubmit = function (e) {
         //console.log('submit stoped');
 
-        var tagsSelect = document.querySelector('form[name=addTagForm] select[name=tags]');
+        var tagsSelect = document.querySelector('form[name=addEventoTagForm] select[name=tags]');
         if (tagsSelect){
             if (tagsSelect.selectedOptions.length){
 
                 let tagId = tagsSelect.selectedOptions[0].value;
-                let eventoIdFormInput = document.querySelector('form[name=addTagForm] input[name=evento_id]');
-                let tagIdFormInput = document.querySelector('form[name=addTagForm] input[name=tag_id]');
-                let tagValue = document.querySelector('form[name=addTagForm] input[name=value]');
-                let tagCaption = document.querySelector('form[name=addTagForm] input[name=caption]');
+                let eventoIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=evento_id]');
+                let tagIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=tag_id]');
+                let tagValue = document.querySelector('form[name=addEventoTagForm] input[name=value]');
+                let tagCaption = document.querySelector('form[name=addEventoTagForm] input[name=caption]');
 
                 if (tagId && tagIdFormInput){
                     tagIdFormInput.value = tagId;
@@ -485,7 +492,17 @@ if (addTagForm) {
                                 '<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>' +
                                 '</svg>' +
                                 '</a>';
-                            let delete_link_div_wrapper = '<div>' + rs['tag_name'] + ' (' + rs['tag_value'] +  ') ' + delete_link + '</div>';
+                            let delete_link_div_wrapper;
+                            let textHtml;
+
+                            if (rs['tag_value'] == undefined){
+                                textHtml = '<span class="tagNameText" data-textvalue="'+rs['tag_name']+'">'+rs['tag_name'] +'</span>';
+                                delete_link_div_wrapper = '<div class="eventoTagDiv" data-eventotagid="'+rs['eventotag_id']+'">' + textHtml + delete_link + '</div>';
+                            }else{
+                                textHtml = '<span class="tagNameText" data-textvalue="'+rs['tag_name']+'">'+rs['tag_name']+ ' (' + rs['tag_value'] +  ') ' +'</span>';
+                                delete_link_div_wrapper = '<div class="eventoTagDiv" data-eventotagid="'+rs['eventotag_id']+'">' + textHtml + delete_link + '</div>';
+                            }
+
                             need_tr.innerHTML =  delete_link_div_wrapper + need_tr.innerHTML;
 
                             deleteEventoTagAddHandler();
@@ -501,8 +518,6 @@ if (addTagForm) {
         return false;
     };
 }
-
-
 
 function deleteEventoCategoryAddHandler()
 {
@@ -724,66 +739,6 @@ if (addStandAloneCategoryBtnFind){
 }
 // #### END
 
-// #### add standalone tag
-var addStandAloneTagBtnFind = document.querySelector('#addStandAloneTagBtnId');
-if (addStandAloneTagBtnFind){
-    addStandAloneTagBtnFind.onclick = function () {
-        const tagAddRequestUrl = "/cabinet/evento/tag/store_ajax/";
-        let name = 'default';
-        let parent_id = 0;
-        let color = "#ccc";
-
-        let realName = document.querySelector('form[name=addStandaloneTagForm] input[name=name]');
-        let realParentId = document.querySelector('form[name=addStandaloneTagForm] input[name=tag_id]');
-        let realColor = document.querySelector('form[name=addStandaloneTagForm] input[name=color]');
-        if (realName){
-            name = realName.value;
-        }
-        if (realParentId){
-            parent_id = realParentId.value;
-        }
-        if (realColor){
-            color = realColor.value;
-        }
-
-        const tagAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id + '&color=' + color;
-
-        const tagAddRequest = new XMLHttpRequest();
-        tagAddRequest.open("POST", tagAddRequestUrl);
-        tagAddRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        tagAddRequest.addEventListener("readystatechange", () => {
-            if (tagAddRequest.readyState === 4 && tagAddRequest.status === 200) {
-                let rs = JSON.parse(tagAddRequest.responseText);
-
-                // теперь нужно показать успешность добавления, а также обновить селект сверху!
-                getUserTags();
-                if (rs['success']){
-                    if (resultMessageInnerForStandaloneTag){
-                        resultMessageInnerForStandaloneTag.classList.remove('d-none');
-                        resultMessageInnerForStandaloneTag.classList.remove('text-danger');
-                        resultMessageInnerForStandaloneTag.classList.add('text-success');
-                        resultMessageInnerForStandaloneTag.innerHTML = rs['message'];
-                        if (realName){
-                            realName.value = '';
-                        }
-                        if (realColor){
-                            realColor.value = '';
-                        }
-                    }else{
-                        resultMessageInnerForStandaloneTag.classList.remove('d-none');
-                        resultMessageInnerForStandaloneTag.classList.add('text-danger');
-                        resultMessageInnerForStandaloneTag.classList.remove('text-success');
-                        resultMessageInnerForStandaloneTag.innerHTML = rs['message'];
-                    }
-                }
-            }
-        });
-        tagAddRequest.send(tagAddRequestParams);
-    }
-}
-// #### END
-
-
 // ### show/hide && wait/hide CategoryAddSuccessMessage
 function hideCategoryAddSuccessMessage()
 {
@@ -900,5 +855,185 @@ function changeAllCategorysByName(oldName, newName)
             allCats[i].innerHTML = newName;
             allCats[i].setAttribute('data-textValue', newName);
         }
+    }
+}
+
+// #### add standalone tag
+// сохранение тега (+его цвет) - перехват сабмита и отправка xhr запроса.
+var addStandaloneTagForm = document.querySelector('form[name=addStandaloneTagForm]');
+if (addStandaloneTagForm){
+    addStandaloneTagForm.onsubmit = function (e) {
+        e.stopImmediatePropagation();
+
+        const tagAddRequestUrl = "/cabinet/evento/tag/store_ajax/";
+        let name = 'default';
+        let parent_id = 0;
+        let color = "#ccc";
+
+        let realName = document.querySelector('form[name=addStandaloneTagForm] input[name=name]');
+        let realParentId = document.querySelector('form[name=addStandaloneTagForm] input[name=tag_id]');
+        let realColor = document.querySelector('form[name=addStandaloneTagForm] input[name=color]');
+        if (realName){
+            name = realName.value;
+        }
+        if (realParentId){
+            parent_id = realParentId.value;
+        }
+        if (realColor){
+            color = realColor.value;
+        }
+
+        const tagAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id + '&color=' + color;
+
+        const tagAddRequest = new XMLHttpRequest();
+        tagAddRequest.open("POST", tagAddRequestUrl);
+        tagAddRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        tagAddRequest.addEventListener("readystatechange", () => {
+            if (tagAddRequest.readyState === 4 && tagAddRequest.status === 200) {
+                let rs = JSON.parse(tagAddRequest.responseText);
+
+                // теперь нужно показать успешность добавления, а также обновить селект сверху!
+                if (rs['success']){
+
+                    getUserTags();
+                    getTags();
+
+                    if (resultMessageInnerForStandaloneTag){
+
+                        showTagAddSuccessMessage();
+                        resultMessageInnerForStandaloneTag.innerHTML = rs['message'];
+                        if (realName){
+                            realName.value = '';
+                        }
+                        if (realColor){
+                            realColor.value = '';
+                        }
+                        waitAndHideTagAddSuccessMessage(5000);
+                    }
+                }else{
+                    if (resultMessageInnerForStandaloneTag) {
+                        resultMessageInnerForStandaloneTag.classList.remove('d-none');
+                        //resultMessageInnerForStandaloneTag.classList.add('text-danger');
+                        resultMessageInnerForStandaloneTag.classList.remove('text-success');
+
+                        //resultMessageInnerForStandaloneTag.innerHTML = rs['message'];
+                        resultMessageInnerForStandaloneTag.innerHTML = "";
+
+                        // show error lines
+                        var errors = rs['errors'];
+                        var customAttributes = rs['customAttributes'];
+
+                        let keys = Object.keys(errors);
+                        for(let i=0; i<keys.length; i++){
+                            let p = document.createElement('p');
+                            p.classList.add('m-0');
+                            p.innerHTML = customAttributes[keys[i]] + ' - ' +
+                            "<span class='text-danger pt-2'>" +  errors[keys[i]][0] + "</span>";
+                            //console.log(span.innerHTML);
+                            resultMessageInnerForStandaloneTag.appendChild(p);
+                        }
+                        //waitAndHideTagAddSuccessMessage(5000);
+                    }
+                }
+            }
+        });
+        tagAddRequest.send(tagAddRequestParams);
+
+        return false;
+    }
+}
+// #### END
+
+// ### show/hide && wait/hide CategoryAddSuccessMessage
+function hideTagAddSuccessMessage()
+{
+    if (resultMessageInnerForStandaloneTag){
+        resultMessageInnerForStandaloneTag.classList.add('d-none');
+    }
+}
+function showTagAddSuccessMessage()
+{
+    if (resultMessageInnerForStandaloneTag){
+        resultMessageInnerForStandaloneTag.classList.remove('d-none');
+        resultMessageInnerForStandaloneTag.classList.remove('text-danger');
+        resultMessageInnerForStandaloneTag.classList.add('text-success');
+    }
+}
+function waitAndHideTagAddSuccessMessage(time=2000)
+{
+    setTimeout(hideTagAddSuccessMessage, time);
+}
+
+////////////////
+function getTags()
+{
+    const url = "/cabinet/evento/tag/index_ajax/";
+    const params = "_token=" + token;
+
+    const request = new XMLHttpRequest();
+    request.open("GET", url);
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.addEventListener("readystatechange", () => {
+        if (request.readyState === 4 && request.status === 200) {
+            let rs = JSON.parse(request.responseText);
+            if (rs['success'] === 1) {
+                let crudTags = document.querySelector('.crud_tags');
+                if (crudTags){
+                    crudTags.innerHTML = rs['tags']
+                    deleteTagForCrud();
+                }
+            }
+        }
+    });
+    request.send(params);
+}
+
+// tag delete links
+function deleteTagForCrud()
+{
+    let deleteTagForCrud = document.querySelectorAll('a.tag_delete_for_crud');
+    if (deleteTagForCrud.length) {
+        for (let i = 0; i < deleteTagForCrud.length; i++) {
+            deleteTagForCrud[i].onclick = function (e) {
+                e.stopImmediatePropagation();
+
+                let href = "/cabinet/evento/tag/destroy_ajax/" + this.getAttribute('data-id');
+
+                const params = "_token=" + token;
+
+                const request = new XMLHttpRequest();
+                request.open("GET", href);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.addEventListener("readystatechange", () => {
+                    if (request.readyState === 4 && request.status === 200) {
+                        let rs = JSON.parse(request.responseText);
+                        if (rs['success'] === 1) {
+
+                            // удаление строки с основной таблицы, в котором тег, который мы только что удалили.
+                            if (rs['evIds'] && rs['evIds'].length){
+                                for(let i=0; i<rs['evIds'].length; i++){
+                                    var tmpGetEventoCategoryDiv = null;
+                                    tmpGetEventoCategoryDiv = document.querySelector('div.eventoTagDiv[data-eventoTagId="'+rs['evIds'][i]+'"]');
+                                    if (tmpGetEventoCategoryDiv){
+                                        tmpGetEventoCategoryDiv.remove();
+                                    }
+                                }
+                            }
+
+                            getUserTags();
+                            getTags();
+                        }
+                    }
+
+                });
+                request.send(params);
+
+                return false;
+            }
+        }
+        // todo
+        //removeOldAddCategoryButtons();
+        //deleteInputForChangeCategoryText();
+        //categoryAddEditButtonCatch();
     }
 }

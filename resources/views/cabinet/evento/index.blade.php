@@ -116,12 +116,13 @@
                                     <div class="">
                                         @if(count($evento['tags']))
                                             @foreach($evento['tags'] as $k => $tag)
-                                                <div>
-                                                    {{ $tag['evento_tag_name'] }}
-                                                    @if ($tag['evento_evento_tag_value_value'])
-                                                        ({{ $tag['evento_evento_tag_value_value'] }})
-                                                    @endif
-                                                    <?php // {{ route('cabinet.evento.eventocategory.destroy', $category['evento_evento_category_id']) }} ?>
+                                                <div class="eventoTagDiv" data-eventoTagId="{{ $tag['evento_evento_tag_id'] }}">
+                                                    <button class="btn btn-primary btn-sm mb-2" style="background-color: {{$tag['evento_tag_color']}}; border-color: {{$tag['evento_tag_color']}};">
+                                                        {{ $tag['evento_tag_name'] }}
+                                                        @if ($tag['evento_evento_tag_value_value'])
+                                                            <span class="badge rounded-pill bg-secondary">{{ $tag['evento_evento_tag_value_value'] }}</span>
+                                                        @endif
+                                                    </button>
                                                     <a href=""
                                                        class="delete_tag" data-tagId="{{ $tag['evento_evento_tag_id'] }}">
                                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">
@@ -271,7 +272,7 @@
                             </h2>
                             <div id="collapse3" class="accordion-collapse collapse show" aria-labelledby="heading3" data-parent="#accordionEventoTag">
                                 <div class="accordion-body">
-                                    <form action="{{ route('cabinet.evento.eventotag.store_ajax') }}" method="POST" name="addTagForm">
+                                    <form action="{{ route('cabinet.evento.eventotag.store_ajax') }}" method="POST" name="addEventoTagForm">
                                         <div class="modal-body">
                                             <div class="input-group mb-3">
                                                 <label class="mr-3" for="addEventoTagModalId">Choose need tag</label>
@@ -301,7 +302,7 @@
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading4">
                                 <button class="accordion-button collapsed" type="button" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                                    Add Standalone Tag
+                                    Tag CRUD
                                 </button>
                             </h2>
                             <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="heading4" data-parent="#accordionEventoTag">
@@ -320,10 +321,14 @@
                                             </div>
                                             <p class="message-text resultMessage d-none">Добавлено!</p>
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button id="addStandAloneTagBtnId" type="button" class="btn btn-primary">add tag</button>
+                                        <div style="display: flex;justify-content: flex-end;">
+                                            <button type="button" class="btn btn-secondary" style="margin-right: 0.3em;" data-dismiss="modal">Close</button>
+                                            <button id="addStandAloneTagBtnId" type="submit" class="btn btn-primary">add tag</button>
                                         </div>
+                                        <div class="crud_tags">
+
+                                        </div>
+
                                     </form>
                                 </div>
                             </div>

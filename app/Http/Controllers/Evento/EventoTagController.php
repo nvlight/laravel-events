@@ -8,6 +8,7 @@ use App\Models\Evento\EventoTag;
 use App\Models\Evento\EventoTagValue;
 use App\Models\Evento\Tag;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\View;
 
 class EventoTagController extends Controller
 {
@@ -60,6 +61,7 @@ class EventoTagController extends Controller
                     $rsTag = Tag::where('id', '=', $eventoTag->tag_id)->first();
                     $rs['tag_name'] = $rsTag->name;
                     $rs['eventotag_id'] = $eventoTag->id;
+                    $rs['tag_color'] = $rsTag->color;
 
                     $etv = EventoTagValue::find($eventoTag->id);
                     if (!$etv){
@@ -76,15 +78,17 @@ class EventoTagController extends Controller
                     $rs['tag_name'] = $rsTag->name;
                     $rs['tag_value'] = $tagValue;
                     $rs['eventotag_id'] = $eventoTag->id;
-                    $result = $rs;
                 });
-                die(json_encode($result));
             }else{
                 $eventoTag = EventoTag::create($attributes);
                 $rsTag = Tag::where('id', '=', $eventoTag->tag_id)->first();
                 $rs['tag_name'] = $rsTag->name;
                 $rs['eventotag_id'] = $eventoTag->id;
+                $rs['tag_color'] = $rsTag->color;
             }
+
+            $rs['eventoTagDiv'] = View::make('cabinet.evento.ajax.eventotag_table_item', ['tag' => $rs])->render();
+
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
             logger('error with ' . __METHOD__ . ' '

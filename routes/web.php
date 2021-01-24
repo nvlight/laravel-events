@@ -306,6 +306,8 @@ Route::group(
         Route::get('/destroy/{tag}', 'TagController@destroy')->name('destroy');
 
         Route::post('/store_ajax/', 'TagController@storeAjax' )->name('store_ajax');
+        Route::get('/index_ajax/', 'TagController@indexAjax' )->name('index_ajax');
+        Route::get('/destroy_ajax/{tag}', 'TagController@destroyAjax')->name('destroy_ajax');
     });
 
     Route::group(['prefix' => '/category', 'as' => 'category.'], function () {
