@@ -468,7 +468,6 @@ if (addEventoTagForm) {
                     tagCaption.value = null;
                 }
 
-                // all data prepared for add
                 var addTagData = '&evento_id=' + currentEventoId + '&tag_id=' + tagId + '&value=' + tagValue.value + '&caption=' + tagCaption.value
                 //console.log(addTagData);
 
@@ -485,25 +484,7 @@ if (addEventoTagForm) {
                         if (rs['success']){
                             let need_tr = document.querySelector('tr[data-evento-id="'+currentEventoId+'"] .tag_td');
 
-                            // добавление ссылки, который будет производить удаление через перезагрузку страницы
-                            let delete_link = '<a href="/cabinet/evento/eventotag/destroy/' + rs['eventotag_id'] + '"' +
-                                'class="delete_tag" data-tagId="' + rs['eventotag_id'] + '">' +
-                                '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">' +
-                                '<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>' +
-                                '</svg>' +
-                                '</a>';
-                            let delete_link_div_wrapper;
-                            let textHtml;
-
-                            if (rs['tag_value'] == undefined){
-                                textHtml = '<span class="tagNameText" data-textvalue="'+rs['tag_name']+'">'+rs['tag_name'] +'</span>';
-                                delete_link_div_wrapper = '<div class="eventoTagDiv" data-eventotagid="'+rs['eventotag_id']+'">' + textHtml + delete_link + '</div>';
-                            }else{
-                                textHtml = '<span class="tagNameText" data-textvalue="'+rs['tag_name']+'">'+rs['tag_name']+ ' (' + rs['tag_value'] +  ') ' +'</span>';
-                                delete_link_div_wrapper = '<div class="eventoTagDiv" data-eventotagid="'+rs['eventotag_id']+'">' + textHtml + delete_link + '</div>';
-                            }
-
-                            need_tr.innerHTML =  delete_link_div_wrapper + need_tr.innerHTML;
+                            need_tr.innerHTML =  rs['eventoTagDiv'] + need_tr.innerHTML;
 
                             deleteEventoTagAddHandler();
 
