@@ -1,0 +1,11 @@
+<thead>
+    <tr>
+        <th>id</th>
+        <th>parent_id</th>
+        <th>name</th>
+        <th>img</th>
+        <th>show</th>
+        <th>edit</th>
+        <th>delete</th>
+    </tr>
+</thead>

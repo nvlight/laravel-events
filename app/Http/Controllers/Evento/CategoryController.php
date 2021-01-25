@@ -13,6 +13,14 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
+    protected function saveToLog($e){
+        logger('error with ' . __METHOD__ . ' '
+            . implode(' | ', [
+                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+            ])
+        );
+    }
+
     public function index()
     {
         $categories = auth()->user()->eventoCategories;
@@ -56,7 +64,7 @@ class CategoryController extends Controller
 
         Category::create($attributes);
 
-        return back();
+        return redirect()->route('cabinet.evento.category.index');
     }
 
     public function storeAjax(CategoryRequest $request)
@@ -131,11 +139,14 @@ class CategoryController extends Controller
     {
         abort_if(auth()->user()->cannot('delete', $category), 403);
 
-        $category->delete();
+        try{
+            $category->delete();
+            $this->deleteImg($category);
+        }catch (\Exception $e){
+            $this->saveToLog();
+        }
 
-        $this->deleteImg($category);
-
-        return back();
+        return redirect()->route('cabinet.evento.category.index');
     }
 
     public function destroyAjax(Category $category)

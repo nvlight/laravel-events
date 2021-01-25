@@ -1,32 +1,30 @@
 @extends('layouts.evento')
 
 @section('content')
-    <h2>Evento/Category/index</h2>
-    <p><a href="{{ route('cabinet.evento.category.create') }}">create new</a></p>
+    <div class="container">
+        <h2>Evento/Category/index</h2>
 
-    @if($categories)
-        <table>
-            <tr>
-                <th>id</th>
-                <th>parent_id</th>
-                <th>name</th>
-                <th>img</th>
-                <th>show</th>
-                <th>delete</th>
-                <th>update</th>
-            </tr>
-        @foreach($categories as $category)
-            <tr>
-                <td>{{$category->id}}</td>
-                <td>{{$category->parent_id}}</td>
-                <td>{{$category->name}}</td>
-                <td>{{$category->img}}</td>
-                <td><a href="{{ route('cabinet.evento.category.show',   $category) }}"  target="">{{ $category->name }}</a></td>
-                <td><a href="{{ route('cabinet.evento.category.destroy', $category) }}" target="">{{ $category->name }}</a></td>
-                <td><a href="{{ route('cabinet.evento.category.edit', $category) }}" target="">{{ $category->name }}</a></td>
-            </tr>
-        @endforeach
-        </table>
-    @endif
+        @include('cabinet.evento.category.nav.breadcrumbs')
+        @include('cabinet.evento.category.buttons.create')
 
+        @if($categories)
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered">
+                                @include('cabinet.evento.category.list.header')
+                                <tbody>
+                                    @foreach($categories as $category)
+                                        @include('cabinet.evento.category.list.item')
+                                    @endforeach
+                                </tbody>
+                                {{-- @include('cabinet.evento.category.list.footer')--}}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    </div>
 @endsection
