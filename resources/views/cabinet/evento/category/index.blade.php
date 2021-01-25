@@ -2,14 +2,17 @@
 
 @section('content')
     <div class="container">
-        <h2>Evento/Category/index</h2>
+        <div class="row">
+            <div class="col-md-6">
 
-        @include('cabinet.evento.category.nav.breadcrumbs')
-        @include('cabinet.evento.category.buttons.create')
+                <h2>Evento/Category/index</h2>
 
-        @if($categories)
-            <div class="row">
-                <div class="col-md-6">
+                @include('cabinet.evento.category.nav.breadcrumbs')
+                @include('cabinet.evento.category.buttons.create')
+
+                @include('cabinet.evento.category.flash.message')
+
+                @if($categories)
                     <div class="card">
                         <div class="card-body">
                             <table class="table table-striped table-bordered">
@@ -23,8 +26,8 @@
                             </table>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
-        @endif
+        </div>
     </div>
 @endsection

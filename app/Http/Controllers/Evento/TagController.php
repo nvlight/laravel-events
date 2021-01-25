@@ -53,7 +53,7 @@ class TagController extends Controller
             }
             Tag::create($attributes);
 
-            $request->session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-success']);
+            $request->session()->flash('crud_message',['message' => 'Tag stored!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog();
         }

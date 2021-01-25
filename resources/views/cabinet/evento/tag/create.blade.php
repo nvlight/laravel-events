@@ -4,6 +4,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4">
+
                 <h2>Evento/Tag/Create</h2>
 
                 @include('cabinet.evento.tag.nav.breadcrumbs')

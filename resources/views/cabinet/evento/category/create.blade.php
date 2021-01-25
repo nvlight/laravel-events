@@ -7,6 +7,7 @@
                 <h2>Evento/Category/Create</h2>
 
                 @include('cabinet.evento.category.nav.breadcrumbs')
+                @include('cabinet.evento.category.flash.message')
 
                 <div class="card">
                     <div class="card-body">

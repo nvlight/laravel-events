@@ -13,6 +13,8 @@
                     @include('cabinet.evento.category.buttons.delete', ['categoryId' => $category->id, 'class' => 'btn-danger ml-2' ] )
                 </div>
 
+                @include('cabinet.evento.category.flash.message')
+
                 <div class="card">
                     <div class="card-body">
                         @if(count($errors) > 0)

@@ -13,14 +13,6 @@ use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
-    protected function saveToLog($e){
-        logger('error with ' . __METHOD__ . ' '
-            . implode(' | ', [
-                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-            ])
-        );
-    }
-
     public function index()
     {
         $categories = auth()->user()->eventoCategories;
@@ -56,13 +48,18 @@ class CategoryController extends Controller
         $attributes += ['slug' => Str::slug($attributes['name'])];
         $attributes += ['user_id' => auth()->id()];
 
-        if ($request->hasFile('img')){
-            $savedImgPath = $request->file('img')
-                ->store(auth()->id(), ['disk' => 'local'] );
-            $attributes['img'] = $savedImgPath;
-        }
+        try{
+            if ($request->hasFile('img')){
+                $savedImgPath = $request->file('img')
+                    ->store(auth()->id(), ['disk' => 'local'] );
+                $attributes['img'] = $savedImgPath;
+            }
 
-        Category::create($attributes);
+            Category::create($attributes);
+            session()->flash('crud_message',['message' => 'Tag stored!', 'class' => 'alert alert-success']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+        }
 
         return redirect()->route('cabinet.evento.category.index');
     }
@@ -86,13 +83,10 @@ class CategoryController extends Controller
                 $attributes['img'] = $savedImgPath;
             }
 
+            session()->flash('crud_message',['message' => 'Tag stored!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
-            logger('error with ' . __METHOD__ . ' '
-                . implode(' | ', [
-                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-                ])
-            );
+            $this->saveToLog($e);
         }
 
         die(json_encode($rs));
@@ -122,15 +116,20 @@ class CategoryController extends Controller
 
         $attributes['slug'] = Str::slug($attributes['name']);
 
-        if ($request->hasFile('img')){
-            $savedImgPath = $request->file('img')
-                ->store(auth()->id(), ['disk' => 'local'] );
-            $attributes['img'] = $savedImgPath;
+        try{
+            if ($request->hasFile('img')){
+                $savedImgPath = $request->file('img')
+                    ->store(auth()->id(), ['disk' => 'local'] );
+                $attributes['img'] = $savedImgPath;
 
-            $this->deleteImg($category);
+                $this->deleteImg($category);
+            }
+            $category->update($attributes);
+
+            session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-warning']);
+        }catch (\Exception $e){
+            $this->saveToLog();
         }
-
-        $category->update($attributes);
 
         return back();
     }
@@ -142,6 +141,8 @@ class CategoryController extends Controller
         try{
             $category->delete();
             $this->deleteImg($category);
+
+            session()->flash('crud_message',['message' => 'Tag deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $this->saveToLog();
         }
@@ -164,13 +165,10 @@ class CategoryController extends Controller
 
             $rs['evIds'] = $evIds;
 
+            session()->flash('crud_message',['message' => 'Tag deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
-            logger('error with ' . __METHOD__ . ' '
-                . implode(' | ', [
-                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-                ])
-            );
+            $this->saveToLog($e);
         }
 
         die(json_encode($rs));
@@ -214,15 +212,20 @@ CONCAT_BTNS;
             $result = ['success' => 1,
                 'name' => $category->name, 'categoryId' => $category->id
             ];
+            session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-warning']);
         }catch (\Exception $e){
             $result = ['success' => 0, 'message' => 'error'];
-            logger('error with ' . __METHOD__ . ' '
-                . implode(' | ', [
-                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-                ])
-            );
+            saveToLog($e);
         }
 
         die(json_encode($result));
+    }
+
+    protected function saveToLog($e){
+        logger('error with ' . __METHOD__ . ' '
+            . implode(' | ', [
+                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+            ])
+        );
     }
 }
