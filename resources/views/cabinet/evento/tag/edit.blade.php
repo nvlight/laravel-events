@@ -1,33 +1,51 @@
 @extends('layouts.evento')
 
 @section('content')
-    <h2>Evento/Tag/Edit</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
 
-    <div class="card-body">
-        @if(count($errors) > 0)
-            @foreach($errors->all() as $error)
-                <div class="alert alert-danger">{{ $error }}</div>
-            @endforeach
-        @endif
+                <h2>Evento/Tag/Edit</h2>
 
-        <form action="{{ route('cabinet.evento.tag.update', $tag) }}" method="post" enctype="multipart/form-data">
-            @csrf
-            <div class="form-group">
-                <label><b>name :-</b></label>
-                <input type="text" name="name" class="form-control" value="{{ $tag->name }}">
+                @include('cabinet.evento.tag.nav.breadcrumbs')
+
+                <div class="d-flex">
+                    @include('cabinet.evento.tag.buttons.create')
+                    @include('cabinet.evento.tag.buttons.delete', ['tagId' => $tag->id, 'class' => 'btn-danger ml-2'])
+                </div>
+
+                @include('cabinet.evento.tag.flash.message')
+
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{ route('cabinet.evento.tag.update', $tag) }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <label class="w-100">
+                                    <b>name</b>
+                                    <input type="text" name="name" class="form-control  w-100" value="{{ $tag->name }}">
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="w-100">
+                                    <b>color</b>
+                                    <input type="text" name="color" class="form-control w-100" value="{{ $tag->color }}">
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="w-100">
+                                    <b>Img</b>
+                                    <input type="file" name="img" class="form-control w-100" value="{{ $tag->img }}">
+                                </label>
+                            </div>
+                            <div class="form-group mt-2">
+                                <button class="btn btn-success" type="submit">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label><b>color :-</b></label>
-                <input type="text" name="color" class="form-control" value="{{ $tag->color }}">
-            </div>
-            <div class="form-group">
-                <label><b>Imh :-</b></label>
-                <input type="file" name="img" class="form-control" value="{{ $tag->img }}">
-            </div>
-            <div class="form-group text-center">
-                <button class="btn btn-success" type="submit">Save</button>
-            </div>
-        </form>
+        </div>
     </div>
 
 @endsection

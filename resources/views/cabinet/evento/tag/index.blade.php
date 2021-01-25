@@ -1,32 +1,30 @@
 @extends('layouts.evento')
 
 @section('content')
-    <h2>Evento/Tag/index</h2>
-    <p><a href="{{ route('cabinet.evento.tag.create') }}">create new</a></p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
 
-    @if($tags)
-        <table>
-            <tr>
-                <th>id</th>
-                <th>name</th>
-                <th>color</th>
-                <th>img</th>
-                <th>show</th>
-                <th>delete</th>
-                <th>update</th>
-            </tr>
-        @foreach($tags as $tag)
-            <tr>
-                <td>{{$tag->id}}</td>
-                <td>{{$tag->name}}</td>
-                <td>{{$tag->color}}</td>
-                <td>{{$tag->img}}</td>
-                <td><a href="{{ route('cabinet.evento.tag.show',   $tag) }}"  target="">{{ $tag->name }}</a></td>
-                <td><a href="{{ route('cabinet.evento.tag.destroy', $tag) }}" target="">{{ $tag->name }}</a></td>
-                <td><a href="{{ route('cabinet.evento.tag.edit', $tag) }}" target="">{{ $tag->name }}</a></td>
-            </tr>
-        @endforeach
-        </table>
-    @endif
+                <h2>Evento/Tag/index</h2>
 
+                @include('cabinet.evento.tag.nav.breadcrumbs')
+                @include('cabinet.evento.tag.buttons.create')
+
+                @include('cabinet.evento.tag.flash.message')
+
+                <div class="card">
+                    <div class="card-body">
+                        @if($tags)
+                        <table class="table table-striped table-bordered">
+                            @include('cabinet.evento.tag.list.header')
+                            @foreach($tags as $tag)
+                                @include('cabinet.evento.tag.list.item')
+                            @endforeach
+                        </table>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

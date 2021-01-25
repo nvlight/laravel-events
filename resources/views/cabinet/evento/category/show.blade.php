@@ -15,9 +15,8 @@
 
         <div class="row">
             <div class="col-md-4">
-
-                <div class="card" style="width: 18rem;">
-                    <div class=" card-body">
+                <div class="card">
+                    <div class="card-body">
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr>
@@ -25,12 +24,16 @@
                                     <th>Value</th>
                                 </tr>
                             </thead>
-                            @foreach($category->attributesToArray() as $k => $v)
+                            @forelse($category->attributesToArray() as $k => $v)
                                 <tr>
                                     <th>{{ $k  }}</th>
                                     <td>{{ $v }}</td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="2">Список пуст</td>
+                                </tr>
+                            @endforelse
                         </table>
                     </div>
                 </div>

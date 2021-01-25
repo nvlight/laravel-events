@@ -45,13 +45,20 @@ class TagController extends Controller
         $attributes = $request->validated();
         $attributes += ['user_id' => auth()->id()];
 
-        if ($request->hasFile('img')){
-            $savedImgPath = $request->file('img')
-                ->store(auth()->id(), ['disk' => 'local'] );
-            $attributes['img'] = $savedImgPath;
+        try{
+            if ($request->hasFile('img')){
+                $savedImgPath = $request->file('img')
+                    ->store(auth()->id(), ['disk' => 'local'] );
+                $attributes['img'] = $savedImgPath;
+            }
+            Tag::create($attributes);
+
+            $request->session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-success']);
+        }catch (\Exception $e){
+            $this->saveToLog();
         }
 
-        Tag::create($attributes);
+        session()->flash('crud_message',['message' => 'Tag created!', 'class' => 'alert alert-success']);
 
         return back();
     }
@@ -115,13 +122,10 @@ class TagController extends Controller
                 $attributes['img'] = $savedImgPath;
             }
 
+            session()->flash('crud_message',['message' => 'Tag created with ajax!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
-            logger('error with ' . __METHOD__ . ' '
-                . implode(' | ', [
-                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-                ])
-            );
+            $this->saveToLog();
         }
 
         die(json_encode($rs));
@@ -147,28 +151,38 @@ class TagController extends Controller
 
         $attributes = $request->validated();
 
-        if ($request->hasFile('img')){
-            $savedImgPath = $request->file('img')
-                ->store(auth()->id(), ['disk' => 'local'] );
-            $attributes['img'] = $savedImgPath;
+        try{
+            if ($request->hasFile('img')){
+                $savedImgPath = $request->file('img')
+                    ->store(auth()->id(), ['disk' => 'local'] );
+                $attributes['img'] = $savedImgPath;
 
-            $this->deleteImg($tag);
+                $this->deleteImg($tag);
+            }
+            $tag->update($attributes);
+
+            session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-warning']);
+        }catch (\Exception $e){
+            $this->saveToLog();
         }
-
-        $tag->update($attributes);
 
         return back();
     }
 
-    public function destroy(Tag $tag)
+    public function destroy(Tag $tag, Request $request)
     {
         abort_if(auth()->user()->cannot('delete', $tag), 403);
 
-        $tag->delete();
+        try{
+            $tag->delete();
+            $this->deleteImg($tag);
 
-        $this->deleteImg($tag);
+            session()->flash('crud_message',['message' => 'Tag deleted!', 'class' => 'alert alert-danger']);
+        }catch (\Exception $e){
+            $this->saveToLog();
+        }
 
-        return back();
+        return redirect()->route('cabinet.evento.tag.index');
     }
 
     public function destroyAjax(Tag $tag)
@@ -186,13 +200,10 @@ class TagController extends Controller
 
             $rs['evIds'] = $evIds;
 
+            session()->flash('crud_message',['message' => 'Tag deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
-            logger('error with ' . __METHOD__ . ' '
-                . implode(' | ', [
-                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-                ])
-            );
+            $this->saveToLog();
         }
 
         die(json_encode($rs));
@@ -211,5 +222,13 @@ class TagController extends Controller
             'name' => ['required', 'string', 'max:105', 'min:2'],
             'color' => ['required', 'string', 'regex:/^#[a-f\d]{3,6}$/ui'],
         ]);
+    }
+
+    protected function saveToLog($e){
+        logger('error with ' . __METHOD__ . ' '
+            . implode(' | ', [
+                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+            ])
+        );
     }
 }
