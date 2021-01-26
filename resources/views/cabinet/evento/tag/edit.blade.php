@@ -18,6 +18,9 @@
 
                 <div class="card">
                     <div class="card-body">
+
+                        @include('cabinet.evento.tag.list.errors')
+
                         <form action="{{ route('cabinet.evento.tag.update', $tag) }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">

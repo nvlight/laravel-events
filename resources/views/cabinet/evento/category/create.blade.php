@@ -11,11 +11,8 @@
 
                 <div class="card">
                     <div class="card-body">
-                        @if(count($errors) > 0)
-                            @foreach($errors->all() as $error)
-                                <div class="alert alert-danger">{{ $error }}</div>
-                            @endforeach
-                        @endif
+
+                        @include('cabinet.evento.eventocategory.list.errors')
 
                         <form action="{{ route('cabinet.evento.category.store') }}" method="post" enctype="multipart/form-data">
                             @csrf

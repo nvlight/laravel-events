@@ -1,34 +1,30 @@
 @extends('layouts.evento')
 
 @section('content')
-    <h2>Evento/EventoCategory/index</h2>
-    <p><a href="{{ route('cabinet.evento.eventocategory.create') }}">create new evento-category</a></p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
 
-    @if($eventocategories)
-        <table>
-            <tr>
-                <th>id</th>
-                <th>evento_id</th>
-                <th>evento_caption</th>
-                <th>category_id</th>
-                <th>category_name</th>
-                <th>show</th>
-                <th>delete</th>
-                <th>update</th>
-            </tr>
-            @foreach($eventocategories as $eventocatetory)
-                <tr>
-                    <td>{{$eventocatetory->id}}</td>
-                    <td>{{$eventocatetory->evento_id}}</td>
-                    <td>{{ $eventocatetory->description }}</td>
-                    <td>{{$eventocatetory->category_id}}</td>
-                    <td>{{$eventocatetory->category_name}}</td>
-                    <td><a href="{{ route('cabinet.evento.eventocategory.show',    $eventocatetory) }}" target="">{{ $eventocatetory->id }}</a></td>
-                    <td><a href="{{ route('cabinet.evento.eventocategory.destroy', $eventocatetory) }}" target="">{{ $eventocatetory->id }}</a></td>
-                    <td><a href="{{ route('cabinet.evento.eventocategory.edit',    $eventocatetory) }}" target="">{{ $eventocatetory->id }}</a></td>
-                </tr>
-            @endforeach
-        </table>
-    @endif
+                <h2>Evento/EventoCategory/index</h2>
 
+                @include('cabinet.evento.eventocategory.nav.breadcrumbs')
+                @include('cabinet.evento.eventocategory.buttons.create')
+
+                @include('cabinet.evento.category.flash.message')
+
+                @if($eventocategories)
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered table-responsive">
+                                @include('cabinet.evento.eventocategory.list.header')
+                                @foreach($eventocategories as $eventocatetory)
+                                    @include('cabinet.evento.eventocategory.list.item')
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
 @endsection

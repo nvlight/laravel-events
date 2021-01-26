@@ -10,7 +10,6 @@ use App\Models\Evento\EventoTag;
 use App\Models\Evento\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use PHPUnit\Util\Json;
 
 class EventoCategoryController extends Controller
 {
@@ -40,8 +39,13 @@ class EventoCategoryController extends Controller
         $attributes = $request->validated();
 
         // todo - нужно предусмотреть случай с дублированием Тега для Evento
-
-        EventoCategory::create($attributes);
+        try{
+            EventoCategory::create($attributes);
+            session()->flash('crud_message',['message' => 'Tag created!', 'class' => 'alert alert-success']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            session()->flash('crud_message',['message' => 'Tag create error!', 'class' => 'alert alert-danger']);
+        }
 
         return back();
     }
@@ -68,14 +72,20 @@ class EventoCategoryController extends Controller
     {
         abort_if(auth()->user()->cannot('update', $eventocategory), 403);
 
-        // - нужно предусмотреть случай с дублированием Тега для Evento
+        // todo нужно предусмотреть случай с дублированием Тега для Evento
 
         $attributes = $request->validated();
 
         // todo + нужно не дать user-у изменить evento_id, котоый имеет input=hidden
         $attributes['evento_id'] = $eventocategory->evento_id;
 
-        $eventocategory->update($attributes);
+        try{
+            $eventocategory->update($attributes);
+            session()->flash('crud_message',['message' => 'EventoCategory updated!', 'class' => 'alert alert-warning']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            session()->flash('crud_message',['message' => 'EventoCategory update failed!', 'class' => 'alert alert-danger']);
+        }
 
         return back();
     }
@@ -84,9 +94,15 @@ class EventoCategoryController extends Controller
     {
         abort_if(auth()->user()->cannot('delete', $eventocategory), 403);
 
-        $eventocategory->delete();
+        try{
+            $eventocategory->delete();
+            session()->flash('crud_message',['message' => 'EventoCategory deleted!', 'class' => 'alert alert-danger']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            session()->flash('crud_message',['message' => 'EventoCategory delete failed!', 'class' => 'alert alert-danger']);
+        }
 
-        return back();
+        return redirect()->route('cabinet.evento.eventocategory.index');
     }
 
     // toDo -- remove later
@@ -145,11 +161,7 @@ class EventoCategoryController extends Controller
             $rs['eventocategory_id'] = $eventoCategory->id;
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
-            logger('error with ' . __METHOD__ . ' '
-                . implode(' | ', [
-                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-                ])
-            );
+            $this->saveToLog($e);
         }
 
         die(json_encode($rs));
@@ -168,6 +180,14 @@ class EventoCategoryController extends Controller
         $eventocategory->delete();
 
         die(json_encode($rs));
+    }
+
+    protected function saveToLog($e){
+        logger('error with ' . __METHOD__ . ' '
+            . implode(' | ', [
+                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+            ])
+        );
     }
 
 }
