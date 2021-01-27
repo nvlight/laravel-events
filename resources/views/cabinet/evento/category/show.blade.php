@@ -10,7 +10,8 @@
 
         <div class="d-flex">
             @include('cabinet.evento.category.buttons.create')
-            @include('cabinet.evento.category.buttons.delete', ['categoryId' => $category->id, 'class' => 'btn-danger ml-2' ] )
+            @include('cabinet.evento.category.buttons.update', ['itemId' => $category->id, 'class' => 'btn-warning ml-2' ] )
+            @include('cabinet.evento.category.buttons.delete', ['itemId' => $category->id, 'class' => 'btn-danger ml-2' ] )
         </div>
 
         <div class="row">

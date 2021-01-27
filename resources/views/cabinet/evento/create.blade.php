@@ -12,11 +12,7 @@
                 <div class="card">
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
-                            @if(count($errors) > 0)
-                                @foreach($errors->all() as $error)
-                                    <div class="alert alert-danger">{{ $error }}</div>
-                                @endforeach
-                            @endif
+                            @include('cabinet.evento._blocks.flash_message')
 
                             <form action="{{ route('cabinet.evento.store') }}" method="post" enctype="multipart/form-data">
                                 @csrf

@@ -10,7 +10,7 @@
                 @include('cabinet.evento.tag.nav.breadcrumbs')
                 @include('cabinet.evento.tag.buttons.create')
 
-                @include('cabinet.evento.tag.flash.message')
+                @include('cabinet.evento._blocks.flash_message')
 
                 <div class="card">
                     <div class="card-body">

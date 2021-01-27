@@ -7,6 +7,7 @@ use App\Models\Evento\Category;
 use App\Models\Evento\Evento;
 use App\Models\Evento\EventoCategory;
 use App\Models\Evento\EventoTag;
+use App\Models\Evento\EventoTagValue;
 use App\Models\Evento\Tag;
 use App\Models\User;
 use App\Policies\DocumentPolicy;
@@ -15,6 +16,7 @@ use App\Policies\Evento\CategoryPolicy;
 use App\Policies\Evento\EventoCategoryPolicy;
 use App\Policies\Evento\EventoPolicy;
 use App\Policies\Evento\EventoTagPolicy;
+use App\Policies\Evento\EventoTagValuePolicy;
 use App\Policies\Evento\TagPolicy;
 use App\Policies\EventPolicy;
 use App\Policies\ShortUrlPolicy;
@@ -49,6 +51,7 @@ class AuthServiceProvider extends ServiceProvider
         Attachment::class => AttachmentPolicy::class,
         EventoTag::class => EventoTagPolicy::class,
         EventoCategory::class => EventoCategoryPolicy::class,
+        EventoTagValue::class => EventoTagValuePolicy::class
     ];
 
     /**

@@ -54,6 +54,8 @@ class EventoTagValueController extends Controller
 
     public function show(EventoTagValue $eventoTagValue)
     {
+        abort_if(auth()->user()->cannot('view', $eventoTagValue), 403);
+
         return view('cabinet.evento.eventotagvalue.show', compact('eventoTagValue'));
     }
 
@@ -79,6 +81,8 @@ class EventoTagValueController extends Controller
 
     public function update(EventoTagValueRequest $request, EventoTagValue $eventoTagValue)
     {
+        abort_if(auth()->user()->cannot('update', $eventoTagValue), 403);
+
         $attributes = $request->validated();
 
         $attributes['evento_evento_tags_id'] = $eventoTagValue->evento_evento_tags_id;
@@ -90,8 +94,24 @@ class EventoTagValueController extends Controller
 
     public function destroy(EventoTagValue $eventoTagValue)
     {
-        $eventoTagValue->delete();
+        abort_if(auth()->user()->cannot('delete', $eventoTagValue), 403);
+
+        try{
+            $eventoTagValue->delete();
+            session()->flash('crud_message',['message' => 'EventoCategory deleted!', 'class' => 'alert alert-danger']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            session()->flash('crud_message',['message' => 'EventoCategory delete failed!', 'class' => 'alert alert-danger']);
+        }
 
         return back();
+    }
+
+    protected function saveToLog($e){
+        logger('error with ' . __METHOD__ . ' '
+            . implode(' | ', [
+                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+            ])
+        );
     }
 }

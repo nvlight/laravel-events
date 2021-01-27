@@ -1,8 +1,8 @@
 @if($itemId)
 <p>
-    <a href="{{ route('cabinet.evento.category.destroy', $itemId) }}"
+    <a href="{{ route('cabinet.evento.category.edit', $itemId) }}"
        class="btn btn-success @if ($class) {{ $class  }} @endif">
-        <span>delete</span>
+        <span>update</span>
     </a>
 </p>
 @endif

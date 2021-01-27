@@ -31,4 +31,9 @@ class EventoTagValue extends Model
     protected $fillable = [
         'evento_evento_tags_id', 'value', 'caption'
     ];
+
+    public function tag(){
+        return $this->hasOne('App\Models\Evento\EventoTag','id','evento_evento_tags_id');
+    }
+
 }

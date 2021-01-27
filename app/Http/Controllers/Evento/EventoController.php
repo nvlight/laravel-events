@@ -150,10 +150,22 @@ class EventoController extends Controller
     {
         abort_if(auth()->user()->cannot('delete', $evento), 403);
 
-        $evento->delete();
-
-        session()->flash('deleted', 'sucess deleted');
+        try{
+            $evento->delete();
+            session()->flash('crud_message',['message' => 'Evento deleted!', 'class' => 'alert alert-danger']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            session()->flash('crud_message',['message' => 'Evento delete failed!', 'class' => 'alert alert-danger']);
+        }
 
         return redirect()->route('cabinet.evento.index');
+    }
+
+    protected function saveToLog($e){
+        logger('error with ' . __METHOD__ . ' '
+            . implode(' | ', [
+                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+            ])
+        );
     }
 }

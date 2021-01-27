@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Evento;
 
 use App\Http\Requests\Evento\EventoTagRequest;
-use App\Models\Evento\Evento;
 use App\Models\Evento\EventoTag;
 use App\Models\Evento\EventoTagValue;
 use App\Models\Evento\Tag;
@@ -55,18 +54,22 @@ class EventoTagController extends Controller
         $attributes = $request->validated();
 
         $rs = ['success' => 1, 'message' => 'tag success added'];
+        $result = null;
         try{
             if ($request->has('value') && ( $request->get('value') !== null) ){
                 // нужно написать транзакцию, чтобы сразу же записать в таблицу EventoTagValue!
                 $tagValue   = $request->get('value');
                 $tagCaption = $request->get('caption');
-                $result = null;
                 \DB::transaction(function () use($attributes, $tagValue, $tagCaption, &$result) {
                     $eventoTag = EventoTag::create($attributes);
                     $rsTag = Tag::where('id', '=', $eventoTag->tag_id)->first();
+
+                    $rs = ['success' => 1, 'message' => 'tag success added'];
                     $rs['tag_name'] = $rsTag->name;
                     $rs['eventotag_id'] = $eventoTag->id;
                     $rs['tag_color'] = $rsTag->color;
+                    $rs['tag_value'] = $tagValue;
+                    $result = $rs;
 
                     $etv = EventoTagValue::find($eventoTag->id);
                     if (!$etv){
@@ -79,10 +82,6 @@ class EventoTagController extends Controller
                         $etv->value = $tagValue;
                         $etv->save();
                     }
-                    $rs = ['success' => 1, 'message' => 'tag success added'];
-                    $rs['tag_name'] = $rsTag->name;
-                    $rs['tag_value'] = $tagValue;
-                    $rs['eventotag_id'] = $eventoTag->id;
                 });
             }else{
                 $eventoTag = EventoTag::create($attributes);
@@ -90,17 +89,13 @@ class EventoTagController extends Controller
                 $rs['tag_name'] = $rsTag->name;
                 $rs['eventotag_id'] = $eventoTag->id;
                 $rs['tag_color'] = $rsTag->color;
+                $result = $rs;
             }
-
-            $rs['eventoTagDiv'] = View::make('cabinet.evento.ajax.eventotag_table_item', ['tag' => $rs])->render();
+            $rs['eventoTagDiv'] = View::make('cabinet.evento.ajax.eventotag_table_item', ['tag' => $result])->render();
 
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
-            logger('error with ' . __METHOD__ . ' '
-                . implode(' | ', [
-                    $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
-                ])
-            );
+            $this->saveToLog($e);
         }
 
         die(json_encode($rs));

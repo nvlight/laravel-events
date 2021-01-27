@@ -339,7 +339,6 @@
             </div>
         </div>
     </div>
-
     {{-- END of Modals --}}
 
 @endsection

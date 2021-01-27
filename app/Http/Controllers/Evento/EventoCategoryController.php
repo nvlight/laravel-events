@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Evento;
 
 use App\Http\Requests\Evento\EventoCategoryRequest;
-use App\Http\Requests\Evento\EventoTagRequest;
-use App\Models\Evento\Evento;
 use App\Models\Evento\EventoCategory;
-use App\Models\Evento\EventoTag;
 use App\Models\Evento\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -105,22 +102,6 @@ class EventoCategoryController extends Controller
         return redirect()->route('cabinet.evento.eventocategory.index');
     }
 
-    // toDo -- remove later
-    public function destroyAjaxTest(EventoCategory $eventocategory)
-    {
-        $rs = ['success' => 1, 'message' => 'eventocategory success deleted!'];
-        if (auth()->user()->cannot('delete', $eventocategory)){
-            $rs = ['success' => 0, 'message' => 'cant delete not my own eventocategory'];
-        }
-
-        $eventocategory->delete();
-
-        die(json_encode($rs));
-    }
-
-    /**
-     *  Получение списка категорий пользователя
-     */
     public function getUserCategories()
     {
         $categories = auth()->user()->eventoCategories->toArray();
@@ -142,9 +123,6 @@ class EventoCategoryController extends Controller
         die(json_encode($categoriesWithNeedColumns));
     }
 
-    /**
-     *  Сохранение новой категории
-     */
     public function storeAjax(EventoCategoryRequest $request)
     {
         // todo - подделка evento_id
@@ -167,17 +145,22 @@ class EventoCategoryController extends Controller
         die(json_encode($rs));
     }
 
-    /**
-     *  Удаление категории
-     */
     public function destroyAjax(EventoCategory $eventocategory)
     {
+        abort_if(auth()->user()->cannot('delete', $eventocategory), 403);
+
         $rs = ['success' => 1, 'message' => 'eventocategory success deleted!'];
         if (auth()->user()->cannot('delete', $eventocategory)){
             $rs = ['success' => 0, 'message' => 'cant delete not my own eventocategory'];
         }
 
-        $eventocategory->delete();
+        try{
+            $eventocategory->delete();
+
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'eventocategory delete error'];
+            $this->saveToLog($e);
+        }
 
         die(json_encode($rs));
     }

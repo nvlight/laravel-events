@@ -12,7 +12,7 @@
                 <div class="card">
                     <div class="card-body">
 
-                        @include('cabinet.evento.eventocategory.list.errors')
+                        @include('cabinet.evento._blocks.flash_message')
 
                         <form action="{{ route('cabinet.evento.category.store') }}" method="post" enctype="multipart/form-data">
                             @csrf

@@ -10,15 +10,15 @@
 
                 <div class="d-flex">
                     @include('cabinet.evento.category.buttons.create')
-                    @include('cabinet.evento.category.buttons.delete', ['categoryId' => $category->id, 'class' => 'btn-danger ml-2' ] )
+                    @include('cabinet.evento.category.buttons.delete', ['itemId' => $category->id, 'class' => 'btn-danger ml-2' ] )
                 </div>
 
-                @include('cabinet.evento.category.flash.message')
+                @include('cabinet.evento._blocks.flash_message')
 
                 <div class="card">
                     <div class="card-body">
 
-                        @include('cabinet.evento.eventocategory.list.errors')
+                        @include('cabinet.evento._blocks.flash_message')
 
                         <form action="{{ route('cabinet.evento.category.update', $category) }}" method="post" enctype="multipart/form-data">
                             @csrf

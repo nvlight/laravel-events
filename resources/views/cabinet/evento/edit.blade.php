@@ -19,11 +19,7 @@
                 </div>
             @endif
 
-            @if(count($errors) > 0)
-                @foreach($errors->all() as $error)
-                    <div class="alert alert-danger">{{ $error }}</div>
-                @endforeach
-            @endif
+            @include('cabinet.evento._blocks.flash_message')
 
             <form action="{{ route('cabinet.evento.update', $evento) }}" method="post" enctype="multipart/form-data">
                 @csrf
