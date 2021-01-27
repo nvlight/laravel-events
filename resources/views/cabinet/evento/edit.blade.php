@@ -13,12 +13,6 @@
                 </div>
             @endif
 
-            @if(session()->has('saved'))
-                <div class="alert alert-success" role="alert">
-                    {{ session()->get('saved') }}
-                </div>
-            @endif
-
             @include('cabinet.evento._blocks.flash_message')
 
             <form action="{{ route('cabinet.evento.update', $evento) }}" method="post" enctype="multipart/form-data">

@@ -1572,16 +1572,16 @@ function isStandardBrowserEnv() {
 }
 
 /**
- * Iterate over an Array or an Object invoking a function for each item.
+ * Iterate over an Array or an Object invoking a function for each list.
  *
  * If `obj` is an Array callback will be called passing
- * the value, index, and complete array for each item.
+ * the value, index, and complete array for each list.
  *
  * If 'obj' is an Object callback will be called passing
  * the value, key, and complete object for each property.
  *
  * @param {Object|Array} obj The object to iterate
- * @param {Function} fn The callback to invoke for each item
+ * @param {Function} fn The callback to invoke for each list
  */
 function forEach(obj, fn) {
   // Don't bother if no value provided
@@ -2361,16 +2361,16 @@ module.exports = {
   var CLASS_NAME_CAROUSEL = 'carousel';
   var CLASS_NAME_ACTIVE$1 = 'active';
   var CLASS_NAME_SLIDE = 'slide';
-  var CLASS_NAME_RIGHT = 'carousel-item-right';
-  var CLASS_NAME_LEFT = 'carousel-item-left';
-  var CLASS_NAME_NEXT = 'carousel-item-next';
-  var CLASS_NAME_PREV = 'carousel-item-prev';
+  var CLASS_NAME_RIGHT = 'carousel-list-right';
+  var CLASS_NAME_LEFT = 'carousel-list-left';
+  var CLASS_NAME_NEXT = 'carousel-list-next';
+  var CLASS_NAME_PREV = 'carousel-list-prev';
   var CLASS_NAME_POINTER_EVENT = 'pointer-event';
   var SELECTOR_ACTIVE$1 = '.active';
-  var SELECTOR_ACTIVE_ITEM = '.active.carousel-item';
-  var SELECTOR_ITEM = '.carousel-item';
-  var SELECTOR_ITEM_IMG = '.carousel-item img';
-  var SELECTOR_NEXT_PREV = '.carousel-item-next, .carousel-item-prev';
+  var SELECTOR_ACTIVE_ITEM = '.active.carousel-list';
+  var SELECTOR_ITEM = '.carousel-list';
+  var SELECTOR_ITEM_IMG = '.carousel-list img';
+  var SELECTOR_NEXT_PREV = '.carousel-list-next, .carousel-list-prev';
   var SELECTOR_INDICATORS = '.carousel-indicators';
   var SELECTOR_DATA_SLIDE = '[data-slide], [data-slide-to]';
   var SELECTOR_DATA_RIDE = '[data-ride="carousel"]';
@@ -3286,7 +3286,7 @@ module.exports = {
   var SELECTOR_FORM_CHILD = '.dropdown form';
   var SELECTOR_MENU = '.dropdown-menu';
   var SELECTOR_NAVBAR_NAV = '.navbar-nav';
-  var SELECTOR_VISIBLE_ITEMS = '.dropdown-menu .dropdown-item:not(.disabled):not(:disabled)';
+  var SELECTOR_VISIBLE_ITEMS = '.dropdown-menu .dropdown-list:not(.disabled):not(:disabled)';
   var PLACEMENT_TOP = 'top-start';
   var PLACEMENT_TOPEND = 'top-end';
   var PLACEMENT_BOTTOM = 'bottom-start';
@@ -5392,15 +5392,15 @@ module.exports = {
   var EVENT_ACTIVATE = "activate" + EVENT_KEY$8;
   var EVENT_SCROLL = "scroll" + EVENT_KEY$8;
   var EVENT_LOAD_DATA_API$2 = "load" + EVENT_KEY$8 + DATA_API_KEY$6;
-  var CLASS_NAME_DROPDOWN_ITEM = 'dropdown-item';
+  var CLASS_NAME_DROPDOWN_ITEM = 'dropdown-list';
   var CLASS_NAME_ACTIVE$2 = 'active';
   var SELECTOR_DATA_SPY = '[data-spy="scroll"]';
   var SELECTOR_NAV_LIST_GROUP = '.nav, .list-group';
   var SELECTOR_NAV_LINKS = '.nav-link';
-  var SELECTOR_NAV_ITEMS = '.nav-item';
-  var SELECTOR_LIST_ITEMS = '.list-group-item';
+  var SELECTOR_NAV_ITEMS = '.nav-list';
+  var SELECTOR_LIST_ITEMS = '.list-group-list';
   var SELECTOR_DROPDOWN = '.dropdown';
-  var SELECTOR_DROPDOWN_ITEMS = '.dropdown-item';
+  var SELECTOR_DROPDOWN_ITEMS = '.dropdown-list';
   var SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
   var METHOD_OFFSET = 'offset';
   var METHOD_POSITION = 'position';
@@ -5574,7 +5574,7 @@ module.exports = {
         $link.addClass(CLASS_NAME_ACTIVE$2); // Set triggered links parents as active
         // With both <ul> and <nav> markup a parent is the previous sibling of any nav ancestor
 
-        $link.parents(SELECTOR_NAV_LIST_GROUP).prev(SELECTOR_NAV_LINKS + ", " + SELECTOR_LIST_ITEMS).addClass(CLASS_NAME_ACTIVE$2); // Handle special case when .nav-link is inside .nav-item
+        $link.parents(SELECTOR_NAV_LIST_GROUP).prev(SELECTOR_NAV_LINKS + ", " + SELECTOR_LIST_ITEMS).addClass(CLASS_NAME_ACTIVE$2); // Handle special case when .nav-link is inside .nav-list
 
         $link.parents(SELECTOR_NAV_LIST_GROUP).prev(SELECTOR_NAV_ITEMS).children(SELECTOR_NAV_LINKS).addClass(CLASS_NAME_ACTIVE$2);
       }
@@ -12231,7 +12231,7 @@ function domManip( collection, args, callback, ignored ) {
 			scripts = jQuery.map( getAll( fragment, "script" ), disableScript );
 			hasScripts = scripts.length;
 
-			// Use the original fragment for the last item
+			// Use the original fragment for the last list
 			// instead of the first because it can end up
 			// being emptied incorrectly in certain situations (#8070).
 			for ( ; i < l; i++ ) {
@@ -15036,11 +15036,11 @@ function buildParams( prefix, obj, traditional, add ) {
 
 	if ( Array.isArray( obj ) ) {
 
-		// Serialize array item.
+		// Serialize array list.
 		jQuery.each( obj, function( i, v ) {
 			if ( traditional || rbracket.test( prefix ) ) {
 
-				// Treat each array item as a scalar.
+				// Treat each array list as a scalar.
 				add( prefix, v );
 
 			} else {
@@ -15057,14 +15057,14 @@ function buildParams( prefix, obj, traditional, add ) {
 
 	} else if ( !traditional && toType( obj ) === "object" ) {
 
-		// Serialize object item.
+		// Serialize object list.
 		for ( name in obj ) {
 			buildParams( prefix + "[" + name + "]", obj[ name ], traditional, add );
 		}
 
 	} else {
 
-		// Serialize scalar item.
+		// Serialize scalar list.
 		add( prefix, obj );
 	}
 }

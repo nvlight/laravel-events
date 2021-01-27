@@ -1129,16 +1129,16 @@
   var CLASS_NAME_CAROUSEL = 'carousel';
   var CLASS_NAME_ACTIVE$1 = 'active';
   var CLASS_NAME_SLIDE = 'slide';
-  var CLASS_NAME_RIGHT = 'carousel-item-right';
-  var CLASS_NAME_LEFT = 'carousel-item-left';
-  var CLASS_NAME_NEXT = 'carousel-item-next';
-  var CLASS_NAME_PREV = 'carousel-item-prev';
+  var CLASS_NAME_RIGHT = 'carousel-list-right';
+  var CLASS_NAME_LEFT = 'carousel-list-left';
+  var CLASS_NAME_NEXT = 'carousel-list-next';
+  var CLASS_NAME_PREV = 'carousel-list-prev';
   var CLASS_NAME_POINTER_EVENT = 'pointer-event';
   var SELECTOR_ACTIVE = '.active';
-  var SELECTOR_ACTIVE_ITEM = '.active.carousel-item';
-  var SELECTOR_ITEM = '.carousel-item';
-  var SELECTOR_ITEM_IMG = '.carousel-item img';
-  var SELECTOR_NEXT_PREV = '.carousel-item-next, .carousel-item-prev';
+  var SELECTOR_ACTIVE_ITEM = '.active.carousel-list';
+  var SELECTOR_ITEM = '.carousel-list';
+  var SELECTOR_ITEM_IMG = '.carousel-list img';
+  var SELECTOR_NEXT_PREV = '.carousel-list-next, .carousel-list-prev';
   var SELECTOR_INDICATORS = '.carousel-indicators';
   var SELECTOR_DATA_SLIDE = '[data-slide], [data-slide-to]';
   var SELECTOR_DATA_RIDE = '[data-ride="carousel"]';
@@ -2113,7 +2113,7 @@
   var SELECTOR_FORM_CHILD = '.dropdown form';
   var SELECTOR_MENU = '.dropdown-menu';
   var SELECTOR_NAVBAR_NAV = '.navbar-nav';
-  var SELECTOR_VISIBLE_ITEMS = '.dropdown-menu .dropdown-item:not(.disabled):not(:disabled)';
+  var SELECTOR_VISIBLE_ITEMS = '.dropdown-menu .dropdown-list:not(.disabled):not(:disabled)';
   var PLACEMENT_TOP = 'top-start';
   var PLACEMENT_TOPEND = 'top-end';
   var PLACEMENT_BOTTOM = 'bottom-start';
@@ -4301,13 +4301,13 @@
   var EVENT_ACTIVATE = "activate" + EVENT_KEY$8;
   var EVENT_SCROLL = "scroll" + EVENT_KEY$8;
   var EVENT_LOAD_DATA_API$1 = "load" + EVENT_KEY$8 + DATA_API_KEY$6;
-  var CLASS_NAME_DROPDOWN_ITEM = 'dropdown-item';
+  var CLASS_NAME_DROPDOWN_ITEM = 'dropdown-list';
   var CLASS_NAME_ACTIVE$2 = 'active';
   var SELECTOR_DATA_SPY = '[data-spy="scroll"]';
   var SELECTOR_NAV_LIST_GROUP = '.nav, .list-group';
   var SELECTOR_NAV_LINKS = '.nav-link';
-  var SELECTOR_NAV_ITEMS = '.nav-item';
-  var SELECTOR_LIST_ITEMS = '.list-group-item';
+  var SELECTOR_NAV_ITEMS = '.nav-list';
+  var SELECTOR_LIST_ITEMS = '.list-group-list';
   var SELECTOR_DROPDOWN = '.dropdown';
   var SELECTOR_DROPDOWN_TOGGLE = '.dropdown-toggle';
   var METHOD_OFFSET = 'offset';
@@ -4482,7 +4482,7 @@
           // With both <ul> and <nav> markup a parent is the previous sibling of any nav ancestor
           SelectorEngine.prev(listGroup, SELECTOR_NAV_LINKS + ", " + SELECTOR_LIST_ITEMS).forEach(function (item) {
             return item.classList.add(CLASS_NAME_ACTIVE$2);
-          }); // Handle special case when .nav-link is inside .nav-item
+          }); // Handle special case when .nav-link is inside .nav-list
 
           SelectorEngine.prev(listGroup, SELECTOR_NAV_ITEMS).forEach(function (navItem) {
             SelectorEngine.children(navItem, SELECTOR_NAV_LINKS).forEach(function (item) {

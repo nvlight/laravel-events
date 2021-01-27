@@ -98,9 +98,9 @@
                                     //dd($curr_parent_id);
                                     $cat_parent_name = $categories->filter(function($item) use ($curr_parent_id) {
                                         //dd($curr_parent_id);
-                                        //echo 'itemId: ' . $item->id  . ' parentId: ' . $curr_parent_id ;
+                                        //echo 'itemId: ' . $list->id  . ' parentId: ' . $curr_parent_id ;
                                         $rs = $item->id == $curr_parent_id;
-                                        //dd($item->id);
+                                        //dd($list->id);
                                         //echo $rs;
                                         return $rs;
                                     })->first();

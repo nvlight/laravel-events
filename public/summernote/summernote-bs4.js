@@ -99,7 +99,7 @@
           var option = (typeof item === 'object') ? item.option : undefined;
           var dataValue = 'data-value="' + value + '"';
           var dataOption = (option !== undefined) ? ' data-option="' + option + '"' : '';
-          return '<a class="dropdown-item" href="#" ' + (dataValue + dataOption) + ' role="listitem" aria-label="' + value + '">' + content + '</a>';
+          return '<a class="dropdown-list" href="#" ' + (dataValue + dataOption) + ' role="listitem" aria-label="' + value + '">' + content + '</a>';
       }).join('') : options.items;
       $node.html(markup).attr({ 'aria-label': options.title });
   });
@@ -110,7 +110,7 @@
       var markup = Array.isArray(options.items) ? options.items.map(function (item) {
           var value = (typeof item === 'string') ? item : (item.value || '');
           var content = options.template ? options.template(item) : item;
-          return '<a class="dropdown-item" href="#" data-value="' + value + '" role="listitem" aria-label="' + item + '">' + icon(options.checkClassName) + ' ' + content + '</a>';
+          return '<a class="dropdown-list" href="#" data-value="' + value + '" role="listitem" aria-label="' + item + '">' + icon(options.checkClassName) + ' ' + content + '</a>';
       }).join('') : options.items;
       $node.html(markup).attr({ 'aria-label': options.title });
   });
@@ -663,7 +663,7 @@
   };
 
   /**
-   * returns the first item of an array.
+   * returns the first list of an array.
    *
    * @param {Array} array
    */
@@ -671,7 +671,7 @@
       return array[0];
   }
   /**
-   * returns the last item of an array.
+   * returns the last list of an array.
    *
    * @param {Array} array
    */
@@ -695,7 +695,7 @@
       return array.slice(1);
   }
   /**
-   * returns item of array
+   * returns list of array
    */
   function find(array, pred) {
       for (var idx = 0, len = array.length; idx < len; idx++) {
@@ -809,7 +809,7 @@
       return results;
   }
   /**
-   * returns next item.
+   * returns next list.
    * @param {Array} array
    */
   function next(array, item) {
@@ -820,7 +820,7 @@
       return null;
   }
   /**
-   * returns prev item.
+   * returns prev list.
    * @param {Array} array
    */
   function prev(array, item) {
@@ -3370,8 +3370,8 @@
       /**
        * @method appendToPrevious
        *
-       * Appends list to previous list item, if
-       * none exist it wraps the list in a new list item.
+       * Appends list to previous list list, if
+       * none exist it wraps the list in a new list list.
        *
        * @param {HTMLNode} ListItem
        * @return {HTMLNode}
@@ -3384,7 +3384,7 @@
       /**
        * @method findList
        *
-       * Finds an existing list in list item
+       * Finds an existing list in list list
        *
        * @param {HTMLNode} ListItem
        * @return {Array[]}
@@ -3397,7 +3397,7 @@
       /**
        * @method findNextSiblings
        *
-       * Finds all list item siblings that follow it
+       * Finds all list list siblings that follow it
        *
        * @param {HTMLNode} ListItem
        * @return {HTMLNode}
@@ -3576,7 +3576,7 @@
        * Create action cell object.
        *
        * @param {object} virtualTableCellObj Object of specific position on virtual table.
-       * @param {enum} resultAction Action to be applied in that item.
+       * @param {enum} resultAction Action to be applied in that list.
        */
       function getActionCell(virtualTableCellObj, resultAction, virtualRowPosition, virtualColPosition) {
           return {
@@ -7177,7 +7177,7 @@
           var keyMap = this.options.keyMap[env.isMac ? 'mac' : 'pc'];
           return Object.keys(keyMap).map(function (key) {
               var command = keyMap[key];
-              var $row = $$1('<div><div class="help-list-item"/></div>');
+              var $row = $$1('<div><div class="help-list-list"/></div>');
               $row.append($$1('<label><kbd>' + key + '</kdb></label>').css({
                   'width': 180,
                   'margin-right': 10
@@ -7311,7 +7311,7 @@
           }).render().appendTo(this.options.container);
           this.$popover.hide();
           this.$content = this.$popover.find('.popover-content,.note-popover-content');
-          this.$content.on('click', '.note-hint-item', function (e) {
+          this.$content.on('click', '.note-hint-list', function (e) {
               _this.$content.find('.active').removeClass('active');
               $$1(e.currentTarget).addClass('active');
               _this.replace();
@@ -7326,7 +7326,7 @@
           this.$content[0].scrollTop = $item[0].offsetTop - (this.$content.innerHeight() / 2);
       };
       HintPopover.prototype.moveDown = function () {
-          var $current = this.$content.find('.note-hint-item.active');
+          var $current = this.$content.find('.note-hint-list.active');
           var $next = $current.next();
           if ($next.length) {
               this.selectItem($next);
@@ -7336,11 +7336,11 @@
               if (!$nextGroup.length) {
                   $nextGroup = this.$content.find('.note-hint-group').first();
               }
-              this.selectItem($nextGroup.find('.note-hint-item').first());
+              this.selectItem($nextGroup.find('.note-hint-list').first());
           }
       };
       HintPopover.prototype.moveUp = function () {
-          var $current = this.$content.find('.note-hint-item.active');
+          var $current = this.$content.find('.note-hint-list.active');
           var $prev = $current.prev();
           if ($prev.length) {
               this.selectItem($prev);
@@ -7350,11 +7350,11 @@
               if (!$prevGroup.length) {
                   $prevGroup = this.$content.find('.note-hint-group').last();
               }
-              this.selectItem($prevGroup.find('.note-hint-item').last());
+              this.selectItem($prevGroup.find('.note-hint-list').last());
           }
       };
       HintPopover.prototype.replace = function () {
-          var $item = this.$content.find('.note-hint-item.active');
+          var $item = this.$content.find('.note-hint-list.active');
           if ($item.length) {
               var node = this.nodeFromItem($item);
               // XXX: consider to move codes to editor for recording redo/undo.
@@ -7378,7 +7378,7 @@
       HintPopover.prototype.createItemTemplates = function (hintIdx, items) {
           var hint = this.hints[hintIdx];
           return items.map(function (item, idx) {
-              var $item = $$1('<div class="note-hint-item"/>');
+              var $item = $$1('<div class="note-hint-list"/>');
               $item.append(hint.template ? hint.template(item) : item + '');
               $item.data({
                   'index': hintIdx,
@@ -7442,8 +7442,8 @@
                               _this.createGroup(idx, keyword_1).appendTo(_this.$content);
                           }
                       });
-                      // select first .note-hint-item
-                      this.$content.find('.note-hint-item:first').addClass('active');
+                      // select first .note-hint-list
+                      this.$content.find('.note-hint-list:first').addClass('active');
                       // set position for popover after group is created
                       if (this.direction === 'top') {
                           this.$popover.css({

@@ -645,11 +645,11 @@ if (eventoDeleteLinks.length){
         eventoDeleteLinks[i].onclick = function (e) {
             e.stopImmediatePropagation();
 
-            if (!confirm('Delete item?')){
+            if (!confirm('Delete list?')){
                 return false;
             }
 
-            //console.log('item deleted!');
+            //console.log('list deleted!');
         };
     }
 }

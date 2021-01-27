@@ -19,5 +19,12 @@
     <script src="{{ asset('bootstrap-5.0.0-alpha2-dist/js/bootstrap.js') }}"></script>
 
     <script src="{{ asset('js/evento.main.js') }}"></script>
+
+    <footer class="">
+        <div class="container">
+            <p class="">© <script>document.write(new Date().getFullYear())</script> Evento
+            </p>
+        </div>
+    </footer>
 </body>
 </html>
