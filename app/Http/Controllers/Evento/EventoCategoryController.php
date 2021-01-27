@@ -38,13 +38,13 @@ class EventoCategoryController extends Controller
     {
         $attributes = $request->validated();
 
-        // todo - нужно предусмотреть случай с дублированием Тега для Evento
+        // todo - нужно предусмотреть случай с дублированием Категории для Evento
         try{
             EventoCategory::create($attributes);
-            session()->flash('crud_message',['message' => 'Tag created!', 'class' => 'alert alert-success']);
+            session()->flash('crud_message',['message' => 'EventoCategory created!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'Tag create error!', 'class' => 'alert alert-danger']);
+            session()->flash('crud_message',['message' => 'EventoCategory create error!', 'class' => 'alert alert-danger']);
         }
 
         return back();

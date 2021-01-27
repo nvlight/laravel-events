@@ -10,7 +10,7 @@
                 @include('cabinet.evento.eventocategory.nav.breadcrumbs')
                 @include('cabinet.evento.eventocategory.buttons.create')
 
-                @include('cabinet.evento.category.flash.message')
+                @include('cabinet.evento._blocks.flash_message')
 
                 @if($eventocategories)
                     <div class="card">

@@ -1,34 +1,31 @@
 @extends('layouts.evento')
 
 @section('content')
-    <h2>Evento/EventoTag/index</h2>
-    <p><a href="{{ route('cabinet.evento.eventotag.create') }}">create new evento-tag</a></p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
 
-    @if($eventotags)
-        <table>
-            <tr>
-                <th>id</th>
-                <th>evento_id</th>
-                <th>evento_caption</th>
-                <th>tag_id</th>
-                <th>tag_name</th>
-                <th>show</th>
-                <th>delete</th>
-                <th>update</th>
-            </tr>
-            @foreach($eventotags as $eventotag)
-                <tr>
-                    <td>{{$eventotag->id}}</td>
-                    <td>{{$eventotag->evento_id}}</td>
-                    <td>{{ $eventotag->description }}</td>
-                    <td>{{$eventotag->tag_id}}</td>
-                    <td>{{$eventotag->tag_name}}</td>
-                    <td><a href="{{ route('cabinet.evento.eventotag.show',    $eventotag) }}" target="">{{ $eventotag->id }}</a></td>
-                    <td><a href="{{ route('cabinet.evento.eventotag.destroy', $eventotag) }}" target="">{{ $eventotag->id }}</a></td>
-                    <td><a href="{{ route('cabinet.evento.eventotag.edit',    $eventotag) }}" target="">{{ $eventotag->id }}</a></td>
-                </tr>
-            @endforeach
-        </table>
-    @endif
+                <h2>Evento/EventoTag/index</h2>
+
+                @include('cabinet.evento.eventotag.nav.breadcrumbs')
+                @include('cabinet.evento.eventotag.buttons.create')
+
+                @include('cabinet.evento._blocks.flash_message')
+
+                @if($eventotags)
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered table-responsive">
+                                @include('cabinet.evento.eventotag.list.header')
+                                @foreach($eventotags as $eventotag)
+                                    @include('cabinet.evento.eventotag.list.item')
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
 
 @endsection

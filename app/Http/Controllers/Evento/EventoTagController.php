@@ -36,9 +36,14 @@ class EventoTagController extends Controller
     {
         $attributes = $request->validated();
 
-        // - нужно предусмотреть случай с дублированием Тега для Evento
-
-        EventoTag::create($attributes);
+        // todo - нужно предусмотреть случай с дублированием Тега для Evento
+        try{
+            EventoTag::create($attributes);
+            session()->flash('crud_message',['message' => 'EventoTag created!', 'class' => 'alert alert-success']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            session()->flash('crud_message',['message' => 'EventoTag create error!', 'class' => 'alert alert-danger']);
+        }
 
         return back();
     }
@@ -130,7 +135,13 @@ class EventoTagController extends Controller
         // + нужно не дать user-у изменить evento_id, котоый имеет input=hidden
         $attributes['evento_id'] = $eventotag->evento_id;
 
-        $eventotag->update($attributes);
+        try{
+            $eventotag->update($attributes);
+            session()->flash('crud_message',['message' => 'EventoTag updated!', 'class' => 'alert alert-success']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            session()->flash('crud_message',['message' => 'EventoTag update error!', 'class' => 'alert alert-danger']);
+        }
 
         return back();
     }
@@ -139,9 +150,15 @@ class EventoTagController extends Controller
     {
         abort_if(auth()->user()->cannot('delete', $eventotag), 403);
 
-        $eventotag->delete();
+        try{
+            $eventotag->delete();
+            session()->flash('crud_message',['message' => 'EventoTag deleted!', 'class' => 'alert alert-danger']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            session()->flash('crud_message',['message' => 'EventoTag delete error!', 'class' => 'alert alert-danger']);
+        }
 
-        return back();
+        return redirect()->route('cabinet.evento.eventotag.index');
     }
 
     /**
@@ -154,7 +171,14 @@ class EventoTagController extends Controller
             $rs = ['success' => 0, 'message' => 'cant delete not my own eventotag'];
         }
 
-        $eventotag->delete();
+        try{
+            $eventotag->delete();
+            session()->flash('crud_message',['message' => 'EventoTag deleted!', 'class' => 'alert alert-danger']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'EventoTag delete error!'];
+            session()->flash('crud_message',['message' => 'EventoTag delete error!', 'class' => 'alert alert-danger']);
+        }
 
         die(json_encode($rs));
     }
@@ -181,5 +205,13 @@ class EventoTagController extends Controller
         }
 
         die(json_encode($tagsWithNeedColumns));
+    }
+
+    protected function saveToLog($e){
+        logger('error with ' . __METHOD__ . ' '
+            . implode(' | ', [
+                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+            ])
+        );
     }
 }

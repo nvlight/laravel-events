@@ -16,8 +16,8 @@
                 <div class="card">
                     <div class="card-body">
 
-                        @include('cabinet.evento.eventocategory.list.errors')
-                        @include('cabinet.evento.category.flash.message')
+                        @include('cabinet.evento._blocks.errors')
+                        @include('cabinet.evento._blocks.flash_message')
 
                         <form action="{{ route('cabinet.evento.eventocategory.update', $eventocategory) }}" method="post" enctype="application/x-www-form-urlencoded">
                             @csrf

@@ -19,10 +19,10 @@
                     <div class="card-body">
                         <table class="table table-striped table-bordered">
                             <thead>
-                            <tr>
-                                <th>Column</th>
-                                <th>Value</th>
-                            </tr>
+                                <tr>
+                                    <th>Column</th>
+                                    <th>Value</th>
+                                </tr>
                             </thead>
                             @forelse($eventocategory->attributesToArray() as $k => $v)
                                 <tr>

@@ -1,0 +1,10 @@
+<tr>
+    <th>id</th>
+    <th>evento_id</th>
+    <th>evento_caption</th>
+    <th>tag_id</th>
+    <th>tag_name</th>
+    <th>show</th>
+    <th>delete</th>
+    <th>update</th>
+</tr>
