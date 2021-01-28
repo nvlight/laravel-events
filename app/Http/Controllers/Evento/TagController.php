@@ -55,7 +55,7 @@ class TagController extends Controller
 
             $request->session()->flash('crud_message',['message' => 'Tag stored!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
-            $this->saveToLog();
+            $this->saveToLog($e);
         }
 
         session()->flash('crud_message',['message' => 'Tag created!', 'class' => 'alert alert-success']);
@@ -65,14 +65,6 @@ class TagController extends Controller
 
     public function storeAjax(Request $request)
     {
-        //$attributes = $request->validated();
-        //$attributes = $this->validateStoreAjax();
-
-        //$attributes = $request->validateWithBug('POST', [
-        //    'name' => ['required', 'string', 'max:105', 'min:2'],
-        //    'color' => ['required', 'string', 'regex:/^#[a-f\d]{3,6}$/ui'],
-        //]);
-
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:105', 'min:2'],
             'color' => ['required', 'string', 'regex:/^#[a-f\d]{3,6}$/ui'],
@@ -92,15 +84,6 @@ class TagController extends Controller
         $validator->setAttributeNames($attributeNames);
         $validator->setCustomMessages($customMessages);
 
-        //if ($validator->fails()) {
-        //    //dd($validator->errors());
-        //    foreach($validator->errors()->toArray() as $k => $v){
-        //        dump($k); dump($v);
-        //    }
-        //}
-        //dump($validator->errors()->toArray());
-        //dump($validator->customAttributes);
-
         if ($validator->fails()){
             $rs = ['success' => 0, 'message' => 'Ошибки валидации',
                 'errors' => $validator->errors()->toArray(), 'customAttributes' => $validator->customAttributes];
@@ -117,15 +100,14 @@ class TagController extends Controller
             $rs['tag_name'] = $category->name;
 
             if ($request->hasFile('img')){
-                $savedImgPath = $request->file('img')
-                    ->store(auth()->id(), ['disk' => 'local'] );
+                $savedImgPath = $request->file('img')->store(auth()->id(), ['disk' => 'local'] );
                 $attributes['img'] = $savedImgPath;
             }
 
             session()->flash('crud_message',['message' => 'Tag created with ajax!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
-            $rs = ['success' => 0, 'message' => 'error'];
-            $this->saveToLog();
+            $rs = ['success' => 0, 'message' => 'storeAjax error'];
+            $this->saveToLog($e);
         }
 
         die(json_encode($rs));
@@ -163,7 +145,7 @@ class TagController extends Controller
 
             session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-warning']);
         }catch (\Exception $e){
-            $this->saveToLog();
+            $this->saveToLog($e);
         }
 
         return back();
@@ -179,7 +161,7 @@ class TagController extends Controller
 
             session()->flash('crud_message',['message' => 'Tag deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
-            $this->saveToLog();
+            $this->saveToLog($e);
         }
 
         return redirect()->route('cabinet.evento.tag.index');
@@ -203,7 +185,7 @@ class TagController extends Controller
             session()->flash('crud_message',['message' => 'Tag deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
-            $this->saveToLog();
+            $this->saveToLog($e);
         }
 
         die(json_encode($rs));

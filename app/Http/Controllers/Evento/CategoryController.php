@@ -128,7 +128,7 @@ class CategoryController extends Controller
 
             session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-warning']);
         }catch (\Exception $e){
-            $this->saveToLog();
+            $this->saveToLog($e);
         }
 
         return back();
@@ -144,7 +144,7 @@ class CategoryController extends Controller
 
             session()->flash('crud_message',['message' => 'Tag deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
-            $this->saveToLog();
+            $this->saveToLog($e);
         }
 
         return redirect()->route('cabinet.evento.category.index');
@@ -184,20 +184,18 @@ class CategoryController extends Controller
 
     public function getChangeCategoryButtonsHtml()
     {
-        $buttonsHtml[0] = View::make('cabinet.evento.other.button.confirm-button',
+        $confirmButton = View::make('cabinet.evento._other.button.confirm-button',
             ['class' => 'add-category-crud--confirm color-green curp'])
                 ->render();
 
-        $buttonsHtml[1] = View::make('cabinet.evento.other.button.cancel-button',
+        $cancelButton = View::make('cabinet.evento._other.button.cancel-button',
             ['class' => 'add-category-crud--cancel color-red curp'])
                 ->render();
 
-        $rs['buttons'] = <<<CONCAT_BTNS
- <div class="add-category-crud--buttons">
-    {$buttonsHtml[0]}
-    {$buttonsHtml[1]}
-</div>
-CONCAT_BTNS;
+        $rs['buttons'] = View::make('cabinet.evento._other.button.add_category_crud_buttons',
+            ['confirmButton' => $confirmButton,
+             'cancelButton' =>  $cancelButton]
+            )->render();
 
         $rs['success'] = 1;
 
@@ -209,13 +207,12 @@ CONCAT_BTNS;
         try {
             $category->name = $request->input('name');
             $category->save();
-            $result = ['success' => 1,
-                'name' => $category->name, 'categoryId' => $category->id
-            ];
+            $result = ['success' => 1, 'name' => $category->name, 'categoryId' => $category->id];
+
             session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-warning']);
         }catch (\Exception $e){
-            $result = ['success' => 0, 'message' => 'error'];
-            saveToLog($e);
+            $result = ['success' => 0, 'message' => 'editCategoryAjax error!'];
+            $this->saveToLog($e);
         }
 
         die(json_encode($result));

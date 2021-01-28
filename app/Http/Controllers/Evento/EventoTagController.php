@@ -41,7 +41,6 @@ class EventoTagController extends Controller
             session()->flash('crud_message',['message' => 'EventoTag created!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'EventoTag create error!', 'class' => 'alert alert-danger']);
         }
 
         return back();
@@ -49,8 +48,7 @@ class EventoTagController extends Controller
 
     public function storeAjax(EventoTagRequest $request)
     {
-        // todo
-
+        // todo - опять же, если валидация не пройдет, аякс ответ не будет получен
         $attributes = $request->validated();
 
         $rs = ['success' => 1, 'message' => 'tag success added'];
@@ -94,7 +92,7 @@ class EventoTagController extends Controller
             $rs['eventoTagDiv'] = View::make('cabinet.evento.ajax.eventotag_table_item', ['tag' => $result])->render();
 
         }catch (\Exception $e){
-            $rs = ['success' => 0, 'message' => 'error'];
+            $rs = ['success' => 0, 'message' => 'storeAjax error'];
             $this->saveToLog($e);
         }
 
@@ -113,7 +111,7 @@ class EventoTagController extends Controller
         abort_if(auth()->user()->cannot('update', $eventotag), 403);
 
         $evento = $eventotag->evento;
-        //dd($evento);
+
         $tags = auth()->user()->eventoTags;
 
         return view('cabinet.evento.eventotag.edit', compact('eventotag', 'evento','tags'));
@@ -124,10 +122,9 @@ class EventoTagController extends Controller
         abort_if(auth()->user()->cannot('update', $eventotag), 403);
 
         // - нужно предусмотреть случай с дублированием Тега для Evento
-
         $attributes = $request->validated();
 
-        // + нужно не дать user-у изменить evento_id, котоый имеет input=hidden
+        // ! нужно не дать user-у изменить evento_id, котоый имеет input=hidden
         $attributes['evento_id'] = $eventotag->evento_id;
 
         try{
@@ -135,7 +132,6 @@ class EventoTagController extends Controller
             session()->flash('crud_message',['message' => 'EventoTag updated!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'EventoTag update error!', 'class' => 'alert alert-danger']);
         }
 
         return back();
@@ -150,15 +146,11 @@ class EventoTagController extends Controller
             session()->flash('crud_message',['message' => 'EventoTag deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'EventoTag delete error!', 'class' => 'alert alert-danger']);
         }
 
         return redirect()->route('cabinet.evento.eventotag.index');
     }
 
-    /**
-     *  Удаление категории
-     */
     public function destroyAjax(EventoTag $eventotag)
     {
         $rs = ['success' => 1, 'message' => 'eventotag success deleted!'];
@@ -178,9 +170,6 @@ class EventoTagController extends Controller
         die(json_encode($rs));
     }
 
-    /**
-     *  Получение списка категорий пользователя
-     */
     public function getUserTags()
     {
         $categories = auth()->user()->eventoTags->toArray();

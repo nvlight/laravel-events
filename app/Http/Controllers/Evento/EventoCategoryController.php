@@ -41,7 +41,6 @@ class EventoCategoryController extends Controller
             session()->flash('crud_message',['message' => 'EventoCategory created!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'EventoCategory create error!', 'class' => 'alert alert-danger']);
         }
 
         return back();
@@ -73,7 +72,7 @@ class EventoCategoryController extends Controller
 
         $attributes = $request->validated();
 
-        // todo + нужно не дать user-у изменить evento_id, котоый имеет input=hidden
+        // ! нужно не дать user-у изменить evento_id, котоый имеет input=hidden
         $attributes['evento_id'] = $eventocategory->evento_id;
 
         try{
@@ -81,7 +80,6 @@ class EventoCategoryController extends Controller
             session()->flash('crud_message',['message' => 'EventoCategory updated!', 'class' => 'alert alert-warning']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'EventoCategory update failed!', 'class' => 'alert alert-danger']);
         }
 
         return back();
@@ -96,7 +94,6 @@ class EventoCategoryController extends Controller
             session()->flash('crud_message',['message' => 'EventoCategory deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'EventoCategory delete failed!', 'class' => 'alert alert-danger']);
         }
 
         return redirect()->route('cabinet.evento.eventocategory.index');
@@ -129,6 +126,7 @@ class EventoCategoryController extends Controller
         // todo - дублирование category - пока возможна работа только с одной категорией.
         //dd($request->all());
 
+        // todo - тут якс запрос, если валидация не сработает json-ответ
         $attributes = $request->validated();
 
         $rs = ['success' => 1, 'message' => 'category success added'];
@@ -138,7 +136,7 @@ class EventoCategoryController extends Controller
             $rs['category_name'] = $rsCategory->name;
             $rs['eventocategory_id'] = $eventoCategory->id;
         }catch (\Exception $e){
-            $rs = ['success' => 0, 'message' => 'error'];
+            $rs = ['success' => 0, 'message' => 'storeAjax error'];
             $this->saveToLog($e);
         }
 
@@ -147,8 +145,6 @@ class EventoCategoryController extends Controller
 
     public function destroyAjax(EventoCategory $eventocategory)
     {
-        abort_if(auth()->user()->cannot('delete', $eventocategory), 403);
-
         $rs = ['success' => 1, 'message' => 'eventocategory success deleted!'];
         if (auth()->user()->cannot('delete', $eventocategory)){
             $rs = ['success' => 0, 'message' => 'cant delete not my own eventocategory'];
@@ -156,7 +152,6 @@ class EventoCategoryController extends Controller
 
         try{
             $eventocategory->delete();
-
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'eventocategory delete error'];
             $this->saveToLog($e);

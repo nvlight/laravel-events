@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Evento;
 use App\Http\Requests\Evento\EventoRequest;
 use App\Models\Evento\Evento;
 use App\Http\Controllers\Controller;
-use App\Models\MGDebug;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -111,9 +110,12 @@ class EventoController extends Controller
 
         $attributes += ['user_id' => auth()->id()];
 
-        $evento = Evento::create($attributes);
-
-        session()->flash('created', 'sucess created');
+        try{
+            $evento = Evento::create($attributes);
+            session()->flash('crud_message',['message' => 'Evento created!', 'class' => 'alert alert-danger']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+        }
 
         return redirect()->route('cabinet.evento.edit', $evento);
     }
@@ -139,9 +141,12 @@ class EventoController extends Controller
         $attributes = $request->validated();
         $attributes['date'] = (new Carbon($attributes['date']))->format('Y-m-d');
 
-        $evento->update($attributes);
-
-        session()->flash('saved', 'sucess updated');
+        try{
+            $evento->update($attributes);
+            session()->flash('crud_message',['message' => 'Evento updated!', 'class' => 'alert alert-danger']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+        }
 
         return back();
     }
@@ -155,7 +160,6 @@ class EventoController extends Controller
             session()->flash('crud_message',['message' => 'Evento deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'Evento delete failed!', 'class' => 'alert alert-danger']);
         }
 
         return redirect()->route('cabinet.evento.index');

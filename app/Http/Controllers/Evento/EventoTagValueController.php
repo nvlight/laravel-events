@@ -47,7 +47,13 @@ class EventoTagValueController extends Controller
     {
         $attributes = $request->validated();
 
-        EventoTagValue::create($attributes);
+        try{
+            EventoTagValue::create($attributes);
+
+            session()->flash('crud_message',['message' => 'EventoTagValue created with ajax!', 'class' => 'alert alert-success']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+        }
 
         return back();
     }
@@ -87,7 +93,13 @@ class EventoTagValueController extends Controller
 
         $attributes['evento_evento_tags_id'] = $eventoTagValue->evento_evento_tags_id;
 
-        $eventoTagValue->update($attributes);
+        try{
+            $eventoTagValue->update($attributes);
+
+            session()->flash('crud_message',['message' => 'EventoTagValue created with ajax!', 'class' => 'alert alert-success']);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+        }
 
         return back();
     }
@@ -101,7 +113,6 @@ class EventoTagValueController extends Controller
             session()->flash('crud_message',['message' => 'EventoCategory deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            session()->flash('crud_message',['message' => 'EventoCategory delete failed!', 'class' => 'alert alert-danger']);
         }
 
         return back();
