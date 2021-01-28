@@ -1,0 +1,14 @@
+<tr>
+    <th>evento_id</th>
+    <th>evento_description</th>
+    <th>evento_date</th>
+    <th>tag_id</th>
+    <th>tag_name</th>
+    <th>ee_tag_id</th>
+    <th>eetv_id</th>
+    <th>eetv_value</th>
+    <th>eetv_caption</th>
+    <th>show</th>
+    <th>update</th>
+    <th>delete</th>
+</tr>

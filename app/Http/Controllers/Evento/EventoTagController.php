@@ -69,6 +69,7 @@ class EventoTagController extends Controller
                     $rs['tag_value'] = $tagValue;
                     $result = $rs;
 
+                    // todo - ошибка в логике работы - else никогда не сработает, т.к. каждый раз создается новый тег...
                     $etv = EventoTagValue::find($eventoTag->id);
                     if (!$etv){
                         $etv = new EventoTagValue();

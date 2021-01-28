@@ -7,12 +7,6 @@
 
         <table class="table table-striped table-bordered">
 
-            @if(session()->has('created'))
-                <div class="alert alert-success" role="alert">
-                    {{ session()->get('created') }}
-                </div>
-            @endif
-
             @include('cabinet.evento._blocks.flash_message')
 
             <form action="{{ route('cabinet.evento.update', $evento) }}" method="post" enctype="multipart/form-data">
@@ -28,7 +22,7 @@
                 <div class="form-group mt-2">
                     <button class="btn btn-success" type="submit">Save</button>
                     <a class="btn btn-danger" href="{{ route('cabinet.evento.destroy', $evento) }}">Delete</a>
-                    <a class="btn btn-primary" href="{{ route('cabinet.evento.create') }}">New Evento</a>
+                    <a class="btn btn-primary" href="{{ route('cabinet.evento.create') }}">New</a>
                 </div>
             </form>
         </table>

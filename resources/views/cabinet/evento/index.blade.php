@@ -83,8 +83,6 @@
 
     </main>
 
-
-
     {{-- Modals --}}
     <div class="modal fade" id="add-category-modal" tabindex="-1">
         <div class="modal-dialog">

@@ -23,6 +23,7 @@ class EventoTagValueController extends Controller
                 'evento_evento_tag_values.value as evento_evento_tag_value_value',
                 'evento_evento_tag_values.caption as evento_evento_tag_value_caption'
             )
+            ->orderBy('date','DESC')
             ->get();
 
         return view('cabinet.evento.eventotagvalue.index', compact('eventoTagValues'));
@@ -38,6 +39,7 @@ class EventoTagValueController extends Controller
                 'evento_evento_tags.tag_id', 'evento_tags.name as tag_name',
                 'evento_evento_tags.id as evento_evento_tag_id'
             )
+            ->orderBy('date','DESC')
             ->get();
 
         return view('cabinet.evento.eventotagvalue.create', compact('eventoTags'));
@@ -50,7 +52,7 @@ class EventoTagValueController extends Controller
         try{
             EventoTagValue::create($attributes);
 
-            session()->flash('crud_message',['message' => 'EventoTagValue created with ajax!', 'class' => 'alert alert-success']);
+            session()->flash('crud_message',['message' => 'EventoTagValue created!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
         }
@@ -96,7 +98,7 @@ class EventoTagValueController extends Controller
         try{
             $eventoTagValue->update($attributes);
 
-            session()->flash('crud_message',['message' => 'EventoTagValue created with ajax!', 'class' => 'alert alert-success']);
+            session()->flash('crud_message',['message' => 'EventoTagValue updated!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
         }
@@ -110,12 +112,12 @@ class EventoTagValueController extends Controller
 
         try{
             $eventoTagValue->delete();
-            session()->flash('crud_message',['message' => 'EventoCategory deleted!', 'class' => 'alert alert-danger']);
+            session()->flash('crud_message',['message' => 'EventoTagValue deleted!', 'class' => 'alert alert-danger']);
         }catch (\Exception $e){
             $this->saveToLog($e);
         }
 
-        return back();
+        return redirect()->route('cabinet.evento.eventotagvalue.index');
     }
 
     protected function saveToLog($e){

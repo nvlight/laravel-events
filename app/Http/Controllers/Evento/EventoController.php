@@ -112,7 +112,7 @@ class EventoController extends Controller
 
         try{
             $evento = Evento::create($attributes);
-            session()->flash('crud_message',['message' => 'Evento created!', 'class' => 'alert alert-danger']);
+            session()->flash('crud_message',['message' => 'Evento created!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
         }
@@ -143,7 +143,7 @@ class EventoController extends Controller
 
         try{
             $evento->update($attributes);
-            session()->flash('crud_message',['message' => 'Evento updated!', 'class' => 'alert alert-danger']);
+            session()->flash('crud_message',['message' => 'Evento updated!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
         }
