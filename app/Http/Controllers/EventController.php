@@ -6,7 +6,6 @@ use App\Http\Requests\EventRequestStore;
 use App\Models\Event\Category;
 use App\Models\Event\Event;
 use App\Models\Event\Type;
-use App\Models\MGDebug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;

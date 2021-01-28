@@ -12,8 +12,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class EventoController extends Controller
 {
-    protected $eventoPerPage = 15;
-
     /**/
     private function getEventoTree(Collection $eventos)
     {
@@ -83,7 +81,7 @@ class EventoController extends Controller
 
         $eventosTree = $this->getEventoTree($eventosWithAllColumns->get());
 
-        $perPage = $this->eventoPerPage;
+        $perPage = env('EVENTO_PER_PAGE', 15);
         $currentPage = $request->input('page');
         $currentPage = $currentPage == null ? 1 : $currentPage;
         $offset = $currentPage == 1 ? 0 : $currentPage * $perPage - $perPage;

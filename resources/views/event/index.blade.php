@@ -35,7 +35,7 @@
             <h5 class="text-success"><?=session()->get('event_deleted');?></h5>
             <h5 class="text-success"><?=session()->get('event_updated');?></h5>
             <h5 class="text-success"><?=session()->get('event_copy');?></h5>
-            <table class="table table-bordered table-striped table-responsive">
+            <table class="table table-bordered table-striped">
                 <tr>
                     <th>№</th>
                     <th>Категория</th>

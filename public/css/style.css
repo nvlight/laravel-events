@@ -1307,3 +1307,19 @@ body > nav.navbar{
 	height: 37px;
 	width: 28px;
 }
+
+/* dropdown-menu show - search in row category */
+.dropdown-menu.inner.show{
+	padding: 4px 8px;
+}
+
+.dropdown-menu.inner.show a{
+	padding: 7px 20px;
+	display: block;
+}
+.dropdown-menu.inner.show a:hover{
+	background-color: #dae0e5;
+}
+.dropdown-menu.inner.show li.active{
+	background-color: #96BEED;
+}
