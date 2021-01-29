@@ -29,7 +29,7 @@ class AttachmentStoreRequest extends FormRequest
                 'max' => 5120
             ],
             'mimes' => [
-                'jpg', 'jpeg', 'png', 'webp', 'svg', 'gif',
+                'jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico',
                 'doc', 'docx', 'xls', 'xlsx', 'pdf', 'djvu', 'txt',
                 'zip', 'rar'
             ],

@@ -7,12 +7,17 @@ use App\Http\Requests\Evento\AttachmentUpdateRequest;
 use App\Models\Evento\Attachment;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class AttachmentController extends Controller
 {
+    const SAVE_DIR_PREFIX = "evento_attachs" . DIRECTORY_SEPARATOR . "user_";
+
+    protected $fileName;
+
     public function index()
     {
         $attachments = auth()->user()->eventoAttachments;
@@ -38,7 +43,9 @@ class AttachmentController extends Controller
         {
             $file = $request->file('file');
 
-            $filename = auth()->id() . DIRECTORY_SEPARATOR . Str::random(40);
+            $filename = self::SAVE_DIR_PREFIX . auth()->id() . DIRECTORY_SEPARATOR . Str::random(40) . "."
+                        . $file->extension();
+
             $attributes['file'] = $filename;
             $attributes += ['originalname' => $file->getClientOriginalName()];
             $attributes += ['mimetype' => $file->getMimeType()];
@@ -47,33 +54,25 @@ class AttachmentController extends Controller
 
         try{
             $attachment = Attachment::create($attributes);
-        }catch (QueryException $qe){
-            return back()->with('error', implode(', ', [
-                    'create error: ' . $qe->getCode() //, $qe->getLine(), $qe->getMessage()
-                ]
-            ));
-        }
 
-        if ($request->hasFile('file')){
-            try{
-                $file->storeAs($filename, '', ['disk' => 'local'] );
-            } catch (FileException $e){
-
-                // созданную запись нужно удалить, если файл не был сохранен
+            if ($request->hasFile('file')){
                 try{
-                    $attachment->delete();
-                }catch (QueryException $qe){
-                    return back()->with('error', implode(', ', [
-                            'delete error: ' . $qe->getCode() //, $qe->getLine(), $qe->getMessage()
-                        ]
-                    ));
+                    $file->storeAs($filename, '', ['disk' => 'local'] );
+                } catch (FileException $fe){
+                    // созданную запись нужно удалить, если файл не был сохранен
+                    try{
+                        $attachment->delete();
+                    }catch (QueryException $qe){
+                        return back()->with('crud_message',['message' => 'Delete error!', 'class' => 'alert alert-danger']);
+                    }
+                    $this->saveToLog($fe);
+                    return back()->with('crud_message',['message' => 'File save error!', 'class' => 'alert alert-danger']);
                 }
-
-                return back()->with('error', implode(', ', [
-                        'file save error: ' . $e->getCode() //, $qe->getLine(), $qe->getMessage()
-                    ]
-                ));
             }
+            session()->flash('crud_message',['message' => 'Attachment stored!', 'class' => 'alert alert-success']);
+        }catch (QueryException $qe){
+            $this->saveToLog($qe);
+            return back()->with('crud_message',['message' => 'Create error!', 'class' => 'alert alert-danger']);
         }
 
         return back();
@@ -132,16 +131,12 @@ class AttachmentController extends Controller
                 try{
                     $attachment->delete();
                 }catch (QueryException $qe){
-                    return back()->with('error', implode(', ', [
-                            'delete error: ' . $qe->getCode() //, $qe->getLine(), $qe->getMessage()
-                        ]
-                    ));
+                    $this->saveToLog($e);
+                    return back()->with('error', 'delete error!');
                 }
 
-                return back()->with('error', implode(', ', [
-                        'file save error: ' . $e->getCode() //, $qe->getLine(), $qe->getMessage()
-                    ]
-                ));
+                $this->saveToLog($e);
+                return back()->with('error', 'save error!');
             }
             $this->deleteFile($attachment->file);
         }
@@ -153,8 +148,14 @@ class AttachmentController extends Controller
     {
         abort_if(auth()->user()->cannot('delete', $attachment), 403);
 
-        $attachment->delete();
-        $this->deleteFile($attachment->file);
+        try{
+            $attachment->delete();
+            $this->deleteFile($attachment->file);
+
+            session()->flash('crud_message',['message' => 'Attachment deleted!', 'class' => 'alert alert-danger']);
+        }catch(\Exception $e){
+            $this->saveToLog($e);
+        }
 
         return back();
     }
@@ -172,5 +173,13 @@ class AttachmentController extends Controller
             return Storage::disk('local')->download($attachment->file, $attachment->originalname);
         }
         return back();
+    }
+
+    protected function saveToLog($e){
+        logger('error with ' . __METHOD__ . ' '
+            . implode(' | ', [
+                $e->getMessage(), $e->getLine(), $e->getCode(), $e->getFile()
+            ])
+        );
     }
 }

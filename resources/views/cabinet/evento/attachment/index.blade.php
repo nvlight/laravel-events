@@ -1,35 +1,32 @@
 @extends('layouts.evento')
 
 @section('content')
-    <h2>Evento/Attachments/index</h2>
-    <p><a href="{{ route('cabinet.evento.attachment.create') }}">create new attachment</a></p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
 
-    @if($attachments)
-        <table>
-            <tr>
-                <th>id</th>
-                <th>user_id</th>
-                <th>evento_id</th>
-                <th>file</th>
-                <th>orig_name</th>
-                <th>show</th>
-                <th>delete</th>
-                <th>update</th>
-            </tr>
-            @foreach($attachments as $attachment)
-                <tr>
-                    <td>{{$attachment->id}}</td>
-                    <td>{{$attachment->user_id}}</td>
-                    <td>{{$attachment->evento_id}}</td>
-                    <td>{{$attachment->file}}</td>
-                    <td>{{$attachment->originalname}}</td>
-                    <td><a href="{{ route('cabinet.evento.attachment.show',    $attachment) }}" target="">show</a></td>
-                    <td><a href="{{ route('cabinet.evento.attachment.destroy', $attachment) }}" target="">delete</a></td>
-                    <td><a href="{{ route('cabinet.evento.attachment.edit',    $attachment) }}" target="">edit</a></td>
-                    <td><a href="{{ route('cabinet.evento.attachment.download',$attachment) }}" target="">download</a></td>
-                </tr>
-            @endforeach
-        </table>
-    @endif
+                <h2>Evento/Attachments/index</h2>
 
+                @include('cabinet.evento.attachment.nav.breadcrumbs')
+                @include('cabinet.evento.attachment.buttons.create')
+
+                @include('cabinet.evento._blocks.flash_message')
+
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table table-striped table-bordered">
+                            @include('cabinet.evento.attachment.list.header')
+                            @if($attachments->count())
+                                @each('cabinet.evento.attachment.list.item', $attachments, 'attachment')
+                            @else
+                                <tr>
+                                    <td colspan="9" class="text-center font-weight-bold text-danger">No items!</td>
+                                </tr>
+                            @endif
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

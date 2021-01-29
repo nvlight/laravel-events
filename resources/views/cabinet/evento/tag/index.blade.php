@@ -15,12 +15,10 @@
                 <div class="card">
                     <div class="card-body">
                         @if($tags)
-                        <table class="table table-striped table-bordered">
-                            @include('cabinet.evento.tag.list.header')
-                            @foreach($tags as $tag)
-                                @include('cabinet.evento.tag.list.item')
-                            @endforeach
-                        </table>
+                            <table class="table table-striped table-bordered">
+                                @include('cabinet.evento.tag.list.header')
+                                @each('cabinet.evento.tag.list.item', $tags, 'tag')
+                            </table>
                         @endif
                     </div>
                 </div>
