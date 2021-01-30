@@ -8,13 +8,13 @@
                 <h2>Evento/Attachments/index</h2>
 
                 @include('cabinet.evento.attachment.nav.breadcrumbs')
-                @include('cabinet.evento.attachment.buttons.create')
+                            @include('cabinet.evento.attachment.buttons.create')
 
-                @include('cabinet.evento._blocks.flash_message')
+                            @include('cabinet.evento._blocks.flash_message')
 
-                <div class="card">
-                    <div class="card-body">
-                        <table class="table table-striped table-bordered">
+                            <div class="card">
+                                <div class="card-body">
+                                    <table class="table table-striped table-bordered">
                             @include('cabinet.evento.attachment.list.header')
                             @if($attachments->count())
                                 @each('cabinet.evento.attachment.list.item', $attachments, 'attachment')

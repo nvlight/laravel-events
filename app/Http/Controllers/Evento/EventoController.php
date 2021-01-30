@@ -44,29 +44,28 @@ class EventoController extends Controller
             //$eventosWithAllColumnsArrayFormatted[$v['evento_id']][$v['evento_evento_category_id']][] = $v;
 
             $categories = [];
+            $tags = [];
+            $attachments = [];
             foreach($eventosWithAllColumnsArray as $l => $g){
                 if ($g['evento_id'] === $eventoId && $g['evento_category_id']){
                     $categories[$g['evento_evento_category_id']] = $g;
                 }
-            }
-
-            $tags = [];
-            foreach($eventosWithAllColumnsArray as $l => $g){
                 if ($g['evento_id'] === $eventoId && $g['evento_tag_id']){
                     $tags[$g['evento_evento_tag_id']] = $g;
                 }
-            }
-
-            $attachments = [];
-            foreach($eventosWithAllColumnsArray as $l => $g){
                 if ($g['evento_id'] === $eventoId && $g['evento_attachment_id']){
-                    $attachments[] = $g;
+                    $attachments[$g['evento_attachment_id']] = $g;
                 }
             }
 
             $eventosWithAllColumnsArrayFormatted[$eventoId]['categories']  = $categories;
             $eventosWithAllColumnsArrayFormatted[$eventoId]['tags']        = $tags;
             $eventosWithAllColumnsArrayFormatted[$eventoId]['attachments'] = $attachments;
+
+            //self::d($attachments,2,1);
+            //dd(array_unique($attachments)); die;
+            //self::d(array_unique($attachments),2);
+
         }
 
         //dd($eventosWithAllColumnsArrayFormatted);
@@ -102,8 +101,10 @@ class EventoController extends Controller
                 'evento_attachments.originalname as evento_attachment_originalname',
                 'evento_attachments.size as evento_attachment_size'
             )
-            ->orderBy('evento_eventos.date', 'desc')
+            //->orderBy('evento_eventos.date', 'desc')
+            //->toSql()
         ;
+        //dd($eventosWithAllColumns);
 
         $eventosTree = $this->getEventoTree($eventosWithAllColumns->get());
 

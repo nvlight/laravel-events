@@ -11,15 +11,15 @@
 
                 <div class="d-flex">
                     @include('cabinet.evento.tag.buttons.create')
-                    @include('cabinet.evento.tag.buttons.delete', ['tagId' => $tag->id, 'class' => 'btn-danger ml-2'])
+                    @include('cabinet.evento.tag.buttons.delete', ['itemId' => $tag->id, 'class' => 'btn-danger ml-2'])
                 </div>
 
-                @include('cabinet.evento.tag.flash.message')
+                @include('cabinet.evento._blocks.flash_message')
 
                 <div class="card">
                     <div class="card-body">
 
-                        @include('cabinet.evento.tag.list.errors')
+                        @include('cabinet.evento._blocks.errors')
 
                         <form action="{{ route('cabinet.evento.tag.update', $tag) }}" method="post" enctype="multipart/form-data">
                             @csrf

@@ -1,8 +1,8 @@
 @if($itemId)
     <p>
-        <a href="{{ route('cabinet.evento.tag.destroy', $itemId) }}"
+        <a href="{{ route('cabinet.evento.attachment.edit', $itemId) }}"
            class="btn btn-success @if ($class) {{ $class  }} @endif">
-            <span>delete</span>
+            <span>update</span>
         </a>
     </p>
 @endif

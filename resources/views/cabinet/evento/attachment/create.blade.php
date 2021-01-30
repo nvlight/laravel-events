@@ -17,7 +17,7 @@
                         <form action="{{ route('cabinet.evento.attachment.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
-                                <label>
+                                <label class="w-100">
                                     <b>evento_id</b>
                                     <select name="evento_id" class="form-control w-100">
                                         <option>0</option>

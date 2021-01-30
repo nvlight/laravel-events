@@ -105,7 +105,8 @@ class AttachmentController extends Controller
         {
             $file = $request->file('file');
 
-            $filename = auth()->id() . DIRECTORY_SEPARATOR . Str::random(40);
+            $filename = self::SAVE_DIR_PREFIX . auth()->id() . DIRECTORY_SEPARATOR . Str::random(40) . "."
+                . $file->extension();
 
             $attributes['file'] = $filename;
             $attributes['originalname'] = $file->getClientOriginalName();
@@ -114,14 +115,16 @@ class AttachmentController extends Controller
         }
 
         try{
+            if (Storage::disk('local')->exists($attachment->file)){
+                Storage::disk('local')->delete($attachment->file);
+            }
+
             $attachment->update($attributes);
         }catch (QueryException $qe){
-            return back()->with('error', implode(', ', [
-                    'update error: ' . $qe->getCode() //, $qe->getLine(), $qe->getMessage()
-                ]
-            ));
+            return back()->with('crud_message',['message' => 'File update error!', 'class' => 'alert alert-danger']);
         }
 
+        //
         if ($request->hasFile('file')){
             try{
                 $file->storeAs($filename, '', ['disk' => 'local'] );
@@ -132,13 +135,13 @@ class AttachmentController extends Controller
                     $attachment->delete();
                 }catch (QueryException $qe){
                     $this->saveToLog($e);
-                    return back()->with('error', 'delete error!');
+                    return back()->with('crud_message',['message' => 'File delete error!', 'class' => 'alert alert-danger']);
                 }
 
                 $this->saveToLog($e);
-                return back()->with('error', 'save error!');
+                return back()->with('crud_message',['message' => 'File save error!', 'class' => 'alert alert-danger']);
             }
-            $this->deleteFile($attachment->file);
+            //$this->deleteFile($attachment->file);
         }
 
         return back();
@@ -157,7 +160,7 @@ class AttachmentController extends Controller
             $this->saveToLog($e);
         }
 
-        return back();
+        return redirect()->route('cabinet.evento.attachment.index');
     }
 
     protected function deleteFile(string $filename)

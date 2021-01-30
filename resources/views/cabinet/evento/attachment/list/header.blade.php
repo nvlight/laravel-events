@@ -5,7 +5,7 @@
     <th>file</th>
     <th>orig_name</th>
     <th>show</th>
-    <th>delete</th>
     <th>update</th>
+    <th>delete</th>
     <th>download</th>
 </tr>
