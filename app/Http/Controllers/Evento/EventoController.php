@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Evento;
 
 use App\Http\Requests\Evento\EventoRequest;
+use App\Models\Evento\Attachment;
 use App\Models\Evento\Evento;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -12,12 +13,27 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class EventoController extends Controller
 {
+    static public function d($value, $type=1, $die=1){
+        echo "<pre>";
+        if (intval($type)===1){
+            var_dump($value);
+        }else{
+            print_r($value);
+        }
+        echo "</pre>";
+
+        if ($die){
+            die;
+        }
+    }
+
     /**/
     private function getEventoTree(Collection $eventos)
     {
         $eventosWithAllColumnsArray = $eventos->toArray();
 
         //dump($eventosWithAllColumnsArray);
+        //self::d($eventosWithAllColumnsArray,2);
 
         $eventosWithAllColumnsArrayFormatted = [];
         foreach($eventosWithAllColumnsArray as $j => $v)
@@ -41,15 +57,21 @@ class EventoController extends Controller
                 }
             }
 
-            $eventosWithAllColumnsArrayFormatted[$eventoId]['categories'] = $categories;
-            $eventosWithAllColumnsArrayFormatted[$eventoId]['tags']       = $tags;
+            $attachments = [];
+            foreach($eventosWithAllColumnsArray as $l => $g){
+                if ($g['evento_id'] === $eventoId && $g['evento_attachment_id']){
+                    $attachments[] = $g;
+                }
+            }
+
+            $eventosWithAllColumnsArrayFormatted[$eventoId]['categories']  = $categories;
+            $eventosWithAllColumnsArrayFormatted[$eventoId]['tags']        = $tags;
+            $eventosWithAllColumnsArrayFormatted[$eventoId]['attachments'] = $attachments;
         }
 
-//        echo "<pre>";
-//        (print_r($eventosWithAllColumnsArrayFormatted));
-//        echo "</pre>";
-//        die;
         //dd($eventosWithAllColumnsArrayFormatted);
+        //self::d($eventosWithAllColumnsArrayFormatted,2);
+
         return $eventosWithAllColumnsArrayFormatted;
     }
 
@@ -64,6 +86,7 @@ class EventoController extends Controller
             ->leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
             ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
             ->leftJoin('evento_evento_tag_values','evento_evento_tag_values.evento_evento_tags_id','=','evento_evento_tags.id')
+            ->leftJoin('evento_attachments','evento_attachments.evento_id','=','evento_eventos.id')
             ->where('evento_eventos.user_id','=',auth()->id())
             //->where('evento_categories.user_id','=',auth()->id())
             //->where('evento_tags.user_id','=',auth()->id())
@@ -74,7 +97,10 @@ class EventoController extends Controller
                 'evento_evento_tags.id as evento_evento_tag_id',
                 'evento_evento_tag_values.id as evento_evento_tag_values_id',
                 'evento_evento_tag_values.value as evento_evento_tag_value_value',
-                'evento_evento_tag_values.caption as evento_evento_tag_value_caption'
+                'evento_evento_tag_values.caption as evento_evento_tag_value_caption',
+                'evento_attachments.id as evento_attachment_id',
+                'evento_attachments.originalname as evento_attachment_originalname',
+                'evento_attachments.size as evento_attachment_size'
             )
             ->orderBy('evento_eventos.date', 'desc')
         ;
@@ -94,7 +120,7 @@ class EventoController extends Controller
         );
 
         return view('cabinet.evento.index',
-            compact('eventos', 'paginator'));
+            compact('eventos', 'paginator') );
     }
 
     public function create()
