@@ -10,6 +10,19 @@ if (findToken){
 let resultMessageInnerForStandaloneCategory = document.querySelector('form[name=addStandaloneCategoryForm] .resultMessage');
 let resultMessageInnerForStandaloneTag = document.querySelector('form[name=addStandaloneTagForm] .resultMessage');
 
+
+let attachmentModal = document.getElementById('add-attachment-modal');
+if (attachmentModal){
+    var addAttachmentModal = new bootstrap.Modal(attachmentModal, {keyboard: false});
+}
+
+
+//###########################################
+function conlog(e){
+    console.log(e);
+}
+//###########################################
+
 //
 function categoryAddEditButtonCatch()
 {
@@ -1018,3 +1031,187 @@ function deleteTagForCrud()
         //categoryAddEditButtonCatch();
     }
 }
+
+// ########################################
+// загрузка файлов через js, /attachment
+// start
+
+function insertAttachments(html){
+    let attachments = document.querySelector('.attachments');
+    if (attachments){
+        attachments.innerHTML = html;
+    }
+}
+
+function storeAttachmentAjax(formData)
+{
+    let url = "/cabinet/evento/attachment/store_ajax/";
+    //url = "../js_handler.php";
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+
+    //xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    //xhr.setRequestHeader("Content-type","multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2));
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']){
+                addAttachmentModal.hide();
+                insertAttachments(rs['attachments']);
+                addHandlerForAttachmentDelete();
+            }else{
+                // catch error and show that
+            }
+        }
+    });
+
+    xhr.send(formData);
+}
+
+function storeAttachmentHandler(href, evento_id){
+    //
+    let form = document.querySelector('form[name=addAttachmentForm]');
+    if (form){
+        form.onsubmit = function () {
+            //conlog('submit is done!');
+
+            let addAttachmentForm = document.querySelector('form[name=addAttachmentForm]');
+            if (addAttachmentForm){
+
+                let input_evento_id = addAttachmentForm.querySelector('input[name=evento_id]');
+                if (input_evento_id){
+                    input_evento_id.value = evento_id;
+                }
+
+                let input_token = addAttachmentForm.querySelector('input[name=_token]');
+                if (input_token){
+                    input_token.value = token;
+                }
+
+                let formData = new FormData(addAttachmentForm);
+
+                let file = form.querySelector('input[type=file]');
+                if (file && file.files.length){
+                    formData.append('file', file.files[0]);
+                }
+
+                storeAttachmentAjax(formData);
+            }
+
+            return false;
+        }
+    }
+
+}
+
+function storeAttachment(e) {
+
+    let href = e.target.parentElement.getAttribute('href');
+    let evento_id = e.target.parentElement.getAttribute('data-evento-id');
+
+    // main
+    storeAttachmentHandler(href, evento_id);
+
+    return false;
+}
+
+function addHandlerForEventoItems() {
+    let a = document.querySelectorAll('a.attachment_store_ajax');
+    if (a && a.length){
+        for(let i=0; i<a.length; i++){
+            a[i].onclick = storeAttachment;
+        }
+    }
+}
+addHandlerForEventoItems();
+
+// загрузка файлов через js, /attachment
+// end
+// ##########################################
+
+
+
+
+// ########################################
+// удаление файлов через js ---> /attachment/delete
+// start
+// attachment_delete
+
+function addHandlerForAttachmentDelete() {
+    let a = document.querySelectorAll('a.attachment_delete');
+    if (a && a.length){
+        for(let i=0; i<a.length; i++){
+            a[i].onclick = deleteAttachmentHandler;
+        }
+    }
+}
+addHandlerForAttachmentDelete();
+
+function deleteAttachmentHandler(e) {
+
+    let href = e.target.getAttribute('href');
+    let evento_id = e.target.getAttribute('data-eventoId');
+    let attachment_id = e.target.getAttribute('data-attachmentId');
+
+    // main
+    //conlog(attachment_id);
+
+    deleteAttachment(attachment_id);
+
+    return false;
+}
+
+function deleteAttachment(attachment_id)
+{
+    let url = "/cabinet/evento/attachment/destroyAjax/"+attachment_id;
+    const xhr = new XMLHttpRequest();
+    const params = "_token=" + token;
+
+    xhr.open("POST", url);
+
+    //xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    //xhr.setRequestHeader("Content-type","multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2));
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']) {
+                // get new attachments and insert HTML
+                getAttachmentById(rs['evento_id']);
+            }
+        }
+    });
+    xhr.send(params);
+}
+
+// удаление файлов через js ---> /attachment/delete
+// end
+// ########################################
+
+////
+function getAttachmentById(evento_id)
+{
+    const xhr = new XMLHttpRequest();
+    let url = "/cabinet/evento/attachment/getAttachmentsByEventoId/?evento_id="+evento_id;
+
+    xhr.open("get", url);
+
+    //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    //xhr.setRequestHeader("Content-type", "application/json");
+    //xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    //xhr.setRequestHeader("Content-type","multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2));
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']) {
+                insertAttachments(rs['attachments']);
+            }
+        }
+    });
+
+    xhr.send();
+}
+//getAttachmentById(57);

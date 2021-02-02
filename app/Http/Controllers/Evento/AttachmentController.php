@@ -6,9 +6,12 @@ use App\Http\Requests\Evento\AttachmentStoreRequest;
 use App\Http\Requests\Evento\AttachmentUpdateRequest;
 use App\Models\Evento\Attachment;
 use App\Http\Controllers\Controller;
+use App\Models\Evento\Evento;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
@@ -38,6 +41,11 @@ class AttachmentController extends Controller
 
         $attributes += ['user_id' => auth()->id()];
         $attributes += ['evento_id' => $request->get('evento_id')];
+
+        //
+        if ( !$this->isUserHaveEventoId($request->get('evento_id'))){
+            return back()->with('crud_message',['message' => 'user doesnt have evento with this id!', 'class' => 'alert alert-danger']);
+        }
 
         if ($request->hasFile('file'))
         {
@@ -76,6 +84,115 @@ class AttachmentController extends Controller
         }
 
         return back();
+    }
+
+    public function storeAjax(Request $request)
+    {
+        $file = [
+            'size' => [
+                'min' => 0,
+                'max' => 5120
+            ],
+            'mimes' => [
+                'jpg', 'jpeg', 'png', 'webp', 'svg', 'gif', 'ico',
+                'doc', 'docx', 'xls', 'xlsx', 'pdf', 'djvu', 'txt',
+                'zip', 'rar'
+            ],
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'evento_id' => ['required', 'int', 'min:0'],
+            'file' => 'required|file' .
+                '|min:' . $file['size']['min'] .
+                '|max:' . $file['size']['max'] .
+                '|mimes:' . implode(',', $file['mimes']),
+        ]);
+
+        if ($validator->fails()){
+            $rs = ['success' => 0, 'message' => 'Ошибки валидации вложения!',
+                    'errors' => $validator->errors()->toArray()];
+            die(json_encode($rs));
+        }
+
+        //$attributes = $request->validated();
+
+        $attributes  = ['user_id' => auth()->id()];
+        $attributes += ['evento_id' => $request->get('evento_id')];
+
+        if ( !$this->isUserHaveEventoId($request->get('evento_id'))){
+            $rs = ['success' => 0, 'message' => 'user doesnt have evento with this id!'];
+            die(json_encode($rs));
+        }
+
+        if ($request->hasFile('file'))
+        {
+            $file = $request->file('file');
+
+            $filename = self::SAVE_DIR_PREFIX . auth()->id() . DIRECTORY_SEPARATOR . Str::random(40) . "."
+                . $file->extension();
+
+            $attributes['file'] = $filename;
+            $attributes += ['originalname' => $file->getClientOriginalName()];
+            $attributes += ['mimetype' => $file->getMimeType()];
+            $attributes += ['size' => $file->getSize()];
+        }
+
+        try{
+            $attachment = Attachment::create($attributes);
+
+            if ($request->hasFile('file')){
+                try{
+                    $file->storeAs($filename, '', ['disk' => 'local'] );
+                } catch (FileException $fe){
+                    // созданную запись нужно удалить, если файл не был сохранен
+                    try{
+                        $attachment->delete();
+                    }catch (QueryException $qe){
+                        return back()->with('crud_message',['message' => 'Delete error!', 'class' => 'alert alert-danger']);
+                    }
+                    $this->saveToLog($fe);
+
+                    $rs = ['success' => 1, 'message' => 'File save error!'];
+                    die(json_encode($rs));
+                    //return back()->with('crud_message',['message' => , 'class' => 'alert alert-danger']);
+                }
+            }
+            session()->flash('crud_message',['message' => 'Attachment stored!', 'class' => 'alert alert-success']);
+        }catch (QueryException $qe){
+            $this->saveToLog($qe);
+
+            $rs = ['success' => 1, 'message' => 'Create error!'];
+            die(json_encode($rs));
+            //return back()->with('crud_message',['message' => 'Create error!', 'class' => 'alert alert-danger']);
+        }
+
+        $attachments = $this->getAttachmentsHtmlByEventoId($request->get('evento_id'));
+
+        $rs = ['success' => 1, 'message' => 'row added, file saved!', 'attachments' => $attachments];
+        die(json_encode($rs));
+    }
+
+    protected function getAttachmentsHtmlByEventoId($eventoId){
+
+        $attachments = auth()->user()->eventoAttachments()->where('evento_attachments.evento_id', $eventoId)->get();
+
+        return View::make('cabinet.evento._blocks.ajax.attachment', compact('attachments'))->render();
+    }
+
+    public function getAttachmentsByEventoIdAjax(Request $request){
+
+        $attachments = $this->getAttachmentsHtmlByEventoId($request->get('evento_id'));
+
+        $rs = ['success' => 1, 'message' => 'attachments here!', 'attachments' => $attachments];
+
+        die(json_encode($rs));
+    }
+
+    protected function isUserHaveEventoId($eventoId){
+
+        $result = Evento::where('user_id', auth()->id())->where('id', $eventoId)->count();
+
+        return intval($result);
     }
 
     public function show(Attachment $attachment)
@@ -147,20 +264,45 @@ class AttachmentController extends Controller
         return back();
     }
 
-    public function destroy(Attachment $attachment)
+
+    public function destroy($attachment)
     {
         abort_if(auth()->user()->cannot('delete', $attachment), 403);
 
         try{
+            $savedAttachmentId = $attachment->id;
+            $eventoId = $attachment->evento_id;
+
             $attachment->delete();
             $this->deleteFile($attachment->file);
 
-            session()->flash('crud_message',['message' => 'Attachment deleted!', 'class' => 'alert alert-danger']);
+            $rs = ['success' => 1, 'message' => 'Attachment deleted!', 'class' => 'alert alert-danger',
+                'attachment_id' => $savedAttachmentId, 'evento_id' => $eventoId];
         }catch(\Exception $e){
             $this->saveToLog($e);
+            $rs = ['success' => 0, ['message' => 'Attachment delete failed!', 'class' => 'alert alert-danger'] ];
         }
 
+        return $rs;
+    }
+
+    public function destroyAndRedirect(Attachment $attachment)
+    {
+        $this->destroy($attachment);
+
         return redirect()->route('cabinet.evento.attachment.index');
+    }
+
+    public function destroyAndBack(Attachment $attachment)
+    {
+        $this->destroy($attachment);
+
+        return back();
+    }
+
+    public function destroyAjax(Attachment $attachment)
+    {
+        die(json_encode($this->destroy($attachment)));
     }
 
     protected function deleteFile(string $filename)

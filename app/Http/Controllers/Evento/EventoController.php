@@ -101,7 +101,7 @@ class EventoController extends Controller
                 'evento_attachments.originalname as evento_attachment_originalname',
                 'evento_attachments.size as evento_attachment_size'
             )
-            //->orderBy('evento_eventos.date', 'desc')
+            ->orderBy('evento_eventos.date', 'desc')
             //->toSql()
         ;
         //dd($eventosWithAllColumns);
@@ -132,7 +132,6 @@ class EventoController extends Controller
     public function store(EventoRequest $request)
     {
         $attributes = $request->validated();
-
         $attributes += ['user_id' => auth()->id()];
 
         try{
@@ -140,6 +139,7 @@ class EventoController extends Controller
             session()->flash('crud_message',['message' => 'Evento created!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $this->saveToLog($e);
+            return back()->with('crud_message',['message' => 'Evento create failed!', 'class' => 'alert alert-success']);
         }
 
         return redirect()->route('cabinet.evento.edit', $evento);

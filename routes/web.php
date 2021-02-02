@@ -364,8 +364,15 @@ Route::group(
         Route::get('/show/{attachment}', 'AttachmentController@show')->name('show');
         Route::get('/edit/{attachment}', 'AttachmentController@edit')->name('edit');
         Route::post('/update/{attachment}', 'AttachmentController@update')->name('update');
-        Route::get('/destroy/{attachment}', 'AttachmentController@destroy')->name('destroy');
+
+        Route::get('/destroyAndRedirect/{attachment}', 'AttachmentController@destroyAndRedirect')->name('destroyAndRedirect');
+        Route::get('/destroyAndBack/{attachment}', 'AttachmentController@destroyAndBack')->name('destroyAndBack');
+        Route::post('/destroyAjax/{attachment}', 'AttachmentController@destroyAjax')->name('destroyAjax');
+
         Route::get('/download/{attachment}', 'AttachmentController@download')->name('download');
+        Route::post('/store_ajax/', 'AttachmentController@storeAjax' )->name('store_ajax');
+        Route::get('/getAttachmentsByEventoId', 'AttachmentController@getAttachmentsByEventoIdAjax')
+            ->name('getAttachmentsByEventoId');
     });
 
     Route::group(['prefix' => '/eventotagvalue', 'as' => 'eventotagvalue.'], function () {
@@ -386,7 +393,6 @@ Route::group(
     Route::get('/edit/{evento}', 'EventoController@edit')->name('edit');
     Route::post('/update/{evento}', 'EventoController@update')->name('update');
     Route::get('/destroy/{evento}', 'EventoController@destroy')->name('destroy');
-
 });
 
 Route::group([

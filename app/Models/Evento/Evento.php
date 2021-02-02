@@ -35,6 +35,10 @@ class Evento extends Model
         'user_id', 'description', 'date'
     ];
 
+    protected $casts = [
+        //'data' => 'array',
+    ];
+
     public function getDateAttribute() {
         return $this->attributes['date'] = (new Carbon($this->attributes['date']))->format('d.m.Y');
     }
