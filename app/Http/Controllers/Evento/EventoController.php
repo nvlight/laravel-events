@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Validator;
 
 class EventoController extends Controller
 {
@@ -120,8 +121,7 @@ class EventoController extends Controller
             ['path' => 'evento', 'pageName' => 'page']
         );
 
-        return view('cabinet.evento.index',
-            compact('eventos', 'paginator') );
+        return view('cabinet.evento.index', compact('eventos', 'paginator') );
     }
 
     public function create()
@@ -143,6 +143,35 @@ class EventoController extends Controller
         }
 
         return redirect()->route('cabinet.evento.edit', $evento);
+    }
+
+    public function storeAjax(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'description' => ['required', 'string', 'max:155', 'min:3'],
+            'date' => ['required', 'date'],
+        ]);
+
+        if ($validator->fails()){
+            $rs = ['success' => 0, 'message' => 'Ошибки валидации', 'errors' => $validator->errors()->toArray(),
+                'data' => $request->all()
+            ];
+            die(json_encode($rs));
+        }
+
+        $attributes = $request->all();
+        $attributes += ['user_id' => auth()->id()];
+
+        try{
+            Evento::create($attributes);
+            session()->flash('crud_message',['message' => 'Evento created!', 'class' => 'alert alert-success']);
+            $rs = ['success' => 1, 'message' => 'Evento created!'];
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 1, 'message' => 'Evento create failed!'];
+        }
+
+        die(json_encode($rs));
     }
 
     public function show(Evento $evento)

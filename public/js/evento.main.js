@@ -16,6 +16,10 @@ if (attachmentModal){
     var addAttachmentModal = new bootstrap.Modal(attachmentModal, {keyboard: false});
 }
 
+var eventoModal = document.getElementById('add-evento-modal');
+if (eventoModal) {
+    var addEventoModal = new bootstrap.Modal(eventoModal, {keyboard: false});
+}
 
 //###########################################
 function conlog(e){
@@ -1215,3 +1219,59 @@ function getAttachmentById(evento_id)
     xhr.send();
 }
 //getAttachmentById(57);
+
+
+
+/////////////////////////////////////
+// start
+// add_evento
+function create_evento_xhr(params) {
+    let url = "/cabinet/evento/store_ajax/";
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("POST", url);
+
+    //xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    //xhr.setRequestHeader("Content-type","multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2));
+    //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']) {
+
+                addEventoModal.hide();
+            }
+        }
+    });
+    xhr.send(params);
+}
+
+function create_evento__handler(e, form){
+
+    let formData = new FormData(form);
+
+    formData.append('_token', token);
+
+    //conlog('description: '+formData.get('description'));
+    //conlog('date: '+formData.get('date'));
+
+    create_evento_xhr(formData);
+}
+
+function create_evento__submit(){
+    var form = document.querySelector('form[name=addEventoForm]');
+    if (form) {
+        form.onsubmit = function (e) {
+
+            create_evento__handler(e, form);
+
+            return false;
+        }
+    }
+}
+create_evento__submit();
+
+// end
+// add_evento
+/////////////////////////////////////

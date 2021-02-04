@@ -393,6 +393,8 @@ Route::group(
     Route::get('/edit/{evento}', 'EventoController@edit')->name('edit');
     Route::post('/update/{evento}', 'EventoController@update')->name('update');
     Route::get('/destroy/{evento}', 'EventoController@destroy')->name('destroy');
+
+    Route::post('/store_ajax/', 'EventoController@storeAjax' )->name('store_ajax');
 });
 
 Route::group([
