@@ -2,34 +2,44 @@ var currentEventoId = 0, token = "some token...";
 var findToken = document.head.querySelector('meta[name="csrf-token"]');
 var addStandAloneCategoryBtnFind = document.querySelector('#addStandAloneCategoryBtnId');
 var editCategoryInputText = "";
-if (findToken){
-    if (findToken.hasAttribute('content')){
-        token = findToken.getAttribute('content');
-    }
-}
+
 let resultMessageInnerForStandaloneCategory = document.querySelector('form[name=addStandaloneCategoryForm] .resultMessage');
 let resultMessageInnerForStandaloneTag = document.querySelector('form[name=addStandaloneTagForm] .resultMessage');
 
+var addCategoryModal = document.getElementById('add-category-modal');
+var addTagModal = document.getElementById('add-tag-modal');
+var addCategoryForm = document.querySelector('form[name=addCategoryForm]');
+var addEventoTagForm = document.querySelector('form[name=addEventoTagForm]');
 
-let attachmentModal = document.getElementById('add-attachment-modal');
-if (attachmentModal){
-    var addAttachmentModal = new bootstrap.Modal(attachmentModal, {keyboard: false});
-}
+var currentDeleteItemHref = null;
+let deleteItemA = document.querySelectorAll('a.deleteItem');
 
+let openDeactivateDialog = document.querySelector('#openDeactivateDialog');
+let cancelBtn = document.querySelector('.cancelBtn');
+let closeMainDialogOnDarkSide = document.querySelector('#main_dialog');
+let eventoDeleteLinks = document.querySelectorAll('.evento_delete');
+var addStandaloneTagForm = document.querySelector('form[name=addStandaloneTagForm]');
+
+// modals
+var attachmentModal = document.getElementById('add-attachment-modal');
 var eventoModal = document.getElementById('add-evento-modal');
-if (eventoModal) {
-    var addEventoModal = new bootstrap.Modal(eventoModal, {keyboard: false});
-}
 
-//###########################################
 function conlog(e){
     console.log(e);
 }
-//###########################################
 
-//
-function categoryAddEditButtonCatch()
-{
+function attachmentModalFunction() {
+    if (attachmentModal){
+        var addAttachmentModal = new bootstrap.Modal(attachmentModal, {keyboard: false});
+    }
+}
+function eventoModalFunction() {
+    if (eventoModal) {
+        var addEventoModal = new bootstrap.Modal(eventoModal, {keyboard: false});
+    }
+}
+
+function categoryAddEditButtonCatch() {
     var categoryAddEditButton = document.querySelectorAll('.category-add--edit-button');
 
     for(let i=0; i<categoryAddEditButton.length; i++){
@@ -37,8 +47,7 @@ function categoryAddEditButtonCatch()
     }
 }
 
-function removeOldAddCategoryButtons()
-{
+function removeOldAddCategoryButtons() {
     let oldButtons = document.querySelectorAll('.add-category-crud--buttons');
     if (oldButtons){
         for(let i=0; i<oldButtons.length; i++){
@@ -47,8 +56,7 @@ function removeOldAddCategoryButtons()
     }
 }
 
-function categoryAddEditButtonHandler(e)
-{
+function categoryAddEditButtonHandler(e) {
     e.stopImmediatePropagation();
     //console.log(e);
     //console.log(e.target);
@@ -88,8 +96,7 @@ function catchEnterPressForEditInputCategoryText() {
     }
 }
 
-function deleteInputForChangeCategoryText()
-{
+function deleteInputForChangeCategoryText() {
     // todo2
     let input = document.querySelectorAll('.add-category-crud--name-field .text');
     if (input){
@@ -104,8 +111,7 @@ function deleteInputForChangeCategoryText()
     }
 }
 
-function addFocusForEditCategoryInput()
-{
+function addFocusForEditCategoryInput() {
     let input = document.querySelector("input[name='crudEditCategoryInput']");
     if (input){
         editCategoryInputText = input.value;
@@ -114,8 +120,7 @@ function addFocusForEditCategoryInput()
     }
 }
 
-function addInputTagForEditCategoryText(needTr)
-{
+function addInputTagForEditCategoryText(needTr) {
     let categoryText = needTr.querySelector('.add-category-crud--name-field .text');
     if (categoryText){
         // save current input value
@@ -138,8 +143,7 @@ function addInputTagForEditCategoryText(needTr)
     return categoryText;
 }
 
-function addButtonsForAddCategoryTd(needTr, nameTd, catTextWithForm)
-{
+function addButtonsForAddCategoryTd(needTr, nameTd, catTextWithForm) {
     const url = "/cabinet/evento/category/get_change_category_buttons/";
     const params = "_token=" + token;
 
@@ -179,10 +183,8 @@ function addButtonsForAddCategoryTd(needTr, nameTd, catTextWithForm)
     request.send(params);
 }
 
-
-
 /// ################################################
-// add category for evento
+//  start --- add category for evento
 function removeOptions(selectElement) {
     var i, L = selectElement.options.length - 1;
     for(i = L; i >= 0; i--) {
@@ -199,11 +201,8 @@ function saveCurrentDataEventoId(){
         });
     }
 }
-saveCurrentDataEventoId();
 
-//
-function getUserCategories()
-{
+function getUserCategories() {
     const url = "/cabinet/evento/eventocategory/get_user_categories/";
     const params = "_token=" + token;
 
@@ -247,8 +246,7 @@ function getUserCategories()
     request.send(params);
 }
 
-function getCategories()
-{
+function getCategories() {
     const url = "/cabinet/evento/category/index_ajax/";
     const params = "_token=" + token;
 
@@ -269,10 +267,12 @@ function getCategories()
     });
     request.send(params);
 }
+//  end --- add category for evento
+/// ################################################
 
+/// ################################################
 // category delete links
-function deleteCategoryForCrud()
-{
+function deleteCategoryForCrud() {
     let deleteCategoryForCrud = document.querySelectorAll('a.category_delete_for_crud');
     if (deleteCategoryForCrud.length) {
         for (let i = 0; i < deleteCategoryForCrud.length; i++) {
@@ -318,9 +318,7 @@ function deleteCategoryForCrud()
     }
 }
 
-//
-function getUserTags()
-{
+function getUserTags() {
     const url = "/cabinet/evento/eventotag/get_user_tags/";
     const params = "_token=" + token;
 
@@ -360,165 +358,176 @@ function getUserTags()
     request.send(params);
 }
 
-// сохранение категории для Евенто, не просто для категории
-var addCategoryModal = document.getElementById('add-category-modal');
-if (addCategoryModal){
-    var myAddCategoryModal = new bootstrap.Modal(document.getElementById('add-category-modal'), {keyboard: false});
+function findTokenFunction(){
+    if (findToken){
+        if (findToken.hasAttribute('content')){
+            token = findToken.getAttribute('content');
+        }
+    }
+}
 
-    addCategoryModal.addEventListener('shown.bs.modal', function (e)
-    {
-        console.log('+ for category modal');
+function addCategoryModalFunction(){
+    // сохранение категории для Евенто, не просто для категории
+    if (addCategoryModal){
+        var myAddCategoryModal = new bootstrap.Modal(document.getElementById('add-category-modal'), {keyboard: false});
 
-        // +plus плюсик нажат!
-        getCategories();
-        getUserCategories();
-        showCategoryAddSuccessMessage();
-        hideCategoryAddSuccessMessage();
-    });
+        addCategoryModal.addEventListener('shown.bs.modal', function (e)
+        {
+            console.log('+ for category modal');
+
+            // +plus плюсик нажат!
+            getCategories();
+            getUserCategories();
+            showCategoryAddSuccessMessage();
+            hideCategoryAddSuccessMessage();
+        });
+    }
 }
 
 // сохранение тега для Евенто, не просто для категории
-var addTagModal = document.getElementById('add-tag-modal');
-if (addTagModal){
-    var myAddTagModal = new bootstrap.Modal(document.getElementById('add-tag-modal'), {keyboard: false});
+function addTagModalFunction() {
+    if (addTagModal){
+        var myAddTagModal = new bootstrap.Modal(document.getElementById('add-tag-modal'), {keyboard: false});
 
-    addTagModal.addEventListener('shown.bs.modal', function (e)
-    {
-        console.log('+ for tag modal');
+        addTagModal.addEventListener('shown.bs.modal', function (e)
+        {
+            console.log('+ for tag modal');
 
-        addEventoTagForm.reset();
+            addEventoTagForm.reset();
 
-        if (resultMessageInnerForStandaloneTag){
-            resultMessageInnerForStandaloneTag.classList.add('d-none');
-        }
-        getUserTags();
-        getTags();
-    });
+            if (resultMessageInnerForStandaloneTag){
+                resultMessageInnerForStandaloneTag.classList.add('d-none');
+            }
+            getUserTags();
+            getTags();
+        });
+    }
 }
 
 // сохранение категории - перехват сабмита и отправка xhr запроса.
-var addCategoryForm = document.querySelector('form[name=addCategoryForm]');
-if (addCategoryForm) {
-    addCategoryForm.onsubmit = function (e) {
-        //console.log('submit stoped');
+function addCategoryFormFunction() {
+    if (addCategoryForm) {
+        addCategoryForm.onsubmit = function (e) {
+            //console.log('submit stoped');
 
-        var categoriesSelect = document.querySelector('form[name=addCategoryForm] select[name=categories]');
-        if (categoriesSelect){
-            if (categoriesSelect.selectedOptions.length){
-                let categoryId = categoriesSelect.selectedOptions[0].value;
+            var categoriesSelect = document.querySelector('form[name=addCategoryForm] select[name=categories]');
+            if (categoriesSelect){
+                if (categoriesSelect.selectedOptions.length){
+                    let categoryId = categoriesSelect.selectedOptions[0].value;
 
-                let eventoIdFormInput   = document.querySelector('form[name=addCategoryForm] input[name=evento_id]');
-                let categoryIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=category_id]');
+                    let eventoIdFormInput   = document.querySelector('form[name=addCategoryForm] input[name=evento_id]');
+                    let categoryIdFormInput = document.querySelector('form[name=addCategoryForm] input[name=category_id]');
 
-                if (categoryId && categoryIdFormInput){
-                    categoryIdFormInput.value = categoryId;
-                }
-                eventoIdFormInput.value = currentEventoId;
-
-                // all data prepared for add
-                var addCategoryData = '&evento_id=' + currentEventoId + '&category_id=' + categoryId;
-                //console.log(addCategoryData);
-
-                // xhr
-                const url = "/cabinet/evento/eventocategory/store_ajax/";
-                const params = "_token=" + token + addCategoryData;
-                const request = new XMLHttpRequest();
-                request.open("POST", url);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                request.addEventListener("readystatechange", () => {
-                    if(request.readyState === 4 && request.status === 200) {
-                        let rs = JSON.parse(request.responseText);
-                        //console.log(rs);
-                        if (rs['success']){
-                            let need_tr = document.querySelector('tr[data-evento-id="'+currentEventoId+'"] .category_td');
-
-                            // добавление ссылки, который будет производить удаление через перезагрузку страницы
-                            //let delete_link = '<a href="/cabinet/evento/eventocategory/destroy/' + rs['eventocategory_id'] + '" class="delete_category" data-categoryId="' + rs['eventocategory_id'] + '">delete</a>';
-                            let delete_link = '<a href="/cabinet/evento/eventocategory/destroy/' + rs['eventocategory_id'] + '"' +
-                                                   'class="delete_category" data-categoryId="' + rs['eventocategory_id'] + '">' +
-                                                    '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">' +
-                                                        '<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>' +
-                                                    '</svg>' +
-                                                '</a>';
-                            let textHtml = '<span class="categoryNameText" data-textvalue="'+rs['category_name']+'">'+rs['category_name']+'</span>';
-                            let delete_link_div_wrapper = '<div class="eventoCategoryDiv" data-eventocategoryid="'+rs['eventocategory_id']+'">' + textHtml + delete_link + '</div>';
-                            need_tr.innerHTML =  delete_link_div_wrapper + need_tr.innerHTML;
-
-                            deleteEventoCategoryAddHandler();
-
-                            myAddCategoryModal.hide();
-                        }
+                    if (categoryId && categoryIdFormInput){
+                        categoryIdFormInput.value = categoryId;
                     }
-                });
-                request.send(params);
-            }
-        }
+                    eventoIdFormInput.value = currentEventoId;
 
-        return false;
-    };
+                    // all data prepared for add
+                    var addCategoryData = '&evento_id=' + currentEventoId + '&category_id=' + categoryId;
+                    //console.log(addCategoryData);
+
+                    // xhr
+                    const url = "/cabinet/evento/eventocategory/store_ajax/";
+                    const params = "_token=" + token + addCategoryData;
+                    const request = new XMLHttpRequest();
+                    request.open("POST", url);
+                    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    request.addEventListener("readystatechange", () => {
+                        if(request.readyState === 4 && request.status === 200) {
+                            let rs = JSON.parse(request.responseText);
+                            //console.log(rs);
+                            if (rs['success']){
+                                let need_tr = document.querySelector('tr[data-evento-id="'+currentEventoId+'"] .category_td');
+
+                                // добавление ссылки, который будет производить удаление через перезагрузку страницы
+                                //let delete_link = '<a href="/cabinet/evento/eventocategory/destroy/' + rs['eventocategory_id'] + '" class="delete_category" data-categoryId="' + rs['eventocategory_id'] + '">delete</a>';
+                                let delete_link = '<a href="/cabinet/evento/eventocategory/destroy/' + rs['eventocategory_id'] + '"' +
+                                    'class="delete_category" data-categoryId="' + rs['eventocategory_id'] + '">' +
+                                    '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">' +
+                                    '<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>' +
+                                    '</svg>' +
+                                    '</a>';
+                                let textHtml = '<span class="categoryNameText" data-textvalue="'+rs['category_name']+'">'+rs['category_name']+'</span>';
+                                let delete_link_div_wrapper = '<div class="eventoCategoryDiv" data-eventocategoryid="'+rs['eventocategory_id']+'">' + textHtml + delete_link + '</div>';
+                                need_tr.innerHTML =  delete_link_div_wrapper + need_tr.innerHTML;
+
+                                deleteEventoCategoryAddHandler();
+
+                                myAddCategoryModal.hide();
+                            }
+                        }
+                    });
+                    request.send(params);
+                }
+            }
+
+            return false;
+        };
+    }
 }
 
 // сохранение тега (+значение) - перехват сабмита и отправка xhr запроса.
-var addEventoTagForm = document.querySelector('form[name=addEventoTagForm]');
-if (addEventoTagForm) {
-    addEventoTagForm.onsubmit = function (e) {
-        //console.log('submit stoped');
+function addEventoTagFormFunction(){
+    if (addEventoTagForm) {
+        addEventoTagForm.onsubmit = function (e) {
+            //console.log('submit stoped');
 
-        var tagsSelect = document.querySelector('form[name=addEventoTagForm] select[name=tags]');
-        if (tagsSelect){
-            if (tagsSelect.selectedOptions.length){
+            var tagsSelect = document.querySelector('form[name=addEventoTagForm] select[name=tags]');
+            if (tagsSelect){
+                if (tagsSelect.selectedOptions.length){
 
-                let tagId = tagsSelect.selectedOptions[0].value;
-                let eventoIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=evento_id]');
-                let tagIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=tag_id]');
-                let tagValue = document.querySelector('form[name=addEventoTagForm] input[name=value]');
-                let tagCaption = document.querySelector('form[name=addEventoTagForm] input[name=caption]');
+                    let tagId = tagsSelect.selectedOptions[0].value;
+                    let eventoIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=evento_id]');
+                    let tagIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=tag_id]');
+                    let tagValue = document.querySelector('form[name=addEventoTagForm] input[name=value]');
+                    let tagCaption = document.querySelector('form[name=addEventoTagForm] input[name=caption]');
 
-                if (tagId && tagIdFormInput){
-                    tagIdFormInput.value = tagId;
-                }
-                eventoIdFormInput.value = currentEventoId;
-                if (!tagValue){
-                    tagValue.value = null;
-                }
-                if (!tagCaption){
-                    tagCaption.value = null;
-                }
-
-                var addTagData = '&evento_id=' + currentEventoId + '&tag_id=' + tagId + '&value=' + tagValue.value + '&caption=' + tagCaption.value
-                //console.log(addTagData);
-
-                // xhr
-                const url = "/cabinet/evento/eventotag/store_ajax/";
-                const params = "_token=" + token + addTagData;
-                const request = new XMLHttpRequest();
-                request.open("POST", url);
-                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                request.addEventListener("readystatechange", () => {
-                    if(request.readyState === 4 && request.status === 200) {
-                        let rs = JSON.parse(request.responseText);
-                        //console.log(rs);
-                        if (rs['success']){
-                            let need_tr = document.querySelector('tr[data-evento-id="'+currentEventoId+'"] .tag_td');
-
-                            need_tr.innerHTML =  rs['eventoTagDiv'] + need_tr.innerHTML;
-
-                            deleteEventoTagAddHandler();
-
-                            myAddTagModal.hide();
-                        }
+                    if (tagId && tagIdFormInput){
+                        tagIdFormInput.value = tagId;
                     }
-                });
-                request.send(params);
-            }
-        }
+                    eventoIdFormInput.value = currentEventoId;
+                    if (!tagValue){
+                        tagValue.value = null;
+                    }
+                    if (!tagCaption){
+                        tagCaption.value = null;
+                    }
 
-        return false;
-    };
+                    var addTagData = '&evento_id=' + currentEventoId + '&tag_id=' + tagId + '&value=' + tagValue.value + '&caption=' + tagCaption.value
+                    //console.log(addTagData);
+
+                    // xhr
+                    const url = "/cabinet/evento/eventotag/store_ajax/";
+                    const params = "_token=" + token + addTagData;
+                    const request = new XMLHttpRequest();
+                    request.open("POST", url);
+                    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    request.addEventListener("readystatechange", () => {
+                        if(request.readyState === 4 && request.status === 200) {
+                            let rs = JSON.parse(request.responseText);
+                            //console.log(rs);
+                            if (rs['success']){
+                                let need_tr = document.querySelector('tr[data-evento-id="'+currentEventoId+'"] .tag_td');
+
+                                need_tr.innerHTML =  rs['eventoTagDiv'] + need_tr.innerHTML;
+
+                                deleteEventoTagAddHandler();
+
+                                myAddTagModal.hide();
+                            }
+                        }
+                    });
+                    request.send(params);
+                }
+            }
+
+            return false;
+        };
+    }
 }
 
-function deleteEventoCategoryAddHandler()
-{
+function deleteEventoCategoryAddHandler() {
     let deleteCategoryTagA = document.querySelectorAll('a.delete_category');
     if (deleteCategoryTagA.length){
         for(let i=0; i<deleteCategoryTagA.length; i++){
@@ -550,10 +559,8 @@ function deleteEventoCategoryAddHandler()
         }
     }
 }
-deleteEventoCategoryAddHandler();
 
-function deleteEventoTagAddHandler()
-{
+function deleteEventoTagAddHandler() {
     let deleteTagTagA = document.querySelectorAll('a.delete_tag');
     if (deleteTagTagA.length){
         for(let i=0; i<deleteTagTagA.length; i++){
@@ -584,57 +591,58 @@ function deleteEventoTagAddHandler()
         }
     }
 }
-deleteEventoTagAddHandler();
-
 
 /* ################################################
  * scripts for all delete buttons for confirmed them
  */
-var currentDeleteItemHref = null;
-let deleteItemA = document.querySelectorAll('a.deleteItem');
-if (deleteItemA.length){
-    for (let i=0; i<deleteItemA.length; i++){
-        deleteItemA[i].onclick = function (e) {
-            e.stopImmediatePropagation();
-            if (deleteItemA[i].hasAttribute('href')){
-                let href = deleteItemA[i].getAttribute('href');
-                currentDeleteItemHref = href;
-                //console.log(href);
-                dialogOpenBtnHandler();
+function deleteItemAFunction(){
+    if (deleteItemA.length){
+        for (let i=0; i<deleteItemA.length; i++){
+            deleteItemA[i].onclick = function (e) {
+                e.stopImmediatePropagation();
+                if (deleteItemA[i].hasAttribute('href')){
+                    let href = deleteItemA[i].getAttribute('href');
+                    currentDeleteItemHref = href;
+                    //console.log(href);
+                    dialogOpenBtnHandler();
 
-                let deleteConfirmBtn = document.querySelector('.deleteConfirmBtn');
-                if (deleteConfirmBtn){
-                    deleteConfirmBtn.onclick = function () {
-                        deleteConfirmBtnHandler(currentDeleteItemHref);
+                    let deleteConfirmBtn = document.querySelector('.deleteConfirmBtn');
+                    if (deleteConfirmBtn){
+                        deleteConfirmBtn.onclick = function () {
+                            deleteConfirmBtnHandler(currentDeleteItemHref);
+                        }
                     }
                 }
+                return false;
             }
-            return false;
         }
     }
 }
 
-let openDeactivateDialog = document.querySelector('#openDeactivateDialog');
-if (openDeactivateDialog){
-    openDeactivateDialog.addEventListener('click', dialogOpenBtnHandler)
+function openDeactivateDialogFunction(){
+    if (openDeactivateDialog){
+        openDeactivateDialog.addEventListener('click', dialogOpenBtnHandler)
+    }
 }
 
-let cancelBtn = document.querySelector('.cancelBtn');
-if (cancelBtn){
-    cancelBtn.addEventListener('click', dialogCloseBtnHandler);
+function cancelBtnFunction() {
+    if (cancelBtn){
+        cancelBtn.addEventListener('click', dialogCloseBtnHandler);
+    }
 }
 
-let closeMainDialogOnDarkSide = document.querySelector('#main_dialog');
-if (closeMainDialogOnDarkSide){
-    closeMainDialogOnDarkSide.onclick = function(e) {
-        //console.log(e.target.classList + ' clicked ' + Math.random(100));
-        let targetClass = '#main_dialog';
-        let isFindTarget = document.querySelector(targetClass);
+function closeMainDialogOnDarkSideFunction() {
+    if (closeMainDialogOnDarkSide){
+        closeMainDialogOnDarkSide.onclick = function(e) {
+            //console.log(e.target.classList + ' clicked ' + Math.random(100));
+            let targetClass = '#main_dialog';
+            let isFindTarget = document.querySelector(targetClass);
 
-        if (e.target.classList.contains('modalBg') && isFindTarget ){
-            isFindTarget.classList.toggle('d-none');
-        }
-    };
+            if (e.target.classList.contains('modalBg') && isFindTarget ){
+                isFindTarget.classList.toggle('d-none');
+            }
+        };
+    }
 }
 
 function dialogOpenBtnHandler() {
@@ -656,23 +664,23 @@ function deleteConfirmBtnHandler(href) {
 }
 
 // evento delete confirmation
-let eventoDeleteLinks = document.querySelectorAll('.evento_delete');
-if (eventoDeleteLinks.length){
-    for(let i=0; i<eventoDeleteLinks.length; i++){
-        eventoDeleteLinks[i].onclick = function (e) {
-            e.stopImmediatePropagation();
+function eventoDeleteLinksFunction() {
+    if (eventoDeleteLinks.length){
+        for(let i=0; i<eventoDeleteLinks.length; i++){
+            eventoDeleteLinks[i].onclick = function (e) {
+                e.stopImmediatePropagation();
 
-            if (!confirm('Delete list?')){
-                return false;
-            }
+                if (!confirm('Delete list?')){
+                    return false;
+                }
 
-            //console.log('list deleted!');
-        };
+                //console.log('list deleted!');
+            };
+        }
     }
 }
 
-function addStandAloneCategoryBtnFindClick(e)
-{
+function addStandAloneCategoryBtnFindClick(e) {
     e.preventDefault();
 
     const categoryAddRequestUrl = "/cabinet/evento/category/store_ajax/";
@@ -732,32 +740,29 @@ function addStandAloneCategoryBtnFindClick(e)
 }
 
 // #### add standalone category
-if (addStandAloneCategoryBtnFind){
-    addStandAloneCategoryBtnFind.onclick = addStandAloneCategoryBtnFindClick;
+function addStandAloneCategoryBtnFindFunction() {
+    if (addStandAloneCategoryBtnFind){
+        addStandAloneCategoryBtnFind.onclick = addStandAloneCategoryBtnFindClick;
+    }
 }
 // #### END
 
 // ### show/hide && wait/hide CategoryAddSuccessMessage
-function hideCategoryAddSuccessMessage()
-{
+function hideCategoryAddSuccessMessage() {
     if (resultMessageInnerForStandaloneCategory){
         resultMessageInnerForStandaloneCategory.classList.add('d-none');
     }
 }
-function showCategoryAddSuccessMessage()
-{
+function showCategoryAddSuccessMessage() {
     if (resultMessageInnerForStandaloneCategory){
         resultMessageInnerForStandaloneCategory.classList.remove('d-none');
     }
 }
-function waitAndHideCategoryAddSuccessMessage(time=2000)
-{
+function waitAndHideCategoryAddSuccessMessage(time=2000) {
     setTimeout(hideCategoryAddSuccessMessage, time);
 }
 
-//
-function addCategoryCrudCancelHandler()
-{
+function addCategoryCrudCancelHandler() {
     let cancel = document.querySelector('.add-category-crud--cancel');
     if (cancel){
         cancel.addEventListener('click', function () {
@@ -767,8 +772,7 @@ function addCategoryCrudCancelHandler()
     }
 }
 
-function changeCategoryCrudHandlerAjax(categoryId, name)
-{
+function changeCategoryCrudHandlerAjax(categoryId, name) {
     const requestUrl = "/cabinet/evento/category/edit_category/"+categoryId;
     const params = "_token=" + token + '&name=' + name + '&parent_id=' + 0 + '&color=' + '#ccc';
 
@@ -805,15 +809,13 @@ function changeCategoryCrudHandlerAjax(categoryId, name)
     xhr.send(params);
 }
 
-function changeCategoryCrudHandle()
-{
+function changeCategoryCrudHandle() {
     let confirm = document.querySelector('.add-category-crud--confirm');
     if (confirm){
         confirm.addEventListener('click', changeCategoryCrudHandler);
     }
 }
-function changeCategoryCrudHandler(e)
-{
+function changeCategoryCrudHandler(e) {
     let confirm = document.querySelector('.add-category-crud--confirm');
     if (confirm){
         let needTr = confirm.parentElement.parentElement.parentElement;
@@ -839,8 +841,7 @@ function changeCategoryCrudHandler(e)
     }
 }
 
-function changeAllCategorysByName(oldName, newName)
-{
+function changeAllCategorysByName(oldName, newName) {
     //console.log('oldName: '+oldName);
     //console.log('newName: '+newName);
     let allCatsSelector = 'span[class=categoryNameText][data-textValue="'+oldName+'"]';
@@ -857,114 +858,111 @@ function changeAllCategorysByName(oldName, newName)
 }
 
 // #### add standalone tag
-// сохранение тега (+его цвет) - перехват сабмита и отправка xhr запроса.
-var addStandaloneTagForm = document.querySelector('form[name=addStandaloneTagForm]');
-if (addStandaloneTagForm){
-    addStandaloneTagForm.onsubmit = function (e) {
-        e.stopImmediatePropagation();
+function addStandaloneTagFormFunction() {
+    if (addStandaloneTagForm){
+        addStandaloneTagForm.onsubmit = function (e) {
+            e.stopImmediatePropagation();
 
-        const tagAddRequestUrl = "/cabinet/evento/tag/store_ajax/";
-        let name = 'default';
-        let parent_id = 0;
-        let color = "#ccc";
+            const tagAddRequestUrl = "/cabinet/evento/tag/store_ajax/";
+            let name = 'default';
+            let parent_id = 0;
+            let color = "#ccc";
 
-        let realName = document.querySelector('form[name=addStandaloneTagForm] input[name=name]');
-        let realParentId = document.querySelector('form[name=addStandaloneTagForm] input[name=tag_id]');
-        let realColor = document.querySelector('form[name=addStandaloneTagForm] input[name=color]');
-        if (realName){
-            name = realName.value;
-        }
-        if (realParentId){
-            parent_id = realParentId.value;
-        }
-        if (realColor){
-            color = realColor.value;
-        }
+            let realName = document.querySelector('form[name=addStandaloneTagForm] input[name=name]');
+            let realParentId = document.querySelector('form[name=addStandaloneTagForm] input[name=tag_id]');
+            let realColor = document.querySelector('form[name=addStandaloneTagForm] input[name=color]');
+            if (realName){
+                name = realName.value;
+            }
+            if (realParentId){
+                parent_id = realParentId.value;
+            }
+            if (realColor){
+                color = realColor.value;
+            }
 
-        const tagAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id + '&color=' + color;
+            const tagAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id + '&color=' + color;
 
-        const tagAddRequest = new XMLHttpRequest();
-        tagAddRequest.open("POST", tagAddRequestUrl);
-        tagAddRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        tagAddRequest.addEventListener("readystatechange", () => {
-            if (tagAddRequest.readyState === 4 && tagAddRequest.status === 200) {
-                let rs = JSON.parse(tagAddRequest.responseText);
+            const tagAddRequest = new XMLHttpRequest();
+            tagAddRequest.open("POST", tagAddRequestUrl);
+            tagAddRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            tagAddRequest.addEventListener("readystatechange", () => {
+                if (tagAddRequest.readyState === 4 && tagAddRequest.status === 200) {
+                    let rs = JSON.parse(tagAddRequest.responseText);
 
-                // теперь нужно показать успешность добавления, а также обновить селект сверху!
-                if (rs['success']){
+                    // теперь нужно показать успешность добавления, а также обновить селект сверху!
+                    if (rs['success']){
 
-                    getUserTags();
-                    getTags();
+                        getUserTags();
+                        getTags();
 
-                    if (resultMessageInnerForStandaloneTag){
+                        if (resultMessageInnerForStandaloneTag){
 
-                        showTagAddSuccessMessage();
-                        resultMessageInnerForStandaloneTag.innerHTML = rs['message'];
-                        if (realName){
-                            realName.value = '';
+                            showTagAddSuccessMessage();
+                            resultMessageInnerForStandaloneTag.innerHTML = rs['message'];
+                            if (realName){
+                                realName.value = '';
+                            }
+                            if (realColor){
+                                realColor.value = '';
+                            }
+                            waitAndHideTagAddSuccessMessage(5000);
                         }
-                        if (realColor){
-                            realColor.value = '';
+                    }else{
+                        if (resultMessageInnerForStandaloneTag) {
+                            resultMessageInnerForStandaloneTag.classList.remove('d-none');
+                            //resultMessageInnerForStandaloneTag.classList.add('text-danger');
+                            resultMessageInnerForStandaloneTag.classList.remove('text-success');
+
+                            //resultMessageInnerForStandaloneTag.innerHTML = rs['message'];
+                            resultMessageInnerForStandaloneTag.innerHTML = "";
+
+                            // show error lines
+                            var errors = rs['errors'];
+                            var customAttributes = rs['customAttributes'];
+
+                            let keys = Object.keys(errors);
+                            for(let i=0; i<keys.length; i++){
+                                let p = document.createElement('p');
+                                p.classList.add('m-0');
+                                p.innerHTML = customAttributes[keys[i]] + ' - ' +
+                                    "<span class='text-danger pt-2'>" +  errors[keys[i]][0] + "</span>";
+                                //console.log(span.innerHTML);
+                                resultMessageInnerForStandaloneTag.appendChild(p);
+                            }
+                            //waitAndHideTagAddSuccessMessage(5000);
                         }
-                        waitAndHideTagAddSuccessMessage(5000);
-                    }
-                }else{
-                    if (resultMessageInnerForStandaloneTag) {
-                        resultMessageInnerForStandaloneTag.classList.remove('d-none');
-                        //resultMessageInnerForStandaloneTag.classList.add('text-danger');
-                        resultMessageInnerForStandaloneTag.classList.remove('text-success');
-
-                        //resultMessageInnerForStandaloneTag.innerHTML = rs['message'];
-                        resultMessageInnerForStandaloneTag.innerHTML = "";
-
-                        // show error lines
-                        var errors = rs['errors'];
-                        var customAttributes = rs['customAttributes'];
-
-                        let keys = Object.keys(errors);
-                        for(let i=0; i<keys.length; i++){
-                            let p = document.createElement('p');
-                            p.classList.add('m-0');
-                            p.innerHTML = customAttributes[keys[i]] + ' - ' +
-                            "<span class='text-danger pt-2'>" +  errors[keys[i]][0] + "</span>";
-                            //console.log(span.innerHTML);
-                            resultMessageInnerForStandaloneTag.appendChild(p);
-                        }
-                        //waitAndHideTagAddSuccessMessage(5000);
                     }
                 }
-            }
-        });
-        tagAddRequest.send(tagAddRequestParams);
+            });
+            tagAddRequest.send(tagAddRequestParams);
 
-        return false;
+            return false;
+        }
     }
 }
+// сохранение тега (+его цвет) - перехват сабмита и отправка xhr запроса.
 // #### END
 
 // ### show/hide && wait/hide CategoryAddSuccessMessage
-function hideTagAddSuccessMessage()
-{
+function hideTagAddSuccessMessage() {
     if (resultMessageInnerForStandaloneTag){
         resultMessageInnerForStandaloneTag.classList.add('d-none');
     }
 }
-function showTagAddSuccessMessage()
-{
+function showTagAddSuccessMessage() {
     if (resultMessageInnerForStandaloneTag){
         resultMessageInnerForStandaloneTag.classList.remove('d-none');
         resultMessageInnerForStandaloneTag.classList.remove('text-danger');
         resultMessageInnerForStandaloneTag.classList.add('text-success');
     }
 }
-function waitAndHideTagAddSuccessMessage(time=2000)
-{
+function waitAndHideTagAddSuccessMessage(time=2000) {
     setTimeout(hideTagAddSuccessMessage, time);
 }
 
 ////////////////
-function getTags()
-{
+function getTags() {
     const url = "/cabinet/evento/tag/index_ajax/";
     const params = "_token=" + token;
 
@@ -987,8 +985,7 @@ function getTags()
 }
 
 // tag delete links
-function deleteTagForCrud()
-{
+function deleteTagForCrud() {
     let deleteTagForCrud = document.querySelectorAll('a.tag_delete_for_crud');
     if (deleteTagForCrud.length) {
         for (let i = 0; i < deleteTagForCrud.length; i++) {
@@ -1039,7 +1036,6 @@ function deleteTagForCrud()
 // ########################################
 // загрузка файлов через js, /attachment
 // start
-
 function insertAttachments(html){
     let attachments = document.querySelector('.attachments');
     if (attachments){
@@ -1047,8 +1043,7 @@ function insertAttachments(html){
     }
 }
 
-function storeAttachmentAjax(formData)
-{
+function storeAttachmentAjax(formData) {
     let url = "/cabinet/evento/attachment/store_ajax/";
     //url = "../js_handler.php";
     const xhr = new XMLHttpRequest();
@@ -1128,20 +1123,15 @@ function addHandlerForEventoItems() {
         }
     }
 }
-addHandlerForEventoItems();
 
 // загрузка файлов через js, /attachment
 // end
 // ##########################################
 
-
-
-
 // ########################################
 // удаление файлов через js ---> /attachment/delete
 // start
 // attachment_delete
-
 function addHandlerForAttachmentDelete() {
     let a = document.querySelectorAll('a.attachment_delete');
     if (a && a.length){
@@ -1150,7 +1140,6 @@ function addHandlerForAttachmentDelete() {
         }
     }
 }
-addHandlerForAttachmentDelete();
 
 function deleteAttachmentHandler(e) {
 
@@ -1166,8 +1155,7 @@ function deleteAttachmentHandler(e) {
     return false;
 }
 
-function deleteAttachment(attachment_id)
-{
+function deleteAttachment(attachment_id) {
     let url = "/cabinet/evento/attachment/destroyAjax/"+attachment_id;
     const xhr = new XMLHttpRequest();
     const params = "_token=" + token;
@@ -1189,14 +1177,11 @@ function deleteAttachment(attachment_id)
     });
     xhr.send(params);
 }
-
 // удаление файлов через js ---> /attachment/delete
 // end
 // ########################################
 
-////
-function getAttachmentById(evento_id)
-{
+function getAttachmentById(evento_id) {
     const xhr = new XMLHttpRequest();
     let url = "/cabinet/evento/attachment/getAttachmentsByEventoId/?evento_id="+evento_id;
 
@@ -1218,9 +1203,6 @@ function getAttachmentById(evento_id)
 
     xhr.send();
 }
-//getAttachmentById(57);
-
-
 
 /////////////////////////////////////
 // start
@@ -1270,8 +1252,37 @@ function create_evento__submit(){
         }
     }
 }
-create_evento__submit();
-
 // end
 // add_evento
 /////////////////////////////////////
+
+// ###################################################
+// all functions with one initial start
+// start
+function functionsInitialStart(){
+    findTokenFunction();
+    attachmentModalFunction();
+    eventoModalFunction();
+    addCategoryModalFunction();
+    addStandaloneTagFormFunction();
+    deleteItemAFunction();
+    openDeactivateDialogFunction();
+    cancelBtnFunction();
+    closeMainDialogOnDarkSideFunction();
+    addTagModalFunction();
+    addCategoryFormFunction();
+    addEventoTagFormFunction();
+    eventoDeleteLinksFunction();
+    addStandAloneCategoryBtnFindFunction();
+
+    saveCurrentDataEventoId();
+    deleteEventoCategoryAddHandler();
+    deleteEventoTagAddHandler();
+    addHandlerForEventoItems();
+    addHandlerForAttachmentDelete();
+    create_evento__submit();
+}
+functionsInitialStart();
+// end
+// all functions with one initial start
+// ###################################################
