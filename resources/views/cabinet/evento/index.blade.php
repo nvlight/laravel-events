@@ -58,9 +58,17 @@
             @include('cabinet.evento._blocks.flash_message')
 
             @if($eventos)
+                <p>Evento count: {{ $eventoCount }}</p>
+{{--                <p>--}}
+{{--                    @foreach($eventos as $k => $v)--}}
+{{--                        {{ $v['evento']['evento_id'] }}&nbsp;--}}
+{{--                    @endforeach--}}
+{{--                </p>--}}
                 <div class="table-responsive">
-                    <table class="table table-bordered table-striped ">
-                        @include('cabinet.evento._inner.list.header')
+                    <table class="eventos_table table table-bordered table-striped ">
+                        <thead>
+                            @include('cabinet.evento._inner.list.header')
+                        </thead>
                         @foreach($eventos as $eventoKey => $evento)
                             @include('cabinet.evento._inner.list.item')
                         @endforeach

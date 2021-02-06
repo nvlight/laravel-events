@@ -1,12 +1,10 @@
 <tr data-evento-id="{{ $evento['evento']['evento_id'] }}">
     <td class="evento_id">{{ $evento['evento']['evento_id'] }}</td>
     <td class="category_td">
-        <?php //dump($evento['categories']); ?>
         @if(count($evento['categories']))
             @foreach($evento['categories'] as $k => $category)
                 <div class="eventoCategoryDiv" data-eventoCategoryId="{{ $category['evento_evento_category_id'] }}">
                     <span class="categoryNameText" data-textValue="{{ $category['evento_category_name'] }}">{{ $category['evento_category_name'] }}</span>
-                    <?php // {{ route('cabinet.evento.eventocategory.destroy', $category['evento_evento_category_id']) }} ?>
                     <a href=""
                        class="delete_category" data-categoryId="{{ $category['evento_evento_category_id'] }}">
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">
@@ -59,8 +57,6 @@
         </svg>
     </td>
     <td class="border px-4 py-2">
-        @php //$fistCategoryForEventoId = array_key_first($eventoId); dd($eventoId[$fistCategoryForEventoId][0]['evento_id']); @endphp
-        <?php //dd($eventoId); ?>
         <a href="{{ route('cabinet.evento.show',    $evento['evento']['evento_id'] ) }}" class="" title="show" style="text-decoration: none; color: green;">
             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-chat-square-text" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h2.5a2 2 0 0 1 1.6.8L8 14.333 9.9 11.8a2 2 0 0 1 1.6-.8H14a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
@@ -78,7 +74,7 @@
             </svg>
         </a>
         <a href="{{ route('cabinet.evento.attachment.store_ajax', $evento['evento']['evento_id'] ) }}" title="добавить вложение" class="attachment_store_ajax" data-evento-id="{{ $evento['evento']['evento_id'] }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16"
+            <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg"  fill="currentColor" class="bi bi-bookmark" viewBox="0 0 16 16"
                  data-toggle="modal" data-target="#add-attachment-modal" role="button">
                 <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z"/>
             </svg>

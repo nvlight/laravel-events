@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View;
 
 class EventoController extends Controller
 {
@@ -75,11 +76,43 @@ class EventoController extends Controller
         return $eventosWithAllColumnsArrayFormatted;
     }
 
+    protected function getEventoTreeById($eventoId){
+        $eventosWithAllColumns = Evento::
+        leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
+            ->leftJoin('evento_categories','evento_categories.id','=','evento_evento_categories.category_id')
+            ->leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
+            ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
+            ->leftJoin('evento_evento_tag_values','evento_evento_tag_values.evento_evento_tags_id','=','evento_evento_tags.id')
+            ->leftJoin('evento_attachments','evento_attachments.evento_id','=','evento_eventos.id')
+            ->where('evento_eventos.user_id','=',auth()->id())
+            //->where('evento_categories.user_id','=',auth()->id())
+            //->where('evento_tags.user_id','=',auth()->id())
+            ->where('evento_eventos.id', $eventoId)
+            ->select('evento_eventos.id as evento_id', 'evento_eventos.description as evento_description', 'evento_eventos.date as evento_date', 'evento_eventos.date as date',
+                'evento_categories.id as evento_category_id', 'evento_categories.name as evento_category_name',
+                'evento_evento_categories.id as evento_evento_category_id',
+                'evento_tags.id as evento_tag_id', 'evento_tags.name as evento_tag_name', 'evento_tags.color as evento_tag_color',
+                'evento_evento_tags.id as evento_evento_tag_id',
+                'evento_evento_tag_values.id as evento_evento_tag_values_id',
+                'evento_evento_tag_values.value as evento_evento_tag_value_value',
+                'evento_evento_tag_values.caption as evento_evento_tag_value_caption',
+                'evento_attachments.id as evento_attachment_id',
+                'evento_attachments.originalname as evento_attachment_originalname',
+                'evento_attachments.size as evento_attachment_size'
+            )
+            ->orderBy('evento_eventos.date', 'desc')
+            ->limit(1);
+        //dd($eventosWithAllColumns);
+
+        return $this->getEventoTree($eventosWithAllColumns->get());
+    }
+
+    protected function getEventoHtml($evento){
+        return View::make('cabinet.evento._inner.list.item', ['evento' => $evento ])->render();
+    }
+
     public function index(Request $request)
     {
-        //Evento::all()->dd();
-        //$eventos = auth()->user()->eventos;
-
         $eventosWithAllColumns = Evento::
               leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
             ->leftJoin('evento_categories','evento_categories.id','=','evento_evento_categories.category_id')
@@ -108,6 +141,7 @@ class EventoController extends Controller
         //dd($eventosWithAllColumns);
 
         $eventosTree = $this->getEventoTree($eventosWithAllColumns->get());
+        $eventoCount = count($eventosTree);
 
         $perPage = env('EVENTO_PER_PAGE', 15);
         $currentPage = $request->input('page');
@@ -121,7 +155,7 @@ class EventoController extends Controller
             ['path' => 'evento', 'pageName' => 'page']
         );
 
-        return view('cabinet.evento.index', compact('eventos', 'paginator') );
+        return view('cabinet.evento.index', compact('eventos', 'paginator', 'eventoCount') );
     }
 
     public function create()
@@ -163,15 +197,50 @@ class EventoController extends Controller
         $attributes += ['user_id' => auth()->id()];
 
         try{
-            Evento::create($attributes);
+            $evento = Evento::create($attributes);
             session()->flash('crud_message',['message' => 'Evento created!', 'class' => 'alert alert-success']);
-            $rs = ['success' => 1, 'message' => 'Evento created!'];
+
+            // теперь нужно получить строку с этим Evento, т.е. верстку с данными.
+            $eventoTree = $this->getEventoTreeById($evento->id);
+            $eventoHtml = ""; $eventoId = 0;
+            if(count($eventoTree)){
+                $eventoId   = $eventoTree[array_keys($eventoTree)[0]];
+                $eventoHtml = $this->getEventoHtml($eventoId);
+            }
+            $rs = ['success' => 1, 'message' => 'Evento created!',
+                'eventoHtml' => $eventoHtml, 'eventoId' => $eventoId['evento']['evento_id']];
         }catch (\Exception $e){
             $this->saveToLog($e);
             $rs = ['success' => 1, 'message' => 'Evento create failed!'];
         }
 
         die(json_encode($rs));
+    }
+
+    // todo - delete this after
+    public function test_added_evento_html_with_ajax(){
+        $eventoTree = $this->getEventoTreeById(70);
+        $eventoHtml = "";
+        if(count($eventoTree)){
+            //dump($eventoTree);
+            $eventoHtml = $this->getEventoHtml($eventoTree[array_keys($eventoTree)[0]]);
+        }
+
+        $eventoCount = count($eventoTree);
+
+        $perPage = env('EVENTO_PER_PAGE', 15);
+        $currentPage = 1;
+        $currentPage = $currentPage == null ? 1 : $currentPage;
+        $offset = $currentPage == 1 ? 0 : $currentPage * $perPage - $perPage;
+
+        $eventos = array_slice($eventoTree, $offset, $perPage);
+
+        $paginator = new LengthAwarePaginator(
+            $eventos, count($eventoTree), $perPage, $currentPage,
+            ['path' => 'evento', 'pageName' => 'page']
+        );
+
+        return view('cabinet.evento.index', compact('eventos', 'paginator', 'eventoCount', 'eventoHtml') );
     }
 
     public function show(Evento $evento)

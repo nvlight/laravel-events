@@ -23,6 +23,10 @@ var addStandaloneTagForm = document.querySelector('form[name=addStandaloneTagFor
 // modals
 var attachmentModal = document.getElementById('add-attachment-modal');
 var eventoModal = document.getElementById('add-evento-modal');
+var addEventoModal;
+var addAttachmentModal;
+var myAddCategoryModal;
+var myAddTagModal;
 
 function conlog(e){
     console.log(e);
@@ -30,12 +34,12 @@ function conlog(e){
 
 function attachmentModalFunction() {
     if (attachmentModal){
-        var addAttachmentModal = new bootstrap.Modal(attachmentModal, {keyboard: false});
+        addAttachmentModal = new bootstrap.Modal(attachmentModal, {keyboard: false});
     }
 }
 function eventoModalFunction() {
     if (eventoModal) {
-        var addEventoModal = new bootstrap.Modal(eventoModal, {keyboard: false});
+        addEventoModal = new bootstrap.Modal(eventoModal, {keyboard: false});
     }
 }
 
@@ -197,7 +201,7 @@ function saveCurrentDataEventoId(){
     for(let i=0; i<btnsAddCat.length; i++){
         btnsAddCat[i].addEventListener('click', function (e) {
             currentEventoId = this.parentElement.parentElement.getAttribute('data-evento-id');
-            //console.log(currentEventoId);
+            console.log(currentEventoId);
         });
     }
 }
@@ -369,7 +373,7 @@ function findTokenFunction(){
 function addCategoryModalFunction(){
     // сохранение категории для Евенто, не просто для категории
     if (addCategoryModal){
-        var myAddCategoryModal = new bootstrap.Modal(document.getElementById('add-category-modal'), {keyboard: false});
+        myAddCategoryModal = new bootstrap.Modal(document.getElementById('add-category-modal'), {keyboard: false});
 
         addCategoryModal.addEventListener('shown.bs.modal', function (e)
         {
@@ -387,7 +391,7 @@ function addCategoryModalFunction(){
 // сохранение тега для Евенто, не просто для категории
 function addTagModalFunction() {
     if (addTagModal){
-        var myAddTagModal = new bootstrap.Modal(document.getElementById('add-tag-modal'), {keyboard: false});
+        myAddTagModal = new bootstrap.Modal(document.getElementById('add-tag-modal'), {keyboard: false});
 
         addTagModal.addEventListener('shown.bs.modal', function (e)
         {
@@ -1222,7 +1226,20 @@ function create_evento_xhr(params) {
             let rs = JSON.parse(xhr.responseText);
             if (rs['success']) {
 
+                var eventos_table_tr = document.querySelector('.eventos_table tbody tr');
+                if (eventos_table_tr){
+                    let tr = document.createElement('tr');
+                    let td = document.createElement('td');
+                    td.innerHTML = "Anather test td inner!";
+
+                    tr.appendChild(td);
+                    tr.innerHTML = rs['eventoHtml'];
+                    tr.setAttribute('data-evento-id', rs['eventoId']);
+
+                    eventos_table_tr.before(tr);
+                }
                 addEventoModal.hide();
+                functionsInitialStart();
             }
         }
     });
