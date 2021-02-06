@@ -288,6 +288,23 @@ class EventoController extends Controller
         return redirect()->route('cabinet.evento.index');
     }
 
+    public function destroyAjax(Evento $evento)
+    {
+        abort_if(auth()->user()->cannot('delete', $evento), 403);
+
+        try{
+            $eventoId = $evento->id;
+            $evento->delete();
+
+            $rs = ['success' => 1, 'message' => 'Evento deleted!', 'eventoId' => $eventoId];
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Evento delete failed!'];
+        }
+
+        die(json_encode($rs));
+    }
+
     protected function saveToLog($e){
         logger('error with ' . __METHOD__ . ' '
             . implode(' | ', [

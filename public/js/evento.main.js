@@ -3,8 +3,8 @@ var findToken = document.head.querySelector('meta[name="csrf-token"]');
 var addStandAloneCategoryBtnFind = document.querySelector('#addStandAloneCategoryBtnId');
 var editCategoryInputText = "";
 
-let resultMessageInnerForStandaloneCategory = document.querySelector('form[name=addStandaloneCategoryForm] .resultMessage');
-let resultMessageInnerForStandaloneTag = document.querySelector('form[name=addStandaloneTagForm] .resultMessage');
+var resultMessageInnerForStandaloneCategory = document.querySelector('form[name=addStandaloneCategoryForm] .resultMessage');
+var resultMessageInnerForStandaloneTag = document.querySelector('form[name=addStandaloneTagForm] .resultMessage');
 
 var addCategoryModal = document.getElementById('add-category-modal');
 var addTagModal = document.getElementById('add-tag-modal');
@@ -12,12 +12,12 @@ var addCategoryForm = document.querySelector('form[name=addCategoryForm]');
 var addEventoTagForm = document.querySelector('form[name=addEventoTagForm]');
 
 var currentDeleteItemHref = null;
-let deleteItemA = document.querySelectorAll('a.deleteItem');
+var deleteItemA = document.querySelectorAll('a.deleteItem');
 
-let openDeactivateDialog = document.querySelector('#openDeactivateDialog');
-let cancelBtn = document.querySelector('.cancelBtn');
-let closeMainDialogOnDarkSide = document.querySelector('#main_dialog');
-let eventoDeleteLinks = document.querySelectorAll('.evento_delete');
+var openDeactivateDialog = document.querySelector('#openDeactivateDialog');
+var cancelBtn = document.querySelector('.cancelBtn');
+var closeMainDialogOnDarkSide = document.querySelector('#main_dialog');
+var eventoDeleteLinks = document.querySelectorAll('.evento_delete');
 var addStandaloneTagForm = document.querySelector('form[name=addStandaloneTagForm]');
 
 // modals
@@ -672,13 +672,25 @@ function eventoDeleteLinksFunction() {
     if (eventoDeleteLinks.length){
         for(let i=0; i<eventoDeleteLinks.length; i++){
             eventoDeleteLinks[i].onclick = function (e) {
-                e.stopImmediatePropagation();
 
                 if (!confirm('Delete list?')){
                     return false;
                 }
 
-                //console.log('list deleted!');
+                let href = e.currentTarget;
+                conlog(href);
+                if (href.hasAttribute('href')){
+                    let str = href.getAttribute('href');
+                    //let str = "http://laravel-events:86/cabinet/evento/destroy/91";
+                    let pattern = /destroy\/(\d+)$/;
+                    let result = str.match(pattern);
+                    if (result){
+                        conlog(result[1]);
+                        eventoDeleteAjax(result[1]);
+                    }
+                }
+
+                return false;
             };
         }
     }
@@ -1238,7 +1250,12 @@ function create_evento_xhr(params) {
 
                     eventos_table_tr.before(tr);
                 }
+                eventoDeleteLinks = document.querySelectorAll('.evento_delete');
+                eventoDeleteLinksFunction();
+
                 addEventoModal.hide();
+
+                // required
                 functionsInitialStart();
             }
         }
@@ -1272,6 +1289,30 @@ function create_evento__submit(){
 // end
 // add_evento
 /////////////////////////////////////
+
+function eventoDeleteAjax(eventoId){
+
+    let url = "/cabinet/evento/destroy_ajax/"+eventoId;
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("get", url);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']) {
+                // delete row with old eventoId
+                let eventoId = rs['eventoId'];
+                let tr = document.querySelector("tr[data-evento-id='"+eventoId+"']");
+                if (tr){
+                    tr.remove();
+                }
+            }
+        }
+    });
+    xhr.send();
+}
 
 // ###################################################
 // all functions with one initial start
