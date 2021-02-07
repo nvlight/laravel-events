@@ -1122,8 +1122,11 @@ function storeAttachmentHandler(href, evento_id){
 
 function storeAttachment(e) {
 
-    let href = e.target.parentElement.getAttribute('href');
-    let evento_id = e.target.parentElement.getAttribute('data-evento-id');
+    //let href = e.target.parentElement.getAttribute('href');
+    //let evento_id = e.target.parentElement.getAttribute('data-evento-id');
+
+    let href = e.currentTarget.getAttribute('href');
+    let evento_id = e.currentTarget.getAttribute('data-evento-id');
 
     // main
     storeAttachmentHandler(href, evento_id);
