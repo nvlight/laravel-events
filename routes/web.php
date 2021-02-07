@@ -397,9 +397,6 @@ Route::group(
     Route::post('/store_ajax/', 'EventoController@storeAjax' )->name('store_ajax');
     Route::get('/destroy_ajax/{evento}', 'EventoController@destroyAjax')->name('destroy_ajax');
 
-    // todo - delete after
-    Route::get('test_added_evento_html_with_ajax', 'EventoController@test_added_evento_html_with_ajax' )
-        ->name('test_added_evento_html_with_ajax');
 });
 
 Route::group([

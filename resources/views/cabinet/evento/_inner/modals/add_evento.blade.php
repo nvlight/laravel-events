@@ -20,7 +20,7 @@
                         <div class="input-group mt-1">
                             <label class="w-100">
                                 <b>Date</b>
-                                <input type="text" name="date" class="w-100 form-control" placeholder="">
+                                <input type="text" name="date" class="w-100 form-control flatpickrEventoCreateDate" placeholder="">
                             </label>
                         </div>
                         <div class="w-100">

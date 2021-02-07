@@ -201,7 +201,7 @@ function saveCurrentDataEventoId(){
     for(let i=0; i<btnsAddCat.length; i++){
         btnsAddCat[i].addEventListener('click', function (e) {
             currentEventoId = this.parentElement.parentElement.getAttribute('data-evento-id');
-            console.log(currentEventoId);
+            //console.log(currentEventoId);
         });
     }
 }
@@ -1317,6 +1317,13 @@ function eventoDeleteAjax(eventoId){
     xhr.send();
 }
 
+function setFlatpickrInstances(){
+    // flatpickrEventoCreateDate
+    // flatpickrEventoEditDate
+    flatpickr(".flatpickrEventoCreateDate");
+    flatpickr(".flatpickrEventoEditDate");
+}
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -1342,6 +1349,8 @@ function functionsInitialStart(){
     addHandlerForEventoItems();
     addHandlerForAttachmentDelete();
     create_evento__submit();
+
+    setFlatpickrInstances();
 }
 functionsInitialStart();
 // end

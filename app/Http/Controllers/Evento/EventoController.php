@@ -217,32 +217,6 @@ class EventoController extends Controller
         die(json_encode($rs));
     }
 
-    // todo - delete this after
-    public function test_added_evento_html_with_ajax(){
-        $eventoTree = $this->getEventoTreeById(70);
-        $eventoHtml = "";
-        if(count($eventoTree)){
-            //dump($eventoTree);
-            $eventoHtml = $this->getEventoHtml($eventoTree[array_keys($eventoTree)[0]]);
-        }
-
-        $eventoCount = count($eventoTree);
-
-        $perPage = env('EVENTO_PER_PAGE', 15);
-        $currentPage = 1;
-        $currentPage = $currentPage == null ? 1 : $currentPage;
-        $offset = $currentPage == 1 ? 0 : $currentPage * $perPage - $perPage;
-
-        $eventos = array_slice($eventoTree, $offset, $perPage);
-
-        $paginator = new LengthAwarePaginator(
-            $eventos, count($eventoTree), $perPage, $currentPage,
-            ['path' => 'evento', 'pageName' => 'page']
-        );
-
-        return view('cabinet.evento.index', compact('eventos', 'paginator', 'eventoCount', 'eventoHtml') );
-    }
-
     public function show(Evento $evento)
     {
         abort_if(auth()->user()->cannot('view', $evento), 403);

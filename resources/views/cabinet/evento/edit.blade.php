@@ -1,6 +1,10 @@
 @extends('layouts.evento')
 
 @section('content')
+    @push('header_styles')
+        <link rel="stylesheet" href="{{ asset('flatpickr/flatpickr.min.css') }}">
+    @endpush
+
     <div class="container">
         <h2>Evento/edit</h2>
         <p><a href="{{ route('cabinet.evento.index') }}">Eventos</a></p>
@@ -17,7 +21,7 @@
                 </div>
                 <div class="form-group">
                     <label for="date"><b>date:</b></label>
-                    <input type="text" id="date" name="date" class="form-control" value="{{ $evento->date }}">
+                    <input type="text" id="date" name="date" class="form-control flatpickrEventoEditDate" value="{{ $evento->date }}">
                 </div>
                 <div class="form-group mt-2">
                     <button class="btn btn-success" type="submit">Save</button>
@@ -27,5 +31,10 @@
             </form>
         </table>
     </div>
+
+    @push('footer_js')
+        <script src="{{ asset('flatpickr/flatpickr.js') }}"></script>
+        <script src="{{ asset('js/evento.main.js') }}"></script>
+    @endpush
 
 @endsection
