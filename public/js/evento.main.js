@@ -678,14 +678,14 @@ function eventoDeleteLinksFunction() {
                 }
 
                 let href = e.currentTarget;
-                conlog(href);
+                //conlog(href);
                 if (href.hasAttribute('href')){
                     let str = href.getAttribute('href');
                     //let str = "http://laravel-events:86/cabinet/evento/destroy/91";
                     let pattern = /destroy\/(\d+)$/;
                     let result = str.match(pattern);
                     if (result){
-                        conlog(result[1]);
+                        //conlog(result[1]);
                         eventoDeleteAjax(result[1]);
                     }
                 }
