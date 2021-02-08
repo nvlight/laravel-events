@@ -1,0 +1,1 @@
+<a class="btn btn-danger deleteShowedWithAjaxEventoButton" href="{{ route('cabinet.evento.destroy', $evento) }}">Delete</a>

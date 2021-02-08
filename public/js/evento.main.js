@@ -27,11 +27,19 @@ var addEventoModal;
 var addAttachmentModal;
 var myAddCategoryModal;
 var myAddTagModal;
+var eventoShowModal = document.getElementById('show-evento-modal');
+var deleteEventoMessage = 'Delete evento?';
 
 function conlog(e){
     console.log(e);
 }
 
+
+function eventoShowModalFunction() {
+    if (eventoShowModal){
+        eventoShowModal = new bootstrap.Modal(eventoShowModal, {keyboard: false});
+    }
+}
 function attachmentModalFunction() {
     if (attachmentModal){
         addAttachmentModal = new bootstrap.Modal(attachmentModal, {keyboard: false});
@@ -673,7 +681,7 @@ function eventoDeleteLinksFunction() {
         for(let i=0; i<eventoDeleteLinks.length; i++){
             eventoDeleteLinks[i].onclick = function (e) {
 
-                if (!confirm('Delete list?')){
+                if (!confirm(deleteEventoMessage)){
                     return false;
                 }
 
@@ -1254,12 +1262,20 @@ function create_evento_xhr(params) {
                     eventos_table_tr.before(tr);
                 }
                 eventoDeleteLinks = document.querySelectorAll('.evento_delete');
+
+                // for delete
                 eventoDeleteLinksFunction();
+                // for attachments
+                // for edit
+                // for show
+                eventoGetAjaxHanlder();
+
 
                 addEventoModal.hide();
 
                 // required
-                functionsInitialStart();
+                // functionsInitialStart(); // ?
+                saveCurrentDataEventoId();
             }
         }
     });
@@ -1324,6 +1340,89 @@ function setFlatpickrInstances(){
     flatpickr(".flatpickrEventoEditDate");
 }
 
+function eventoGetAjaxHanlder(){
+    let selector = document.querySelectorAll('.evento_get_ajax');
+    if (selector && selector.length){
+        for (let i=0; i<selector.length; i++){
+            selector[i].onclick = eventoGetAjax;
+        }
+    }
+}
+function eventoGetAjax(e){
+
+    let current = e.currentTarget;
+    if (current.hasAttribute('href')){
+        let href = current.getAttribute('href');
+        let pattern = /show\/(\d+)$/;
+        let result = href.match(pattern);
+        if (result){
+            eventoGetAjaxXhr(result[1]);
+        }
+    }
+
+    return false;
+}
+function eventoGetAjaxXhr(eventoId){
+    let url = "/cabinet/evento/get_ajax/"+eventoId;
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("get", url);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']) {
+                eventoShowModal.show();
+                // #show-evento-modal .modal-body
+                let body = document.querySelector('#show-evento-modal .modal-body');
+                body.innerHTML = "";
+                if (body){
+                    let div = document.createElement('div');
+                    let eventoTable = document.createElement('table');
+                    let eventoButtons = document.createElement('div');
+                    eventoTable.innerHTML = rs['htmlEventoTable'];
+                    eventoTable.setAttribute('class', rs['eventoTableClass']);
+                    eventoButtons.innerHTML = rs['htmlEventoEditDeleteButtons'];
+                    div.appendChild(eventoTable);
+                    div.appendChild(eventoButtons);
+                    body.appendChild(div);
+
+                    //
+                    deleteShowedWithAjaxEventoButtonClick();
+                }
+            }
+        }
+    });
+    xhr.send();
+}
+
+function deleteShowedWithAjaxEventoButtonClick() {
+    let a = document.querySelector('.deleteShowedWithAjaxEventoButton');
+    if (a){
+        a.onclick =  deleteShowedWithAjaxEventoButtonHandler;
+    }
+}
+function deleteShowedWithAjaxEventoButtonHandler(e) {
+    if (!confirm(deleteEventoMessage)){
+        return false;
+    }
+
+    // close old showed evento modal
+    eventoShowModal.hide();
+
+    let current = e.currentTarget;
+    if (current.hasAttribute('href')){
+        let href = current.getAttribute('href');
+        let pattern = /destroy\/(\d+)$/;
+        let result = href.match(pattern);
+        if (result){
+            eventoDeleteAjax(result[1]);
+        }
+    }
+    return false;
+}
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -1351,6 +1450,8 @@ function functionsInitialStart(){
     create_evento__submit();
 
     setFlatpickrInstances();
+    eventoGetAjaxHanlder();
+    eventoShowModalFunction();
 }
 functionsInitialStart();
 // end

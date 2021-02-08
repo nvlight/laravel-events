@@ -11,11 +11,6 @@
 |
 */
 
-$router->get('/chich', function () use ($router){
-    //dump($router);
-    return 'marin!';
-});
-
 Route::get('/', function () {
 
     $logined = auth()->id();
@@ -150,8 +145,6 @@ Route::get('mgram', 'MGram@index');
 Route::get('hd_video', 'HDVideoController@index')->middleware('verified'); //
 
 Route::get('/home', 'HomeController@index')->name('home');
-
-//Route::any('/sh555', 'Shelltest@index');
 
 //Route::get('/cabinet', 'Cabinet\HomeController@index')->name('cabinet');
 Route::group(
@@ -349,9 +342,6 @@ Route::group(
         Route::post('/update/{eventocategory}', 'EventoCategoryController@update')->name('update');
         Route::get('/destroy/{eventocategory}', 'EventoCategoryController@destroy')->name('destroy');
 
-        // toDo -- remove them after
-        Route::get('/destroy_ajax_test/{eventocategory}', 'EventoCategoryController@destroyAjaxTest')->name('destroy_ajax_test');
-
         Route::post('/get_user_categories/', 'EventoCategoryController@getUserCategories' )->name('get_user_categories');
         Route::post('/store_ajax/', 'EventoCategoryController@storeAjax' )->name('store_ajax');
         Route::delete('/destroy_ajax/{eventocategory}', 'EventoCategoryController@destroyAjax')->name('destroy_ajax');
@@ -394,6 +384,7 @@ Route::group(
     Route::post('/update/{evento}', 'EventoController@update')->name('update');
     Route::get('/destroy/{evento}', 'EventoController@destroy')->name('destroy');
 
+    Route::get('/get_ajax/{evento}', 'EventoController@getAjax')->name('get_ajax');
     Route::post('/store_ajax/', 'EventoController@storeAjax' )->name('store_ajax');
     Route::get('/destroy_ajax/{evento}', 'EventoController@destroyAjax')->name('destroy_ajax');
 
@@ -406,4 +397,16 @@ Route::group([
     'middleware' => ['auth'],
 ], function () {
     Route::get('/', [App\Http\Controllers\Bootstrap5\Bootstrap5::class, 'index'])->name('index');
+});
+
+Route::group([
+    'prefix' => 'test', // prefix for url
+    'as' => 'test.',    // prefix for names
+    'namespace' => 'test',
+    'middleware' => ['auth'],
+], function () {
+    Route::get('/', [App\Http\Controllers\Test\TestController::class, 'index']);
+    Route::get('/test_typehunting/{index}', function(int $index){
+        return sprintf("#%s block", $index); // $index;
+    });
 });

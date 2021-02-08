@@ -41,6 +41,7 @@
     @include('cabinet.evento._inner.modals.add_tag')
     @include('cabinet.evento._inner.modals.add_attachment')
     @include('cabinet.evento._inner.modals.add_evento')
+    @include('cabinet.evento._inner.modals.show_evento')
     {{-- END of Modals --}}
 
     @push('footer_js')

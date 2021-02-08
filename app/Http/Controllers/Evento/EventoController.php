@@ -224,6 +224,36 @@ class EventoController extends Controller
         return view('cabinet.evento.show', compact('evento'));
     }
 
+    public function getAjax(int $eventoId)
+    {
+        try{
+            $evento = Evento::find($eventoId);
+            $rs = ['success' => 1, 'message' => 'Evento finded!'];
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Evento not finded!'];
+        }
+
+        if (auth()->user()->cannot('view', $evento)){
+            $rs = ['success' => 0, 'message' => 'Access denied!'];
+        }
+
+        try{
+            $htmlEventoTable = View::make('cabinet.evento._inner.get_evento_table', compact('evento'))->render();
+            $htmlEventoEditDeleteButtons = View::make('cabinet.evento._inner.get_evento_edit_delete_buttons', compact('evento'))->render();
+            $tableClass = "table table-bordered table-striped";
+
+            $rs['eventoTableClass'] = $tableClass;
+            $rs['htmlEventoTable'] = $htmlEventoTable;
+            $rs['htmlEventoEditDeleteButtons'] = $htmlEventoEditDeleteButtons;
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'Error with make views!'];
+            $this->saveToLog($e);
+        }
+
+        die(json_encode($rs));
+    }
+
     public function edit(Evento $evento)
     {
         abort_if(auth()->user()->cannot('update', $evento), 403);
