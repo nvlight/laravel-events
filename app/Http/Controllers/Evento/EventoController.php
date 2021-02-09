@@ -261,6 +261,38 @@ class EventoController extends Controller
         return view('cabinet.evento.edit', compact('evento'));
     }
 
+    public function editAjax(int $eventoId)
+    {
+        try{
+            $evento = Evento::find($eventoId);
+            $rs = ['success' => 1, 'message' => 'Evento finded!'];
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Evento not finded!'];
+        }
+
+        if (auth()->user()->cannot('view', $evento)){
+            $rs = ['success' => 0, 'message' => 'Access denied!'];
+        }
+
+        try{
+            $eventoEditTable = View::make('cabinet.evento._inner.edit_evento_modal_inner', compact('evento'))->render();
+            $action = route('cabinet.evento.update', $evento);
+            $method = 'post';
+            $enctype = 'multipart/form-data';
+
+            $rs['eventoEditTable'] = $eventoEditTable;
+            $rs['action'] = $action;
+            $rs['method'] = $method;
+            $rs['enctype'] = $enctype;
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'Error with make views!'];
+            $this->saveToLog($e);
+        }
+
+        die(json_encode($rs));
+    }
+
     public function update(EventoRequest $request, Evento $evento)
     {
         abort_if(auth()->user()->cannot('update', $evento), 403);
@@ -276,6 +308,37 @@ class EventoController extends Controller
         }
 
         return back();
+    }
+
+    public function updateAjax(Request $request, $eventoId)
+    {
+        try{
+            $evento = Evento::find($eventoId);
+            $rs = ['success' => 1, 'message' => 'Evento finded!'];
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Evento not finded!'];
+        }
+
+        if (auth()->user()->cannot('update', $evento)){
+            $rs = ['success' => 0, 'message' => 'Access denied!'];
+        }
+
+        try{
+            //$attributes = $request->validated();
+            // todo - need normal error responses !
+            $attributes = $request->all();
+
+            $attributes['date'] = (new Carbon($attributes['date']))->format('Y-m-d');
+            $evento->update($attributes);
+            $rs['eventoId'] = $evento->id;
+        }catch (\Exception $e){
+            $rs = ['success' => 0, 'message' => 'Error with update evento!'];
+            $rs['eventoId'] = $evento->id;
+            $this->saveToLog($e);
+        }
+
+        die(json_encode($rs));
     }
 
     public function destroy(Evento $evento)

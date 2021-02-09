@@ -6,10 +6,9 @@
     @endpush
 
     <div class="container">
-        <h2>Evento/edit</h2>
-        <p><a href="{{ route('cabinet.evento.index') }}">Eventos</a></p>
-
-        <table class="table table-striped table-bordered">
+        <div class="col-md-4">
+            <h2>Evento/edit</h2>
+            <p><a href="{{ route('cabinet.evento.index') }}">Eventos</a></p>
 
             @include('cabinet.evento._blocks.flash_message')
 
@@ -17,7 +16,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="description"><b>description:</b></label>
-                    <input type="text" id="description" name="description" class="form-control" value="{{ $evento->description }}">
+                    <textarea type="text" id="description" name="description" class="form-control">{{ $evento->description }}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="date"><b>date:</b></label>
@@ -29,7 +28,8 @@
                     <a class="btn btn-primary" href="{{ route('cabinet.evento.create') }}">New</a>
                 </div>
             </form>
-        </table>
+        </div>
+
     </div>
 
     @push('footer_js')

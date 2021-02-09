@@ -385,6 +385,8 @@ Route::group(
     Route::get('/destroy/{evento}', 'EventoController@destroy')->name('destroy');
 
     Route::get('/get_ajax/{evento}', 'EventoController@getAjax')->name('get_ajax');
+    Route::get('/edit_ajax/{evento}', 'EventoController@editAjax')->name('edit_ajax');
+    Route::post('/update_ajax/{evento}', 'EventoController@updateAjax')->name('update_ajax');
     Route::post('/store_ajax/', 'EventoController@storeAjax' )->name('store_ajax');
     Route::get('/destroy_ajax/{evento}', 'EventoController@destroyAjax')->name('destroy_ajax');
 

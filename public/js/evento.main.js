@@ -28,13 +28,21 @@ var addAttachmentModal;
 var myAddCategoryModal;
 var myAddTagModal;
 var eventoShowModal = document.getElementById('show-evento-modal');
+var eventoEditModal = document.getElementById('edit-evento-modal');
 var deleteEventoMessage = 'Delete evento?';
+
+var isInEventoEditModalDeleteButtonPressed = false;
 
 function conlog(e){
     console.log(e);
 }
 
 
+function eventoEditModalFunction() {
+    if (eventoEditModal){
+        eventoEditModal = new bootstrap.Modal(eventoEditModal, {keyboard: false});
+    }
+}
 function eventoShowModalFunction() {
     if (eventoShowModal){
         eventoShowModal = new bootstrap.Modal(eventoShowModal, {keyboard: false});
@@ -1268,7 +1276,7 @@ function create_evento_xhr(params) {
                 // for attachments
                 addHandlerForAttachmentsStoreButton();
                 // for edit
-                //
+                eventoEditAjaxHanlder();
                 // for show
                 eventoGetAjaxHanlder();
 
@@ -1411,6 +1419,7 @@ function deleteShowedWithAjaxEventoButtonHandler(e) {
 
     // close old showed evento modal
     eventoShowModal.hide();
+    eventoEditModal.hide();
 
     let current = e.currentTarget;
     if (current.hasAttribute('href')){
@@ -1422,6 +1431,148 @@ function deleteShowedWithAjaxEventoButtonHandler(e) {
         }
     }
     return false;
+}
+
+function eventoEditAjaxHanlder() {
+    let selector = document.querySelectorAll('.evento_edit_ajax');
+    if (selector && selector.length){
+        for (let i=0; i<selector.length; i++){
+            selector[i].onclick = eventoEditAjax;
+        }
+    }
+}
+function eventoEditAjax(e) {
+    let current = e.currentTarget;
+    if (current.hasAttribute('href')){
+        let href = current.getAttribute('href');
+        let pattern = /edit\/(\d+)$/;
+        let result = href.match(pattern);
+        if (result){
+            eventoEditAjaxXhr(result[1]);
+        }
+    }
+
+    return false;
+}
+function eventoEditAjaxXhr(eventoId) {
+    let url = "/cabinet/evento/edit_ajax/"+eventoId;
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("get", url);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']) {
+                eventoEditModal.show();
+                let body = document.querySelector('#edit-evento-modal .modal-body');
+                if (body){
+                    body.innerHTML = "";
+                    let div = document.createElement('div');
+                    let eventoTable = document.createElement('form');
+                    eventoTable.innerHTML = rs['eventoEditTable'];
+                    eventoTable.setAttribute('action', rs['action']);
+                    eventoTable.setAttribute('enctype', rs['enctype']);
+                    eventoTable.setAttribute('method', rs['method']);
+                    div.appendChild(eventoTable);
+                    body.appendChild(div);
+
+                    // reinit flatpickr
+                    setFlatpickrInstances();
+
+                    // for delete button
+                    deleteShowedWithAjaxEventoButtonClick();
+
+                    // for new button
+                    editAjaxCreateNewButtonHandler();
+
+                    // for save button
+                    saveEditedEventoAjaxButtonHandler();
+                }
+            }
+        }
+    });
+    xhr.send();
+}
+
+function editAjaxCreateNewButtonHandler() {
+    let btn = document.querySelector('.editEventoCreateNewButton');
+    if (btn){
+        btn.onclick = function (e) {
+            eventoEditModal.hide();
+            createNewEventoButtonClick();
+            return false;
+        }
+    }
+}
+function createNewEventoButtonClick(){
+    let a = document.querySelector('.js_create_evento');
+    if (a){
+        a.click();
+    }
+}
+
+
+function updateEventoAjaxXhr(eventoId, description, date) {
+    let url = "/cabinet/evento/update_ajax/"+eventoId;
+    const xhr = new XMLHttpRequest();
+    let params = "_token=" + token + '&description='+description+'&date='+date;
+
+    xhr.open("post", url);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            eventoEditAjaxXhr(rs['eventoId']);
+
+            if (rs['success']){
+                // todo - осталось найти текущую строку и обновить ее данные
+
+            }
+        }
+    });
+
+    xhr.send(params);
+}
+function saveEditedEventoAjaxButtonHandler() {
+    let btn = document.querySelector('.saveEditedEventoAjaxButton');
+    if (btn){
+        btn.onclick = function (e) {
+
+            let current = e.target.parentElement.parentElement;
+            if (current.hasAttribute('action')){
+                let href = current.getAttribute('action');
+                let pattern = /update\/(\d+)$/;
+                let result = href.match(pattern);
+                if (result){
+
+                    // get description, and date
+                    let description = current.querySelector('textarea');
+                    let date = current.querySelector('input');
+                    let descriptionValue = "";
+                    let dateValue = "";
+                    if (description){
+                        descriptionValue = description.value;
+                    }
+                    if (date){
+                        dateValue = date.value;
+                    }
+                    let dd = document.querySelector('#date');
+                    if (dd){
+                        dateValue = dd.value;
+                    }
+                    //conlog(descriptionValue);
+                    //conlog(dateValue);
+
+                    updateEventoAjaxXhr(result[1], descriptionValue, dateValue);
+                }
+            }
+
+            return false;
+        }
+    }
 }
 
 // ###################################################
@@ -1453,6 +1604,8 @@ function functionsInitialStart(){
     setFlatpickrInstances();
     eventoGetAjaxHanlder();
     eventoShowModalFunction();
+    eventoEditModalFunction();
+    eventoEditAjaxHanlder();
 }
 functionsInitialStart();
 // end
