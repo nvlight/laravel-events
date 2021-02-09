@@ -1397,8 +1397,12 @@ function eventoGetAjaxXhr(eventoId){
                     div.appendChild(eventoButtons);
                     body.appendChild(div);
 
-                    //
+                    // for delete button
                     deleteShowedWithAjaxEventoButtonClick();
+                    // for edit button
+                    eventoEditAjaxHanlder();
+                    // for new button
+                    editAjaxCreateNewButtonHandler();
                 }
             }
         }
@@ -1407,9 +1411,11 @@ function eventoGetAjaxXhr(eventoId){
 }
 
 function deleteShowedWithAjaxEventoButtonClick() {
-    let a = document.querySelector('.deleteShowedWithAjaxEventoButton');
-    if (a){
-        a.onclick =  deleteShowedWithAjaxEventoButtonHandler;
+    let a = document.querySelectorAll('.deleteShowedWithAjaxEventoButton');
+    if (a && a.length){
+        for(let i=0; i<a.length; i++){
+            a[i].onclick =  deleteShowedWithAjaxEventoButtonHandler;
+        }
     }
 }
 function deleteShowedWithAjaxEventoButtonHandler(e) {
@@ -1418,8 +1424,7 @@ function deleteShowedWithAjaxEventoButtonHandler(e) {
     }
 
     // close old showed evento modal
-    eventoShowModal.hide();
-    eventoEditModal.hide();
+    closeAllEventoModals();
 
     let current = e.currentTarget;
     if (current.hasAttribute('href')){
@@ -1442,6 +1447,7 @@ function eventoEditAjaxHanlder() {
     }
 }
 function eventoEditAjax(e) {
+    closeAllEventoModals();
     let current = e.currentTarget;
     if (current.hasAttribute('href')){
         let href = current.getAttribute('href');
@@ -1483,10 +1489,8 @@ function eventoEditAjaxXhr(eventoId) {
 
                     // for delete button
                     deleteShowedWithAjaxEventoButtonClick();
-
                     // for new button
                     editAjaxCreateNewButtonHandler();
-
                     // for save button
                     saveEditedEventoAjaxButtonHandler();
                 }
@@ -1500,7 +1504,7 @@ function editAjaxCreateNewButtonHandler() {
     let btn = document.querySelector('.editEventoCreateNewButton');
     if (btn){
         btn.onclick = function (e) {
-            eventoEditModal.hide();
+            closeAllEventoModals();
             createNewEventoButtonClick();
             return false;
         }
@@ -1573,6 +1577,11 @@ function saveEditedEventoAjaxButtonHandler() {
             return false;
         }
     }
+}
+
+function closeAllEventoModals(){
+    eventoShowModal.hide();
+    eventoEditModal.hide();
 }
 
 // ###################################################

@@ -1,1 +1,1 @@
-<a class="btn btn-primary" href="{{ route('cabinet.evento.edit', $evento) }}">Edit</a>
+<a class="btn btn-primary evento_edit_ajax" href="{{ route('cabinet.evento.edit', $evento) }}">Edit</a>

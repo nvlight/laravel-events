@@ -1,0 +1,1 @@
+<a class="btn btn-primary editEventoCreateNewButton" href="{{ route('cabinet.evento.create') }}">New</a>

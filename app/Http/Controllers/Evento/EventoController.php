@@ -240,7 +240,8 @@ class EventoController extends Controller
 
         try{
             $htmlEventoTable = View::make('cabinet.evento._inner.get_evento_table', compact('evento'))->render();
-            $htmlEventoEditDeleteButtons = View::make('cabinet.evento._inner.get_evento_edit_delete_buttons', compact('evento'))->render();
+            $htmlEventoEditDeleteButtons = View::make('cabinet.evento._inner.get_evento_edit_delete_new_buttons',
+                compact('evento'))->render();
             $tableClass = "table table-bordered table-striped";
 
             $rs['eventoTableClass'] = $tableClass;
