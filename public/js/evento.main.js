@@ -1142,7 +1142,7 @@ function storeAttachment(e) {
     return false;
 }
 
-function addHandlerForEventoItems() {
+function addHandlerForAttachmentsStoreButton() {
     let a = document.querySelectorAll('a.attachment_store_ajax');
     if (a && a.length){
         for(let i=0; i<a.length; i++){
@@ -1266,10 +1266,11 @@ function create_evento_xhr(params) {
                 // for delete
                 eventoDeleteLinksFunction();
                 // for attachments
+                addHandlerForAttachmentsStoreButton();
                 // for edit
+                //
                 // for show
                 eventoGetAjaxHanlder();
-
 
                 addEventoModal.hide();
 
@@ -1445,7 +1446,7 @@ function functionsInitialStart(){
     saveCurrentDataEventoId();
     deleteEventoCategoryAddHandler();
     deleteEventoTagAddHandler();
-    addHandlerForEventoItems();
+    addHandlerForAttachmentsStoreButton();
     addHandlerForAttachmentDelete();
     create_evento__submit();
 
