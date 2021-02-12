@@ -100,7 +100,8 @@ class EventoController extends Controller
                 'evento_attachments.size as evento_attachment_size'
             )
             ->orderBy('evento_eventos.date', 'desc')
-            ->limit(1);
+            //->limit(1)
+        ;
         //dd($eventosWithAllColumns);
 
         return $this->getEventoTree($eventosWithAllColumns->get());
