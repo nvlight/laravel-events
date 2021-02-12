@@ -29,7 +29,6 @@ class EventoController extends Controller
         }
     }
 
-    /**/
     private function getEventoTree(Collection $eventos)
     {
         $eventosWithAllColumnsArray = $eventos->toArray();
@@ -343,8 +342,17 @@ class EventoController extends Controller
 
             $attributes['date'] = (new Carbon($attributes['date']))->format('Y-m-d');
             $evento->update($attributes);
-            $rs['eventoId'] = $evento->id;
-            $rs['message'] = "Сохранено!";
+
+            // теперь нужно обновить строку.
+            $eventoTree = $this->getEventoTreeById($evento->id);
+            $eventoHtml = ""; $eventoId = 0;
+            if(count($eventoTree)){
+                $eventoId   = $eventoTree[array_keys($eventoTree)[0]];
+                $eventoHtml = $this->getEventoHtml($eventoId);
+            }
+            $rs = ['success' => 1, 'message' => 'Сохранено!',
+                'eventoHtml' => $eventoHtml, 'eventoId' => $eventoId['evento']['evento_id']];
+
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'Error with update evento!'];
             $rs['eventoId'] = $evento->id;

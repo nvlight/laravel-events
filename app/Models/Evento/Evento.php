@@ -31,6 +31,8 @@ class Evento extends Model
 {
     protected $table = 'evento_eventos';
 
+    protected $hidden = ['user_id'];
+
     protected $fillable = [
         'user_id', 'description', 'date'
     ];

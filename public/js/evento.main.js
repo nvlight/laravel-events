@@ -1069,6 +1069,7 @@ function deleteTagForCrud() {
 // загрузка файлов через js, /attachment
 // start
 function insertAttachments(html){
+    // todo - берет первый attachments - переделать, чтобы выбирал с текущей строки!
     let attachments = document.querySelector('.attachments');
     if (attachments){
         attachments.innerHTML = html;
@@ -1501,12 +1502,14 @@ function eventoEditAjaxXhr(eventoId) {
 }
 
 function editAjaxCreateNewButtonHandler() {
-    let btn = document.querySelector('.editEventoCreateNewButton');
-    if (btn){
-        btn.onclick = function (e) {
-            closeAllEventoModals();
-            createNewEventoButtonClick();
-            return false;
+    let btns = document.querySelectorAll('.editEventoCreateNewButton');
+    if (btns && btns.length){
+        for(let i=0; i<btns.length; i++){
+            btns[i].onclick = function (e) {
+                closeAllEventoModals();
+                createNewEventoButtonClick();
+                return false;
+            }
         }
     }
 }
@@ -1555,6 +1558,29 @@ function updateEventoAjaxXhr(eventoId, description, date) {
                 let successMessage = message.querySelector('.text-success');
                 successMessage.classList.remove('d-none');
                 successMessage.innerHTML = rs['message'];
+
+                var eventoTr = document.querySelector('.eventos_table tbody tr[data-evento-id="'+rs['eventoId']+'"]');
+                if (eventoTr){
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = rs['eventoHtml'];
+                    tr.setAttribute('data-evento-id', rs['eventoId']);
+                    eventoTr.before(tr);
+                    eventoTr.remove();
+                }
+                eventoDeleteLinks = document.querySelectorAll('.evento_delete');
+
+                // for delete
+                eventoDeleteLinksFunction();
+                // for attachments
+                addHandlerForAttachmentsStoreButton();
+                // for edit
+                eventoEditAjaxHanlder();
+                // for show
+                eventoGetAjaxHanlder();
+                // for new button
+                editAjaxCreateNewButtonHandler();
+
+                saveCurrentDataEventoId();
             }else{
                 let successDanger = message.querySelector('.text-danger');
                 successDanger.classList.remove('d-none');
