@@ -325,14 +325,26 @@ class EventoController extends Controller
             $rs = ['success' => 0, 'message' => 'Access denied!'];
         }
 
+        // validate this
+        $validator = Validator::make($request->all(), [
+            'description' => ['required', 'string', 'max:155', 'min:3'],
+            'date' => ['required', 'date'],
+        ]);
+        if ($validator->fails()){
+            $rs = ['success' => 0, 'message' => 'Ошибки валидации!', 'errors' => $validator->errors()->toArray(),
+                'data' => $request->all(), 'description' => $evento->description, 'date' => $evento->date
+            ];
+            die(json_encode($rs));
+        }
+
+        //sleep(3);
         try{
-            //$attributes = $request->validated();
-            // todo - need normal error responses !
             $attributes = $request->all();
 
             $attributes['date'] = (new Carbon($attributes['date']))->format('Y-m-d');
             $evento->update($attributes);
             $rs['eventoId'] = $evento->id;
+            $rs['message'] = "Сохранено!";
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'Error with update evento!'];
             $rs['eventoId'] = $evento->id;

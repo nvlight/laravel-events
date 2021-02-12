@@ -1517,7 +1517,24 @@ function createNewEventoButtonClick(){
     }
 }
 
+function updateEventXhr_startAnimation(spin, message) {
+    if (spin){
+        spin.classList.remove('d-none');
+    }
+    message.classList.add('d-none');
+    let successDanger = message.querySelector('.text-danger');
+    successDanger.innerHTML = "Fail!";
+    successDanger.classList.add('d-none');
 
+    let successMessage = message.querySelector('.text-success');
+    successMessage.classList.add('d-none');
+    successMessage.innerHTML = "Success!";
+}
+function updateEventXhr_stopAnimation(spin) {
+    if (spin){
+        spin.classList.add('d-none');
+    }
+}
 function updateEventoAjaxXhr(eventoId, description, date) {
     let url = "/cabinet/evento/update_ajax/"+eventoId;
     const xhr = new XMLHttpRequest();
@@ -1529,13 +1546,49 @@ function updateEventoAjaxXhr(eventoId, description, date) {
     xhr.addEventListener("readystatechange", () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let rs = JSON.parse(xhr.responseText);
-            eventoEditAjaxXhr(rs['eventoId']);
 
+            //eventoEditAjaxXhr(rs['eventoId']); // после обновить содержимое формы
+
+            message.classList.remove('d-none');
             if (rs['success']){
                 // todo - осталось найти текущую строку и обновить ее данные
+                let successMessage = message.querySelector('.text-success');
+                successMessage.classList.remove('d-none');
+                successMessage.innerHTML = rs['message'];
+            }else{
+                let successDanger = message.querySelector('.text-danger');
+                successDanger.classList.remove('d-none');
+                successDanger.innerHTML = rs['message'];
 
+                // restore old data
+                let description = document.querySelector('#edit-evento-modal textarea[name="description"]');
+                let date = document.querySelector('#edit-evento-modal input[name="date"]');
+                if (description){
+                    description.value = rs['description'];
+                }
+                if (date){
+                    date.value = rs['date'];
+                }
             }
         }
+    });
+
+    let message = document.querySelector('.eventoEdit__successEditMessage');
+    let spin = document.querySelector('.eventoEdit__successEditSpin');
+
+    updateEventXhr_startAnimation(spin, message);
+
+    xhr.addEventListener("progress", () => {
+        updateEventXhr_stopAnimation(spin)
+    });
+    xhr.addEventListener("load", () => {
+        updateEventXhr_stopAnimation(spin)
+    });
+    xhr.addEventListener("error", () => {
+        updateEventXhr_stopAnimation(spin)
+    });
+    xhr.addEventListener("abort", () => {
+        updateEventXhr_stopAnimation(spin)
     });
 
     xhr.send(params);
@@ -1544,14 +1597,12 @@ function saveEditedEventoAjaxButtonHandler() {
     let btn = document.querySelector('.saveEditedEventoAjaxButton');
     if (btn){
         btn.onclick = function (e) {
-
-            let current = e.target.parentElement.parentElement;
+            let current = e.target.parentElement.parentElement.parentElement.parentElement;
             if (current.hasAttribute('action')){
                 let href = current.getAttribute('action');
                 let pattern = /update\/(\d+)$/;
                 let result = href.match(pattern);
                 if (result){
-
                     // get description, and date
                     let description = current.querySelector('textarea');
                     let date = current.querySelector('input');
@@ -1619,4 +1670,5 @@ function functionsInitialStart(){
 functionsInitialStart();
 // end
 // all functions with one initial start
-// ###################################################
+// ##################
+// #################################

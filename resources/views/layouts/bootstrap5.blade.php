@@ -9,7 +9,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('bootstrap-5.0.0-alpha2-dist/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('bootstrap-5.0.0-beta2-dist/css/bootstrap.css') }}" rel="stylesheet">
 
 </head>
 <body>
@@ -17,6 +17,6 @@
         @yield('content')
     </div>
 
-    <script src="{{ asset('bootstrap-5.0.0-alpha2-dist/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('bootstrap-5.0.0-beta2-dist/js/bootstrap.js') }}"></script>
 </body>
 </html>

@@ -41,3 +41,23 @@
 .add-category-crud--buttons{
 
 }
+
+/*for rotate*/
+@keyframes spin {
+    from {
+        transform:rotate(360deg);
+    }
+    to {
+        transform:rotate(0deg);
+    }
+}
+.eventoEdit__successEditSpin{
+    animation-name: spin;
+    animation-duration: 2500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    transform: rotate(3deg);
+    transform: rotate(0.3rad);/
+    transform: rotate(3grad);
+    transform: rotate(.03turn);
+}
