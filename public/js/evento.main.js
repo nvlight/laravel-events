@@ -1068,9 +1068,10 @@ function deleteTagForCrud() {
 // ########################################
 // загрузка файлов через js, /attachment
 // start
-function insertAttachments(html){
+function insertAttachments(html, eventoId){
     // todo - берет первый attachments - переделать, чтобы выбирал с текущей строки!
-    let attachments = document.querySelector('.attachments');
+    //let attachments = document.querySelector('.attachments');
+    let attachments = document.querySelector('.eventos_table tbody tr[data-evento-id="'+eventoId+'"] .attachments');
     if (attachments){
         attachments.innerHTML = html;
     }
@@ -1090,7 +1091,7 @@ function storeAttachmentAjax(formData) {
             let rs = JSON.parse(xhr.responseText);
             if (rs['success']){
                 addAttachmentModal.hide();
-                insertAttachments(rs['attachments']);
+                insertAttachments(rs['attachments'], rs['eventoId']);
                 addHandlerForAttachmentDelete();
             }else{
                 // catch error and show that
@@ -1232,7 +1233,7 @@ function getAttachmentById(evento_id) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let rs = JSON.parse(xhr.responseText);
             if (rs['success']) {
-                insertAttachments(rs['attachments']);
+                insertAttachments(rs['attachments'], evento_id);
             }
         }
     });

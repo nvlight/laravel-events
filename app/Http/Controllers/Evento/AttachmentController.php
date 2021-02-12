@@ -168,7 +168,8 @@ class AttachmentController extends Controller
 
         $attachments = $this->getAttachmentsHtmlByEventoId($request->get('evento_id'));
 
-        $rs = ['success' => 1, 'message' => 'row added, file saved!', 'attachments' => $attachments];
+        $rs = ['success' => 1, 'message' => 'row added, file saved!', 'attachments' => $attachments,
+            'eventoId' => $request->get('evento_id')];
         die(json_encode($rs));
     }
 
