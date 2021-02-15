@@ -315,14 +315,15 @@ class EventoController extends Controller
     {
         try{
             $evento = Evento::find($eventoId);
-            $rs = ['success' => 1, 'message' => 'Evento finded!'];
         }catch (\Exception $e){
             $this->saveToLog($e);
             $rs = ['success' => 0, 'message' => 'Evento not finded!'];
+            die(json_encode($rs));
         }
 
         if (auth()->user()->cannot('update', $evento)){
             $rs = ['success' => 0, 'message' => 'Access denied!'];
+            die(json_encode($rs));
         }
 
         // validate this

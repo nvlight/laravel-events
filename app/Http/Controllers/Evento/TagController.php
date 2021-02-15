@@ -113,6 +113,25 @@ class TagController extends Controller
         die(json_encode($rs));
     }
 
+    public function getAjax($tagId)
+    {
+        try{
+            $tag = Tag::find($tagId);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Tag not finded!'];
+            die(json_encode($rs));
+        }
+
+        if (auth()->user()->cannot('view', $tag)){
+            $rs = ['success' => 0, 'message' => 'Access denied!'];
+            die(json_encode($rs));
+        }
+
+        $rs = ['success' => 1, 'message' => 'tag finded!', 'tag' => $tag->toArray()];
+        die(json_encode($rs));
+    }
+
     public function show(Tag $tag)
     {
         abort_if(auth()->user()->cannot('view', $tag), 403);
@@ -149,6 +168,48 @@ class TagController extends Controller
         }
 
         return back();
+    }
+
+    public function updateAjax(Request $request, $tagId)
+    {
+        try{
+            $tag = Tag::find($tagId);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Tag not finded!'];
+            die(json_encode($rs));
+        }
+
+        if (auth()->user()->cannot('update', $tag)){
+            $rs = ['success' => 0, 'message' => 'Access denied!'];
+            die(json_encode($rs));
+        }
+
+        try {
+            $attributes = $request->all();
+            $tag->update($attributes);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Tag save failed!'];
+            die(json_encode($rs));
+        }
+
+        try{
+            if ($request->hasFile('img')){
+                $savedImgPath = $request->file('img')
+                    ->store(auth()->id(), ['disk' => 'local'] );
+                $attributes['img'] = $savedImgPath;
+
+                $this->deleteImg($tag);
+            }
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Tag img save failed!'];
+            die(json_encode($rs));
+        }
+
+        $rs = ['success' => 1, 'message' => 'Tag updated!', 'tag' => $tag->toArray(),];
+        die(json_encode($rs));
     }
 
     public function destroy(Tag $tag, Request $request)

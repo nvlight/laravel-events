@@ -401,7 +401,7 @@ function addCategoryModalFunction(){
         {
             console.log('+ for category modal');
 
-            // +plus плюсик нажат!
+            // +plus category pressed!
             getCategories();
             getUserCategories();
             showCategoryAddSuccessMessage();
@@ -419,6 +419,7 @@ function addTagModalFunction() {
         {
             console.log('+ for tag modal');
 
+            // +plus tag pressed!
             addEventoTagForm.reset();
 
             if (resultMessageInnerForStandaloneTag){
@@ -1016,6 +1017,8 @@ function getTags() {
                     crudTags.innerHTML = rs['tags']
                     deleteTagForCrud();
                 }
+
+                tagEditLinksHandler();
             }
         }
     });
@@ -1668,6 +1671,111 @@ function closeAllEventoModals(){
     eventoEditModal.hide();
 }
 
+function tagEditLinksHandler() {
+    let tag_edit_links = document.querySelectorAll('.tag-crud__edit-link');
+    if (tag_edit_links && tag_edit_links.length){
+        for(let i=0; i<tag_edit_links.length; i++){
+            tag_edit_links[i].onclick = tagEditLinkPressed;
+        }
+    }
+}
+function tagEditLinkPressed(e) {
+    let link  = e.currentTarget;
+    let tagId = null;
+    if (link.hasAttribute('data-tagId')){
+        tagId = link.getAttribute('data-tagId');
+
+        // 1. get tag data with current id
+        tagEditLink__mainWork(tagId);
+    }
+
+    return false;
+}
+
+function tagEditLink__mainWork(tagId) {
+    getTagXhr(tagId);
+}
+function getTagXhr(tagId){
+    let url = "/cabinet/evento/tag/get_ajax/"+tagId;
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("get", url);
+    //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']) {
+                if (tagEditModal){
+                    let modal = document.getElementById('edit-tag-modal');
+                    let name = modal.querySelector('form input[name="name"]');
+                    let color = modal.querySelector('form input[name="color"]');
+                    if (modal && name && color){
+                        name.value = rs['tag']['name'];
+                        color.value = rs['tag']['color'];
+
+                        let form = modal.querySelector('form');
+                        if (form){
+                            let hiddenInputTagId = document.createElement('input');
+                            hiddenInputTagId.setAttribute('name', 'tagId');
+                            hiddenInputTagId.setAttribute('type', 'hidden');
+                            hiddenInputTagId.setAttribute('value', rs['tag']['id']);
+                            form.appendChild(hiddenInputTagId);
+                        }
+                    }
+                    tagEditModal.show();
+                }
+            }
+        }
+    });
+    xhr.send();
+}
+
+function editTagFormHandler() {
+    let form = document.querySelector('form[name="editTagForm"]');
+    if (form){
+        form.onsubmit = editTagFormHandle;
+    }
+}
+function editTagFormHandle(e) {
+    let formData = new FormData(e.currentTarget);
+
+    editTagXhr(formData);
+
+    return false;
+}
+function editTagXhr(formData) {
+    const url = "/cabinet/evento/tag/update_ajax/"+formData.get('tagId');
+    if (!formData.has('_token')){
+        formData.append('_token', token)
+    }else{
+        formData.set('_token', token);
+    }
+
+    const request = new XMLHttpRequest();
+    request.open("POST", url);
+
+    request.addEventListener("readystatechange", () => {
+        if (request.readyState === 4 && request.status === 200) {
+            let rs = JSON.parse(request.responseText);
+            if (rs['success']) {
+                let tr = document.querySelector('.add-tag--tr_id-'+rs['tag']['id']);
+                if (tr){
+                    let dataName = tr.querySelector('[data-name]');
+                    if (dataName){
+                        dataName.innerHTML = rs['tag']['name'];
+                    }
+                    let dataColor = tr.querySelector('[data-color]');
+                    if (dataColor){
+                        dataColor.innerHTML = rs['tag']['color'];
+                    }
+                }
+            }
+        }
+    });
+    request.send(formData);
+}
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -1700,6 +1808,7 @@ function functionsInitialStart(){
     eventoEditModalFunction();
     eventoEditAjaxHanlder();
     tagEditModalFunction();
+    editTagFormHandler();
 }
 functionsInitialStart();
 // end

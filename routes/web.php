@@ -300,6 +300,8 @@ Route::group(
 
         Route::post('/store_ajax/', 'TagController@storeAjax' )->name('store_ajax');
         Route::get('/index_ajax/', 'TagController@indexAjax' )->name('index_ajax');
+        Route::get('/get_ajax/{tag}', 'TagController@getAjax' )->name('get_ajax');
+        Route::post('/update_ajax/{tag}', 'TagController@updateAjax' )->name('update_ajax');
         Route::get('/destroy_ajax/{tag}', 'TagController@destroyAjax')->name('destroy_ajax');
     });
 

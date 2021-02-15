@@ -20,7 +20,8 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'payment/*',
+
         // todo - потом нужно обойти CSRF FormData
-        'cabinet/evento/attachment/store_ajax'
+        'cabinet/evento/attachment/store_ajax',
     ];
 }
