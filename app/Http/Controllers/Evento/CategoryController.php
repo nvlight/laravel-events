@@ -185,16 +185,15 @@ class CategoryController extends Controller
     public function getChangeCategoryButtonsHtml()
     {
         $confirmButton = View::make('cabinet.evento._other.button.confirm-button',
-            ['class' => 'add-category-crud--confirm color-green curp'])
+            ['class' => 'add-category-crud--confirm color-green curp', 'style' => 'margin-top: 1px'])
                 ->render();
 
         $cancelButton = View::make('cabinet.evento._other.button.cancel-button',
-            ['class' => 'add-category-crud--cancel color-red curp'])
+            ['class' => 'add-category-crud--cancel color-red curp', 'style' => 'margin-left: 2px'])
                 ->render();
 
         $rs['buttons'] = View::make('cabinet.evento._other.button.add_category_crud_buttons',
-            ['confirmButton' => $confirmButton,
-             'cancelButton' =>  $cancelButton]
+            ['confirmButton' => $confirmButton, 'cancelButton' =>  $cancelButton, 'class' => "d-flex align-items-center"]
             )->render();
 
         $rs['success'] = 1;

@@ -29,6 +29,7 @@ var myAddCategoryModal;
 var myAddTagModal;
 var eventoShowModal = document.getElementById('show-evento-modal');
 var eventoEditModal = document.getElementById('edit-evento-modal');
+var tagEditModal = document.getElementById('edit-tag-modal');
 var deleteEventoMessage = 'Delete evento?';
 
 var isInEventoEditModalDeleteButtonPressed = false;
@@ -38,6 +39,11 @@ function conlog(e){
 }
 
 
+function tagEditModalFunction() {
+    if (tagEditModal){
+        tagEditModal = new bootstrap.Modal(tagEditModal, {keyboard: false});
+    }
+}
 function eventoEditModalFunction() {
     if (eventoEditModal){
         eventoEditModal = new bootstrap.Modal(eventoEditModal, {keyboard: false});
@@ -1693,6 +1699,7 @@ function functionsInitialStart(){
     eventoShowModalFunction();
     eventoEditModalFunction();
     eventoEditAjaxHanlder();
+    tagEditModalFunction();
 }
 functionsInitialStart();
 // end
