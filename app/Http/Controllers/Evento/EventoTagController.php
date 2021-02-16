@@ -67,6 +67,7 @@ class EventoTagController extends Controller
                     $rs['eventotag_id'] = $eventoTag->id;
                     $rs['tag_color'] = $rsTag->color;
                     $rs['tag_value'] = $tagValue;
+                    $rs['tag_id'] = $rsTag->id;
                     $result = $rs;
 
                     // todo - ошибка в логике работы - else никогда не сработает, т.к. каждый раз создается новый тег...
@@ -88,6 +89,7 @@ class EventoTagController extends Controller
                 $rs['tag_name'] = $rsTag->name;
                 $rs['eventotag_id'] = $eventoTag->id;
                 $rs['tag_color'] = $rsTag->color;
+                $rs['tag_id'] = $rsTag->id;
                 $result = $rs;
             }
             $rs['eventoTagDiv'] = View::make('cabinet.evento.ajax.eventotag_table_item', ['tag' => $result])->render();

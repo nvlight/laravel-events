@@ -2,9 +2,9 @@
 
     {{-- tag_name / tag_value / eventotag_id / tag_color --}}
 
-    <div class="eventoTagDiv" data-eventoTagId="{{ $tag['eventotag_id'] }}">
+    <div class="eventoTagDiv" data-eventoTagId="{{ $tag['eventotag_id'] }}" data-tagId="{{ $tag['tag_id'] }}" >
         <button class="btn btn-primary btn-sm mb-2" style="background-color: {{$tag['tag_color']}}; border-color: {{$tag['tag_color']}};">
-            {{ $tag['tag_name'] }}
+            <span class="eventotag_name">{{ $tag['tag_name'] }}</span>
             @if (isset($tag['tag_value']))
                 <span class="badge rounded-pill bg-secondary">{{ $tag['tag_value'] }}</span>
             @endif

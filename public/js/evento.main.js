@@ -498,55 +498,49 @@ function addCategoryFormFunction() {
 function addEventoTagFormFunction(){
     if (addEventoTagForm) {
         addEventoTagForm.onsubmit = function (e) {
-            //console.log('submit stoped');
+            let tagsSelect = document.querySelector('form[name=addEventoTagForm] select[name=tags]');
+            if (tagsSelect && tagsSelect.selectedOptions.length){
+                let tagId = tagsSelect.selectedOptions[0].value;
+                let eventoIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=evento_id]');
+                let tagIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=tag_id]');
+                let tagValue = document.querySelector('form[name=addEventoTagForm] input[name=value]');
+                let tagCaption = document.querySelector('form[name=addEventoTagForm] input[name=caption]');
 
-            var tagsSelect = document.querySelector('form[name=addEventoTagForm] select[name=tags]');
-            if (tagsSelect){
-                if (tagsSelect.selectedOptions.length){
-
-                    let tagId = tagsSelect.selectedOptions[0].value;
-                    let eventoIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=evento_id]');
-                    let tagIdFormInput = document.querySelector('form[name=addEventoTagForm] input[name=tag_id]');
-                    let tagValue = document.querySelector('form[name=addEventoTagForm] input[name=value]');
-                    let tagCaption = document.querySelector('form[name=addEventoTagForm] input[name=caption]');
-
-                    if (tagId && tagIdFormInput){
-                        tagIdFormInput.value = tagId;
-                    }
-                    eventoIdFormInput.value = currentEventoId;
-                    if (!tagValue){
-                        tagValue.value = null;
-                    }
-                    if (!tagCaption){
-                        tagCaption.value = null;
-                    }
-
-                    var addTagData = '&evento_id=' + currentEventoId + '&tag_id=' + tagId + '&value=' + tagValue.value + '&caption=' + tagCaption.value
-                    //console.log(addTagData);
-
-                    // xhr
-                    const url = "/cabinet/evento/eventotag/store_ajax/";
-                    const params = "_token=" + token + addTagData;
-                    const request = new XMLHttpRequest();
-                    request.open("POST", url);
-                    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                    request.addEventListener("readystatechange", () => {
-                        if(request.readyState === 4 && request.status === 200) {
-                            let rs = JSON.parse(request.responseText);
-                            //console.log(rs);
-                            if (rs['success']){
-                                let need_tr = document.querySelector('tr[data-evento-id="'+currentEventoId+'"] .tag_td');
-
-                                need_tr.innerHTML =  rs['eventoTagDiv'] + need_tr.innerHTML;
-
-                                deleteEventoTagAddHandler();
-
-                                myAddTagModal.hide();
-                            }
-                        }
-                    });
-                    request.send(params);
+                if (tagId && tagIdFormInput){
+                    tagIdFormInput.value = tagId;
                 }
+                eventoIdFormInput.value = currentEventoId;
+                if (!tagValue){
+                    tagValue.value = null;
+                }
+                if (!tagCaption){
+                    tagCaption.value = null;
+                }
+
+                var addTagData = '&evento_id=' + currentEventoId + '&tag_id=' + tagId + '&value=' + tagValue.value + '&caption=' + tagCaption.value;
+
+                // xhr
+                const url = "/cabinet/evento/eventotag/store_ajax/";
+                const params = "_token=" + token + addTagData;
+                const request = new XMLHttpRequest();
+                request.open("POST", url);
+                request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                request.addEventListener("readystatechange", () => {
+                    if(request.readyState === 4 && request.status === 200) {
+                        let rs = JSON.parse(request.responseText);
+
+                        if (rs['success']){
+                            let need_tr = document.querySelector('tr[data-evento-id="'+currentEventoId+'"] .tag_td .tags_wrapper');
+
+                            need_tr.innerHTML = need_tr.innerHTML + rs['eventoTagDiv'];
+
+                            deleteEventoTagAddHandler();
+
+                            myAddTagModal.hide();
+                        }
+                    }
+                });
+                request.send(params);
             }
 
             return false;
@@ -1067,10 +1061,6 @@ function deleteTagForCrud() {
                 return false;
             }
         }
-        // todo
-        //removeOldAddCategoryButtons();
-        //deleteInputForChangeCategoryText();
-        //categoryAddEditButtonCatch();
     }
 }
 
@@ -1785,6 +1775,8 @@ function editTagXhr(formData) {
                         dataColor.innerHTML = rs['tag']['color'];
                     }
                 }
+                // update tag caption && color
+                editTagsInEventoRowTagsColumns(rs['tag']['id'], rs['tag']['name'], rs['tag']['color']);
             }else{
                 let modal = document.getElementById('edit-tag-modal');
                 let name = modal.querySelector('form input[name="name"]');
@@ -1799,6 +1791,24 @@ function editTagXhr(formData) {
         }
     });
     request.send(formData);
+}
+function editTagsInEventoRowTagsColumns(eventotag_id, name, color) {
+    let eventotags =  document.querySelectorAll('.tags_wrapper [data-tagid="'+eventotag_id+'"]');
+    if (eventotags && eventotags.length){
+        for(let i=0; i<eventotags.length; i++){
+            // > button style="background-color: #f6c417; border-color: #f6c417;"
+            // > button .eventotag_name
+            let button = eventotags[i].querySelector('button');
+            if (button){
+                button.setAttribute('style', "background-color: "+color+"; border-color: "+color+";");
+                let eventotag_name = button.querySelector('.eventotag_name');
+                if (eventotag_name){
+                    eventotag_name.innerHTML = name;
+                }
+            }
+        }
+    }
+
 }
 function editTagModal__hideReportTags() {
     EditTagModal__hideUpdateSpin();

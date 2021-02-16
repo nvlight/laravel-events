@@ -249,7 +249,7 @@ class TagController extends Controller
 
             $tag->delete();
             $this->deleteImg($tag);
-            $rs = ['success' => 1, 'message' => 'Tag deleted!', 'id' => $tag->id];
+            $rs = ['success' => 1, 'message' => 'Tag deleted!', 'tag_id' => $tag->id];
 
             $rs['evIds'] = $evIds;
 

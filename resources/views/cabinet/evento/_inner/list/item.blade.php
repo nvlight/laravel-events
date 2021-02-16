@@ -30,12 +30,12 @@
     <td class="">{{ $evento['evento']['date'] }}</td>
 
     <td class="tag_td">
-        <div class="">
+        <div class="tags_wrapper">
             @if(count($evento['tags']))
                 @foreach($evento['tags'] as $k => $tag)
-                    <div class="eventoTagDiv" data-eventoTagId="{{ $tag['evento_evento_tag_id'] }}">
+                    <div class="eventoTagDiv" data-eventoTagId="{{ $tag['evento_evento_tag_id'] }}" data-tagId="{{ $tag['evento_tag_id'] }}">
                         <button class="btn btn-primary btn-sm mb-2" style="background-color: {{$tag['evento_tag_color']}}; border-color: {{$tag['evento_tag_color']}};">
-                            {{ $tag['evento_tag_name'] }}
+                            <span class="eventotag_name">{{ $tag['evento_tag_name'] }}</span>
                             @if ($tag['evento_evento_tag_value_value'])
                                 <span class="badge rounded-pill bg-secondary">{{ $tag['evento_evento_tag_value_value'] }}</span>
                             @endif

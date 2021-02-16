@@ -36,8 +36,6 @@
                                         <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"></path>
                                     </svg>
                                     <span class="ml-2 tagEdit__resultButtonsMessages d-none">
-{{--                                        <span class="text-success">Сохранено!</span>--}}
-{{--                                        <span class="text-danger d-none">Fail!</span>--}}
                                     </span>
                                 </div>
                             </div>
