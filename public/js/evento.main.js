@@ -1706,6 +1706,10 @@ function getTagXhr(tagId){
         if (xhr.readyState === 4 && xhr.status === 200) {
             let rs = JSON.parse(xhr.responseText);
             if (rs['success']) {
+
+                // clear edit tag modal reports
+                editTagModal__hideReportTags();
+
                 if (tagEditModal){
                     let modal = document.getElementById('edit-tag-modal');
                     let name = modal.querySelector('form input[name="name"]');
@@ -1755,26 +1759,77 @@ function editTagXhr(formData) {
     const request = new XMLHttpRequest();
     request.open("POST", url);
 
+    editTagModal__hideReportTags();
+    EditTagModal__showUpdateSpin();
+
     request.addEventListener("readystatechange", () => {
         if (request.readyState === 4 && request.status === 200) {
             let rs = JSON.parse(request.responseText);
+
+            EditTagModal__hideUpdateSpin();
+
             if (rs['success']) {
                 let tr = document.querySelector('.add-tag--tr_id-'+rs['tag']['id']);
                 if (tr){
                     let dataName = tr.querySelector('[data-name]');
-                    if (dataName){
+                    let dataColor = tr.querySelector('[data-color]');
+                    if (tr && dataName) {
                         dataName.innerHTML = rs['tag']['name'];
                     }
-                    let dataColor = tr.querySelector('[data-color]');
-                    if (dataColor){
+                    if (tr && dataColor){
                         dataColor.innerHTML = rs['tag']['color'];
                     }
                 }
+            }else{
+                let modal = document.getElementById('edit-tag-modal');
+                let name = modal.querySelector('form input[name="name"]');
+                let color = modal.querySelector('form input[name="color"]');
+                if (modal && name && color){
+                    name.value = rs['oldTag']['name'];
+                    color.value = rs['oldTag']['color'];
+                }
             }
+            EditTagModal__setUpdateMessage(rs['result_message']);
+            EditTagModal__showUpdateMessage();
         }
     });
     request.send(formData);
 }
+function editTagModal__hideReportTags() {
+    EditTagModal__hideUpdateSpin();
+    EditTagModal__hideUpdateMessage();
+}
+function EditTagModal__showUpdateSpin(){
+    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper svg.tagEdit__successEditSpin');
+    if (wrp_spin){
+        wrp_spin.classList.remove('d-none');
+    }
+}
+function EditTagModal__hideUpdateSpin(){
+    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper svg.tagEdit__successEditSpin');
+    if (wrp_spin){
+        wrp_spin.classList.add('d-none');
+    }
+}
+function EditTagModal__showUpdateMessage(){
+    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper .tagEdit__resultButtonsMessages');
+    if (wrp_spin){
+        wrp_spin.classList.remove('d-none');
+    }
+}
+function EditTagModal__hideUpdateMessage(){
+    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper .tagEdit__resultButtonsMessages');
+    if (wrp_spin){
+        wrp_spin.classList.add('d-none');
+    }
+}
+function EditTagModal__setUpdateMessage(message) {
+    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper .tagEdit__resultButtonsMessages');
+    if (wrp_spin){
+        wrp_spin.innerHTML = message;
+    }
+}
+
 
 // ###################################################
 // all functions with one initial start

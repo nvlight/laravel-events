@@ -176,21 +176,26 @@ class TagController extends Controller
             $tag = Tag::find($tagId);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            $rs = ['success' => 0, 'message' => 'Tag not finded!'];
+            $rs = ['success' => 0, 'message' => 'Tag not finded!',
+                'result_message' => '<span class="text-danger">Tag not find!</span>'];
             die(json_encode($rs));
         }
 
         if (auth()->user()->cannot('update', $tag)){
-            $rs = ['success' => 0, 'message' => 'Access denied!'];
+            $rs = ['success' => 0, 'message' => 'Access denied!',
+                'result_message' => '<span class="text-danger">Access denied!</span>'];
             die(json_encode($rs));
         }
 
         try {
             $attributes = $request->all();
+            $oldTag = $tag->toArray();
             $tag->update($attributes);
         }catch (\Exception $e){
             $this->saveToLog($e);
-            $rs = ['success' => 0, 'message' => 'Tag save failed!'];
+            $rs = ['success' => 0, 'message' => 'Tag save failed!',
+                'result_message' => '<span class="text-danger">Error with tag update!</span>',
+                'oldTag' => $oldTag, ];
             die(json_encode($rs));
         }
 
@@ -204,11 +209,13 @@ class TagController extends Controller
             }
         }catch (\Exception $e){
             $this->saveToLog($e);
-            $rs = ['success' => 0, 'message' => 'Tag img save failed!'];
+            $rs = ['success' => 0, 'message' => 'Tag img save failed!',
+                'result_message' => '<span class="text-danger">Error with save tag file!</span>'];
             die(json_encode($rs));
         }
 
-        $rs = ['success' => 1, 'message' => 'Tag updated!', 'tag' => $tag->toArray(),];
+        $rs = ['success' => 1, 'message' => 'Tag updated!', 'tag' => $tag->toArray(),
+            'result_message' => '<span class="text-success">Saved!</span>' ];
         die(json_encode($rs));
     }
 
