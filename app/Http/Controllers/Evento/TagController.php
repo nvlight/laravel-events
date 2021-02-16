@@ -187,6 +187,9 @@ class TagController extends Controller
             die(json_encode($rs));
         }
 
+        // todo - вставить сюда валидацию
+
+
         try {
             $attributes = $request->all();
             $oldTag = $tag->toArray();
@@ -194,7 +197,7 @@ class TagController extends Controller
         }catch (\Exception $e){
             $this->saveToLog($e);
             $rs = ['success' => 0, 'message' => 'Tag save failed!',
-                'result_message' => '<span class="text-danger">Error with tag update!</span>',
+                'result_message' => '<span class="text-danger">Ошибка при сохранении!</span>',
                 'oldTag' => $oldTag, ];
             die(json_encode($rs));
         }
@@ -210,12 +213,12 @@ class TagController extends Controller
         }catch (\Exception $e){
             $this->saveToLog($e);
             $rs = ['success' => 0, 'message' => 'Tag img save failed!',
-                'result_message' => '<span class="text-danger">Error with save tag file!</span>'];
+                'result_message' => '<span class="text-danger">Ошибка при сохранении аватарки тега!</span>'];
             die(json_encode($rs));
         }
 
         $rs = ['success' => 1, 'message' => 'Tag updated!', 'tag' => $tag->toArray(),
-            'result_message' => '<span class="text-success">Saved!</span>' ];
+            'result_message' => '<span class="text-success">Обновлено!</span>' ];
         die(json_encode($rs));
     }
 

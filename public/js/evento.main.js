@@ -1720,11 +1720,16 @@ function getTagXhr(tagId){
 
                         let form = modal.querySelector('form');
                         if (form){
-                            let hiddenInputTagId = document.createElement('input');
-                            hiddenInputTagId.setAttribute('name', 'tagId');
-                            hiddenInputTagId.setAttribute('type', 'hidden');
-                            hiddenInputTagId.setAttribute('value', rs['tag']['id']);
-                            form.appendChild(hiddenInputTagId);
+                            let findHiddenInput = form.querySelector('input[name="tagId"]');
+                            if (findHiddenInput){
+                                findHiddenInput.setAttribute('value', rs['tag']['id']);
+                            }else{
+                                let hiddenInputTagId = document.createElement('input');
+                                hiddenInputTagId.setAttribute('name', 'tagId');
+                                hiddenInputTagId.setAttribute('type', 'hidden');
+                                hiddenInputTagId.setAttribute('value', rs['tag']['id']);
+                                form.appendChild(hiddenInputTagId);
+                            }
                         }
                     }
                     tagEditModal.show();
