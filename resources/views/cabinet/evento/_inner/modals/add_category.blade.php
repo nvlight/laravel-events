@@ -53,7 +53,7 @@
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right: 0.3em;">Close</button>
                                         <button id="addStandAloneCategoryBtnId" type="submit" class="btn btn-primary">add category</button>
                                     </div>
-                                    <div class="crud_categories">
+                                    <div class="crud_categories" style="max-height: 300px; overflow-y: auto;">
 
                                     </div>
 

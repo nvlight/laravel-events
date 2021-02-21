@@ -7,6 +7,7 @@ use App\Models\Evento\EventoCategory;
 use App\Models\Evento\Category;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class EventoCategoryController extends Controller
 {
@@ -135,6 +136,15 @@ class EventoCategoryController extends Controller
             $rsCategory = Category::where('id', '=', $eventoCategory->category_id)->first();
             $rs['category_name'] = $rsCategory->name;
             $rs['eventocategory_id'] = $eventoCategory->id;
+
+            // нужно представление сгенерировать прямо сейчас, чтобы потом не пришлось на клиенте формировать
+            // лапшу из разметки
+            // добавление ссылки, который будет производить удаление через перезагрузку страницы
+            //let delete_link = '<a href="/cabinet/evento/eventocategory/destroy/' + rs['eventocategory_id'] + '" class="delete_category" data-categoryId="' + rs['eventocategory_id'] + '">delete</a>';
+
+            $rs['eventoCategoryDiv'] = View::make('cabinet.evento.eventocategory.ajax.table_row_item',
+                ['category' => $rs])->render();
+
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'storeAjax error'];
             $this->saveToLog($e);

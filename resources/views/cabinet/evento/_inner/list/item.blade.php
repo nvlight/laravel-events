@@ -1,19 +1,21 @@
 <tr data-evento-id="{{ $evento['evento']['evento_id'] }}">
     <td class="evento_id">{{ $evento['evento']['evento_id'] }}</td>
     <td class="category_td">
-        @if(count($evento['categories']))
-            @foreach($evento['categories'] as $k => $category)
-                <div class="eventoCategoryDiv" data-eventoCategoryId="{{ $category['evento_evento_category_id'] }}">
-                    <span class="categoryNameText" data-textValue="{{ $category['evento_category_name'] }}">{{ $category['evento_category_name'] }}</span>
-                    <a href=""
-                       class="delete_category" data-categoryId="{{ $category['evento_evento_category_id'] }}">
-                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">
-                            <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
-                        </svg>
-                    </a>
-                </div>
-            @endforeach
-        @endif
+        <div class="categories_wrapper">
+            @if(count($evento['categories']))
+                @foreach($evento['categories'] as $k => $category)
+                    <div class="eventoCategoryDiv" data-eventoCategoryId="{{ $category['evento_evento_category_id'] }}">
+                        <span class="categoryNameText" data-textValue="{{ $category['evento_category_name'] }}">{{ $category['evento_category_name'] }}</span>
+                        <a href=""
+                           class="delete_category" data-categoryId="{{ $category['evento_evento_category_id'] }}">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg" role="button">
+                                <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+                            </svg>
+                        </a>
+                    </div>
+                @endforeach
+            @endif
+        </div>
 
         {{-- add new category Icon --}}
         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
@@ -50,6 +52,7 @@
                 @endforeach
             @endif
         </div>
+
         {{-- add new tag Icon --}}
         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg"
              data-toggle="modal" data-target="#add-tag-modal" role="button">

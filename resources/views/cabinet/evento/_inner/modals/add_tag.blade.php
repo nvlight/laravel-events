@@ -69,7 +69,7 @@
                                         <button type="button" class="btn btn-secondary" style="margin-right: 0.3em;" data-dismiss="modal">Close</button>
                                         <button id="addStandAloneTagBtnId" type="submit" class="btn btn-primary">add tag</button>
                                     </div>
-                                    <div class="crud_tags">
+                                    <div class="crud_tags" style="max-height: 300px; overflow-y: auto;">
 
                                     </div>
 
