@@ -72,3 +72,26 @@
     transform: rotate(3grad);
     transform: rotate(.03turn);
 }
+
+
+.spinMessage__spinSvg{
+    animation-name: spinMessage__mainAnimation;
+    animation-duration: 2500ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    transform: rotate(3deg);
+    transform: rotate(0.3rad);
+    transform: rotate(3grad);
+    transform: rotate(.03turn);
+}
+.spinMessage__message{
+
+}
+@keyframes spinMessage__mainAnimation{
+    from {
+        transform:rotate(360deg);
+    }
+    to {
+        transform:rotate(0deg);
+    }
+}

@@ -62,6 +62,10 @@ function attachmentModalFunction() {
 function eventoModalFunction() {
     if (eventoModal) {
         addEventoModal = new bootstrap.Modal(eventoModal, {keyboard: false});
+
+        eventoModal.addEventListener('shown.bs.modal', function () {
+            spineMessage__startingHide();
+        });
     }
 }
 
@@ -1244,9 +1248,15 @@ function create_evento_xhr(params) {
     //xhr.setRequestHeader("Content-type","multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2));
     //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
+    // сразу подставить спины
+    let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
+    spinMessage__hide(spinWrapper);
+    spinMessage__showSpin(spinWrapper);
+
     xhr.addEventListener("readystatechange", () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let rs = JSON.parse(xhr.responseText);
+            spinMessage__hideSpin(spinWrapper);
             if (rs['success']) {
 
                 var eventos_table_tr = document.querySelector('.eventos_table tbody tr');
@@ -1278,8 +1288,29 @@ function create_evento_xhr(params) {
                 // functionsInitialStart(); // ?
                 saveCurrentDataEventoId();
             }
+            spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
+            spinMessage__setMessage(spinWrapper, rs['message']);
+            spinMessage__showMessage(spinWrapper);
         }
     });
+
+    xhr.addEventListener("progress", () => {
+        let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
+        spinMessage__hideSpin(spinWrapper);
+    });
+    xhr.addEventListener("load", () => {
+        let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
+        spinMessage__hideSpin(spinWrapper);
+    });
+    xhr.addEventListener("error", () => {
+        let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
+        spinMessage__hideSpin(spinWrapper);
+    });
+    xhr.addEventListener("abort", () => {
+        let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
+        spinMessage__hideSpin(spinWrapper);
+    });
+
     xhr.send(params);
 }
 
@@ -1836,6 +1867,96 @@ function EditTagModal__setUpdateMessage(message) {
     }
 }
 
+// #############################################
+// spin_message --- hide/show for all modal/etc
+// start
+function spinMessage__getScopeClass(className) {
+    let spinWrapper = document.querySelector('.spinMessage__wrapper'+className); // .eventoStore__wrapper
+    return spinWrapper;
+}
+function spinMessage__hide(wrapper) {
+    spinMessage__hideSpin(wrapper);
+    spinMessage__hideMessage(wrapper);
+}
+function spinMessage__show(wrapper) {
+    spinMessage__showSpin(wrapper);
+    spinMessage__showMessage(wrapper);
+}
+function spinMessage__showSpin(wrapper){
+    if (wrapper){
+        let spin = wrapper.querySelector('svg.svg');
+        if (spin){
+            spin.classList.remove('d-none');
+        }
+    }
+}
+function spinMessage__hideSpin(wrapper){
+    if (wrapper){
+        let spin = wrapper.querySelector('svg.svg');
+        if (spin){
+            spin.classList.add('d-none');
+        }
+    }
+}
+function spinMessage__showMessage(wrapper){
+    if (wrapper){
+        let message = wrapper.querySelector('span.message');
+        if (message){
+            message.classList.remove('d-none');
+        }
+    }
+}
+function spinMessage__hideMessage(wrapper){
+    if (wrapper){
+        let message = wrapper.querySelector('span.message');
+        if (message){
+            message.classList.add('d-none');
+        }
+    }
+}
+function spinMessage__setMessage(wrapper, messageText) {
+    if (wrapper){
+        let message = wrapper.querySelector('span.message');
+        if (message){
+            message.innerHTML = messageText;
+        }
+    }
+}
+function spineMessage__startingHide() {
+    let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
+    spinMessage__hide(spinWrapper);
+}
+function spinMessage__setClassForMessageHandler(wrapper, rs_success) {
+    let className = 'text-danger';
+    if (rs_success){
+        className = 'text-success';
+    }
+    spinMessage__setClassForMessage(wrapper, className);
+}
+function spinMessage__setClassForMessage(wrapper, className){
+    if (wrapper){
+        spinMessage__clearMessageClasses(wrapper);
+        let message = wrapper.querySelector('span.message');
+        if (message){
+            message.classList.add(className);
+        }
+    }
+}
+function spinMessage__clearMessageClasses(wrapper){
+    // todo - вынести эти классы в глобал или куда-нибудь еще
+    let classList = ['text-danger', 'text-success'];
+    if (wrapper){
+        let message = wrapper.querySelector('span.message');
+        if (message){
+            for (let i=0; i<classList.length; i++){
+                message.classList.remove(classList[i]);
+            }
+        }
+    }
+}
+// end
+// spin_message --- hide/show for all modal/etc
+// #############################################
 
 // ###################################################
 // all functions with one initial start
@@ -1870,6 +1991,7 @@ function functionsInitialStart(){
     eventoEditAjaxHanlder();
     tagEditModalFunction();
     editTagFormHandler();
+    spineMessage__startingHide();
 }
 functionsInitialStart();
 // end

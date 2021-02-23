@@ -187,7 +187,7 @@ class EventoController extends Controller
         ]);
 
         if ($validator->fails()){
-            $rs = ['success' => 0, 'message' => 'Ошибки валидации', 'errors' => $validator->errors()->toArray(),
+            $rs = ['success' => 0, 'message' => 'Ошибки валидации!', 'errors' => $validator->errors()->toArray(),
                 'data' => $request->all()
             ];
             die(json_encode($rs));
