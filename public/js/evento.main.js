@@ -33,6 +33,7 @@ var tagEditModal = document.getElementById('edit-tag-modal');
 var deleteEventoMessage = 'Delete evento?';
 
 var isInEventoEditModalDeleteButtonPressed = false;
+var classListFor__spinMessage = ['text-danger', 'text-success'];
 
 function conlog(e){
     console.log(e);
@@ -102,7 +103,6 @@ function categoryAddEditButtonHandler(e) {
         //console.log(nameTd);
         if (nameTd){
             // delete old div with confirm/cancel buttons.
-            // todo!
             removeOldAddCategoryButtons();
             deleteInputForChangeCategoryText();
 
@@ -130,7 +130,6 @@ function catchEnterPressForEditInputCategoryText() {
 }
 
 function deleteInputForChangeCategoryText() {
-    // todo2
     let input = document.querySelectorAll('.add-category-crud--name-field .text');
     if (input){
         for(let i=0; i<input.length; i++){
@@ -344,7 +343,6 @@ function deleteCategoryForCrud() {
                 return false;
             }
         }
-        // todo
         removeOldAddCategoryButtons();
         deleteInputForChangeCategoryText();
         categoryAddEditButtonCatch();
@@ -759,7 +757,6 @@ function addStandAloneCategoryBtnFindClick(e) {
                 }
             }
 
-            // todo
             removeOldAddCategoryButtons();
             deleteInputForChangeCategoryText();
             categoryAddEditButtonCatch();
@@ -1066,8 +1063,6 @@ function deleteTagForCrud() {
 // загрузка файлов через js, /attachment
 // start
 function insertAttachments(html, eventoId){
-    // todo - берет первый attachments - переделать, чтобы выбирал с текущей строки!
-    //let attachments = document.querySelector('.attachments');
     let attachments = document.querySelector('.eventos_table tbody tr[data-evento-id="'+eventoId+'"] .attachments');
     if (attachments){
         attachments.innerHTML = html;
@@ -1718,8 +1713,7 @@ function getTagXhr(tagId){
             let rs = JSON.parse(xhr.responseText);
             if (rs['success']) {
 
-                // clear edit tag modal reports
-                editTagModal__hideReportTags();
+                spinMessages__startingHide();
 
                 if (tagEditModal){
                     let modal = document.getElementById('edit-tag-modal');
@@ -1772,17 +1766,19 @@ function editTagXhr(formData) {
         formData.set('_token', token);
     }
 
-    const request = new XMLHttpRequest();
-    request.open("POST", url);
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
 
-    editTagModal__hideReportTags();
-    EditTagModal__showUpdateSpin();
+    // hide spinMessage__*
+    // show spin
+    let spinWrapper = spinMessage__getScopeClass('.tagEdit__wrapper');
+    spinMessage__hide(spinWrapper);
+    spinMessage__showSpin(spinWrapper);
 
-    request.addEventListener("readystatechange", () => {
-        if (request.readyState === 4 && request.status === 200) {
-            let rs = JSON.parse(request.responseText);
-
-            EditTagModal__hideUpdateSpin();
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            spinMessage__hideSpin(spinWrapper);
 
             if (rs['success']) {
                 let tr = document.querySelector('.add-tag--tr_id-'+rs['tag']['id']);
@@ -1807,11 +1803,30 @@ function editTagXhr(formData) {
                     color.value = rs['oldTag']['color'];
                 }
             }
-            EditTagModal__setUpdateMessage(rs['result_message']);
-            EditTagModal__showUpdateMessage();
+            spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
+            spinMessage__setMessage(spinWrapper, rs['message']);
+            spinMessage__showMessage(spinWrapper);
         }
     });
-    request.send(formData);
+
+    xhr.send(formData);
+
+    xhr.addEventListener("progress", () => {
+        tagEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("load", () => {
+        tagEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("error", () => {
+        tagEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("abort", () => {
+        tagEditWrapper__hideSpin();
+    });
+}
+function tagEditWrapper__hideSpin() {
+    let spinWrapper = spinMessage__getScopeClass('.tagEdit__wrapper');
+    spinMessage__hideSpin(spinWrapper);
 }
 function editTagsInEventoRowTagsColumns(eventotag_id, name, color) {
     let eventotags =  document.querySelectorAll('.tags_wrapper [data-tagid="'+eventotag_id+'"]');
@@ -1831,40 +1846,7 @@ function editTagsInEventoRowTagsColumns(eventotag_id, name, color) {
     }
 
 }
-function editTagModal__hideReportTags() {
-    EditTagModal__hideUpdateSpin();
-    EditTagModal__hideUpdateMessage();
-}
-function EditTagModal__showUpdateSpin(){
-    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper svg.tagEdit__successEditSpin');
-    if (wrp_spin){
-        wrp_spin.classList.remove('d-none');
-    }
-}
-function EditTagModal__hideUpdateSpin(){
-    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper svg.tagEdit__successEditSpin');
-    if (wrp_spin){
-        wrp_spin.classList.add('d-none');
-    }
-}
-function EditTagModal__showUpdateMessage(){
-    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper .tagEdit__resultButtonsMessages');
-    if (wrp_spin){
-        wrp_spin.classList.remove('d-none');
-    }
-}
-function EditTagModal__hideUpdateMessage(){
-    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper .tagEdit__resultButtonsMessages');
-    if (wrp_spin){
-        wrp_spin.classList.add('d-none');
-    }
-}
-function EditTagModal__setUpdateMessage(message) {
-    let wrp_spin = document.querySelector('form[name="editTagForm"] .tagEdit__reportWrapper .tagEdit__resultButtonsMessages');
-    if (wrp_spin){
-        wrp_spin.innerHTML = message;
-    }
-}
+
 
 // #############################################
 // spin_message --- hide/show for all modal/etc
@@ -1946,8 +1928,7 @@ function spinMessage__setClassForMessage(wrapper, className){
     }
 }
 function spinMessage__clearMessageClasses(wrapper){
-    // todo - вынести эти классы в глобал или куда-нибудь еще
-    let classList = ['text-danger', 'text-success'];
+    let classList = classListFor__spinMessage;
     if (wrapper){
         let message = wrapper.querySelector('span.message');
         if (message){
