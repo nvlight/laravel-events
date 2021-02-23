@@ -15,7 +15,8 @@
                 <a class="btn btn-danger deleteShowedWithAjaxEventoButton" href="{{ route('cabinet.evento.destroy', $evento) }}">Delete</a>
                 <a class="btn btn-primary editEventoCreateNewButton" href="{{ route('cabinet.evento.create') }}">New</a>
             </div>
-            <div class="d-flex align-self-center eventoEdit__successEditTagClassWrapper">
+            {{-- todo - удалить потом eventoEdit__successEditTagClassWrapper, должно работать и без него  --}}
+            <div class="d-flex align-self-center eventoEdit__successEditTagClassWrapper spinMessage__wrapper eventoEdit__wrapper">
                 <div class="d-flex">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise align-self-center eventoEdit__successEditSpin d-none" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>

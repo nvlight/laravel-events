@@ -1244,11 +1244,8 @@ function create_evento_xhr(params) {
 
     xhr.open("POST", url);
 
-    //xhr.setRequestHeader("Content-Type", "multipart/form-data");
-    //xhr.setRequestHeader("Content-type","multipart/form-data; charset=utf-8; boundary=" + Math.random().toString().substr(2));
-    //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-    // сразу подставить спины
+    // hide spinMessage__*
+    // show spin
     let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
     spinMessage__hide(spinWrapper);
     spinMessage__showSpin(spinWrapper);
@@ -1295,23 +1292,23 @@ function create_evento_xhr(params) {
     });
 
     xhr.addEventListener("progress", () => {
-        let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
-        spinMessage__hideSpin(spinWrapper);
+        eventoStoreWrapper__hideSpin();
     });
     xhr.addEventListener("load", () => {
-        let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
-        spinMessage__hideSpin(spinWrapper);
+        eventoStoreWrapper__hideSpin();
     });
     xhr.addEventListener("error", () => {
-        let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
-        spinMessage__hideSpin(spinWrapper);
+        eventoStoreWrapper__hideSpin();
     });
     xhr.addEventListener("abort", () => {
-        let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
-        spinMessage__hideSpin(spinWrapper);
+        eventoStoreWrapper__hideSpin();
     });
 
     xhr.send(params);
+}
+function eventoStoreWrapper__hideSpin() {
+    let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
+    spinMessage__hideSpin(spinWrapper);
 }
 
 function create_evento__handler(e, form){
@@ -1366,8 +1363,6 @@ function eventoDeleteAjax(eventoId){
 }
 
 function setFlatpickrInstances(){
-    // flatpickrEventoCreateDate
-    // flatpickrEventoEditDate
     flatpickr(".flatpickrEventoCreateDate");
     flatpickr(".flatpickrEventoEditDate");
 }
