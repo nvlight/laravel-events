@@ -52,6 +52,9 @@ function eventoEditModalFunction() {
 function eventoShowModalFunction() {
     if (eventoShowModal){
         eventoShowModal = new bootstrap.Modal(eventoShowModal, {keyboard: false});
+        eventoEditModal.addEventListener('shown.bs.modal', function () {
+            spinMessages__startingHide();
+        });
     }
 }
 function attachmentModalFunction() {
@@ -64,7 +67,7 @@ function eventoModalFunction() {
         addEventoModal = new bootstrap.Modal(eventoModal, {keyboard: false});
 
         eventoModal.addEventListener('shown.bs.modal', function () {
-            spineMessage__startingHide();
+            spinMessages__startingHide();
         });
     }
 }
@@ -1253,7 +1256,10 @@ function create_evento_xhr(params) {
     xhr.addEventListener("readystatechange", () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let rs = JSON.parse(xhr.responseText);
+
+            let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
             spinMessage__hideSpin(spinWrapper);
+
             if (rs['success']) {
 
                 var eventos_table_tr = document.querySelector('.eventos_table tbody tr');
@@ -1307,7 +1313,7 @@ function create_evento_xhr(params) {
     xhr.send(params);
 }
 function eventoStoreWrapper__hideSpin() {
-    let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
+    let spinWrapper = document.querySelector('.eventoStore__wrapper');
     spinMessage__hideSpin(spinWrapper);
 }
 
@@ -1563,19 +1569,18 @@ function updateEventoAjaxXhr(eventoId, description, date) {
     xhr.open("post", url);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
+    let spinWrapper = spinMessage__getScopeClass('.eventoEdit__wrapper');
+    spinMessage__hide(spinWrapper);
+    spinMessage__showSpin(spinWrapper);
+
     xhr.addEventListener("readystatechange", () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let rs = JSON.parse(xhr.responseText);
+            spinMessage__hideSpin(spinWrapper);
 
             //eventoEditAjaxXhr(rs['eventoId']); // после обновить содержимое формы
 
-            message.classList.remove('d-none');
             if (rs['success']){
-                // todo - осталось найти текущую строку и обновить ее данные
-                let successMessage = message.querySelector('.text-success');
-                successMessage.classList.remove('d-none');
-                successMessage.innerHTML = rs['message'];
-
                 var eventoTr = document.querySelector('.eventos_table tbody tr[data-evento-id="'+rs['eventoId']+'"]');
                 if (eventoTr){
                     let tr = document.createElement('tr');
@@ -1599,10 +1604,6 @@ function updateEventoAjaxXhr(eventoId, description, date) {
 
                 saveCurrentDataEventoId();
             }else{
-                let successDanger = message.querySelector('.text-danger');
-                successDanger.classList.remove('d-none');
-                successDanger.innerHTML = rs['message'];
-
                 // restore old data
                 let description = document.querySelector('#edit-evento-modal textarea[name="description"]');
                 let date = document.querySelector('#edit-evento-modal input[name="date"]');
@@ -1613,28 +1614,31 @@ function updateEventoAjaxXhr(eventoId, description, date) {
                     date.value = rs['date'];
                 }
             }
+
+            spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
+            spinMessage__setMessage(spinWrapper, rs['message']);
+            spinMessage__showMessage(spinWrapper);
         }
     });
 
-    let message = document.querySelector('.eventoEdit__successEditMessage');
-    let spin = document.querySelector('.eventoEdit__successEditSpin');
-
-    updateEventXhr_startAnimation(spin, message);
-
     xhr.addEventListener("progress", () => {
-        updateEventXhr_stopAnimation(spin)
+        eventoEditWrapper__hideSpin();
     });
     xhr.addEventListener("load", () => {
-        updateEventXhr_stopAnimation(spin)
+        eventoEditWrapper__hideSpin();
     });
     xhr.addEventListener("error", () => {
-        updateEventXhr_stopAnimation(spin)
+        eventoEditWrapper__hideSpin();
     });
     xhr.addEventListener("abort", () => {
-        updateEventXhr_stopAnimation(spin)
+        eventoEditWrapper__hideSpin();
     });
 
     xhr.send(params);
+}
+function eventoEditWrapper__hideSpin() {
+    let spinWrapper = spinMessage__getScopeClass('.eventoEdit__wrapper');
+    spinMessage__hideSpin(spinWrapper);
 }
 function saveEditedEventoAjaxButtonHandler() {
     let btn = document.querySelector('.saveEditedEventoAjaxButton');
@@ -1917,9 +1921,13 @@ function spinMessage__setMessage(wrapper, messageText) {
         }
     }
 }
-function spineMessage__startingHide() {
-    let spinWrapper = spinMessage__getScopeClass('.eventoStore__wrapper');
-    spinMessage__hide(spinWrapper);
+function spinMessages__startingHide() {
+    let spinWrappers = document.querySelectorAll('.spinMessage__wrapper');
+    if (spinWrappers && spinWrappers.length){
+        for(let i=0; i<spinWrappers.length; i++){
+            spinMessage__hide(spinWrappers[i]);
+        }
+    }
 }
 function spinMessage__setClassForMessageHandler(wrapper, rs_success) {
     let className = 'text-danger';
@@ -1986,7 +1994,7 @@ function functionsInitialStart(){
     eventoEditAjaxHanlder();
     tagEditModalFunction();
     editTagFormHandler();
-    spineMessage__startingHide();
+    spinMessages__startingHide();
 }
 functionsInitialStart();
 // end
