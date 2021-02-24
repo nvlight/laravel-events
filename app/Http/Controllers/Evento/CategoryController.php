@@ -34,6 +34,25 @@ class CategoryController extends Controller
         die(json_encode($rs));
     }
 
+    public function getAjax($id)
+    {
+        try{
+            $category = Category::find($id);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Category not finded!'];
+            die(json_encode($rs));
+        }
+
+        if (auth()->user()->cannot('view', $category)){
+            $rs = ['success' => 0, 'message' => 'Access denied!'];
+            die(json_encode($rs));
+        }
+
+        $rs = ['success' => 1, 'message' => 'category finded!', 'tag' => $category->toArray()];
+        die(json_encode($rs));
+    }
+
     public function create()
     {
         $categoryIds = auth()->user()->eventoCategories()->pluck('id')->toArray();
@@ -180,25 +199,6 @@ class CategoryController extends Controller
             return Storage::disk('local')->delete($category->img);
         }
         return false;
-    }
-
-    public function getChangeCategoryButtonsHtml()
-    {
-        $confirmButton = View::make('cabinet.evento._other.button.confirm-button',
-            ['class' => 'add-category-crud--confirm color-green curp', 'style' => 'margin-top: 1px'])
-                ->render();
-
-        $cancelButton = View::make('cabinet.evento._other.button.cancel-button',
-            ['class' => 'add-category-crud--cancel color-red curp', 'style' => 'margin-left: 2px'])
-                ->render();
-
-        $rs['buttons'] = View::make('cabinet.evento._other.button.add_category_crud_buttons',
-            ['confirmButton' => $confirmButton, 'cancelButton' =>  $cancelButton, 'class' => "d-flex align-items-center"]
-            )->render();
-
-        $rs['success'] = 1;
-
-        die(json_encode($rs));
     }
 
     public function editCategoryAjax(Category $category, Request $request)

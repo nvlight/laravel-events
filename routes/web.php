@@ -316,6 +316,7 @@ Route::group(
 
         Route::post('/store_ajax/', 'CategoryController@storeAjax' )->name('store_ajax');
         Route::get('/index_ajax/', 'CategoryController@indexAjax' )->name('index_ajax');
+        Route::get('/get_ajax/{category}', 'CategoryController@getAjax' )->name('get_ajax');
         Route::get('/destroy_ajax/{category}', 'CategoryController@destroyAjax')->name('destroy_ajax');
         Route::get('/get_change_category_buttons', 'CategoryController@getChangeCategoryButtonsHtml')->name('get_change_category_buttons');
         Route::post('/edit_category/{category}', 'CategoryController@editCategoryAjax')->name('edit_category');

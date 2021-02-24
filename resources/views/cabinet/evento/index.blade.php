@@ -44,6 +44,7 @@
     @include('cabinet.evento._inner.modals.show_evento')
     @include('cabinet.evento._inner.modals.edit_evento')
     @include('cabinet.evento._inner.modals.edit_tag')
+    @include('cabinet.evento._inner.modals.edit_category')
     {{-- END of Modals --}}
 
     @push('footer_js')

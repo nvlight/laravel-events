@@ -31,9 +31,11 @@ var eventoShowModal = document.getElementById('show-evento-modal');
 var eventoEditModal = document.getElementById('edit-evento-modal');
 var tagEditModal = document.getElementById('edit-tag-modal');
 var deleteEventoMessage = 'Delete evento?';
+var categoryEditId = document.getElementById('edit-category-modal');
 
 var isInEventoEditModalDeleteButtonPressed = false;
 var classListFor__spinMessage = ['text-danger', 'text-success'];
+var categoryEditModal;
 
 function conlog(e){
     console.log(e);
@@ -72,147 +74,38 @@ function eventoModalFunction() {
         });
     }
 }
+function categoryEditModalFunction(){
+    if (categoryEditId){
+        categoryEditModal = new bootstrap.Modal(categoryEditId, {keyboard: false});
+    }
+}
 
 function categoryAddEditButtonCatch() {
-    var categoryAddEditButton = document.querySelectorAll('.category-add--edit-button');
+    var categoryAddEditButton = document.querySelectorAll('.category_edit_for_crud');
 
     for(let i=0; i<categoryAddEditButton.length; i++){
-        categoryAddEditButton[i].addEventListener('click', categoryAddEditButtonHandler);
+        categoryAddEditButton[i].onclick = categoryAddEditButtonHandler;
     }
 }
 
-function removeOldAddCategoryButtons() {
-    let oldButtons = document.querySelectorAll('.add-category-crud--buttons');
-    if (oldButtons){
-        for(let i=0; i<oldButtons.length; i++){
-            oldButtons[i].remove();
-        }
-    }
-}
+// todo - here
+function categoryAddEditButtonHandler(e)
+{
+    let current = e.currentTarget;
+    conlog(current);
 
-function categoryAddEditButtonHandler(e) {
-    e.stopImmediatePropagation();
-    //console.log(e);
-    //console.log(e.target);
-    //console.log(e.target.parentElement);
-    let needTr = e.target.parentElement.parentElement;
-    //console.log(needTr);
-
-    if (needTr){
-        let nameTd = needTr.querySelector('.add-category-crud--name-field');
-        //console.log(nameTd);
-        if (nameTd){
-            // delete old div with confirm/cancel buttons.
-            removeOldAddCategoryButtons();
-            deleteInputForChangeCategoryText();
-
-            let catTextWithForm = addInputTagForEditCategoryText(needTr);
-
-            addButtonsForAddCategoryTd(needTr, nameTd, catTextWithForm);
-        }
+    // todo -  получить данные текущей категории и показать их на формочке
+    // <a class="category_edit_for_crud" href="/cabinet/evento/category/edit/now/130" data-categoryid="130">
+    let categoryId;
+    if (current.hasAttribute('data-categoryid')){
+        categoryId = current.getAttribute('data-categoryid');
     }
 
-    //console.log(e.target.parentElement.parentElement.getAttribute('class'));
+    if (categoryId){
+        getCategoryXhr(categoryId);
+    }
+
     return false;
-}
-
-function catchEnterPressForEditInputCategoryText() {
-    var form = document.querySelector('form[name=crudNameEditForm]');
-    if (form) {
-        form.onsubmit = function (e) {
-
-            // check this?
-            changeCategoryCrudHandler(e);
-
-            return false;
-        }
-    }
-}
-
-function deleteInputForChangeCategoryText() {
-    let input = document.querySelectorAll('.add-category-crud--name-field .text');
-    if (input){
-        for(let i=0; i<input.length; i++){
-            let innerInput = input[i].querySelector('input');
-            if (innerInput){
-                //input[i].innerHTML = innerInput.value;
-                input[i].innerHTML = editCategoryInputText;
-                break;
-            }
-        }
-    }
-}
-
-function addFocusForEditCategoryInput() {
-    let input = document.querySelector("input[name='crudEditCategoryInput']");
-    if (input){
-        editCategoryInputText = input.value;
-        input.focus();
-        //console.log('current_input:'+editCategoryInputText);
-    }
-}
-
-function addInputTagForEditCategoryText(needTr) {
-    let categoryText = needTr.querySelector('.add-category-crud--name-field .text');
-    if (categoryText){
-        // save current input value
-        editCategoryInputText = categoryText.innerHTML;
-
-        let input = document.createElement('input');
-        input.setAttribute('class', 'form-control test-classs');
-        input.setAttribute('name', 'crudEditCategoryInput');
-        input.setAttribute('value',categoryText.innerHTML);
-        input.setAttribute('placeholder', 'type new category');
-
-        let form = document.createElement('form');
-        form.setAttribute('name', 'crudNameEditForm');
-        form.setAttribute('class', 'crudNameEditForm');
-        form.appendChild(input);
-
-        categoryText.innerHTML = "";
-        categoryText.appendChild(form);
-    }
-    return categoryText;
-}
-
-function addButtonsForAddCategoryTd(needTr, nameTd, catTextWithForm) {
-    const url = "/cabinet/evento/category/get_change_category_buttons/";
-    const params = "_token=" + token;
-
-    const request = new XMLHttpRequest();
-    request.open("GET", url);
-    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    request.addEventListener("readystatechange", () => {
-        if (request.readyState === 4 && request.status === 200) {
-            let rs = JSON.parse(request.responseText);
-            //console.log('rs.length : '+rs.length);
-            if (rs.success) {
-                nameTd.innerHTML = '<div class="text">' + catTextWithForm.innerHTML + '</div>' + rs.buttons;
-
-                // again
-                var input = document.querySelector('input[name="crudEditCategoryInput"');
-                var div = input.parentElement;
-
-                var form = document.createElement('form');
-                form.setAttribute('name', 'crudNameEditForm');
-                form.setAttribute('class', 'crudNameEditForm');
-                form.appendChild(input);
-
-                div.innerHTML = '';
-
-                div.append(form);
-
-                // добавление перехвата - enter по полю редактирования
-                catchEnterPressForEditInputCategoryText();
-            }
-            addFocusForEditCategoryInput();
-            addCategoryCrudCancelHandler();
-            changeCategoryCrudHandle();
-        }
-    });
-    //request.addEventListener("load", () => { categoryAddEditButtonCatch(); });
-
-    request.send(params);
 }
 
 /// ################################################
@@ -343,8 +236,6 @@ function deleteCategoryForCrud() {
                 return false;
             }
         }
-        removeOldAddCategoryButtons();
-        deleteInputForChangeCategoryText();
         categoryAddEditButtonCatch();
     }
 }
@@ -725,9 +616,6 @@ function addStandAloneCategoryBtnFindClick(e) {
         parent_id = realParentId.value;
     }
 
-    //console.log('name: '+name);
-    //console.log('parent_id: '+parent_id);
-
     const categoryAddRequestParams = "_token=" + token + '&name=' + name + '&parent_id=' + parent_id;
 
     const categoryAddRequest = new XMLHttpRequest();
@@ -757,8 +645,6 @@ function addStandAloneCategoryBtnFindClick(e) {
                 }
             }
 
-            removeOldAddCategoryButtons();
-            deleteInputForChangeCategoryText();
             categoryAddEditButtonCatch();
         }
     });
@@ -790,21 +676,10 @@ function waitAndHideCategoryAddSuccessMessage(time=2000) {
     setTimeout(hideCategoryAddSuccessMessage, time);
 }
 
-function addCategoryCrudCancelHandler() {
-    let cancel = document.querySelector('.add-category-crud--cancel');
-    if (cancel){
-        cancel.addEventListener('click', function () {
-            deleteInputForChangeCategoryText();
-            removeOldAddCategoryButtons();
-        });
-    }
-}
-
+// todo - its here!
 function changeCategoryCrudHandlerAjax(categoryId, name) {
     const requestUrl = "/cabinet/evento/category/edit_category/"+categoryId;
     const params = "_token=" + token + '&name=' + name + '&parent_id=' + 0 + '&color=' + '#ccc';
-
-    //console.log('name: '+name);
 
     const xhr = new XMLHttpRequest();
     xhr.open("POST", requestUrl);
@@ -813,69 +688,23 @@ function changeCategoryCrudHandlerAjax(categoryId, name) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let rs = JSON.parse(xhr.responseText);
             if (rs['success']){
-                //console.log('name: '+name);
-                //console.log('name: '+rs['name']);
 
-                // search tr
                 let nameHtml = document.querySelector('.add-category--tr_id-'+rs['categoryId']+ ' .add-category-crud--name-field .text');
-                //console.log('needTr: '+nameHtml);
+
                 nameHtml.innerHTML = rs['name'];
 
-                deleteInputForChangeCategoryText();
-                removeOldAddCategoryButtons();
-
-                // нужно заменить тексты всех категорий, которые совпадают с тем, что был заменен!
                 changeAllCategorysByName(editCategoryInputText, rs['name']);
 
-                // раз имя категории изменено, нужно обновить и категории, которые может добавить пользователь
                 getUserCategories();
-            }else{
-                // show error in html ...
             }
         }
     });
     xhr.send(params);
 }
 
-function changeCategoryCrudHandle() {
-    let confirm = document.querySelector('.add-category-crud--confirm');
-    if (confirm){
-        confirm.addEventListener('click', changeCategoryCrudHandler);
-    }
-}
-function changeCategoryCrudHandler(e) {
-    let confirm = document.querySelector('.add-category-crud--confirm');
-    if (confirm){
-        let needTr = confirm.parentElement.parentElement.parentElement;
-
-        let categoryId = 0;
-        let name = '';
-
-        let nameSearch = needTr.querySelector('.add-category-crud--name-field .text input[name=crudEditCategoryInput]');
-        if (nameSearch){
-            //console.log(name);
-            name = nameSearch.value;
-        }
-
-        let categoryTd = needTr.querySelector('.categoryId');
-        if (categoryTd) {
-            categoryId = +categoryTd.innerHTML;
-            //console.log('catId: '+categoryId);
-        }
-
-        // save also current category input value
-
-        changeCategoryCrudHandlerAjax(categoryId, name);
-    }
-}
-
 function changeAllCategorysByName(oldName, newName) {
-    //console.log('oldName: '+oldName);
-    //console.log('newName: '+newName);
     let allCatsSelector = 'span[class=categoryNameText][data-textValue="'+oldName+'"]';
     let allCats = document.querySelectorAll(allCatsSelector);
-    //console.log(allCatsSelector);
-    //console.log(allCats);
 
     if (allCats){
         for(let i=0; i<allCats.length; i++){
@@ -1942,6 +1771,133 @@ function spinMessage__clearMessageClasses(wrapper){
 // spin_message --- hide/show for all modal/etc
 // #############################################
 
+function editCategoryFormHandler() {
+    let form = document.querySelector('form[name="editCategoryForm"]');
+    if (form){
+        form.onsubmit = function (e) {
+            conlog('editCategoryFormHandler');
+
+            let formData = new FormData(e.currentTarget);
+
+            //editTagXhr(formData);
+
+            return false;
+        }
+    }
+}
+
+function getCategoryXhr(categoryId){
+    let url = "/cabinet/evento/category/get_ajax/"+categoryId;
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("get", url);
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']) {
+
+                spinMessages__startingHide();
+
+                // todo - last
+                if (categoryEditModal){
+                    // let modal = document.getElementById('edit-tag-modal');
+                    // let name = modal.querySelector('form input[name="name"]');
+                    // let color = modal.querySelector('form input[name="color"]');
+                    // if (modal && name && color){
+                    //     name.value = rs['tag']['name'];
+                    //     color.value = rs['tag']['color'];
+                    //
+                    //     let form = modal.querySelector('form');
+                    //     if (form){
+                    //         let findHiddenInput = form.querySelector('input[name="tagId"]');
+                    //         if (findHiddenInput){
+                    //             findHiddenInput.setAttribute('value', rs['tag']['id']);
+                    //         }else{
+                    //             let hiddenInputTagId = document.createElement('input');
+                    //             hiddenInputTagId.setAttribute('name', 'tagId');
+                    //             hiddenInputTagId.setAttribute('type', 'hidden');
+                    //             hiddenInputTagId.setAttribute('value', rs['tag']['id']);
+                    //             form.appendChild(hiddenInputTagId);
+                    //         }
+                    //     }
+                    // }
+                    categoryEditModal.show();
+                }
+            }
+        }
+    });
+    xhr.send();
+}
+
+function editCategoryXhr(formData) {
+    const url = "/cabinet/evento/tag/update_ajax/"+formData.get('tagId');
+    if (!formData.has('_token')){
+        formData.append('_token', token)
+    }else{
+        formData.set('_token', token);
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+
+    // hide spinMessage__*
+    // show spin
+    let spinWrapper = spinMessage__getScopeClass('.tagEdit__wrapper');
+    spinMessage__hide(spinWrapper);
+    spinMessage__showSpin(spinWrapper);
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            spinMessage__hideSpin(spinWrapper);
+
+            // if (rs['success']) {
+            //     let tr = document.querySelector('.add-tag--tr_id-'+rs['tag']['id']);
+            //     if (tr){
+            //         let dataName = tr.querySelector('[data-name]');
+            //         let dataColor = tr.querySelector('[data-color]');
+            //         if (tr && dataName) {
+            //             dataName.innerHTML = rs['tag']['name'];
+            //         }
+            //         if (tr && dataColor){
+            //             dataColor.innerHTML = rs['tag']['color'];
+            //         }
+            //     }
+            //     // update tag caption && color
+            //     editTagsInEventoRowTagsColumns(rs['tag']['id'], rs['tag']['name'], rs['tag']['color']);
+            // }else{
+            //     let modal = document.getElementById('edit-tag-modal');
+            //     let name = modal.querySelector('form input[name="name"]');
+            //     let color = modal.querySelector('form input[name="color"]');
+            //     if (modal && name && color){
+            //         name.value = rs['oldTag']['name'];
+            //         color.value = rs['oldTag']['color'];
+            //     }
+            // }
+
+            spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
+            spinMessage__setMessage(spinWrapper, rs['message']);
+            spinMessage__showMessage(spinWrapper);
+        }
+    });
+
+    xhr.send(formData);
+
+    xhr.addEventListener("progress", () => {
+        tagEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("load", () => {
+        tagEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("error", () => {
+        tagEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("abort", () => {
+        tagEditWrapper__hideSpin();
+    });
+}
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -1976,6 +1932,8 @@ function functionsInitialStart(){
     tagEditModalFunction();
     editTagFormHandler();
     spinMessages__startingHide();
+    categoryEditModalFunction();
+    editCategoryFormHandler();
 }
 functionsInitialStart();
 // end

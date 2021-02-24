@@ -49,7 +49,7 @@
                                         <input class="form-control" id="addCategoryModalId" type="text" name="name" value="" placeholder="type category name">
                                         <p class="message-text resultMessage d-none">Добавлено!</p>
                                     </div>
-                                    <div class="" style="display: flex;justify-content: flex-end;">
+                                    <div class="mb-3" style="display: flex;justify-content: flex-end;">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal" style="margin-right: 0.3em;">Close</button>
                                         <button id="addStandAloneCategoryBtnId" type="submit" class="btn btn-primary">add category</button>
                                     </div>

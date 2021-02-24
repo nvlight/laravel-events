@@ -18,7 +18,11 @@
                         <div class="text">{{ $v['name'] }}</div>
                     </td>
                     <td>{{ $v['img'] }}</td>
-                    <td><span href="" class="category-add--edit-button curp">edit</span> /<a href="{{ route('cabinet.evento.category.destroy_ajax', $v) }}" class="category_delete_for_crud" data-id="{{$v['id']}}">delete</a></td>
+                    <td>
+                        {{-- <span href="" class="category-add--edit-button curp">edit</span> / --}}
+                        <a href="/cabinet/evento/category/edit/now/{{ $v['id'] }}" data-categoryId="{{ $v['id'] }}" class="category_edit_for_crud">edit</a>
+                        <a href="{{ route('cabinet.evento.category.destroy_ajax', $v) }}" class="category_delete_for_crud" data-id="{{$v['id']}}">delete</a>
+                    </td>
                 </tr>
                 @php $i++; @endphp
             @endforeach
