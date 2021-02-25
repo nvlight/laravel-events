@@ -319,7 +319,7 @@ Route::group(
         Route::get('/get_ajax/{category}', 'CategoryController@getAjax' )->name('get_ajax');
         Route::get('/destroy_ajax/{category}', 'CategoryController@destroyAjax')->name('destroy_ajax');
         Route::get('/get_change_category_buttons', 'CategoryController@getChangeCategoryButtonsHtml')->name('get_change_category_buttons');
-        Route::post('/edit_category/{category}', 'CategoryController@editCategoryAjax')->name('edit_category');
+        Route::post('/update_ajax/{category}', 'CategoryController@updateAjax')->name('update_ajax');
     });
 
     Route::group(['prefix' => '/eventotag', 'as' => 'eventotag.'], function () {

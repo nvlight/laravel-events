@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Evento\EventoCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 
@@ -49,7 +50,7 @@ class CategoryController extends Controller
             die(json_encode($rs));
         }
 
-        $rs = ['success' => 1, 'message' => 'category finded!', 'tag' => $category->toArray()];
+        $rs = ['success' => 1, 'message' => 'category finded!', 'category' => $category->toArray()];
         die(json_encode($rs));
     }
 
@@ -101,8 +102,6 @@ class CategoryController extends Controller
                     ->store(auth()->id(), ['disk' => 'local'] );
                 $attributes['img'] = $savedImgPath;
             }
-
-            session()->flash('crud_message',['message' => 'Tag stored!', 'class' => 'alert alert-success']);
         }catch (\Exception $e){
             $rs = ['success' => 0, 'message' => 'error'];
             $this->saveToLog($e);
@@ -201,20 +200,74 @@ class CategoryController extends Controller
         return false;
     }
 
-    public function editCategoryAjax(Category $category, Request $request)
+    public function updateAjax($categoryId, Request $request)
     {
+        try{
+            $category = Category::find($categoryId);
+        }catch (\Exception $e){
+            $this->saveToLog($e);
+            $rs = ['success' => 0, 'message' => 'Category not finded!',];
+            die(json_encode($rs));
+        }
+        //die(json_encode(['success' => 0, 'message' => 'Unkoun error!', 'oldCategory' => $category->toArray(), ]));
+
+        if (auth()->user()->cannot('update', $category)){
+            $rs = ['success' => 0, 'message' => 'Access denied!',];
+            die(json_encode($rs));
+        }
+
+        $validator = Validator::make($request->all(), $this->validatorRules());
+
+        if ($validator->fails()){
+            $rs = ['success' => 0, 'message' => 'Validation error!', 'oldCategory' => $category->toArray(),
+                'errors' => $validator->errors()->toArray(), ];
+            die(json_encode($rs));
+        }
+
         try {
             $category->name = $request->input('name');
             $category->save();
-            $result = ['success' => 1, 'name' => $category->name, 'categoryId' => $category->id];
-
-            session()->flash('crud_message',['message' => 'Tag updated!', 'class' => 'alert alert-warning']);
+            $result = ['success' => 1, 'name' => $category->name, 'categoryId' => $category->id,
+                'message' => 'category updated!', 'category' => $category,
+            ];
         }catch (\Exception $e){
-            $result = ['success' => 0, 'message' => 'editCategoryAjax error!'];
+            $result = ['success' => 0, 'message' => 'Save Error!', 'oldCategory' => $category->toArray(),];
             $this->saveToLog($e);
         }
 
         die(json_encode($result));
+    }
+
+    public function validateAjax(){
+        return \request()->validate($this->validatorRules());
+    }
+
+    public function validatorRules(){
+        $img = [
+            'dimensions' => [
+                'min' => [
+                    'width'  => 10,
+                    'height' => 10
+                ],
+                'max' => [
+                    'width'  => 100,
+                    'height' => 100
+                ],
+            ],
+            'size' => [
+                'min' => 0,
+                'max' => 2048
+            ]
+        ];
+        $rules = [
+            'name' => ['required', 'string', 'max:105', 'min:2'],
+            'img' => 'nullable|image|mimes:jpg,jpeg,png,gif,svg|min:' . $img['size']['min'] .
+                '|max:' . $img['size']['max'] .
+                '|dimensions:' .
+                'min_width=' . $img['dimensions']['min']['width'] . ',min_height=' . $img['dimensions']['min']['height'] .
+                ',max_width=' . $img['dimensions']['max']['width'] . ',max_height=' . $img['dimensions']['max']['height'],
+        ];
+        return $rules;
     }
 
     protected function saveToLog($e){

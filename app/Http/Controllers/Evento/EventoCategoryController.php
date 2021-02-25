@@ -136,6 +136,7 @@ class EventoCategoryController extends Controller
             $rsCategory = Category::where('id', '=', $eventoCategory->category_id)->first();
             $rs['category_name'] = $rsCategory->name;
             $rs['eventocategory_id'] = $eventoCategory->id;
+            $rs['category_id'] = $rsCategory->id;
 
             // нужно представление сгенерировать прямо сейчас, чтобы потом не пришлось на клиенте формировать
             // лапшу из разметки

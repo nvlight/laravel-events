@@ -4,7 +4,7 @@
         <div class="categories_wrapper">
             @if(count($evento['categories']))
                 @foreach($evento['categories'] as $k => $category)
-                    <div class="eventoCategoryDiv" data-eventoCategoryId="{{ $category['evento_evento_category_id'] }}">
+                    <div class="eventoCategoryDiv" data-eventoCategoryId="{{ $category['evento_evento_category_id'] }}" data-categoryId="{{ $category['evento_category_id'] }}">
                         <span class="categoryNameText" data-textValue="{{ $category['evento_category_name'] }}">{{ $category['evento_category_name'] }}</span>
                         <a href=""
                            class="delete_category" data-categoryId="{{ $category['evento_evento_category_id'] }}">

@@ -92,7 +92,7 @@ function categoryAddEditButtonCatch() {
 function categoryAddEditButtonHandler(e)
 {
     let current = e.currentTarget;
-    conlog(current);
+    //conlog(current);
 
     // todo -  получить данные текущей категории и показать их на формочке
     // <a class="category_edit_for_crud" href="/cabinet/evento/category/edit/now/130" data-categoryid="130">
@@ -1675,7 +1675,19 @@ function editTagsInEventoRowTagsColumns(eventotag_id, name, color) {
     }
 
 }
+function editCategoriesInEventoRowCategoriesColumns(category_id, name, color) {
+    conlog('editCategoriesInEventoRowCategoriesColumns: '+category_id);
+    let categories = document.querySelectorAll('.categories_wrapper [data-categoryId="'+category_id+'"]');
+    if (categories && categories.length){
+        for(let i=0; i<categories.length; i++){
+            let categoryName = categories[i].querySelector('.categoryNameText');
+            if (categoryName){
+                categoryName.innerHTML = name;
+            }
+        }
+    }
 
+}
 
 // #############################################
 // spin_message --- hide/show for all modal/etc
@@ -1780,6 +1792,7 @@ function editCategoryFormHandler() {
             let formData = new FormData(e.currentTarget);
 
             //editTagXhr(formData);
+            editCategoryXhr(formData);
 
             return false;
         }
@@ -1801,27 +1814,30 @@ function getCategoryXhr(categoryId){
 
                 // todo - last
                 if (categoryEditModal){
-                    // let modal = document.getElementById('edit-tag-modal');
-                    // let name = modal.querySelector('form input[name="name"]');
-                    // let color = modal.querySelector('form input[name="color"]');
-                    // if (modal && name && color){
-                    //     name.value = rs['tag']['name'];
-                    //     color.value = rs['tag']['color'];
-                    //
-                    //     let form = modal.querySelector('form');
-                    //     if (form){
-                    //         let findHiddenInput = form.querySelector('input[name="tagId"]');
-                    //         if (findHiddenInput){
-                    //             findHiddenInput.setAttribute('value', rs['tag']['id']);
-                    //         }else{
-                    //             let hiddenInputTagId = document.createElement('input');
-                    //             hiddenInputTagId.setAttribute('name', 'tagId');
-                    //             hiddenInputTagId.setAttribute('type', 'hidden');
-                    //             hiddenInputTagId.setAttribute('value', rs['tag']['id']);
-                    //             form.appendChild(hiddenInputTagId);
-                    //         }
-                    //     }
-                    // }
+                    let modal = categoryEditId;
+                    let name = modal.querySelector('form input[name="name"]');
+                    let img = modal.querySelector('form input[name="img"]');
+                    if (modal && name && img){
+                        name.value = rs['category']['name'];
+                        img.value = rs['category']['img'];
+
+                        let form = modal.querySelector('form');
+                        if (form){
+                            let categoryFieldName = 'categoryId';
+                            let categoryId = rs['category']['id'];
+
+                            let findHiddenInput = form.querySelector(`input[name="${categoryFieldName}"]`);
+                            if (findHiddenInput){
+                                findHiddenInput.setAttribute('value', categoryId);
+                            }else{
+                                let hiddenInput = document.createElement('input');
+                                hiddenInput.setAttribute('name', categoryFieldName);
+                                hiddenInput.setAttribute('type', 'hidden');
+                                hiddenInput.setAttribute('value', categoryId);
+                                form.appendChild(hiddenInput);
+                            }
+                        }
+                    }
                     categoryEditModal.show();
                 }
             }
@@ -1831,7 +1847,7 @@ function getCategoryXhr(categoryId){
 }
 
 function editCategoryXhr(formData) {
-    const url = "/cabinet/evento/tag/update_ajax/"+formData.get('tagId');
+    const url = "/cabinet/evento/category/update_ajax/"+formData.get('categoryId');
     if (!formData.has('_token')){
         formData.append('_token', token)
     }else{
@@ -1843,7 +1859,7 @@ function editCategoryXhr(formData) {
 
     // hide spinMessage__*
     // show spin
-    let spinWrapper = spinMessage__getScopeClass('.tagEdit__wrapper');
+    let spinWrapper = spinMessage__getScopeClass('.categoryEdit__wrapper');
     spinMessage__hide(spinWrapper);
     spinMessage__showSpin(spinWrapper);
 
@@ -1852,29 +1868,36 @@ function editCategoryXhr(formData) {
             let rs = JSON.parse(xhr.responseText);
             spinMessage__hideSpin(spinWrapper);
 
-            // if (rs['success']) {
-            //     let tr = document.querySelector('.add-tag--tr_id-'+rs['tag']['id']);
-            //     if (tr){
-            //         let dataName = tr.querySelector('[data-name]');
-            //         let dataColor = tr.querySelector('[data-color]');
-            //         if (tr && dataName) {
-            //             dataName.innerHTML = rs['tag']['name'];
-            //         }
-            //         if (tr && dataColor){
-            //             dataColor.innerHTML = rs['tag']['color'];
-            //         }
-            //     }
-            //     // update tag caption && color
-            //     editTagsInEventoRowTagsColumns(rs['tag']['id'], rs['tag']['name'], rs['tag']['color']);
-            // }else{
-            //     let modal = document.getElementById('edit-tag-modal');
-            //     let name = modal.querySelector('form input[name="name"]');
-            //     let color = modal.querySelector('form input[name="color"]');
-            //     if (modal && name && color){
-            //         name.value = rs['oldTag']['name'];
-            //         color.value = rs['oldTag']['color'];
-            //     }
-            // }
+            if (rs['success']) {
+                let rsn = rs['category'];
+                // let tr = document.querySelector(`.add-category--tr_id-${rsn['id']}`);
+                // if (tr){
+                //     let dataName = tr.querySelector('[data-name]');
+                //     let dataImg = tr.querySelector('[data-img]');
+                //     if (tr && dataName) {
+                //         dataName.innerHTML = rsn['name'];
+                //     }
+                //     if (tr && dataImg){
+                //         dataImg.innerHTML = rsn['img'];
+                //     }
+                // }
+
+                // update category crud table
+                getCategories();
+                // update eventocategory table
+                getUserCategories();
+
+                // update category caption && img in all category rows
+                editCategoriesInEventoRowCategoriesColumns(rsn['id'], rsn['name'], rsn['img']);
+            }else{
+                let modal = categoryEditId;
+                let name = modal.querySelector('form input[name="name"]');
+                let img = modal.querySelector('form input[name="img"]');
+                if (modal && name && img){
+                    name.value = rs['oldCategory']['name'];
+                    img.value = rs['oldCategory']['img'];
+                }
+            }
 
             spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
             spinMessage__setMessage(spinWrapper, rs['message']);
@@ -1885,18 +1908,22 @@ function editCategoryXhr(formData) {
     xhr.send(formData);
 
     xhr.addEventListener("progress", () => {
-        tagEditWrapper__hideSpin();
+        categoryEditWrapper__hideSpin();
     });
     xhr.addEventListener("load", () => {
-        tagEditWrapper__hideSpin();
+        categoryEditWrapper__hideSpin();
     });
     xhr.addEventListener("error", () => {
-        tagEditWrapper__hideSpin();
+        categoryEditWrapper__hideSpin();
     });
     xhr.addEventListener("abort", () => {
-        tagEditWrapper__hideSpin();
+        categoryEditWrapper__hideSpin();
     });
 }
+function categoryEditWrapper__hideSpin() {
+    let spinWrapper = spinMessage__getScopeClass('.categoryEdit__wrapper');
+    spinMessage__hideSpin(spinWrapper);
+};
 
 // ###################################################
 // all functions with one initial start

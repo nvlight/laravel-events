@@ -189,7 +189,6 @@ class TagController extends Controller
 
         // todo - вставить сюда валидацию
 
-
         try {
             $attributes = $request->all();
             $oldTag = $tag->toArray();

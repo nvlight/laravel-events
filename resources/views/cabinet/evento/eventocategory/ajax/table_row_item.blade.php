@@ -1,5 +1,5 @@
 @if($category)
-    <div class="eventoCategoryDiv" data-eventocategoryid="{{ $category['eventocategory_id'] }}">
+    <div class="eventoCategoryDiv" data-eventocategoryid="{{ $category['eventocategory_id'] }}" data-categoryId="{{ $category['category_id'] }}">
 
         <span class="categoryNameText" data-textvalue="{{ $category['category_name'] }}">{{ $category['category_name'] }}</span>
 
