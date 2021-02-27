@@ -11,41 +11,21 @@
     </style>
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-2" style="align-self: center;">
                 <div class="container">
-                    <h3>pie_diagram.blade.php</h3>
+                    <script> var tagData = []; </script>
 
+                    <h5>Tag count: {{ count($eventoTagResult) }}</h5>
+                    @foreach($eventoTagResult as $k => $v)
                     <script>
-                        var tagData = [];
+                        tagData.push( [ '{{$v['tag_name']}}', {{$v['tag_value']}}, '{{$v['tag_color']}}' ])
                     </script>
-                    <h4>Count: {{ count($eventoTagResult) }}</h4>
-                    <table class="table table-bordered table-striped">
-                        <tbody>
-                            @foreach($eventoTagResult as $k => $v)
-                            <tr>
-                                <script>
-                                    tagData.push( [ '{{$v['tag_name']}}', {{$v['tag_value']}}, '{{$v['tag_color']}}' ])
-                                </script>
-                                <td class="d-flex align-items-center">
-                                    <div style="background-color: {{ $v['tag_color'] }};" class="tagNameCircle">
-                                    </div>
-                                    <div>
-                                        <strong>{{ $v['tag_name'] }}</strong>: &nbsp;
-                                    </div>
-                                    <div>
-                                        <strong>{{ $v['tag_value'] }}</strong>
-                                    </div>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    @endforeach
 
-
-
+                    <div id="myLegend"></div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-10">
                 <div class="container">
                     <canvas id="pieDiagrammCanvas"></canvas>
                 </div>
@@ -55,8 +35,8 @@
 @push('footer_js')
 <script>
 var myCanvas = document.getElementById("pieDiagrammCanvas");
-myCanvas.width = 350;
-myCanvas.height = 350;
+myCanvas.width = 250;
+myCanvas.height = 250;
 
 var ctx = myCanvas.getContext("2d");
 
@@ -72,8 +52,6 @@ var tagColors = ['#36c417', '#f6c417', '#7800ff', '#5CB85C', '#D9534F',];
 tagValues = {};
 tagColors = [];
 
-console.log(tagData);
-
 if (tagData.length){
     for(let i=0; i<tagData.length; i++){
         var tagName = tagData[i][0];
@@ -82,8 +60,9 @@ if (tagData.length){
         tagColors.push(tagData[i][2]);
     }
 }
-console.log(tagValues);
-console.log(tagColors);
+//console.log(tagData);
+//console.log(tagValues);
+//console.log(tagColors);
 
 function drawLine(ctx, startX, startY, endX, endY){
     ctx.beginPath();
@@ -173,6 +152,16 @@ var Piechart = function(options){
             start_angle += slice_angle;
         }
 
+        if (this.options.legend){
+            color_index = 0;
+            var legendHTML = "";
+            for (categ in this.options.data){
+                legendHTML += "<div style='display: flex; align-items: center;'>" +
+                    "<span class='tagNameCircle' style='background-color:"+this.colors[color_index++]+";'>" +
+                    "&nbsp;</span> <span>"+categ+"</span> </div>";
+            }
+            this.options.legend.innerHTML = legendHTML;
+        }
     }
 }
 
@@ -184,6 +173,7 @@ var tagValuesDiagramm = new Piechart({
     canvas: myCanvas,
     data: tagValues,
     colors: tagColors,
+    legend:myLegend,
     //doughnutHoleSize:0.5,
 });
 tagValuesDiagramm.draw();
