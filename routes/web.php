@@ -379,6 +379,10 @@ Route::group(
         Route::get('/download/{eventoTagValue}', 'EventoTagValueController@download')->name('download');
     });
 
+    Route::group(['prefix' => '/eventotagcounting', 'as' => 'eventotagcounting.'], function () {
+        Route::get('/get_current_year', 'EventoTagCountingDiagram@getData')->name('get_current_year');
+    });
+
     Route::get('/', 'EventoController@index')->name('index');
     Route::get('/create/', 'EventoController@create')->name('create');
     Route::post('/store/', 'EventoController@store' )->name('store');
