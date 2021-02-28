@@ -32,10 +32,12 @@ var eventoEditModal = document.getElementById('edit-evento-modal');
 var tagEditModal = document.getElementById('edit-tag-modal');
 var deleteEventoMessage = 'Delete evento?';
 var categoryEditId = document.getElementById('edit-category-modal');
+var tagvaluesPieDiagrammId = document.getElementById('tagvalue-pie-modal');
 
 var isInEventoEditModalDeleteButtonPressed = false;
 var classListFor__spinMessage = ['text-danger', 'text-success'];
 var categoryEditModal;
+var tagvaluesPieDiagrammModal;
 
 function conlog(e){
     console.log(e);
@@ -77,6 +79,12 @@ function eventoModalFunction() {
 function categoryEditModalFunction(){
     if (categoryEditId){
         categoryEditModal = new bootstrap.Modal(categoryEditId, {keyboard: false});
+    }
+}
+
+function tagvaluesPieDiagrammFunction() {
+    if (tagvaluesPieDiagrammId){
+        tagvaluesPieDiagrammModal = new bootstrap.Modal(tagvaluesPieDiagrammId, {keyboard: false});
     }
 }
 
@@ -1870,17 +1878,6 @@ function editCategoryXhr(formData) {
 
             if (rs['success']) {
                 let rsn = rs['category'];
-                // let tr = document.querySelector(`.add-category--tr_id-${rsn['id']}`);
-                // if (tr){
-                //     let dataName = tr.querySelector('[data-name]');
-                //     let dataImg = tr.querySelector('[data-img]');
-                //     if (tr && dataName) {
-                //         dataName.innerHTML = rsn['name'];
-                //     }
-                //     if (tr && dataImg){
-                //         dataImg.innerHTML = rsn['img'];
-                //     }
-                // }
 
                 // update category crud table
                 getCategories();
@@ -1925,6 +1922,74 @@ function categoryEditWrapper__hideSpin() {
     spinMessage__hideSpin(spinWrapper);
 };
 
+function tagValuesPieDiagrammSvgXhr(formData) {
+    const url = "/cabinet/evento/eventotagcounting/get_pie_ajax/";
+    if (!formData.has('_token')){
+        formData.append('_token', token)
+    }else{
+        formData.set('_token', token);
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+
+    // hide spinMessage__*
+    // show spin
+    let spinWrapper = spinMessage__getScopeClass('.categoryEdit__wrapper');
+    spinMessage__hide(spinWrapper);
+    spinMessage__showSpin(spinWrapper);
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+
+            if (rs['success']){
+                tagvaluesPieDiagrammId.innerHTML = "";
+                let div = document.createElement('div');
+                div.innerHTML = rs['rendered'];
+                tagvaluesPieDiagrammId.appendChild(div);
+                conlog('done!')
+            }
+
+            spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
+            spinMessage__setMessage(spinWrapper, rs['message']);
+            spinMessage__showMessage(spinWrapper);
+        }
+    });
+
+    xhr.send(formData);
+
+    xhr.addEventListener("progress", () => {
+        categoryEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("load", () => {
+        categoryEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("error", () => {
+        categoryEditWrapper__hideSpin();
+    });
+    xhr.addEventListener("abort", () => {
+        categoryEditWrapper__hideSpin();
+    });
+}
+
+function tagValuesPieDiagrammSvgHandler() {
+    let btn = document.querySelector('#tagValuesPieDiagrammSvg');
+    if (btn){
+        btn.onclick = function(e) {
+            //conlog('tagValuesPieDiagrammSvgHandler pressed!');
+
+            //
+            let formData = new FormData();
+            tagValuesPieDiagrammSvgXhr(formData);
+
+            tagvaluesPieDiagrammModal.show();
+
+            return false;
+        }
+    }
+}
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -1961,6 +2026,9 @@ function functionsInitialStart(){
     spinMessages__startingHide();
     categoryEditModalFunction();
     editCategoryFormHandler();
+    tagvaluesPieDiagrammFunction();
+
+    tagValuesPieDiagrammSvgHandler();
 }
 functionsInitialStart();
 // end

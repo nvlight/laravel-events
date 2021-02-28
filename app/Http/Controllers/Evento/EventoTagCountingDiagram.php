@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 
 class EventoTagCountingDiagram extends Controller
 {
@@ -38,7 +39,15 @@ class EventoTagCountingDiagram extends Controller
         return $year;
     }
 
-    public function getData(Request $request)
+    public function getData()
+    {
+        $pie = $this->getPieData();
+        //self::d($eventoTagResult, 2);
+
+        return view('cabinet.evento.eventotagcounting.pie_diagram', ['eventoTagResult' => $pie]);
+    }
+
+    public function getPieData()
     {
         $year = $this->getCurrentYear();
 
@@ -58,8 +67,21 @@ class EventoTagCountingDiagram extends Controller
             ->groupby('tag_name', 'tag_color')
         ;
         $eventoTagResult = $eventoTagQuery->get()->toArray();
-        //self::d($eventoTagResult, 2);
 
-        return view('cabinet.evento.eventotagcounting.pie_diagram', compact('eventoTagResult') );
+        return $eventoTagResult;
+    }
+
+    public function getPieDataRender($pie){
+        return View::make('cabinet.evento.eventotagcounting.pie_diagram_ajax', ['eventoTagResult' => $pie])->render();
+    }
+
+    public function getPieAjax(){
+        $year = $this->getCurrentYear();
+
+        $pie = $this->getPieData();
+        $rendered = $this->getPieDataRender($pie);
+        $rs = ['success' => 1, 'message' => 'its all fine!', 'current_year' => $year, 'rendered' => $rendered];
+
+        die(json_encode($rs));
     }
 }
