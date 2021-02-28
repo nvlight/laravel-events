@@ -1,28 +1,38 @@
-<style>
-    .tagNameCircle{
-        width: 17px;
-        height: 17px;
-        margin-right: 5px;
-        border-radius: 100%;
-    }
-</style>
+@extends('layouts.evento')
 
-<div>
-    <script> var tagData = []; </script>
+@section('content')
+    <style>
+        .tagNameCircle{
+            width: 17px;
+            height: 17px;
+            margin-right: 5px;
+            border-radius: 100%;
+        }
+    </style>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2" style="align-self: center;">
+                <div class="container">
+                    <script> var tagData = []; </script>
 
-    <h5>Tag count: {{ count($eventoTagResult) }}</h5>
-    @foreach($eventoTagResult as $k => $v)
-    <script>
-        tagData.push( [ '{{$v['tag_name']}}', {{$v['tag_value']}}, '{{$v['tag_color']}}' ])
-    </script>
-    @endforeach
+                    <h5>Tag count: {{ count($eventoTagResult) }}</h5>
+                    @foreach($eventoTagResult as $k => $v)
+                    <script>
+                        tagData.push( [ '{{$v['tag_name']}}', {{$v['tag_value']}}, '{{$v['tag_color']}}' ])
+                    </script>
+                    @endforeach
 
-    <div id="myLegend"></div>
-
-
-    <canvas id="pieDiagrammCanvas"></canvas>
-<div>
-
+                    <div id="myLegend"></div>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="container">
+                    <canvas id="pieDiagrammCanvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+@push('footer_js')
 <script>
 var myCanvas = document.getElementById("pieDiagrammCanvas");
 myCanvas.width = 250;
@@ -168,3 +178,4 @@ var tagValuesDiagramm = new Piechart({
 });
 tagValuesDiagramm.draw();
 </script>
+@endpush

@@ -381,6 +381,7 @@ Route::group(
 
     Route::group(['prefix' => '/eventotagcounting', 'as' => 'eventotagcounting.'], function () {
         Route::get('/get_current_year', 'EventoTagCountingDiagram@getData')->name('get_current_year');
+        Route::get('/get_pie', 'EventoTagCountingDiagram@getData')->name('get_pie');
 
         Route::get('/get_pie_ajax', 'EventoTagCountingDiagram@getPieAjax')->name('get_pie_ajax');
     });

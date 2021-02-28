@@ -154,7 +154,7 @@ var Piechart = function(options){
 
         if (this.options.legend){
             color_index = 0;
-            var legendHTML = "";
+            var legendHTML = "";``
             for (categ in this.options.data){
                 legendHTML += "<div style='display: flex; align-items: center;'>" +
                     "<span class='tagNameCircle' style='background-color:"+this.colors[color_index++]+";'>" +
@@ -173,7 +173,7 @@ var tagValuesDiagramm = new Piechart({
     canvas: myCanvas,
     data: tagValues,
     colors: tagColors,
-    legend:myLegend,
+    legend: myLegend,
     //doughnutHoleSize:0.5,
 });
 tagValuesDiagramm.draw();

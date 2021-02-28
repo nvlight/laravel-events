@@ -15,7 +15,7 @@
             @include('cabinet.evento._inner.first_menu_line_with_js')
 
             @include('cabinet.evento._blocks.flash_message')
-
+            
             @if($eventos)
                 <div class="controls d-flex justify-content-around">
                     <p>Evento count: {{ $eventoCount }}</p>
