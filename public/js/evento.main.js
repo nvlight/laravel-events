@@ -43,16 +43,7 @@ var myCanvas = document.getElementById("pieDiagrammCanvas");
 myCanvas.width = 250;
 myCanvas.height = 250;
 var ctx = myCanvas.getContext("2d");
-var tagValues = {
-    "BeeLine": 15640,
-    "Megafon": 5350,
-    "Rostelecom":4700,
-    "доход": 16600,
-    "расход": 34800,
-};
-var tagColors = ['#36c417', '#f6c417', '#7800ff', '#5CB85C', '#D9534F',];
-//tagValues = {};
-//tagColors = [];
+
 var Piechart = function(options){
     this.options = options;
     this.canvas = options.canvas;
@@ -124,22 +115,18 @@ var Piechart = function(options){
             color_index = 0;
             var legendHTML = "";
             for (categ in this.options.data){
+                let val = this.options.data[categ];
+                let currentTagProcent = Math.round(100 * val / total_value);
                 legendHTML += "<div style='display: flex; align-items: center;'>" +
                     "<span class='tagNameCircle' style='background-color:"+this.colors[color_index++]+";'>" +
-                    "&nbsp;</span> <span>"+categ+"</span> </div>";
+                    "&nbsp;</span> <span>"+`${categ} (${val} ${currentTagProcent}%)`+"</span> </div>";
             }
             this.options.legend.innerHTML = legendHTML;
         }
     }
 }
-
-var tagValuesDiagramm = new Piechart({
-    canvas: myCanvas,
-    data:   tagValues,
-    colors: tagColors,
-    legend: pieDiagrammLegend,
-    //doughnutHoleSize:0.5,
-});
+//tagValues = {};
+//tagColors = [];
 
 function conlog(e){
     console.log(e);
@@ -2047,14 +2034,34 @@ function tagValuesPieDiagrammSvgXhr(formData) {
             if (rs['success']){
 
                 let pie = rs['pie'];
-                let tagValues = {};
-                let tagColors = [];
+                var tagValues = {};
+                var tagColors = [];
                 for(let i=0; i<pie.length; i++){
-                    tagValues[pie[i]['tag_name']] = pie[i]['tag_value'];
+                    tagValues[pie[i]['tag_name']] = +pie[i]['tag_value'];
                     tagColors.push(pie[i]['tag_color']);
                 }
-                conlog(tagValues);
-                conlog(tagColors);
+                //conlog(tagValues);
+
+                // tagValues = {
+                //     "BeeLine": 15640,
+                //     "Megafon": 5350,
+                //     "Rostelecom":4700,
+                //     "доход": 16600,
+                //     "расход": 34800,
+                // };
+                // conlog(tagValues);
+
+                var tagValuesDiagramm = new Piechart({
+                    canvas: myCanvas,
+                    data:   tagValues,
+                    colors: tagColors,
+                    legend: pieDiagrammLegend,
+                    //doughnutHoleSize:0.5,
+                });
+
+                for(let i in tagValuesDiagramm){
+                    //conlog(tagValuesDiagramm[i]);
+                }
 
                 tagValuesDiagramm.draw();
                 tagvaluesPieDiagrammModal.show();
