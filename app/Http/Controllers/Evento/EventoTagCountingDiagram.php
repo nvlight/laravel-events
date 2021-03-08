@@ -47,9 +47,28 @@ class EventoTagCountingDiagram extends Controller
         return view('cabinet.evento.eventotagcounting.pie_diagram', ['eventoTagResult' => $pie]);
     }
 
-    public function getPieData()
+    protected function getYears()
     {
-        $year = $this->getCurrentYear();
+        $q = Evento::
+        leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
+            ->leftJoin('evento_categories','evento_categories.id','=','evento_evento_categories.category_id')
+            ->leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
+            ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
+            ->join('evento_evento_tag_values','evento_evento_tag_values.evento_evento_tags_id','=','evento_evento_tags.id')
+            ->where('evento_eventos.user_id', auth()->id())
+            ->select(
+                DB::raw( 'distinct(year(evento_eventos.date)) as date')
+            )
+            ->orderBy('date')
+        ;
+        $rs = $q->get()->toArray();
+
+        return $rs;
+    }
+
+    public function getPieData($currentYear=null)
+    {
+        $year = $currentYear ?? $this->getCurrentYear();
 
         $eventoTagQuery = Evento::
         leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
@@ -79,7 +98,18 @@ class EventoTagCountingDiagram extends Controller
         $year = $this->getCurrentYear();
 
         $pie = $this->getPieData();
-        $rs = ['success' => 1, 'message' => 'its all fine!', 'current_year' => $year, 'pie' => $pie];
+        $rs = ['success' => 1, 'message' => 'pie data is geted!!', 'current_year' => $year, 'pie' => $pie,
+            'years' => $this->getYears(),
+        ];
+
+        die(json_encode($rs));
+    }
+
+    public function getPieAjaxByYear($year=null){
+        $currentYear = $year ?? $this->getCurrentYear();
+
+        $pie = $this->getPieData($currentYear);
+        $rs = ['success' => 1, 'message' => 'pie data is geted!!', 'pie' => $pie, 'years' => $this->getYears(), ];
 
         die(json_encode($rs));
     }

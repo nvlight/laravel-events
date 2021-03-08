@@ -1816,9 +1816,14 @@ function spinMessage__hideSpin(wrapper){
         }
     }
 }
-function spinMessage__showMessage(wrapper){
+function spinMessage__showMessage(wrapper,addit_class_name=''){
     if (wrapper){
-        let message = wrapper.querySelector('span.message');
+        let selector = 'span.message';
+        if (addit_class_name){
+            selector += '.' + addit_class_name;
+        }
+        let message = wrapper.querySelector(selector);
+
         if (message){
             message.classList.remove('d-none');
         }
@@ -2012,20 +2017,9 @@ function categoryEditWrapper__hideSpin() {
 
 function tagValuesPieDiagrammSvgXhr(formData) {
     const url = "/cabinet/evento/eventotagcounting/get_pie_ajax/";
-    if (!formData.has('_token')){
-        formData.append('_token', token)
-    }else{
-        formData.set('_token', token);
-    }
 
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url);
-
-    // hide spinMessage__*
-    // show spin
-    let spinWrapper = spinMessage__getScopeClass('.categoryEdit__wrapper');
-    spinMessage__hide(spinWrapper);
-    spinMessage__showSpin(spinWrapper);
 
     xhr.addEventListener("readystatechange", () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -2066,27 +2060,10 @@ function tagValuesPieDiagrammSvgXhr(formData) {
                 tagValuesDiagramm.draw();
                 tagvaluesPieDiagrammModal.show();
             }
-
-            spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
-            spinMessage__setMessage(spinWrapper, rs['message']);
-            spinMessage__showMessage(spinWrapper);
         }
     });
 
     xhr.send(formData);
-
-    xhr.addEventListener("progress", () => {
-        categoryEditWrapper__hideSpin();
-    });
-    xhr.addEventListener("load", () => {
-        categoryEditWrapper__hideSpin();
-    });
-    xhr.addEventListener("error", () => {
-        categoryEditWrapper__hideSpin();
-    });
-    xhr.addEventListener("abort", () => {
-        categoryEditWrapper__hideSpin();
-    });
 }
 
 function tagValuesPieDiagrammSvgHandler() {
@@ -2127,6 +2104,111 @@ function drawPieSlice(ctx,centerX, centerY, radius, startAngle, endAngle, color 
 //drawArc(ctx, 150,150,150, 0, Math.PI/3);
 //drawPieSlice(ctx, 150,150,150, Math.PI/2, Math.PI/2 + Math.PI/4, '#ff0000');
 
+function DiagrammPieByYearFormSubmitHandler() {
+    let form = document.querySelector('form[name=DiagrammPieByYear]');
+    if (form){
+        form.onsubmit = function (e) {
+
+            let formData = new FormData(e.currentTarget);
+
+            getDiagrammPieByYearXhr(formData);
+
+            return false;
+        }
+    }
+}
+function addExistsYearsForPieDiagramm(data, selector) {
+    if (data.length && selector){
+        removeOptions(selector);
+
+        // default option
+        let option = document.createElement("option");
+        option.text = 'Select need year';
+        option.setAttribute('selected', 'selected');
+        selector.add(option);
+
+        //
+        for (let i = 0; i < data.length; i++) {
+            let option = document.createElement("option");
+            option.text = data[i]['date'];
+            option.value = +data[i]['date'];
+            selector.add(option);
+        }
+    }
+}
+function getDiagrammPieByYearXhr(formData) {
+    let url = "/cabinet/evento/eventotagcounting/get_pie_ajax_by_year/";
+    if (formData.has('year')){
+        url += formData.get('year');
+    }else{
+        url += (new Date).getFullYear();
+    }
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+
+    // hide spinMessage__*
+    // show spin
+    let spinWrapper = spinMessage__getScopeClass('.getPieDiagrammByYear__wrapper');
+    spinMessage__hide(spinWrapper);
+    spinMessage__showSpin(spinWrapper);
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+            if (rs['success']){
+
+                let pie = rs['pie'];
+                var tagValues = {};
+                var tagColors = [];
+                for(let i=0; i<pie.length; i++){
+                    tagValues[pie[i]['tag_name']] = +pie[i]['tag_value'];
+                    tagColors.push(pie[i]['tag_color']);
+                }
+                //conlog(tagValues);
+
+                var tagValuesDiagramm = new Piechart({
+                    canvas: myCanvas,
+                    data:   tagValues,
+                    colors: tagColors,
+                    legend: pieDiagrammLegend,
+                    //doughnutHoleSize:0.5,
+                });
+
+                tagValuesDiagramm.draw();
+                tagvaluesPieDiagrammModal.show();
+
+                let yearsSelect = document.querySelector('.getPieDiagrammByYear__wrapper select[name="year"]');
+                addExistsYearsForPieDiagramm(rs['years'], yearsSelect);
+
+                spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
+                spinMessage__setMessage(spinWrapper, rs['message']);
+                let none_class = 'none_' + Math.random().toString(36).substring(7);
+                spinMessage__showMessage(spinWrapper, none_class);
+            }
+        }
+    });
+
+    xhr.addEventListener("progress", () => {
+        getPieDiagrammCategory__hideSpin();
+    });
+    xhr.addEventListener("load", () => {
+        getPieDiagrammCategory__hideSpin();
+    });
+    xhr.addEventListener("error", () => {
+        getPieDiagrammCategory__hideSpin();
+    });
+    xhr.addEventListener("abort", () => {
+        getPieDiagrammCategory__hideSpin();
+    });
+
+    xhr.send(formData);
+}
+function getPieDiagrammCategory__hideSpin() {
+    let spinWrapper = spinMessage__getScopeClass('.getPieDiagrammByYear__wrapper');
+    spinMessage__hideSpin(spinWrapper);
+};
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -2166,6 +2248,7 @@ function functionsInitialStart(){
     tagvaluesPieDiagrammFunction();
 
     tagValuesPieDiagrammSvgHandler();
+    DiagrammPieByYearFormSubmitHandler();
 }
 functionsInitialStart();
 // end

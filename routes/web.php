@@ -384,6 +384,7 @@ Route::group(
         Route::get('/get_pie', 'EventoTagCountingDiagram@getData')->name('get_pie');
 
         Route::get('/get_pie_ajax', 'EventoTagCountingDiagram@getPieAjax')->name('get_pie_ajax');
+        Route::get('/get_pie_ajax_by_year/{year?}', 'EventoTagCountingDiagram@getPieAjaxByYear')->name('get_pie_ajax_by_year');
     });
 
     Route::get('/', 'EventoController@index')->name('index');
@@ -422,3 +423,4 @@ Route::group([
         return sprintf("#%s block", $index); // $index;
     });
 });
+
