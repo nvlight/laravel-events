@@ -2059,6 +2059,10 @@ function tagValuesPieDiagrammSvgXhr(formData) {
 
                 tagValuesDiagramm.draw();
                 tagvaluesPieDiagrammModal.show();
+
+                let yearsSelect = document.querySelector('.getPieDiagrammByYear__wrapper select[name="year"]');
+                let year = +rs['current_year'];
+                addYearsAndsetCurrentYearSelectedForPieDiagramm(rs['years'], yearsSelect, year);
             }
         }
     });
@@ -2117,21 +2121,31 @@ function DiagrammPieByYearFormSubmitHandler() {
         }
     }
 }
-function addExistsYearsForPieDiagramm(data, selector) {
+// todo - refactor this after, explode 2 functions
+function addYearsAndsetCurrentYearSelectedForPieDiagramm(data, selector, year='') {
     if (data.length && selector){
         removeOptions(selector);
+
+        let current_year = (new Date).getFullYear();
+        if (year){
+            current_year = year;
+        }
 
         // default option
         let option = document.createElement("option");
         option.text = 'Select need year';
-        option.setAttribute('selected', 'selected');
+        //option.setAttribute('selected', 'selected');
         selector.add(option);
 
-        //
         for (let i = 0; i < data.length; i++) {
             let option = document.createElement("option");
             option.text = data[i]['date'];
             option.value = +data[i]['date'];
+
+            if ( (+data[i]['date']) ===  current_year ){
+                option.setAttribute('selected', 'selected');
+            }
+
             selector.add(option);
         }
     }
@@ -2179,7 +2193,8 @@ function getDiagrammPieByYearXhr(formData) {
                 tagvaluesPieDiagrammModal.show();
 
                 let yearsSelect = document.querySelector('.getPieDiagrammByYear__wrapper select[name="year"]');
-                addExistsYearsForPieDiagramm(rs['years'], yearsSelect);
+                let year = +rs['current_year'];
+                addYearsAndsetCurrentYearSelectedForPieDiagramm(rs['years'], yearsSelect, year);
 
                 spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
                 spinMessage__setMessage(spinWrapper, rs['message']);

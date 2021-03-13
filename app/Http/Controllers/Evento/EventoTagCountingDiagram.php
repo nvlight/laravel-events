@@ -109,7 +109,8 @@ class EventoTagCountingDiagram extends Controller
         $currentYear = $year ?? $this->getCurrentYear();
 
         $pie = $this->getPieData($currentYear);
-        $rs = ['success' => 1, 'message' => 'pie data is geted!!', 'pie' => $pie, 'years' => $this->getYears(), ];
+        $rs = ['success' => 1, 'message' => 'pie data is geted!!', 'pie' => $pie, 'years' => $this->getYears(),
+            'current_year' => $currentYear,];
 
         die(json_encode($rs));
     }
