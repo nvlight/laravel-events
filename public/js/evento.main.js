@@ -2034,7 +2034,6 @@ function tagValuesPieDiagrammSvgXhr(formData) {
                     tagValues[pie[i]['tag_name']] = +pie[i]['tag_value'];
                     tagColors.push(pie[i]['tag_color']);
                 }
-                //conlog(tagValues);
 
                 // tagValues = {
                 //     "BeeLine": 15640,
@@ -2053,16 +2052,13 @@ function tagValuesPieDiagrammSvgXhr(formData) {
                     //doughnutHoleSize:0.5,
                 });
 
-                for(let i in tagValuesDiagramm){
-                    //conlog(tagValuesDiagramm[i]);
-                }
-
                 tagValuesDiagramm.draw();
                 tagvaluesPieDiagrammModal.show();
 
                 let yearsSelect = document.querySelector('.getPieDiagrammByYear__wrapper select[name="year"]');
                 let year = +rs['current_year'];
-                addYearsAndsetCurrentYearSelectedForPieDiagramm(rs['years'], yearsSelect, year);
+                addYearsAndsetCurrentYearSelectedForPieDiagramm(rs['years'], yearsSelect);
+                setOptionSelected(yearsSelect, year);
             }
         }
     });
@@ -2122,14 +2118,9 @@ function DiagrammPieByYearFormSubmitHandler() {
     }
 }
 // todo - refactor this after, explode 2 functions
-function addYearsAndsetCurrentYearSelectedForPieDiagramm(data, selector, year='') {
+function addYearsAndsetCurrentYearSelectedForPieDiagramm(data, selector) {
     if (data.length && selector){
         removeOptions(selector);
-
-        let current_year = (new Date).getFullYear();
-        if (year){
-            current_year = year;
-        }
 
         // default option
         let option = document.createElement("option");
@@ -2141,12 +2132,19 @@ function addYearsAndsetCurrentYearSelectedForPieDiagramm(data, selector, year=''
             let option = document.createElement("option");
             option.text = data[i]['date'];
             option.value = +data[i]['date'];
-
-            if ( (+data[i]['date']) ===  current_year ){
-                option.setAttribute('selected', 'selected');
-            }
-
             selector.add(option);
+        }
+    }
+}
+function setOptionSelected(selector, value) {
+    let options = selector.querySelectorAll('option');
+    if (options && options.length){
+        for (let i = 0; i < options.length; i++) {
+            if ( ( options[i].hasAttribute('value') ) &&
+                ( (+options[i].getAttribute('value')) ===  value ) ){
+                options[i].setAttribute('selected', 'selected');
+                break;
+            }
         }
     }
 }
@@ -2194,7 +2192,8 @@ function getDiagrammPieByYearXhr(formData) {
 
                 let yearsSelect = document.querySelector('.getPieDiagrammByYear__wrapper select[name="year"]');
                 let year = +rs['current_year'];
-                addYearsAndsetCurrentYearSelectedForPieDiagramm(rs['years'], yearsSelect, year);
+                addYearsAndsetCurrentYearSelectedForPieDiagramm(rs['years'], yearsSelect);
+                setOptionSelected(yearsSelect, year);
 
                 spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
                 spinMessage__setMessage(spinWrapper, rs['message']);

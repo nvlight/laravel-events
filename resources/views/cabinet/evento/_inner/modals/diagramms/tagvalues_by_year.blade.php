@@ -21,14 +21,7 @@
                     <form action="{{ route('cabinet.evento.eventotagcounting.get_pie_ajax_by_year') }}"
                           name="DiagrammPieByYear" class="d-inline-flex spinMessage__wrapper getPieDiagrammByYear__wrapper">
                         <div class="col-md-7">
-                            <select name="year" class="form-select">
-                                <option selected>Select need year</option>
-                                <option value="2017">2017</option>
-                                <option value="2018">2018</option>
-                                <option value="2019">2019</option>
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                            </select>
+                            <select name="year" class="form-select"></select>
                         </div>
                         <div class="col-md-5">
                             <div class="text-right">
