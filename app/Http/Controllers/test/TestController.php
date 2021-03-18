@@ -10,5 +10,8 @@ class TestController extends Controller
         return __CLASS__ . __METHOD__;
     }
 
+    public function gistogramJsTest(){
 
+        return view('test.js_diagramms.gistogramm');
+    }
 }

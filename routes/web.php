@@ -93,9 +93,6 @@ Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');
 Route::resource('document', 'DocumentController')->middleware('verified');
 Route::get('document-download/{document}','DocumentController@download')->middleware('verified');
 
-//Route::get('test111', 'TestController@show')->name('tttest.note');
-//Route::get('verification.notice', 'TestController@show')->name('tttest.note');
-
 //Route::get('email/verify', 'auth\VerificationController@show')->name('tttest.note');
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
 Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
@@ -136,9 +133,6 @@ Route::resource('sts-selected-qsts', 'SimpleTestSystem\SelectedQstsController')-
 Route::resource('sts-shedule', 'SimpleTestSystem\SheduleController')->middleware('verified');
 
 //Route::post('sts-selected-qsts','')->middleware('verified');
-
-Route::get('test_with_1', 'TestController@testwith1')->middleware('verified');
-Route::get('test_with_2', 'TestController@testwith2')->middleware('verified')->name('test_with_2');
 
 Route::get('mgram', 'MGram@index');
 
@@ -419,6 +413,9 @@ Route::group([
     'middleware' => ['auth'],
 ], function () {
     Route::get('/', [App\Http\Controllers\Test\TestController::class, 'index']);
+
+    Route::get('/js_gistogramm', [App\Http\Controllers\Test\TestController::class, 'gistogramJsTest']);
+
     Route::get('/test_typehunting/{index}', function(int $index){
         return sprintf("#%s block", $index); // $index;
     });
