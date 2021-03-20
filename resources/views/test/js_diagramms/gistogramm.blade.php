@@ -8,11 +8,14 @@
     <title>Gistogramm js</title>
 </head>
 <body>
-    <canvas id="js_gistogramm_month"></canvas>
+    <div class="canvas_wrapper" style="width: 100%;">
+        <canvas id="js_gistogramm_month"></canvas>
+    </div>
+
     <legend for="js_gistogramm_month"></legend>
     <script>
         let canvas = document.getElementById("js_gistogramm_month");
-        canvas.width = 900;
+        canvas.width = 700;
         canvas.height = 300;
 
         let ctx = canvas.getContext("2d");
@@ -43,22 +46,24 @@
             this.draw = function(){
 
                 let numberOfBars = 0;
+                let numberOfGroups = 0;
                 let maxValue = 0;
                 for (let i in this.options.data) {
                     for (let j in this.options.data[i]) {
-                        maxValue = Math.max(maxValue, this.options.data[i][j]);
+                        maxValue = Math.max(maxValue, this.options.data[i][j]['value']);
                         numberOfBars++;
                     }
+                    numberOfGroups++;
                 }
                 //console.log('maxValue: '+maxValue);
 
-                var canvasActualHeight = this.canvas.height - this.options.padding * 2;
-                var canvasActualWidth = this.canvas.width - this.options.padding * 2;
+                let canvasActualHeight = this.canvas.height - this.options.padding * 2;
+                let canvasActualWidth = this.canvas.width - this.options.padding * 2;
 
                 //drawing the grid lines
-                // var gridValue = 0;
+                // let gridValue = 0;
                 // while (gridValue <= maxValue){
-                //     var gridY = canvasActualHeight * (1 - gridValue/maxValue) + this.options.padding;
+                //     let gridY = canvasActualHeight * (1 - gridValue/maxValue) + this.options.padding;
                 //     drawLine(
                 //         this.ctx,
                 //         0,
@@ -80,15 +85,16 @@
 
                 //drawing the bars
                 let barIndex = 0;
-                let barSize = (canvasActualWidth)/numberOfBars;
+                let barOffset = 10;
+                let barSize = (canvasActualWidth)/ (numberOfBars + numberOfGroups - 1);
 
                 let offset = 0; //for
-                for (categ in this.options.data){
+                for (let i in this.options.data){
 
-                    let val0 = this.options.data[categ];
+                    let val0 = this.options.data[i];
 
                     let firstOffset = 0;
-                    for (tagval in val0){
+                    for (let j in val0){
 
                         if (!firstOffset){
                             firstOffset++;
@@ -97,14 +103,14 @@
                             this.ctx.save();
                             this.ctx.fillStyle = this.options.gridColor;
                             this.ctx.font = "bold 11px Arial";
-                            this.ctx.fillText(categ,
+                            this.ctx.fillText(i,
                                 this.options.padding + (barIndex * barSize) + offset,
                                 this.canvas.height - this.options.padding + 11);
                             this.ctx.restore();
                         }
 
-                        let val = val0[tagval];
-                        //console.log(tagval + ': ' + val);
+                        let val   = val0[j]['value'];
+                        let color = val0[j]['color'];
 
                         let barHeight = Math.round( canvasActualHeight * val/maxValue);
                         drawBar(
@@ -113,7 +119,7 @@
                             this.canvas.height - barHeight - this.options.padding,
                             barSize,
                             barHeight,
-                            this.colors[barIndex%this.colors.length]
+                            color,
                         );
 
                         //draw bar value
@@ -121,13 +127,15 @@
                         this.ctx.fillStyle = this.options.gridColor;
                         this.ctx.font = "bold 11px Arial";
                         this.ctx.fillText(val,
-                            this.options.padding + (barIndex * barSize + barSize/2 - val.toString().length*2 ) + offset,
+                            //this.options.padding + (barIndex * barSize + barSize/2 - val.toString().length*2 ) + offset,
+                            this.options.padding + (barIndex * barSize + 3) + offset,
                             this.canvas.height - barHeight - this.options.padding - 5);
                         this.ctx.restore();
                         barIndex++;
+
                     }
 
-                    //offset += 10;
+                    offset += barOffset;
                 }
 
                 //drawing series name
@@ -140,56 +148,74 @@
                 // this.ctx.restore();
 
                 //draw legend
-                barIndex = 0;
                 let legend = document.querySelector("legend[for='js_gistogramm_month']");
                 if (legend){
-                    var ul = document.createElement("ul");
+                    let ul = document.createElement("ul");
                     legend.append(ul);
-                    for (categ0 in this.options.data){
-                        for (categ in this.options.data[categ0]){
-                            var li = document.createElement("li");
-                            li.style.listStyle = "none";
-                            li.style.borderLeft = "20px solid "+this.colors[barIndex%this.colors.length];
-                            li.style.padding = "5px";
-                            li.textContent = categ;
-                            ul.append(li);
-                            barIndex++;
+
+                    let columnNames = {};
+                    let columnColors = {};
+                    for (let i in this.options.data){
+                        for (let j in this.options.data[i]){
+                            let vl = this.options.data[i][j];
+
+                            if (!columnNames[j]){
+                                columnNames[j] = vl['value'];
+                            }else{
+                                columnNames[j] += vl['value'];
+                            }
+
+                            if (!columnColors[j]){
+                                columnColors[j] = vl['color'];
+                            }
                         }
-                        break;
+                    }
+                    //console.log(columnNames);
+                    //console.log(columnColors);
+
+                    barIndex = 0;
+                    for (let i in columnNames){
+                        let li = document.createElement("li");
+                        li.style.listStyle = "none";
+                        li.style.borderLeft = "20px solid "+columnColors[i];
+                        li.style.padding = "5px";
+                        li.textContent = i + ` (${columnNames[i]})`;
+                        ul.append(li);
+                        barIndex++;
                     }
                 }
 
             }
         }
 
-        var tagValues = {
+        let tagValues = {
             'january' : {
-                "dohodi": 25000,
-                "rashodi": 15000,
-                "Internet": 2000,
-                "Svet/Elektro": 3000,
+                "dohodi": { 'value' : 25000, 'color': "#a55ca5", },
+                "rashodi": { 'value' : 15000, 'color': "#67b6c7", },
+                "Internet": { 'value' : 2100, 'color': "#bccd7a", },
+                "Svet/Elektro": { 'value' : 1000, 'color': "#eb9743", },
             },
             'february' : {
-                "dohodi": 33000,
-                "rashodi": 19000,
-                "Internet": 2100,
-                "Svet/Elektro": 2300,
+                "dohodi": { 'value' : 33000, 'color': "#a55ca5", },
+                "rashodi": { 'value' : 19000, 'color': "#67b6c7", },
+                "Internet": { 'value' : 2100, 'color': "#bccd7a", },
+                "Svet/Elektro": { 'value' : 2300, 'color': "#eb9743", },
             },
             'march' : {
-                "dohodi": 15000,
-                "rashodi": 29000,
-                "Internet": 2500,
-                "Svet/Elektro": 1100,
+                "dohodi": { 'value' : 15000, 'color': "#a55ca5", },
+                "rashodi": { 'value' : 29000, 'color': "#67b6c7", },
+                "Internet": { 'value' : 2500, 'color': "#bccd7a", },
+                "Svet/Elektro": { 'value' : 1100, 'color': "#eb9743", },
             },
-            'aprile' : {
-                "dohodi": 17000,
-                "rashodi": 12000,
-                "Internet": 2100,
-                "Svet/Elektro": 1500,
+            'april' : {
+                "dohodi": { 'value' : 17000, 'color': "#a55ca5", },
+                "rashodi": { 'value' : 12000, 'color': "#67b6c7", },
+                "Internet": { 'value' : 2100, 'color': "#bccd7a", },
+                "Svet/Elektro": { 'value' : 1500, 'color': "#eb9743", },
             },
         };
 
-        var tagValuesChart = new Barchart(
+        let tagValuesChart = new Barchart(
             {
                 seriesName:"Tag Values - current month",
                 canvas:canvas,
@@ -198,7 +224,6 @@
                 gridScale:5,
                 gridColor:"#000",
                 data:tagValues,
-                colors:["#a55ca5","#67b6c7", "#bccd7a","#eb9743"]
             }
         );
         tagValuesChart.draw();
