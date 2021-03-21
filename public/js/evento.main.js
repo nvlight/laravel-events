@@ -40,6 +40,10 @@ var categoryEditModal;
 var tagvaluesPieDiagrammModal;
 var tagvaluesMonthDiagrammModal;
 
+let mainFilterId = document.getElementById('mainFilter');
+let mainFilterModalId = document.querySelector('#tagvalue-main-filter');
+let mainFilterModal;
+
 var pieDiagrammCanvas = document.getElementById("pieDiagrammCanvas");
 let pieDiagrammCanvasContext = pieDiagrammCanvas.getContext("2d");
 pieDiagrammCanvas.width = 250;
@@ -317,6 +321,12 @@ function tagvaluesPieDiagrammFunction() {
 function tagvaluesMonthDiagrammFunction() {
     if (tagvaluesMonthDiagrammId){
         tagvaluesMonthDiagrammModal = new bootstrap.Modal(tagvaluesMonthDiagrammId, {keyboard: false});
+    }
+}
+
+function mainFilterModalFunction() {
+    if (mainFilterModalId){
+        mainFilterModal = new bootstrap.Modal(mainFilterModalId, {keyboard: false});
     }
 }
 
@@ -1435,6 +1445,8 @@ function eventoDeleteAjax(eventoId){
 function setFlatpickrInstances(){
     flatpickr(".flatpickrEventoCreateDate");
     flatpickr(".flatpickrEventoEditDate");
+    flatpickr(".mainFilterStartDate");
+    flatpickr(".mainFilterEndDate");
 }
 
 function eventoGetAjaxHanlder(){
@@ -2520,6 +2532,31 @@ function monthTagValueGistogramm__hideSpin() {
 // end
 ////// gistogramm data - tagValues
 
+function mainFilterIdFunction() {
+    if (mainFilterId && mainFilterModal){
+        mainFilterId.onclick = function (e) {
+
+            mainFilterModal.show();
+
+            return false;
+        }
+    }
+}
+
+function tagValueMainFilterFormSubmitHandler() {
+    let form = document.querySelector('form[name=tagValueMainFilterForm]');
+    if (form){
+        form.onsubmit = function (e) {
+
+            let formData = new FormData(e.currentTarget);
+
+            //tagValuesMonthGistogrammSvgXhr(formData);
+
+            return false;
+        }
+    }
+}
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -2564,6 +2601,10 @@ function functionsInitialStart(){
     GistogrammTagValuesByYearFormSubmitHandler();
     tagValuesMonthGistogrammSvgHandler();
     tagvaluesMonthDiagrammFunction();
+
+    mainFilterModalFunction();
+    mainFilterIdFunction();
+    tagValueMainFilterFormSubmitHandler();
 }
 functionsInitialStart();
 // end
