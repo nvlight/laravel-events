@@ -128,9 +128,10 @@ var Piechart = function(options){
 //tagValues = {};
 //tagColors = [];
 
-let canvas = document.getElementById("monthGistogrammCanvas");
-canvas.width = 450;
-canvas.height = 400;
+let monthGistogrammCanvas = document.getElementById("monthGistogrammCanvas");
+let monthGistogrammCanvasContext = monthGistogrammCanvas.getContext("2d");
+monthGistogrammCanvas.width = 450;
+monthGistogrammCanvas.height = 400;
 
 let Barchart = function(options){
     this.options = options;
@@ -2383,7 +2384,13 @@ function tagValuesMonthGistogrammSvgHandler() {
 }
 
 function tagValuesMonthGistogrammSvgXhr(formData) {
-    const url = "/cabinet/evento/eventotagcounting/get_month_gistogramm_by_year_ajax/";
+    let url = "/cabinet/evento/eventotagcounting/get_month_gistogramm_by_year_ajax/";
+
+    if (formData.has('year')){
+        url += formData.get('year');
+    }else{
+        url += (new Date).getFullYear();
+    }
 
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url);
@@ -2437,7 +2444,7 @@ function tagValuesMonthGistogrammSvgXhr(formData) {
 
                 let tagValuesChart = new Barchart(
                     {
-                        canvas:canvas,
+                        canvas:monthGistogrammCanvas,
                         canvas_id:'monthGistogrammCanvas',
                         padding:15,
                         gridScale:5,
@@ -2445,6 +2452,7 @@ function tagValuesMonthGistogrammSvgXhr(formData) {
                         data:tagValues,
                     }
                 );
+                monthGistogrammCanvasContext.clearRect(0, 0, monthGistogrammCanvas.width, monthGistogrammCanvas.height);
                 tagValuesChart.draw();
 
                 let yearsSelect = document.querySelector('.getMonthDiagrammByYear__wrapper select[name="year"]');
@@ -2463,6 +2471,20 @@ function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color){
     ctx.fillStyle=color;
     ctx.fillRect(upperLeftCornerX,upperLeftCornerY,width,height);
     ctx.restore();
+}
+
+function GistogrammTagValuesByYearFormSubmitHandler() {
+    let form = document.querySelector('form[name=monthDiagrammByYear]');
+    if (form){
+        form.onsubmit = function (e) {
+
+            let formData = new FormData(e.currentTarget);
+
+            tagValuesMonthGistogrammSvgXhr(formData);
+
+            return false;
+        }
+    }
 }
 
 // end
@@ -2509,6 +2531,7 @@ function functionsInitialStart(){
     tagValuesPieDiagrammSvgHandler();
     DiagrammPieByYearFormSubmitHandler();
 
+    GistogrammTagValuesByYearFormSubmitHandler();
     tagValuesMonthGistogrammSvgHandler();
     tagvaluesMonthDiagrammFunction();
 }

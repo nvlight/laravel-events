@@ -111,9 +111,7 @@ class EventoTagCountingDiagram extends Controller
         die(json_encode($rs));
     }
 
-    protected function getGistogrammDataByYear($year=null){
-        $year = $currentYear ?? $this->getCurrentYear();
-
+    protected function getGistogrammDataByYear($year){
         $query = Evento::
             leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
             ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
@@ -155,9 +153,9 @@ class EventoTagCountingDiagram extends Controller
         return $res;
     }
 
-    public function getGistogrammDataHandler(){
+    public function getGistogrammDataHandler($currentYear){
 
-        $data = $this->getGistogrammDataByYear();
+        $data = $this->getGistogrammDataByYear($currentYear);
         $restruct = $this->restructureGistogrammData($data);
 
         //$this->d($data,2);
