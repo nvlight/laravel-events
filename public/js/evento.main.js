@@ -41,6 +41,7 @@ var tagvaluesPieDiagrammModal;
 var tagvaluesMonthDiagrammModal;
 
 var pieDiagrammCanvas = document.getElementById("pieDiagrammCanvas");
+let pieDiagrammCanvasContext = pieDiagrammCanvas.getContext("2d");
 pieDiagrammCanvas.width = 250;
 pieDiagrammCanvas.height = 250;
 
@@ -2329,7 +2330,7 @@ function getDiagrammPieByYearXhr(formData) {
                     legend: pieDiagrammLegend,
                     //doughnutHoleSize:0.5,
                 });
-
+                pieDiagrammCanvasContext.clearRect(0, 0, pieDiagrammCanvas.width, pieDiagrammCanvas.height);
                 tagValuesDiagramm.draw();
                 tagvaluesPieDiagrammModal.show();
 
@@ -2395,6 +2396,12 @@ function tagValuesMonthGistogrammSvgXhr(formData) {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url);
 
+    // hide spinMessage__*
+    // show spin
+    let spinWrapper = spinMessage__getScopeClass('.getMonthDiagrammByYear__wrapper');
+    spinMessage__hide(spinWrapper);
+    spinMessage__showSpin(spinWrapper);
+
     xhr.addEventListener("readystatechange", () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let rs = JSON.parse(xhr.responseText);
@@ -2459,8 +2466,26 @@ function tagValuesMonthGistogrammSvgXhr(formData) {
                 let year = +rs['current_year'];
                 addYearsAndsetCurrentYearSelectedForPieDiagramm(rs['years'], yearsSelect);
                 setOptionSelected(yearsSelect, year);
+
+                spinMessage__setClassForMessageHandler(spinWrapper, rs['success']);
+                spinMessage__setMessage(spinWrapper, rs['message']);
+                let none_class = 'none_' + Math.random().toString(36).substring(7);
+                spinMessage__showMessage(spinWrapper, none_class);
             }
         }
+    });
+
+    xhr.addEventListener("progress", () => {
+        monthTagValueGistogramm__hideSpin();
+    });
+    xhr.addEventListener("load", () => {
+        monthTagValueGistogramm__hideSpin();
+    });
+    xhr.addEventListener("error", () => {
+        monthTagValueGistogramm__hideSpin();
+    });
+    xhr.addEventListener("abort", () => {
+        monthTagValueGistogramm__hideSpin();
     });
 
     xhr.send(formData);
@@ -2486,6 +2511,11 @@ function GistogrammTagValuesByYearFormSubmitHandler() {
         }
     }
 }
+
+function monthTagValueGistogramm__hideSpin() {
+    let spinWrapper = spinMessage__getScopeClass('.getMonthDiagrammByYear__wrapper');
+    spinMessage__hideSpin(spinWrapper);
+};
 
 // end
 ////// gistogramm data - tagValues
