@@ -50,9 +50,7 @@ class EventoTagCountingDiagram extends Controller
     protected function getYears()
     {
         $q = Evento::
-        leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
-            ->leftJoin('evento_categories','evento_categories.id','=','evento_evento_categories.category_id')
-            ->leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
+                leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
             ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
             ->join('evento_evento_tag_values','evento_evento_tag_values.evento_evento_tags_id','=','evento_evento_tags.id')
             ->where('evento_eventos.user_id', auth()->id())
@@ -71,9 +69,7 @@ class EventoTagCountingDiagram extends Controller
         $year = $currentYear ?? $this->getCurrentYear();
 
         $eventoTagQuery = Evento::
-        leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
-            ->leftJoin('evento_categories','evento_categories.id','=','evento_evento_categories.category_id')
-            ->leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
+            leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
             ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
             ->join('evento_evento_tag_values','evento_evento_tag_values.evento_evento_tags_id','=','evento_evento_tags.id')
             ->where('evento_eventos.user_id', auth()->id())
@@ -111,6 +107,76 @@ class EventoTagCountingDiagram extends Controller
         $pie = $this->getPieData($currentYear);
         $rs = ['success' => 1, 'message' => 'pie data is geted!!', 'pie' => $pie, 'years' => $this->getYears(),
             'current_year' => $currentYear,];
+
+        die(json_encode($rs));
+    }
+
+    protected function getGistogrammDataByYear($year=null){
+        $year = $currentYear ?? $this->getCurrentYear();
+
+        $query = Evento::
+            leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
+            ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
+            ->join('evento_evento_tag_values','evento_evento_tag_values.evento_evento_tags_id','=','evento_evento_tags.id')
+            ->where('evento_eventos.user_id', auth()->id())
+            ->where(DB::raw('year(evento_eventos.date)'), $year)
+            ->select(
+                'evento_eventos.date',
+                DB::raw('MONTHNAME(evento_eventos.date) as month'),
+                'evento_tags.name as tag_name',
+                'evento_tags.color as tag_color',
+                'evento_evento_tag_values.value as tag_value'
+            )
+            ->orderBy('evento_eventos.date')
+        ;
+
+        $result = $query->get()->toArray();
+
+        return $result;
+    }
+
+    protected function restructureGistogrammData($data){
+        $res = [];
+
+        foreach($data as $k => $v){
+            if (! isset($res[$v['month']][$v['tag_name']]) ) {
+                $res[$v['month']][$v['tag_name']] = [
+                    'tag_color' => $v['tag_color'],
+                    'tag_value' => $v['tag_value'],
+                ];
+            }else{
+                $res[$v['month']][$v['tag_name']] = [
+                    'tag_color' => $v['tag_color'],
+                    'tag_value' => $res[$v['month']][$v['tag_name']]['tag_value'] += $v['tag_value'],
+                ];
+            }
+        }
+
+        return $res;
+    }
+
+    public function getGistogrammDataHandler(){
+
+        $data = $this->getGistogrammDataByYear();
+        $restruct = $this->restructureGistogrammData($data);
+
+        //$this->d($data,2);
+        //$this->d($restruct,2);
+
+        return $restruct;
+    }
+
+    public function getGistogrammDataByYearAjax($year=null){
+        $currentYear = $year ?? $this->getCurrentYear();
+
+        $gistogramm = $this->getGistogrammDataHandler($currentYear);
+        $rs = [
+            'success' => 1,
+            'message' => 'gistogramm is geted!',
+            'gistogramm' => $gistogramm,
+            'years' => $this->getYears(),
+            'current_year' => $currentYear,
+        ];
 
         die(json_encode($rs));
     }

@@ -8,27 +8,13 @@
     <title>Gistogramm js</title>
 </head>
 <body>
-    <div class="canvas_wrapper" style="width: 100%;">
-        <canvas id="js_gistogramm_month"></canvas>
-    </div>
+    <canvas id="monthGistogrammCanvas"></canvas>
 
-    <legend for="js_gistogramm_month"></legend>
+    <legend for="monthGistogrammCanvas"></legend>
     <script>
-        let canvas = document.getElementById("js_gistogramm_month");
+        let canvas = document.getElementById("monthGistogrammCanvas");
         canvas.width = 700;
         canvas.height = 300;
-
-        let ctx = canvas.getContext("2d");
-
-        function drawLine(ctx, startX, startY, endX, endY,color){
-            ctx.save();
-            ctx.strokeStyle = color;
-            ctx.beginPath();
-            ctx.moveTo(startX,startY);
-            ctx.lineTo(endX,endY);
-            ctx.stroke();
-            ctx.restore();
-        }
 
         function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color){
             ctx.save();
@@ -59,29 +45,6 @@
 
                 let canvasActualHeight = this.canvas.height - this.options.padding * 2;
                 let canvasActualWidth = this.canvas.width - this.options.padding * 2;
-
-                //drawing the grid lines
-                // let gridValue = 0;
-                // while (gridValue <= maxValue){
-                //     let gridY = canvasActualHeight * (1 - gridValue/maxValue) + this.options.padding;
-                //     drawLine(
-                //         this.ctx,
-                //         0,
-                //         gridY,
-                //         this.canvas.width,
-                //         gridY,
-                //         this.options.gridColor
-                //     );
-                //
-                //     //writing grid markers
-                //     this.ctx.save();
-                //     this.ctx.fillStyle = this.options.gridColor;
-                //     this.ctx.font = "bold 10px Arial";
-                //     this.ctx.fillText(gridValue, 10,gridY - 2);
-                //     this.ctx.restore();
-                //
-                //     gridValue+=this.options.gridScale;
-                // }
 
                 //drawing the bars
                 let barIndex = 0;
@@ -148,7 +111,10 @@
                 // this.ctx.restore();
 
                 //draw legend
-                let legend = document.querySelector("legend[for='js_gistogramm_month']");
+                let selector = `legend[for="${options.canvas_id}"]`;
+                let legend = document.querySelector(selector);
+                //console.log(selector);
+                //console.log(legend);
                 if (legend){
                     let ul = document.createElement("ul");
                     legend.append(ul);
@@ -217,9 +183,8 @@
 
         let tagValuesChart = new Barchart(
             {
-                seriesName:"Tag Values - current month",
                 canvas:canvas,
-                canvas_id:'js_gistogramm_month',
+                canvas_id:'monthGistogrammCanvas',
                 padding:15,
                 gridScale:5,
                 gridColor:"#000",

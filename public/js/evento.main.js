@@ -33,16 +33,16 @@ var tagEditModal = document.getElementById('edit-tag-modal');
 var deleteEventoMessage = 'Delete evento?';
 var categoryEditId = document.getElementById('edit-category-modal');
 var tagvaluesPieDiagrammId = document.getElementById('tagvalue-pie-modal');
+var tagvaluesMonthDiagrammId = document.getElementById('tagvalue-gistogramm-modal');
 
-var isInEventoEditModalDeleteButtonPressed = false;
 var classListFor__spinMessage = ['text-danger', 'text-success'];
 var categoryEditModal;
 var tagvaluesPieDiagrammModal;
+var tagvaluesMonthDiagrammModal;
 
-var myCanvas = document.getElementById("pieDiagrammCanvas");
-myCanvas.width = 250;
-myCanvas.height = 250;
-var ctx = myCanvas.getContext("2d");
+var pieDiagrammCanvas = document.getElementById("pieDiagrammCanvas");
+pieDiagrammCanvas.width = 250;
+pieDiagrammCanvas.height = 250;
 
 var Piechart = function(options){
     this.options = options;
@@ -128,6 +128,142 @@ var Piechart = function(options){
 //tagValues = {};
 //tagColors = [];
 
+let canvas = document.getElementById("monthGistogrammCanvas");
+canvas.width = 450;
+canvas.height = 400;
+
+let Barchart = function(options){
+    this.options = options;
+    this.canvas = options.canvas;
+    this.ctx = this.canvas.getContext("2d");
+    this.colors = options.colors;
+
+    this.draw = function(){
+
+        let numberOfBars = 0;
+        let numberOfGroups = 0;
+        let maxValue = 0;
+        for (let i in this.options.data) {
+            for (let j in this.options.data[i]) {
+                maxValue = Math.max(maxValue, this.options.data[i][j]['value']);
+                numberOfBars++;
+            }
+            numberOfGroups++;
+        }
+        //console.log('maxValue: '+maxValue);
+
+        let canvasActualHeight = this.canvas.height - this.options.padding * 2;
+        let canvasActualWidth = this.canvas.width - this.options.padding * 2;
+
+        //drawing the bars
+        let barIndex = 0;
+        let barOffset = 10;
+        let barSize = (canvasActualWidth)/ (numberOfBars + numberOfGroups - 1);
+
+        let offset = 0; //for
+        for (let i in this.options.data){
+
+            let val0 = this.options.data[i];
+
+            let firstOffset = 0;
+            for (let j in val0){
+
+                if (!firstOffset){
+                    firstOffset++;
+
+                    // draw month title
+                    this.ctx.save();
+                    this.ctx.fillStyle = this.options.gridColor;
+                    this.ctx.font = "bold 11px Arial";
+                    this.ctx.fillText(i,
+                        this.options.padding + (barIndex * barSize) + offset,
+                        this.canvas.height - this.options.padding + 11);
+                    this.ctx.restore();
+                }
+
+                let val   = val0[j]['value'];
+                let color = val0[j]['color'];
+
+                let barHeight = Math.round( canvasActualHeight * val/maxValue);
+                drawBar(
+                    this.ctx,
+                    this.options.padding + barIndex * barSize + offset,
+                    this.canvas.height - barHeight - this.options.padding,
+                    barSize,
+                    barHeight,
+                    color,
+                );
+
+                //draw bar value
+                this.ctx.save();
+                this.ctx.fillStyle = this.options.gridColor;
+                this.ctx.font = "bold 11px Arial";
+                this.ctx.fillText(val,
+                    //this.options.padding + (barIndex * barSize + barSize/2 - val.toString().length*2 ) + offset,
+                    this.options.padding + (barIndex * barSize + 3) + offset,
+                    this.canvas.height - barHeight - this.options.padding - 5);
+                this.ctx.restore();
+                barIndex++;
+
+            }
+
+            offset += barOffset;
+        }
+
+        //drawing series name
+        // this.ctx.save();
+        // this.ctx.textBaseline="bottom";
+        // this.ctx.textAlign="center";
+        // this.ctx.fillStyle = "#000000";
+        // this.ctx.font = "bold 14px Arial";
+        // this.ctx.fillText(this.options.seriesName, this.canvas.width/2,this.canvas.height);
+        // this.ctx.restore();
+
+        //draw legend
+        let selector = `legend[for="${options.canvas_id}"]`;
+        let legend = document.querySelector(selector);
+        //console.log(selector);
+        //console.log(legend);
+        if (legend){
+            legend.innerHTML = "";
+            let ul = document.createElement("ul");
+            legend.append(ul);
+
+            let columnNames = {};
+            let columnColors = {};
+            for (let i in this.options.data){
+                for (let j in this.options.data[i]){
+                    let vl = this.options.data[i][j];
+
+                    if (!columnNames[j]){
+                        columnNames[j] = vl['value'];
+                    }else{
+                        columnNames[j] += vl['value'];
+                    }
+
+                    if (!columnColors[j]){
+                        columnColors[j] = vl['color'];
+                    }
+                }
+            }
+            //console.log(columnNames);
+            //console.log(columnColors);
+
+            barIndex = 0;
+            for (let i in columnNames){
+                let li = document.createElement("li");
+                li.style.listStyle = "none";
+                li.style.borderLeft = "20px solid "+columnColors[i];
+                li.style.padding = "5px";
+                li.textContent = i + ` (${columnNames[i]})`;
+                ul.append(li);
+                barIndex++;
+            }
+        }
+
+    }
+}
+
 function conlog(e){
     console.log(e);
 }
@@ -173,6 +309,12 @@ function categoryEditModalFunction(){
 function tagvaluesPieDiagrammFunction() {
     if (tagvaluesPieDiagrammId){
         tagvaluesPieDiagrammModal = new bootstrap.Modal(tagvaluesPieDiagrammId, {keyboard: false});
+    }
+}
+
+function tagvaluesMonthDiagrammFunction() {
+    if (tagvaluesMonthDiagrammId){
+        tagvaluesMonthDiagrammModal = new bootstrap.Modal(tagvaluesMonthDiagrammId, {keyboard: false});
     }
 }
 
@@ -2045,7 +2187,7 @@ function tagValuesPieDiagrammSvgXhr(formData) {
                 // conlog(tagValues);
 
                 var tagValuesDiagramm = new Piechart({
-                    canvas: myCanvas,
+                    canvas: pieDiagrammCanvas,
                     data:   tagValues,
                     colors: tagColors,
                     legend: pieDiagrammLegend,
@@ -2180,7 +2322,7 @@ function getDiagrammPieByYearXhr(formData) {
                 //conlog(tagValues);
 
                 var tagValuesDiagramm = new Piechart({
-                    canvas: myCanvas,
+                    canvas: pieDiagrammCanvas,
                     data:   tagValues,
                     colors: tagColors,
                     legend: pieDiagrammLegend,
@@ -2223,6 +2365,109 @@ function getPieDiagrammCategory__hideSpin() {
     spinMessage__hideSpin(spinWrapper);
 };
 
+////// gistogramm data - tagValues
+// start
+
+function tagValuesMonthGistogrammSvgHandler() {
+    let btn = document.querySelector('#tagValuesMonthGistogrammSvg');
+    if (btn){
+        btn.onclick = function(e) {
+            //conlog('tagValuesMonthGistogrammSvg pressed!');
+
+            let formData = new FormData();
+            tagValuesMonthGistogrammSvgXhr(formData);
+
+            return false;
+        }
+    }
+}
+
+function tagValuesMonthGistogrammSvgXhr(formData) {
+    const url = "/cabinet/evento/eventotagcounting/get_month_gistogramm_by_year_ajax/";
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+
+            if (rs['success']){
+
+                tagvaluesMonthDiagrammModal.show();
+
+                let tagValues = {};
+
+                for (let i in rs['gistogramm']){
+                    tagValues[i] = {};
+                    for (let j in rs['gistogramm'][i]){
+                        tagValues[i][j] = {};
+                        tagValues[i][j]['value'] = +rs['gistogramm'][i][j]['tag_value'];
+                        tagValues[i][j]['color'] =  rs['gistogramm'][i][j]['tag_color'];
+                    }
+                }
+                //conlog(tagValues);
+                // tagValues = {
+                //     'january' : {
+                //         "dohodi": { 'value' : 25000, 'color': "#a55ca5", },
+                //         "rashodi": { 'value' : 15000, 'color': "#67b6c7", },
+                //         "Internet": { 'value' : 2100, 'color': "#bccd7a", },
+                //         "Svet/Elektro": { 'value' : 1000, 'color': "#eb9743", },
+                //     },
+                //     'february' : {
+                //         "dohodi": { 'value' : 33000, 'color': "#a55ca5", },
+                //         "rashodi": { 'value' : 19000, 'color': "#67b6c7", },
+                //         "Internet": { 'value' : 2100, 'color': "#bccd7a", },
+                //         "Svet/Elektro": { 'value' : 2300, 'color': "#eb9743", },
+                //     },
+                //     'march' : {
+                //         "dohodi": { 'value' : 15000, 'color': "#a55ca5", },
+                //         "rashodi": { 'value' : 29000, 'color': "#67b6c7", },
+                //         "Internet": { 'value' : 2500, 'color': "#bccd7a", },
+                //         "Svet/Elektro": { 'value' : 1100, 'color': "#eb9743", },
+                //     },
+                //     'april' : {
+                //         "dohodi": { 'value' : 17000, 'color': "#a55ca5", },
+                //         "rashodi": { 'value' : 12000, 'color': "#67b6c7", },
+                //         "Internet": { 'value' : 2100, 'color': "#bccd7a", },
+                //         "Svet/Elektro": { 'value' : 1500, 'color': "#eb9743", },
+                //     },
+                // };
+                // conlog(tagValues);
+
+                let tagValuesChart = new Barchart(
+                    {
+                        canvas:canvas,
+                        canvas_id:'monthGistogrammCanvas',
+                        padding:15,
+                        gridScale:5,
+                        gridColor:"#000",
+                        data:tagValues,
+                    }
+                );
+                tagValuesChart.draw();
+
+                let yearsSelect = document.querySelector('.getMonthDiagrammByYear__wrapper select[name="year"]');
+                let year = +rs['current_year'];
+                addYearsAndsetCurrentYearSelectedForPieDiagramm(rs['years'], yearsSelect);
+                setOptionSelected(yearsSelect, year);
+            }
+        }
+    });
+
+    xhr.send(formData);
+}
+
+function drawBar(ctx, upperLeftCornerX, upperLeftCornerY, width, height,color){
+    ctx.save();
+    ctx.fillStyle=color;
+    ctx.fillRect(upperLeftCornerX,upperLeftCornerY,width,height);
+    ctx.restore();
+}
+
+// end
+////// gistogramm data - tagValues
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -2263,6 +2508,9 @@ function functionsInitialStart(){
 
     tagValuesPieDiagrammSvgHandler();
     DiagrammPieByYearFormSubmitHandler();
+
+    tagValuesMonthGistogrammSvgHandler();
+    tagvaluesMonthDiagrammFunction();
 }
 functionsInitialStart();
 // end

@@ -379,6 +379,7 @@ Route::group(
 
         Route::get('/get_pie_ajax', 'EventoTagCountingDiagram@getPieAjax')->name('get_pie_ajax');
         Route::get('/get_pie_ajax_by_year/{year?}', 'EventoTagCountingDiagram@getPieAjaxByYear')->name('get_pie_ajax_by_year');
+        Route::get('/get_month_gistogramm_by_year_ajax/{year?}', 'EventoTagCountingDiagram@getGistogrammDataByYearAjax')->name('get_month_gistogramm_by_year_ajax');
     });
 
     Route::get('/', 'EventoController@index')->name('index');
@@ -415,6 +416,7 @@ Route::group([
     Route::get('/', [App\Http\Controllers\Test\TestController::class, 'index']);
 
     Route::get('/js_gistogramm', [App\Http\Controllers\Test\TestController::class, 'gistogramJsTest']);
+    Route::get('/js_gistogramm_data', [App\Http\Controllers\Evento\EventoTagCountingDiagram::class, 'getGistogrammDataHandler']);
 
     Route::get('/test_typehunting/{index}', function(int $index){
         return sprintf("#%s block", $index); // $index;
