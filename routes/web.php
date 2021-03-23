@@ -398,6 +398,13 @@ Route::group(
 
 });
 
+Route::group(['prefix' => 'evento', 'as' => 'evento.'], function (){
+    Route::group(['prefix' => 'main_filter', 'as' => 'main_filter.'], function (){
+        Route::get('/get_categories', 'Evento\MainFilterController@getCategories')->name('get_categories');
+        Route::get('/get_tags', 'Evento\MainFilterController@getTags')->name('get_tags');
+    });
+});
+
 Route::group([
     'prefix' => 'bootstrap5', // prefix for url
     'as' => 'bootstrap5.',    // prefix for names
@@ -420,6 +427,11 @@ Route::group([
 
     Route::get('/test_typehunting/{index}', function(int $index){
         return sprintf("#%s block", $index); // $index;
+    });
+
+    Route::group(['prefix' => '/main_filter', 'as' => 'main_filter.'], function (){
+        Route::get('/get_tags', [App\Http\Controllers\Evento\MainFilterController::class, 'getTags' ]);
+        Route::get('/get_categories', [App\Http\Controllers\Evento\MainFilterController::class, 'getCategories' ]);
     });
 });
 

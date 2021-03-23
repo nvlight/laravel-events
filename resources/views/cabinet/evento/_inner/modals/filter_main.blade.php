@@ -15,7 +15,7 @@
                         <div class="form-group">
                             <label class="w-100">
                                 <span>categories</span>
-                                <select name="category_ids" class="form-control w-100">
+                                <select name="category_ids" class="form-control w-100" multiple>
                                     <option value="0">select</option>
                                 </select>
                             </label>
@@ -24,7 +24,7 @@
                         <div class="form-group">
                             <label class="w-100">
                                 <span>tags</span>
-                                <select name="tag_ids" class="form-control w-100">
+                                <select name="tag_ids" class="form-control w-100" multiple>
                                     <option value="0">select</option>
                                 </select>
                             </label>

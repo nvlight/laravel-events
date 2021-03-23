@@ -324,12 +324,6 @@ function tagvaluesMonthDiagrammFunction() {
     }
 }
 
-function mainFilterModalFunction() {
-    if (mainFilterModalId){
-        mainFilterModal = new bootstrap.Modal(mainFilterModalId, {keyboard: false});
-    }
-}
-
 function categoryAddEditButtonCatch() {
     var categoryAddEditButton = document.querySelectorAll('.category_edit_for_crud');
 
@@ -2553,6 +2547,90 @@ function tagValueMainFilterFormSubmitHandler() {
             //tagValuesMonthGistogrammSvgXhr(formData);
 
             return false;
+        }
+    }
+}
+
+function mainFilter__getCategoriesXhr() {
+    let url = "/evento/main_filter/get_categories/";
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+
+            if (rs['success']){
+
+                //setOptionSelected(categorySelect, 0);
+
+                let categorySelect = document.querySelector('form[name=tagValueMainFilterForm] select[name="category_ids"]');
+                if (categorySelect){
+                    pushToSelect(rs['rs'], 'name', categorySelect);
+                }
+            }
+        }
+    });
+
+    xhr.send();
+}
+function mainFilter__getTagsXhr() {
+    let url = "/evento/main_filter/get_tags/";
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+
+            if (rs['success']){
+
+                //setOptionSelected(categorySelect, 0);
+
+                let tagSelect = document.querySelector('form[name=tagValueMainFilterForm] select[name="tag_ids"]');
+                if (tagSelect){
+                    pushToSelect(rs['rs'], 'name', tagSelect);
+                }
+
+            }
+        }
+    });
+
+    xhr.send();
+}
+function mainFilterModalFunction() {
+    if (mainFilterModalId){
+        mainFilterModal = new bootstrap.Modal(mainFilterModalId, {keyboard: false});
+        mainFilterModalId.addEventListener('shown.bs.modal', function () {
+            //conlog('mainFilterModal: shown.bs.modal');
+            mainFilter__getCategoriesXhr();
+            mainFilter__getTagsXhr();
+        });
+    }
+}
+
+function clearSelect(selector) {
+    if (selector){
+        removeOptions(selector);
+    }
+}
+function pushToSelect(array, key, selector, default_select=1) {
+    if (array.length && selector){
+        clearSelect(selector);
+
+        if (default_select){
+            let option = document.createElement("option");
+            option.text = 'Select';
+            selector.add(option);
+        }
+
+        for (let i = 0; i < array.length; i++) {
+            let option = document.createElement("option");
+            option.text = array[i][key];
+            option.value = +array[i][key];
+            selector.add(option);
         }
     }
 }
