@@ -7,26 +7,39 @@
             </div>
 
             <div class="modal-body">
-                <form action="{{ route('cabinet.evento.eventotagcounting.get_month_gistogramm_by_year_ajax') }}"
+                <form action="{{ route('evento.main_filter.filter') }}"
                       name="tagValueMainFilterForm" class="d-inline-flex spinMessage__wrapper tagValueMainFilter__wrapper">
 
+                    @csrf
                     <div class="d-flex flex-column">
 
                         <div class="form-group">
                             <label class="w-100">
-                                <span>categories</span>
-                                <select name="category_ids" class="form-control w-100" multiple>
+                                <span></span>
+                                <select name="category_ids[]" class="form-control w-100" multiple>
                                     <option value="0">select</option>
                                 </select>
                             </label>
                         </div>
-
                         <div class="form-group">
                             <label class="w-100">
+                                <input type="checkbox" name="all_categories" class="form-check-input">
+                                <span>choose all categories</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label class="w-100">
                                 <span>tags</span>
-                                <select name="tag_ids" class="form-control w-100" multiple>
+                                <select name="tag_ids[]" class="form-control w-100" multiple>
                                     <option value="0">select</option>
                                 </select>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="w-100">
+                                <input type="checkbox" name="all_tags" class="form-check-input">
+                                <span>choose all tags</span>
                             </label>
                         </div>
 

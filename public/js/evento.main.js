@@ -2543,13 +2543,33 @@ function tagValueMainFilterFormSubmitHandler() {
         form.onsubmit = function (e) {
 
             let formData = new FormData(e.currentTarget);
+            //let formData = new FormData(form);
 
-            //tagValuesMonthGistogrammSvgXhr(formData);
+            mainFilter__getXhr(formData);
 
             return false;
         }
     }
 }
+function mainFilter__getXhr(formData) {
+    let url = "/evento/main_filter/filter/";
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+
+    xhr.addEventListener("readystatechange", () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let rs = JSON.parse(xhr.responseText);
+
+            if (rs['success']){
+
+            }
+        }
+    });
+
+    xhr.send(formData);
+}
+
 
 function mainFilter__getCategoriesXhr() {
     let url = "/evento/main_filter/get_categories/";
@@ -2565,9 +2585,9 @@ function mainFilter__getCategoriesXhr() {
 
                 //setOptionSelected(categorySelect, 0);
 
-                let categorySelect = document.querySelector('form[name=tagValueMainFilterForm] select[name="category_ids"]');
+                let categorySelect = document.querySelector('form[name=tagValueMainFilterForm] select[name="category_ids[]"]');
                 if (categorySelect){
-                    pushToSelect(rs['rs'], 'name', categorySelect);
+                    pushToSelect(rs['rs'], 'name', 'id', categorySelect);
                 }
             }
         }
@@ -2589,9 +2609,9 @@ function mainFilter__getTagsXhr() {
 
                 //setOptionSelected(categorySelect, 0);
 
-                let tagSelect = document.querySelector('form[name=tagValueMainFilterForm] select[name="tag_ids"]');
+                let tagSelect = document.querySelector('form[name=tagValueMainFilterForm] select[name="tag_ids[]"]');
                 if (tagSelect){
-                    pushToSelect(rs['rs'], 'name', tagSelect);
+                    pushToSelect(rs['rs'], 'name', 'id', tagSelect);
                 }
 
             }
@@ -2616,21 +2636,22 @@ function clearSelect(selector) {
         removeOptions(selector);
     }
 }
-function pushToSelect(array, key, selector, default_select=1) {
+function pushToSelect(array, text_key, value_key, selector, default_select=0) {
     if (array.length && selector){
         clearSelect(selector);
 
         if (default_select){
             let option = document.createElement("option");
-            option.text = 'Select';
+            option.text = 'Select default';
             selector.add(option);
         }
 
         for (let i = 0; i < array.length; i++) {
             let option = document.createElement("option");
-            option.text = array[i][key];
-            option.value = +array[i][key];
+            option.text = array[i][text_key];
+            option.value = +array[i][value_key];
             selector.add(option);
+            //conlog(option.text + ' --- ' + option.value);
         }
     }
 }

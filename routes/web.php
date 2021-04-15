@@ -402,6 +402,7 @@ Route::group(['prefix' => 'evento', 'as' => 'evento.'], function (){
     Route::group(['prefix' => 'main_filter', 'as' => 'main_filter.'], function (){
         Route::get('/get_categories', 'Evento\MainFilterController@getCategories')->name('get_categories');
         Route::get('/get_tags', 'Evento\MainFilterController@getTags')->name('get_tags');
+        Route::post('/filter', 'Evento\MainFilterController@filter')->name('filter');
     });
 });
 

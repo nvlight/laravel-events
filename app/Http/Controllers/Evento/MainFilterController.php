@@ -63,4 +63,20 @@ class MainFilterController extends Controller
 
         $this->dieJsonEncode($categories);
     }
+
+    protected function filterHandle(){
+
+        $requestData = request()->all();
+
+        $result = ['success' => 1, 'message' => 'dummy filter', 'requestData' => $requestData];
+
+        return $result;
+    }
+
+    public function filter(){
+
+        $filter = $this->filterHandle();
+
+        $this->dieJsonEncode($filter);
+    }
 }
