@@ -63,7 +63,7 @@
 
                             <label class="ml-2">
                                 <span>Сумма конечная</span>
-                                <input class="form-control " id="amount2" name="amount2" placeholder="0" value="111000">
+                                <input class="form-control " id="amount2" name="amount2" placeholder="300000" value="300000">
                             </label>
                         </div>
 
