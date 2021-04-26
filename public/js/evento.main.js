@@ -44,6 +44,9 @@ let mainFilterId = document.getElementById('mainFilter');
 let mainFilterModalId = document.querySelector('#tagvalue-main-filter');
 let mainFilterModal;
 
+let filteredResultModalId = document.querySelector('#filtered-result-modal');
+let filteredResultModal;
+
 var pieDiagrammCanvas = document.getElementById("pieDiagrammCanvas");
 let pieDiagrammCanvasContext = pieDiagrammCanvas.getContext("2d");
 pieDiagrammCanvas.width = 250;
@@ -2562,7 +2565,8 @@ function mainFilter__getXhr(formData) {
             let rs = JSON.parse(xhr.responseText);
 
             if (rs['success']){
-
+                // now open modal and add evento result there...
+                filteredResultModal.show();
             }
         }
     });
@@ -2656,6 +2660,17 @@ function pushToSelect(array, text_key, value_key, selector, default_select=0) {
     }
 }
 
+function filterResultModalFunction(){
+    if (filteredResultModalId ){
+        filteredResultModal = new bootstrap.Modal(filteredResultModalId, {keyboard: false});
+        filteredResultModalId.addEventListener('shown.bs.modal', function () {
+            //conlog('mainFilterModal: shown.bs.modal');
+            //mainFilter__getCategoriesXhr();
+            //mainFilter__getTagsXhr();
+        });
+    }
+}
+
 // ###################################################
 // all functions with one initial start
 // start
@@ -2704,6 +2719,8 @@ function functionsInitialStart(){
     mainFilterModalFunction();
     mainFilterIdFunction();
     tagValueMainFilterFormSubmitHandler();
+
+    filterResultModalFunction();
 }
 functionsInitialStart();
 // end

@@ -81,6 +81,7 @@
     @include('cabinet.evento._inner.modals.diagramms.tagvalues_by_year')
     @include('cabinet.evento._inner.modals.gistogramms.tag_values')
     @include('cabinet.evento._inner.modals.filter_main')
+    @include('cabinet.evento._inner.modals.filtered_result')
     {{-- END of Modals --}}
 
     @push('footer_js')

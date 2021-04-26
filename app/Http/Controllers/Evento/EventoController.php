@@ -111,10 +111,10 @@ class EventoController extends Controller
         return View::make('cabinet.evento._inner.list.item', ['evento' => $evento ])->render();
     }
 
-    public function index(Request $request)
-    {
+    protected function mainQuery(){
+
         $eventosWithAllColumns = Evento::
-              leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
+        leftJoin('evento_evento_categories','evento_evento_categories.evento_id','=','evento_eventos.id')
             ->leftJoin('evento_categories','evento_categories.id','=','evento_evento_categories.category_id')
             ->leftJoin('evento_evento_tags','evento_evento_tags.evento_id','=','evento_eventos.id')
             ->leftJoin('evento_tags','evento_tags.id','=','evento_evento_tags.tag_id')
@@ -138,6 +138,13 @@ class EventoController extends Controller
             ->orderBy('evento_eventos.date', 'desc')
             //->toSql()
         ;
+
+        return $eventosWithAllColumns;
+    }
+
+    public function index(Request $request)
+    {
+        $eventosWithAllColumns = $this->mainQuery();
         //dd($eventosWithAllColumns);
 
         $eventosTree = $this->getEventoTree($eventosWithAllColumns->get());
@@ -205,6 +212,7 @@ class EventoController extends Controller
             $eventoHtml = ""; $eventoId = 0;
             if(count($eventoTree)){
                 $eventoId   = $eventoTree[array_keys($eventoTree)[0]];
+                // eventoRowHtml
                 $eventoHtml = $this->getEventoHtml($eventoId);
             }
             $rs = ['success' => 1, 'message' => 'Evento created!',
