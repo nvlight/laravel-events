@@ -2567,6 +2567,24 @@ function mainFilter__getXhr(formData) {
             if (rs['success']){
                 // now open modal and add evento result there...
                 filteredResultModal.show();
+
+                // #filtered-result-modal .modal-body
+                let body = document.querySelector('#filtered-result-modal .modal-body');
+                if (body){
+
+                    body.innerHTML = "";
+                    let div = document.createElement("div");
+
+                    // .modal-dialog
+                    let modalDialog = document.querySelector('#filtered-result-modal .modal-dialog');
+                    if (modalDialog){
+                        modalDialog.style.maxWidth = "80%";
+                    }
+
+                    div.innerHTML = rs['resultData'];
+
+                    body.append(div);
+                }
             }
         }
     });

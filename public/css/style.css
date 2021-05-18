@@ -1323,3 +1323,7 @@ body > nav.navbar{
 .dropdown-menu.inner.show li.active{
 	background-color: #96BEED;
 }
+
+.mw80p{
+	min-width: 80%;
+}
