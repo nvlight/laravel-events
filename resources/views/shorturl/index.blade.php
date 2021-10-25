@@ -9,20 +9,6 @@
         </div>
     </div>
 
-    <?php
-    $mg_errors3 = '';
-    $mg_errors =  ($errors);
-    //echo \App\Debug::d($mg_errors);
-    if (is_array($mg_errors)){
-        $mg_errors2 = array_keys($mg_errors);
-        $mg_errors3 = implode(';', $mg_errors2);
-        //echo \App\Debug::d($mg_errors3);
-        //echo \App\Debug::d(preg_match("#^category#ui",$mg_errors3));
-    }
-    //echo \App\Debug::d(old());
-    //echo \App\Debug::d(old('type-color'));
-    ?>
-
     <div class="row">
         <div class="col-md-6">
             <h4>Добавить короткую ссылку</h4>
@@ -85,7 +71,7 @@
                     <th>actions</th>
                 </tr>
 
-                @include('shorturl-table-data')
+                @include('shorturl.table-data')
 
             </table>
 

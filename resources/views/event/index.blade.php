@@ -1,10 +1,6 @@
 @extends('layouts.event')
 
 @section('content')
-
-    <?php
-    //echo \App\Debug::d($events);
-    ?>
     <h3>События. Главная страница</h3>
 
     <div class="row">

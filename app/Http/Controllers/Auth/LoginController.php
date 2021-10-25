@@ -74,9 +74,9 @@ class LoginController extends Controller
                 return back()->with('error', 'You need to confirm your account. Please check your email.');
             }
             //return redirect('/');
-                        //->intended(route('event'));
-                        //->intended(route('cabinet'));
-                        //->intended(route('/'));
+                //->intended(route('event'));
+                //->intended(route('cabinet'));
+                //->intended(route('/'));
 
             if ($user->isPhoneAuthEnabled()) {
                 Auth::logout();
