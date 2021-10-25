@@ -11,17 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+Auth::routes(['verify' => true]);
 
-    $logined = auth()->id();
-
-    if ($logined !== null){
-        return redirect('/event');
-    }
-
-    return redirect('/login');
-});
-//Route::get('/','Auth\LoginController@login');
+Route::get('/', 'EventController@index')->middleware('verified');
 
 Route::get('/tests', 'SimpleTestSystem\HhController@index');//->middleware('guest');
 Route::get('/tests/resume','SimpleTestSystem\HhController@testResume');
@@ -37,8 +29,6 @@ Route::patch('tests/save-single-result','SimpleTestSystem\HhController@saveSingl
 Route::get('/test_getQuestionByTetsIdAndNumber', 'SimpleTestSystem\HhController@test_getQuestionByTetsIdAndNumber');
 Route::get('/test_testCheckBoxAnswerIsTrue', 'SimpleTestSystem\HhController@test_testCheckBoxAnswerIsTrue');
 Route::get('/test_countingResultBallsByRequest','SimpleTestSystem\HhController@test_isCheckboxQuestionTrue');
-
-Auth::routes(['verify' => true]);
 
 Route::group([
     'prefix' => 'adverts',
@@ -426,9 +416,9 @@ Route::group([
     Route::get('/js_gistogramm', [App\Http\Controllers\Test\TestController::class, 'gistogramJsTest']);
     Route::get('/js_gistogramm_data', [App\Http\Controllers\Evento\EventoTagCountingDiagram::class, 'getGistogrammDataHandler']);
 
-    Route::get('/test_typehunting/{index}', function(int $index){
-        return sprintf("#%s block", $index); // $index;
-    });
+    //Route::get('/test_typehunting/{index}', function(int $index){
+    //    return sprintf("#%s block", $index); // $index;
+    //});
 
     Route::group(['prefix' => '/main_filter', 'as' => 'main_filter.'], function (){
         Route::get('/get_tags', [App\Http\Controllers\Evento\MainFilterController::class, 'getTags' ]);
@@ -436,3 +426,44 @@ Route::group([
     });
 });
 
+Route::group([
+    'prefix' => 'learn',           // prefix for url
+    'as' => 'learn.',              // prefix for names
+    'namespace' => 'Learn',        // namespace name
+    //'middleware' => ['auth'],
+], function () {
+
+    Route::get('/', [App\Http\Controllers\Learn\LearnController::class, 'index'])->name('index');
+    //Route::get('/', 'LearnController@index')->name('index');
+
+    Route::view('/welcome', 'learn.welcome');
+
+//    Route::group(['prefix' => 'tasks', 'as' => 'tasks.', 'namespace' => 'Tasks'], function (){
+//        Route::get('/', 'TaskController@index')->name('index');
+//        Route::get('/create', 'TaskController@create')->name('create');
+//        Route::post('/', 'TaskController@store')->name('store');
+//        Route::get('/{task}', 'TaskController@show')->name('show');
+//        Route::get('/{task}/edit', 'TaskController@edit')->name('edit');
+//        Route::patch('/{task}', 'TaskController@update')->name('update');
+//        Route::delete('/{task}', 'TaskController@destroy')->name('destroy');
+//    });
+
+    Route::group(['namespace' => 'Tasks'], function (){
+        Route::resource('tasks', 'TaskController');
+
+        Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function (){
+            Route::get('{getOne}', 'TaskController@getOne')->name('getOne');
+        });
+    });
+
+    //$router->get('/router_get', function (){
+    //    return 'router_get';
+    //});
+
+    //Route::get('users/{id?}', function ($id=0){
+    //    return $id;
+    //})->where('id', '[1-9]\d*', true);
+
+    Route::apiResource('testApi', 'TestApiController');
+
+});

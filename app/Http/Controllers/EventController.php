@@ -6,6 +6,7 @@ use App\Http\Requests\EventRequestStore;
 use App\Models\Event\Category;
 use App\Models\Event\Event;
 use App\Models\Event\Type;
+use App\Models\MGDebug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -593,9 +594,9 @@ class EventController extends Controller
 //                    ],
             $tmp = [];
             foreach ($arr as $k => $v) {
-                //echo Debug::d($v,'vv: '.$vv); die;
-
+                //echo print_r($v) . ' vv: ' . print_r($vv);
                 if (array_key_exists($vv, $v)){
+                    //echo MGDebug::d($v,'vv: '.$vv);
 //                    try {
                         $tmp[] = [
                             'name' => $v[$vv . '_type_name'],
@@ -605,6 +606,12 @@ class EventController extends Controller
 //                    }catch (Exception $e){
 //                        echo Debug::d($e,''); die;
 //                    }
+                }else{
+                    $tmp[] = [
+                        'name' => "",
+                        'y' => 0,
+                        'color' => '#ccc',
+                    ];
                 }
             }
             if (count($tmp))
@@ -615,7 +622,6 @@ class EventController extends Controller
                     'data' => $tmp
                 ];
         }
-        //echo Debug::d($na); die;
 
         return array_values($na);
     }
@@ -682,15 +688,19 @@ class EventController extends Controller
         //echo MGDebug::d($q_get_years_with_months,'$q_get_years_with_months'); die;
 
         $monthSumms = $this->groupAmountsByMonths($q_get_years_with_months->toArray());
+        //dd($monthSumms);
         //echo Debug::d($monthSumms); die;
 
         $months = $this->getMonthLabels(0);
         //echo Debug::d($months); die;
 
         $filledZeroMonths = $this->fillZerroEmptyMonths($monthSumms, $months);
+        //dump($filledZeroMonths);
         //echo Debug::d($filledZeroMonths); die;
+        //$filledZeroMonths = $monthSumms;
 
         $series2 = $this->getSeriesForGraphic2($filledZeroMonths); // готовый для вставки в диаграмму массив
+        //dump($series2);
 
         return [$q, $series2, $months];
     }

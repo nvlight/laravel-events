@@ -92,6 +92,7 @@ class LoginController extends Controller
 
             return redirect()->intended(route('cabinet.home'));
         }
+
         return redirect()->intended($this->redirectPath());
 
         $this->incrementLoginAttempts($request);
