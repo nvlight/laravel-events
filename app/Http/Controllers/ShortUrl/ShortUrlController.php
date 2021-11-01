@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\ShortUrl;
 
 use App\Models\ShortUrl\ShortUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 
 class ShortUrlController extends Controller
 {
@@ -72,7 +73,11 @@ class ShortUrlController extends Controller
 
         $shorturl->delete();
         session()->flash('shorturl_deleted','Короткая ссылка удалена!');
-        return redirect('/shorturl');
+        return redirect()->route('shorturl.index');
+    }
+
+    public function copyShortUrl(ShortUrl $shorturl){
+
     }
 
     public function getShortUrl($shorturl)

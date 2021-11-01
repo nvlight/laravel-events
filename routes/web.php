@@ -51,7 +51,9 @@ Route::post('/login/phone', 'Auth\LoginController@verify');
 Route::resource('category', 'EventCategoryController')->middleware('verified');
 Route::resource('type', 'EventTypeController')->middleware('verified');
 Route::resource('event', 'EventController')->middleware('verified'); //->name('event');
-Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
+Route::resource('shorturl', 'ShortUrl\ShortUrlController')->middleware('verified');
+Route::get('su/{shorturl}', 'ShortUrl\ShortUrlController@getShortUrl');
+Route::get('shorturl-filter', 'ShortUrl\ShortUrlController@filter')->middleware('verified');
 
 Route::post('event_copy/{event}','EventController@copyAndPast')->middleware('verified');
 
@@ -77,7 +79,6 @@ Route::group([
 
 Route::get('document', 'DocumentController@index')->middleware('verified');
 Route::get('events-graphics', 'EventController@graphics_index')->middleware('verified');
-Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');
 
 //Route::post('document-load', 'DocumentController@upload')->middleware('verified');
 Route::resource('document', 'DocumentController')->middleware('verified');
@@ -93,7 +94,6 @@ Route::get('/banner/get', 'BannerController@get')->name('banner.get');
 Route::get('/banner/{banner}/click', 'BannerController@click')->name('banner.click');
 
 Route::get('event-filter', 'EventController@filter')->middleware('verified');
-Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified');
 
 Route::resource('simple-test-system', 'SimpleTestSystem\CategoryController')
     ->middleware('verified')->middleware('can:admin-panel');
@@ -123,8 +123,6 @@ Route::resource('sts-selected-qsts', 'SimpleTestSystem\SelectedQstsController')-
 Route::resource('sts-shedule', 'SimpleTestSystem\SheduleController')->middleware('verified');
 
 //Route::post('sts-selected-qsts','')->middleware('verified');
-
-Route::get('mgram', 'MGram@index');
 
 Route::get('hd_video', 'HDVideoController@index')->middleware('verified'); //
 
@@ -424,46 +422,4 @@ Route::group([
         Route::get('/get_tags', [App\Http\Controllers\Evento\MainFilterController::class, 'getTags' ]);
         Route::get('/get_categories', [App\Http\Controllers\Evento\MainFilterController::class, 'getCategories' ]);
     });
-});
-
-Route::group([
-    'prefix' => 'learn',           // prefix for url
-    'as' => 'learn.',              // prefix for names
-    'namespace' => 'Learn',        // namespace name
-    //'middleware' => ['auth'],
-], function () {
-
-    Route::get('/', [App\Http\Controllers\Learn\LearnController::class, 'index'])->name('index');
-    //Route::get('/', 'LearnController@index')->name('index');
-
-    Route::view('/welcome', 'learn.welcome');
-
-//    Route::group(['prefix' => 'tasks', 'as' => 'tasks.', 'namespace' => 'Tasks'], function (){
-//        Route::get('/', 'TaskController@index')->name('index');
-//        Route::get('/create', 'TaskController@create')->name('create');
-//        Route::post('/', 'TaskController@store')->name('store');
-//        Route::get('/{task}', 'TaskController@show')->name('show');
-//        Route::get('/{task}/edit', 'TaskController@edit')->name('edit');
-//        Route::patch('/{task}', 'TaskController@update')->name('update');
-//        Route::delete('/{task}', 'TaskController@destroy')->name('destroy');
-//    });
-
-    Route::group(['namespace' => 'Tasks'], function (){
-        Route::resource('tasks', 'TaskController');
-
-        Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function (){
-            Route::get('{getOne}', 'TaskController@getOne')->name('getOne');
-        });
-    });
-
-    //$router->get('/router_get', function (){
-    //    return 'router_get';
-    //});
-
-    //Route::get('users/{id?}', function ($id=0){
-    //    return $id;
-    //})->where('id', '[1-9]\d*', true);
-
-    Route::apiResource('testApi', 'TestApiController');
-
 });
