@@ -47,7 +47,7 @@
 
                 <div class="mb-3">
                     <button class="btn btn-success">Искать</button>
-                    <a href="/shorturl" class="btn btn-danger">Сброс</a>
+                    <a href="{{ route('shorturl.index') }}" class="btn btn-danger">Сброс</a>
                 </div>
 
             </form>

@@ -16,8 +16,7 @@ class ShortUrlPolicy
 
     public function view(User $user, ShortUrl $shortUrl)
     {
-        // return $user->id === $shortUrl->user_id;
-        return true;
+        return $user->id === $shortUrl->user_id;
     }
 
     public function create(User $user)

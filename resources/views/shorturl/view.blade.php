@@ -20,26 +20,16 @@
                 <tr>
                     <td><strong>Короткая ссылка</strong></td>
                     <td>
-                        <a href="{{ url('/su/'.$shorturl->shorturl) }}" target="_blank">{{$shorturl->shorturl}}</a>
-                        <br>
-                        <span>{{ url('/su/'.$shorturl->shorturl) }}</span>
+                        @include('shorturl.table_shortUrls')
                     </td>
                 </tr>
             </table>
-            
+
             <div class="actions" style="display: flex; ">
                 <div class="edit_btn">
-                    <a href="{{ route('shorturl.edit', $shorturl->id) }}">
-                        <button class="btn btn-primary" title="редактировать">Редактировать</button>
-                    </a>
+                    @include('shorturl.buttons.edit_withText')
                 </div>
-                <form class="" action="/shorturl/{{$shorturl->id}}" method="POST" style="margin-left: 3px;">
-                    @csrf
-                    @method('DELETE')
-                    <button class="btn btn-danger" type="submit" title="удалить">
-                        Удалить
-                    </button>
-                </form>
+                @include('shorturl.buttons.delete_withText')
             </div>
 
         </div>
