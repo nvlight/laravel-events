@@ -5,14 +5,14 @@
     <div class="row">
         <div class="col-md-6">
             <h2 class="mb-3">Короткие ссылки</h2>
-            <a href="/">Главная</a>
+            <a href="{{ route('event.index') }}">Главная</a>
         </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
             <h4>Добавить короткую ссылку</h4>
-            <form action="/shorturl" method="POST">
+            <form action="{{ route('shorturl.store') }}" method="POST">
                 @csrf
 
                 <div class="mb-3">
@@ -36,7 +36,7 @@
 
         <div class="col-md-6">
             <h4>Поиск короткой ссылки</h4>
-            <form action="/shorturl" method="GET">
+            <form action="{{ route('shorturl.index') }}" method="GET">
 
                 <div class="mb-3">
                     <label for="description2">Описание</label>

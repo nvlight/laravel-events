@@ -25,7 +25,7 @@ class ShortUrlController extends Controller
     {
     }
 
-    public function store(Request $request)
+    public function store()
     {
         $attributes = $this->validateForStoreShortUrl();
 
@@ -37,8 +37,11 @@ class ShortUrlController extends Controller
         return back();
     }
 
-    public function show(ShortUrl $shortUrl)
+    public function show(ShortUrl $shorturl)
     {
+        abort_if(auth()->user()->cannot('view', $shorturl), 403);
+
+        return view('shorturl.view', compact('shorturl'));
     }
 
     public function edit(ShortUrl $shorturl)
@@ -60,7 +63,7 @@ class ShortUrlController extends Controller
         $shorturl->save();
 
         session()->flash('shorturl_updated', 'Ссылка обновлена');
-        return redirect('/shorturl');
+        return redirect()->route('shorturl.edit', $shorturl->id);
     }
 
     public function destroy(ShortUrl $shorturl)
