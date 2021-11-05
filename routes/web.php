@@ -51,9 +51,11 @@ Route::post('/login/phone', 'Auth\LoginController@verify');
 Route::resource('category', 'EventCategoryController')->middleware('verified');
 Route::resource('type', 'EventTypeController')->middleware('verified');
 Route::resource('event', 'EventController')->middleware('verified'); //->name('event');
-Route::resource('shorturl', 'ShortUrl\ShortUrlController')->middleware('verified');
-Route::get('su/{shorturl}', 'ShortUrl\ShortUrlController@getShortUrl');
-Route::get('shorturl-filter', 'ShortUrl\ShortUrlController@filter')->middleware('verified');
+Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
+Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');
+Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified');
+
+Route::resource('shorturlnew', 'ShortUrl\ShortUrlCategoryController')->middleware('verified');
 
 Route::post('event_copy/{event}','EventController@copyAndPast')->middleware('verified');
 

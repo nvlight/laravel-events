@@ -86,6 +86,10 @@ PO1;
 </div>
 PRE;
 
+        if ($die){
+            die;
+        }
+
         //return $html;
         return $str;
     }

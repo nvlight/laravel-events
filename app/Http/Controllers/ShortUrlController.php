@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\ShortUrl;
+namespace App\Http\Controllers;
 
 use App\Models\ShortUrl\ShortUrl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
 
 class ShortUrlController extends Controller
 {
