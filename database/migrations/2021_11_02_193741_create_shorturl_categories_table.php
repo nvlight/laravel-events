@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Kalnoy\Nestedset\NestedSet; // посмотрим оставить его сейчас или же нет.
 
 class CreateShorturlCategoriesTable extends Migration
 {
@@ -21,6 +22,9 @@ class CreateShorturlCategoriesTable extends Migration
             $table->string('slug');
             $table->string('img')->nullable();
             $table->timestamps();
+
+            // появился потому что в сидере есть children, который позволяет в цикле создать дочерние каталоги.
+            // NestedSet::columns($table);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
         });
