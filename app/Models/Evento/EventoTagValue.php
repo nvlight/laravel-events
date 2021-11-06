@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|EventoTagValue whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|EventoTagValue whereValue($value)
  * @mixin \Eloquent
+ * @property-read \App\Models\Evento\EventoTag|null $tag
  */
 class EventoTagValue extends Model
 {

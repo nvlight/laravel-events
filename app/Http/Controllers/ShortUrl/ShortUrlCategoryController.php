@@ -143,8 +143,15 @@ class ShortUrlCategoryController extends Controller
         //
     }
 
-    public function destroy(ShortUrlsCategory $shortUrlCategory)
+    public function destroy(int $shortUrlCategoryId)
     {
-        //
+        $category = ShortUrlsCategory::findOrFail($shortUrlCategoryId);
+
+        abort_if(auth()->user()->cannot('delete', $category), 403);
+
+        $category->delete();
+        session()->flash('shorturlnew_deleted','Категория удалена!');
+        return redirect()->route('shorturlnew.index');
+
     }
 }

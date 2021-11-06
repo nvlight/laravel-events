@@ -2616,7 +2616,7 @@
                         return $instance->extend($driver, $callback);
         }
                     /**
-         * Determine if an list exists in the cache.
+         * Determine if an item exists in the cache.
          *
          * @param string $key
          * @return bool 
@@ -2628,7 +2628,7 @@
                         return $instance->has($key);
         }
                     /**
-         * Determine if an list doesn't exist in the cache.
+         * Determine if an item doesn't exist in the cache.
          *
          * @param string $key
          * @return bool 
@@ -2640,7 +2640,7 @@
                         return $instance->missing($key);
         }
                     /**
-         * Retrieve an list from the cache by key.
+         * Retrieve an item from the cache by key.
          *
          * @param string $key
          * @param mixed $default
@@ -2683,7 +2683,7 @@
                         return $instance->getMultiple($keys, $default);
         }
                     /**
-         * Retrieve an list from the cache and delete it.
+         * Retrieve an item from the cache and delete it.
          *
          * @param string $key
          * @param mixed $default
@@ -2696,7 +2696,7 @@
                         return $instance->pull($key, $default);
         }
                     /**
-         * Store an list in the cache.
+         * Store an item in the cache.
          *
          * @param string $key
          * @param mixed $value
@@ -2712,9 +2712,9 @@
                     /**
          * Persists data in the cache, uniquely referenced by a key with an optional expiration TTL time.
          *
-         * @param string $key The key of the list to store.
-         * @param mixed $value The value of the list to store, must be serializable.
-         * @param null|int|\DateInterval $ttl Optional. The TTL value of this list. If no value is sent and
+         * @param string $key The key of the item to store.
+         * @param mixed $value The value of the item to store, must be serializable.
+         * @param null|int|\DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
          *                                      the driver supports TTL then the library may set a default value
          *                                      for it or let the driver take care of that.
          * @return bool True on success and false on failure.
@@ -2744,7 +2744,7 @@
          * Persists a set of key => value pairs in the cache, with an optional TTL.
          *
          * @param \Psr\SimpleCache\iterable $values A list of key => value pairs for a multiple-set operation.
-         * @param null|int|\DateInterval $ttl Optional. The TTL value of this list. If no value is sent and
+         * @param null|int|\DateInterval $ttl Optional. The TTL value of this item. If no value is sent and
          *                                       the driver supports TTL then the library may set a default value
          *                                       for it or let the driver take care of that.
          * @return bool True on success and false on failure.
@@ -2759,7 +2759,7 @@
                         return $instance->setMultiple($values, $ttl);
         }
                     /**
-         * Store an list in the cache if the key does not exist.
+         * Store an item in the cache if the key does not exist.
          *
          * @param string $key
          * @param mixed $value
@@ -2773,7 +2773,7 @@
                         return $instance->add($key, $value, $ttl);
         }
                     /**
-         * Increment the value of an list in the cache.
+         * Increment the value of an item in the cache.
          *
          * @param string $key
          * @param mixed $value
@@ -2786,7 +2786,7 @@
                         return $instance->increment($key, $value);
         }
                     /**
-         * Decrement the value of an list in the cache.
+         * Decrement the value of an item in the cache.
          *
          * @param string $key
          * @param mixed $value
@@ -2799,7 +2799,7 @@
                         return $instance->decrement($key, $value);
         }
                     /**
-         * Store an list in the cache indefinitely.
+         * Store an item in the cache indefinitely.
          *
          * @param string $key
          * @param mixed $value
@@ -2812,7 +2812,7 @@
                         return $instance->forever($key, $value);
         }
                     /**
-         * Get an list from the cache, or execute the given Closure and store the result.
+         * Get an item from the cache, or execute the given Closure and store the result.
          *
          * @param string $key
          * @param \DateTimeInterface|\DateInterval|int|null $ttl
@@ -2826,7 +2826,7 @@
                         return $instance->remember($key, $ttl, $callback);
         }
                     /**
-         * Get an list from the cache, or execute the given Closure and store the result forever.
+         * Get an item from the cache, or execute the given Closure and store the result forever.
          *
          * @param string $key
          * @param \Closure $callback
@@ -2839,7 +2839,7 @@
                         return $instance->sear($key, $callback);
         }
                     /**
-         * Get an list from the cache, or execute the given Closure and store the result forever.
+         * Get an item from the cache, or execute the given Closure and store the result forever.
          *
          * @param string $key
          * @param \Closure $callback
@@ -2852,7 +2852,7 @@
                         return $instance->rememberForever($key, $callback);
         }
                     /**
-         * Remove an list from the cache.
+         * Remove an item from the cache.
          *
          * @param string $key
          * @return bool 
@@ -2864,10 +2864,10 @@
                         return $instance->forget($key);
         }
                     /**
-         * Delete an list from the cache by its unique key.
+         * Delete an item from the cache by its unique key.
          *
-         * @param string $key The unique cache key of the list to delete.
-         * @return bool True if the list was successfully removed. False if there was an error.
+         * @param string $key The unique cache key of the item to delete.
+         * @return bool True if the item was successfully removed. False if there was an error.
          * @throws \Psr\SimpleCache\InvalidArgumentException
          *   MUST be thrown if the $key string is not a legal value.
          * @static 
@@ -2975,7 +2975,7 @@
                         return $instance->offsetExists($key);
         }
                     /**
-         * Retrieve an list from the cache by key.
+         * Retrieve an item from the cache by key.
          *
          * @param string $key
          * @return mixed 
@@ -2987,7 +2987,7 @@
                         return $instance->offsetGet($key);
         }
                     /**
-         * Store an list in the cache for the default time.
+         * Store an item in the cache for the default time.
          *
          * @param string $key
          * @param mixed $value
@@ -3000,7 +3000,7 @@
                         $instance->offsetSet($key, $value);
         }
                     /**
-         * Remove an list from the cache.
+         * Remove an item from the cache.
          *
          * @param string $key
          * @return void 
@@ -5727,7 +5727,7 @@
                         $instance->addJsonPath($path);
         }
                     /**
-         * Parse a key into namespace, group, and list.
+         * Parse a key into namespace, group, and item.
          *
          * @param string $key
          * @return array 
@@ -9151,7 +9151,7 @@
                         return $instance->format($default);
         }
                     /**
-         * Retrieve an old input list.
+         * Retrieve an old input item.
          *
          * @param string|null $key
          * @param string|array|null $default
@@ -9259,7 +9259,7 @@
                         return $instance->bearerToken();
         }
                     /**
-         * Determine if the request contains a given input list key.
+         * Determine if the request contains a given input item key.
          *
          * @param string|array $key
          * @return bool 
@@ -9271,7 +9271,7 @@
                         return $instance->exists($key);
         }
                     /**
-         * Determine if the request contains a given input list key.
+         * Determine if the request contains a given input item key.
          *
          * @param string|array $key
          * @return bool 
@@ -9295,7 +9295,7 @@
                         return $instance->hasAny($keys);
         }
                     /**
-         * Determine if the request contains a non-empty value for an input list.
+         * Determine if the request contains a non-empty value for an input item.
          *
          * @param string|array $key
          * @return bool 
@@ -9342,7 +9342,7 @@
                         return $instance->all($keys);
         }
                     /**
-         * Retrieve an input list from the request.
+         * Retrieve an input item from the request.
          *
          * @param string|null $key
          * @param string|array|null $default
@@ -9379,7 +9379,7 @@
                         return $instance->except($keys);
         }
                     /**
-         * Retrieve a query string list from the request.
+         * Retrieve a query string item from the request.
          *
          * @param string|null $key
          * @param string|array|null $default
@@ -9392,7 +9392,7 @@
                         return $instance->query($key, $default);
         }
                     /**
-         * Retrieve a request payload list from the request.
+         * Retrieve a request payload item from the request.
          *
          * @param string|null $key
          * @param string|array|null $default
@@ -11026,7 +11026,7 @@
                         return $instance->has($key);
         }
                     /**
-         * Get an list from the session.
+         * Get an item from the session.
          *
          * @param string $key
          * @param mixed $default
@@ -11064,7 +11064,7 @@
                         return $instance->hasOldInput($key);
         }
                     /**
-         * Get the requested list from the flashed input array.
+         * Get the requested item from the flashed input array.
          *
          * @param string|null $key
          * @param mixed $default
@@ -11102,7 +11102,7 @@
                         $instance->put($key, $value);
         }
                     /**
-         * Get an list from the session, or store the default value.
+         * Get an item from the session, or store the default value.
          *
          * @param string $key
          * @param \Closure $callback
@@ -11128,7 +11128,7 @@
                         $instance->push($key, $value);
         }
                     /**
-         * Increment the value of an list in the session.
+         * Increment the value of an item in the session.
          *
          * @param string $key
          * @param int $amount
@@ -11141,7 +11141,7 @@
                         return $instance->increment($key, $amount);
         }
                     /**
-         * Decrement the value of an list in the session.
+         * Decrement the value of an item in the session.
          *
          * @param string $key
          * @param int $amount
@@ -11215,7 +11215,7 @@
                         $instance->flashInput($value);
         }
                     /**
-         * Remove an list from the session, returning its value.
+         * Remove an item from the session, returning its value.
          *
          * @param string $key
          * @return mixed 
@@ -12967,7 +12967,7 @@
                         $instance->setContainer($container);
         }
                     /**
-         * Get an list from the shared data.
+         * Get an item from the shared data.
          *
          * @param string $key
          * @param mixed $default
@@ -15073,7 +15073,7 @@ namespace  {
             }
              
                 /**
-             * Execute a callback over each list while chunking.
+             * Execute a callback over each item while chunking.
              *
              * @param callable $callback
              * @param int $count
