@@ -1,22 +1,25 @@
 @if( count($shortUrlsArrTree) )
     @php $offset = 0; $offsetInc = 3; $repeatStr = '-'; @endphp
     @foreach($shortUrlsArrTree as $k => $v)
-        {{$v['id']}} {{$v['parent_id']}} {{$v['name']}}
+        <div>
+            {{$v['id']}} {{$v['parent_id']}} {{$v['name']}} <a href="">Delete</a>
+        </div>
 
         @if ( isset($v['child']) )
             @php $offset += $offsetInc; @endphp
-            <br>
 
             @foreach($v['child'] as $kk => $vv)
-                @php echo str_repeat($repeatStr, $offset) @endphp {{$vv['id']}} {{$vv['parent_id']}} {{$vv['name']}}
-                <br>
+                <div>
+                    @php echo str_repeat($repeatStr, $offset) @endphp {{$vv['id']}} {{$vv['parent_id']}} {{$vv['name']}}
+                </div>
 
                 @if ( isset($vv['child']) )
                     @php $offset += $offsetInc; @endphp
 
                     @foreach($vv['child'] as $kkk => $vvv)
-                        @php echo str_repeat($repeatStr, $offset) @endphp {{$vvv['id']}} {{$vvv['parent_id']}} {{$vvv['name']}}
-                        <br>
+                        <div>
+                            @php echo str_repeat($repeatStr, $offset) @endphp {{$vvv['id']}} {{$vvv['parent_id']}} {{$vvv['name']}}
+                        </div>
                     @endforeach
 
                     @php $offset -= $offsetInc; @endphp

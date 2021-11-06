@@ -6,27 +6,10 @@ use App\Models\ShortUrl\ShortUrlsCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\MGDebug;
+use Illuminate\Support\Str;
 
 class ShortUrlCategoryController extends Controller
 {
-
-    protected function tree($parent_id, $input, &$output)
-    {
-        $tmp = [];
-        foreach($input as $k => $v){
-            if ( $parent_id === $v['parent_id']){
-                $output[$parent_id][$v['id']]['inner'] = $v;
-                //$child = [];
-                $child = $this->tree($v['id'], $input, $output);
-                if (!empty($child)){
-                    $tmp = $child;
-                    $output[$parent_id][$v['id']]['child'] = $child;
-                }
-            }
-        }
-        return $tmp;
-    }
-
     // позволяет входной массив преобразовать в 3-х уровненый массив каталогов.
     protected function threeLevelTree(Array $input)
     {
@@ -101,23 +84,48 @@ class ShortUrlCategoryController extends Controller
             where('user_id','=', auth()->id())
             ->get();
 
+        $shortUrlIds = ShortUrlsCategory::
+        where('user_id', auth()->id() )
+            ->pluck('name', 'id')
+            ->toArray()
+        ;
+
         $shortUrlsArr = $shorturls->toArray();
         $shortUrlsArrTree = $this->threeLevelTree($shortUrlsArr);
 
         //$this->threeLevelTreeOutput($result);
         //echo MGDebug::d($result); die;
+        //echo MGDebug::d($shortUrlIds); die;
 
-        return view('shorturl_new.index', compact('shortUrlsArrTree'));
+        return view('shorturl_new.index', ['shortUrlIds' => $shortUrlIds,
+            'shortUrlsArrTree' => $shortUrlsArrTree,
+        ]);
     }
 
     public function create()
     {
-        //
+        return view('shorturl_new.create');
     }
 
     public function store(Request $request)
     {
-        //
+        $attributes = $this->validateForStoreShortUrl();
+
+        $attributes['name'] = $request->get('name');
+        $attributes['slug'] = Str::slug($attributes['name']);
+        $attributes += ['user_id' => auth()->id()];
+        ShortUrlsCategory::create($attributes);
+
+        session()->flash('shorturlnew_created','Категория создана');
+        return back();
+    }
+
+    public function validateForStoreShortUrl()
+    {
+        return \request()->validate([
+            'name' => 'required|string|min:3|max:170',
+            'parent_id' => 'required|int|min:0',
+        ]);
     }
 
     public function show(ShortUrlsCategory $shortUrlCategory)

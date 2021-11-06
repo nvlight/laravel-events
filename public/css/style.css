@@ -175,10 +175,16 @@ p.reg{
 	outline: 1px dotted gray; 
 }
 
+.container1{
+	width: 80%;
+	margin: 0 auto;
+}
+
 .mp0{
 	margin: 0;
 	padding: 0;
 }
+
 
 
 /*.leftbar .main-menu ul li a{*/
@@ -1327,3 +1333,4 @@ body > nav.navbar{
 .mw80p{
 	min-width: 80%;
 }
+
