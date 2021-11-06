@@ -56,6 +56,8 @@ Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');
 Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified');
 
 Route::resource('shorturlnew', 'ShortUrl\ShortUrlCategoryController')->middleware('verified');
+Route::get('shorturlnew_cascadeDestroy', 'ShortUrl\ShortUrlCategoryController@cascadeDestroy')->middleware('verified');
+
 
 Route::post('event_copy/{event}','EventController@copyAndPast')->middleware('verified');
 

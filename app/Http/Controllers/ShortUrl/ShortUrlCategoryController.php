@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\ShortUrl;
 
+use App\Http\Controllers\SimpleTestSystem\DescriptionTypeController;
 use App\Models\ShortUrl\ShortUrlsCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\MGDebug;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class ShortUrlCategoryController extends Controller
 {
@@ -149,9 +151,63 @@ class ShortUrlCategoryController extends Controller
 
         abort_if(auth()->user()->cannot('delete', $category), 403);
 
-        $category->delete();
-        session()->flash('shorturlnew_deleted','Категория удалена!');
-        return redirect()->route('shorturlnew.index');
+        //$category->delete();
+        try {
+            $ids = $this->cascadeDestroy($category->id);
+            session()->flash('shorturlnew_deleted','Категория удалена!');
+            //echo MGDebug::d($ids); die;
 
+            if ($this->deleteByIds($ids) === false ){
+                session()->flash('shorturlnew_deleted','Ошибка при каскадном удалении категории!');
+            }
+        }catch (\Exception $e){
+            session()->flash('shorturlnew_deleted','Ошибка при удалении категории!');
+        }
+
+        return redirect()->route('shorturlnew.index');
+    }
+
+    protected function deleteByIds(Array $ids)
+    {
+        try {
+            $exception = DB::transaction(function() use($ids) {
+                ShortUrlsCategory::destroy($ids);
+            });
+
+            return is_null($exception) ? true : $exception;
+
+        } catch(Exception $e) {
+            return false;
+        }
+
+        //DB::transaction(function () use($ids) {
+        //    ShortUrlsCategory::destroy($ids);
+        //});
+    }
+
+    protected function cascadeDestroyHandler(int $currentId, Array $arr, Array & $ids)
+    {
+        $ids[] = $currentId;
+        foreach($arr as $k => $v){
+            if ($v === $currentId){
+                $this->cascadeDestroyHandler($k, $arr, $ids);
+            }
+        }
+    }
+
+    public function cascadeDestroy(int $id=0)
+    {
+        $ids = [];
+        $categories = ShortUrlsCategory::
+            where('user_id', auth()->id() )
+            ->pluck('parent_id', 'id')
+            ->toArray()
+        ;
+        //echo MGDebug::d($categories); die;
+
+        $this->cascadeDestroyHandler($id, $categories, $ids);
+
+
+        return $ids;
     }
 }
