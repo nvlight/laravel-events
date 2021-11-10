@@ -3,7 +3,8 @@
         <span>
             @php echo str_repeat($repeatStr, $offset) @endphp {{$item['id']}} {{$item['parent_id']}} {{$item['name']}}
         </span>
-        <span>
+        <span style="display: flex;">
+            @include('shorturl_new.buttons.view', ['item' => $item])
             @include('shorturl_new.buttons.delete', ['item' => $item])
         </span>
     </div>

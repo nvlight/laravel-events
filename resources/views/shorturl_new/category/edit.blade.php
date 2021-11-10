@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <a href="{{ route('shorturl.index') }}">Короткие ссылки</a>
+    <a href="{{ route('shorturlnew.index') }}">Короткие ссылки</a>
 
     <div class="row">
         <div class="col-md-4">
@@ -11,7 +11,7 @@
 
             <div class="actions">
 
-                <form action="{{ route('shorturl.update', $shorturl->id) }}" method="POST">
+                <form action="{{ route('shorturlnew.update', $shorturl->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">

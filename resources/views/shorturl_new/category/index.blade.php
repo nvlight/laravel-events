@@ -17,16 +17,16 @@
             <h5 class="text-success"><?=session()->get('shorturl_updated')?></h5>
 
             <div>
-                @include('shorturl_new.table-data')
+                @include('shorturl_new.category.table-data')
             </div>
 
         </div>
         <div class="col-md-6">
 
             <h4>Создание категории</h4>
-            <h5 class="text-success"><?=session()->get('shorturlnew_created')?></h5>
+            <h5 class="text-success"><?=session()->get('shorturlnew_category_created')?></h5>
             <div class="actions">
-                <form action="{{ route('shorturlnew.store') }}" method="POST">
+                <form action="{{ route('shorturlnew_category.store') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label for="parent_id">Выбор каталога</label>

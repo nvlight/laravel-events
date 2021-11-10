@@ -1,5 +1,5 @@
 @if (isset($item['id']))
-    <form action="{{ route('shorturlnew.destroy', $item['id']) }}" method="POST" class="shorturl-delete-button"  style="">
+    <form action="{{ route('shorturlnew_category.destroy', $item['id']) }}" method="POST" class="shorturl-delete-button"  style="">
         @csrf
         @method('DELETE')
         <button class="mg-btn-1 " type="submit" title="удалить" >

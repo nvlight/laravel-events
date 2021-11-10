@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\ShortUrl;
 
-use App\Http\Controllers\SimpleTestSystem\DescriptionTypeController;
 use App\Models\ShortUrl\ShortUrlsCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -99,7 +98,7 @@ class ShortUrlCategoryController extends Controller
         //echo MGDebug::d($result); die;
         //echo MGDebug::d($shortUrlIds); die;
 
-        return view('shorturl_new.index', ['shortUrlIds' => $shortUrlIds,
+        return view('shorturl_new.category.index', ['shortUrlIds' => $shortUrlIds,
             'shortUrlsArrTree' => $shortUrlsArrTree,
         ]);
     }
@@ -118,7 +117,7 @@ class ShortUrlCategoryController extends Controller
         $attributes += ['user_id' => auth()->id()];
         ShortUrlsCategory::create($attributes);
 
-        session()->flash('shorturlnew_created','Категория создана');
+        session()->flash('shorturlnew_category_created','Категория создана');
         return back();
     }
 
@@ -130,9 +129,11 @@ class ShortUrlCategoryController extends Controller
         ]);
     }
 
-    public function show(ShortUrlsCategory $shortUrlCategory)
+    public function show(int $shortUrlCategory)
     {
-        //
+        $category = ShortUrlsCategory::findOrFail($shortUrlCategory);
+
+        return view('shorturl_new.category.show', ['category' => $category]);
     }
 
     public function edit(ShortUrlsCategory $shortUrlCategory)
@@ -164,7 +165,7 @@ class ShortUrlCategoryController extends Controller
             session()->flash('shorturlnew_deleted','Ошибка при удалении категории!');
         }
 
-        return redirect()->route('shorturlnew.index');
+        return redirect()->route('shorturlnew_category.index');
     }
 
     protected function deleteByIds(Array $ids)

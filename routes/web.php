@@ -55,7 +55,7 @@ Route::resource('shorturl', 'ShortUrlController')->middleware('verified');
 Route::get('su/{shorturl}', 'ShortUrlController@getShortUrl');
 Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified');
 
-Route::resource('shorturlnew', 'ShortUrl\ShortUrlCategoryController')->middleware('verified');
+Route::resource('shorturlnew_category', 'ShortUrl\ShortUrlCategoryController')->middleware('verified');
 Route::get('shorturlnew_cascadeDestroy', 'ShortUrl\ShortUrlCategoryController@cascadeDestroy')->middleware('verified');
 
 
