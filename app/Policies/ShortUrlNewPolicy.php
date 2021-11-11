@@ -24,9 +24,10 @@ class ShortUrlNewPolicy
         //
     }
 
-    public function update(User $user, ShortUrlsCategory $shortUrl)
+    public function update(User $user, ShortUrlsCategory $ShortUrlsCategory)
     {
-        //return $user->id === $shortUrl->user_id;
+        //return $ShortUrlsCategory;
+        return $user->id === $ShortUrlsCategory->user_id;
     }
 
     public function delete(User $user, ShortUrlsCategory $ShortUrlsCategory)

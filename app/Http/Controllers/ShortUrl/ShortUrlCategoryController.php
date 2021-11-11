@@ -136,14 +136,30 @@ class ShortUrlCategoryController extends Controller
         return view('shorturl_new.category.show', ['category' => $category]);
     }
 
-    public function edit(ShortUrlsCategory $shortUrlCategory)
+    public function edit(int $shortUrlCategory)
     {
-        //
+        $category = ShortUrlsCategory::findOrFail($shortUrlCategory);
+
+        abort_if(auth()->user()->cannot('update', $category), 403);
+
+        return view('shorturl_new.category.edit', compact('category'));
     }
 
-    public function update(Request $request, ShortUrlsCategory $shortUrlCategory)
+    public function update(Request $request, int $shortUrlCategory)
     {
-        //
+        $category = ShortUrlsCategory::findOrFail($shortUrlCategory);
+
+        abort_if(auth()->user()->cannot('update', $category), 403);
+
+        $attributes = $this->validateForStoreShortUrl();
+
+        $category->name = $attributes['name'];
+        $category->parent_id = $attributes['parent_id'];
+        $category->save();
+
+        session()->flash('shorturlnew_category_updated', 'Категория обновлена');
+
+        return redirect()->route('shorturlnew_category.edit', $category->id);
     }
 
     public function destroy(int $shortUrlCategoryId)

@@ -2,43 +2,47 @@
 
 @section('content')
 
-    <a href="{{ route('shorturlnew.index') }}">Короткие ссылки</a>
+    <a href="{{ route('shorturlnew_category.index') }}">Короткие ссылки</a>
 
     <div class="row">
         <div class="col-md-4">
             <h4>Редактирование короткой ссылки</h4>
-            <h5 class="text-success"><?=session()->get('shorturl_updated')?></h5>
+            <h5 class="text-success"><?=session()->get('shorturlnew_category_updated')?></h5>
 
             <div class="actions">
 
-                <form action="{{ route('shorturlnew.update', $shorturl->id) }}" method="POST">
+                <form action="{{ route('shorturlnew_category.update', $category->id) }}" method="POST">
                     @csrf
                     @method('PATCH')
                     <div class="mb-3">
-                        <label for="description">Описание</label>
-                        <input class="form-control {{ $errors->has('name') ? 'border-danger' : '' }}" id="description" name="description" placeholder="Вика" value="{{$shorturl->description}}" >
+                        <label for="id">id</label>
+                        <input class="form-control" id="id" name="id" placeholder="Вика" value="{{$category->id}}" disabled="" >
                     </div>
 
                     <div class="mb-3">
-                        <label for="longurl">Длинная ссылка</label>
-                        <input class="form-control {{ $errors->has('name') ? 'border-danger' : '' }}" id="longurl" name="longurl" placeholder="https://laracasts.com/series/laravel-from-scratch-2018/episodes/28?autoplay=true" value="{{$shorturl->longurl}}" >
+                        <label for="parent_id">parent_id</label>
+                        <input class="form-control" id="parent_id" name="parent_id" placeholder="Вика" value="{{$category->parent_id}}" >
                     </div>
 
                     <div class="mb-3">
-                        <label for="shorturl">Короткая ссылка</label>
-                        <input class="form-control {{ $errors->has('name') ? 'border-danger' : '' }}" id="shorturl" name="shorturl" placeholder="https://our-site.net/su/UkOw3L" value="{{$shorturl->shorturl}}" >
+                        <label for="name">name</label>
+                        <input class="form-control" id="name" name="name" value="{{$category->name}}"
+                               placeholder="https://laracasts.com/series/laravel-from-scratch-2018/episodes/28?autoplay=true">
                     </div>
 
                     @include('errors')
+
                     @include('shorturl.buttons.save')
 
                 </form>
 
+                <div class="actions" style="display: flex; ">
+                        <span style="display: flex;">
+                            @include('shorturl_new.buttons.view', ['item' => $category])
+                            @include('shorturl_new.buttons.delete', ['item' => $category])
+                        </span>
+                </div>
 
-            </div>
-
-            <div class="mt-3">
-                @include('shorturl.buttons.delete_withText')
             </div>
         </div>
     </div>
