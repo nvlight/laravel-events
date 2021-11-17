@@ -105,7 +105,14 @@ class ShortUrlCategoryController extends Controller
 
     public function create()
     {
-        return view('shorturl_new.create');
+        return view('shorturl_new.category.create');
+    }
+
+    public function createWithParent(int $parentId)
+    {
+        $parent = ShortUrlsCategory::findOrFail($parentId);
+
+        return view('shorturl_new.category.createWithParent', ['parent' => $parent]);
     }
 
     public function store(Request $request)
@@ -119,6 +126,22 @@ class ShortUrlCategoryController extends Controller
 
         session()->flash('shorturlnew_category_created','Категория создана');
         return back();
+    }
+
+    public function storeWithParent(Request $request)
+    {
+        $parent = ShortUrlsCategory::findOrFail($request['parent_id']);
+
+        $attributes = $this->validateForStoreShortUrl();
+
+        $attributes['name'] = $request->get('name');
+        $attributes['slug'] = Str::slug($attributes['name']);
+        $attributes['parent_id'] = $parent->id;
+        $attributes += ['user_id' => auth()->id()];
+        ShortUrlsCategory::create($attributes);
+
+        session()->flash('shorturlnew_category_createdWithParent','Категория с фиксированным id предка создана');
+        return redirect()->route('shorturlnew_category.index');
     }
 
     public function validateForStoreShortUrl()

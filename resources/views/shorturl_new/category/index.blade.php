@@ -15,6 +15,7 @@
             <h4>Список коротких ссылок</h4>
             <h5 class="text-success"><?=session()->get('shorturlnew_deleted')?></h5>
             <h5 class="text-success"><?=session()->get('shorturl_updated')?></h5>
+            <h5 class="text-success"><?=session()->get('shorturlnew_category_createdWithParent')?></h5>
 
             <div>
                 @include('shorturl_new.category.table-data')

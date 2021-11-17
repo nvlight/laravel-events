@@ -57,7 +57,10 @@ Route::get('shorturl-filter', 'ShortUrlController@filter')->middleware('verified
 
 Route::resource('shorturlnew_category', 'ShortUrl\ShortUrlCategoryController')->middleware('verified');
 Route::get('shorturlnew_cascadeDestroy', 'ShortUrl\ShortUrlCategoryController@cascadeDestroy')->middleware('verified');
-
+Route::get('shorturlnew_category/createWithParent/{id}', 'ShortUrl\ShortUrlCategoryController@createWithParent')
+    ->name('shorturlnew_category.createWithParent')->middleware('verified');
+Route::post('shorturlnew_category/storeWithParent', 'ShortUrl\ShortUrlCategoryController@storeWithParent')
+    ->name('shorturlnew_category.storeWithParent')->middleware('verified');
 
 Route::post('event_copy/{event}','EventController@copyAndPast')->middleware('verified');
 

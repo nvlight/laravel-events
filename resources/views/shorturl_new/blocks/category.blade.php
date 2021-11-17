@@ -6,6 +6,7 @@
         <span style="display: flex;">
             @include('shorturl_new.buttons.view', ['item' => $item])
             @include('shorturl_new.buttons.edit', ['item' => $item])
+            @include('shorturl_new.buttons.createWithParent', ['item' => $item])
             @include('shorturl_new.buttons.delete', ['item' => $item])
         </span>
     </div>

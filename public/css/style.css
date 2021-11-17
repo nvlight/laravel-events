@@ -1047,7 +1047,10 @@ body > nav.navbar{
 	color: #364EAC;
 	fill: currentColor;
 }
-
+.mg-btn-createWithParent{
+	color: #463b17;
+	fill: currentColor;
+}
 
 .td-btn-flex-1{
 	display: flex;
