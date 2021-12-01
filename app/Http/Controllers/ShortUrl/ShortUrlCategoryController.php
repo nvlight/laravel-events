@@ -12,38 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class ShortUrlCategoryController extends Controller
 {
-    // позволяет входной массив преобразовать в 3-х уровненый массив каталогов.
-    protected function threeLevelTree(Array $input)
-    {
-        $result = [];
-        $currentParentId = 0; $i = 0; $j = 0; $r = 0;
-        foreach($input as $k => $v){
-            if ($v['parent_id'] === $currentParentId){
-                $result[$i] = $v;
-
-                $anotherParentId = $v['id'];
-                foreach($input as $kk => $vv){
-                    if ($vv['parent_id'] === $anotherParentId) {
-                        $result[$i]['child'][$j] = $vv;
-
-                        $thirdParentId = $vv['id'];
-                        foreach($input as $kkk => $vvv){
-                            if ($vvv['parent_id'] === $thirdParentId) {
-                                $result[$i]['child'][$j]['child'][$r] = $vvv;
-
-                                $r++;
-                            }
-                        }
-
-                        $j++;
-                    }
-                }
-                $i++;
-            }
-        }
-        return $result;
-    }
-
+    // Преобразует входный массив в многомерный с дочерними элементами
     protected function makeTree($data, $pid, &$result)
     {
         $i = 0;
@@ -59,44 +28,25 @@ class ShortUrlCategoryController extends Controller
         }
     }
 
-    protected function outTree(Array $input)
+    // рекурсивная функция обхода дерева массивов и их рендер по шаблону
+    protected function outTreeRec(Array $input, &$output, $repeatStr, $offset, $offsetInc = 3)
     {
-        // id, user_id, parent_id, name
+        // ['item' => $v, 'repeatStr' => $repeatStr, 'offset' => $offset ]
+        if (isset($input['child'])){
+            foreach($input['child'] as $k => $v){
+                $output .= View::make('shorturl_new.category.categoryLine_withStyle',
+                    ['item' => $v, 'repeatStr' => $repeatStr, 'offset' => $offset, 'offsetInc' => $offsetInc ])
+                ->render();
 
-        // 1
-        $offset = 0; $offsetInc = 5;
-        foreach($input as $k => $v){
-            echo str_repeat('&nbsp;', $offset) . $v['name'] . "<br>";
-
-            // 2
-            if (isset($v['child'])){
                 $offset += $offsetInc;
-
-                foreach($v['child'] as $kk => $vv){
-                    echo str_repeat('&nbsp;', $offset) . $vv['name'] . "<br>";
-
-                    // 3
-                    if (isset($vv['child'])){
-                        $offset += $offsetInc;
-
-                        foreach($vv['child'] as $kkk => $vvv){
-                            echo str_repeat('&nbsp;', $offset) . $vvv['name'] . "<br>";
-
-                        }
-
-                        $offset -= $offsetInc;
-                    }
-
-                }
-
+                $this->outTreeRec($v, $output, $repeatStr, $offset, $offsetInc);
                 $offset -= $offsetInc;
-
             }
         }
     }
 
-    // позволяет вывести массив каталогов максимум 3-х уровневый
-    protected function threeLevelTreeOutput(Array $input)
+    // Получение строки из дерева категорий
+    protected function outTree(Array $input)
     {
         $result = "";
 
@@ -104,7 +54,11 @@ class ShortUrlCategoryController extends Controller
             return $result;
         }
 
-        $result = View::make('shorturl_new.category.table-data', ['shortUrlsArrTree' => $input ])->render();
+        // вывод по старому стилю :smirk
+        //$result = View::make('shorturl_new.category.table-data', ['shortUrlsArrTree' => $input ])->render();
+
+        $offset = 0; $offsetInc = 3; $repeatStr = '-';
+        $this->outTreeRec($input, $result, $repeatStr, $offset, $offsetInc);
 
         return $result;
     }
@@ -122,19 +76,11 @@ class ShortUrlCategoryController extends Controller
         ;
 
         $shortUrlsArr = $shorturls->toArray();
-        //echo MGDebug::d($shortUrlsArr); die;
-        //echo MGDebug::d($result, 'first_iteration'); die;
 
         $shortUrlsArrTree = [];
-        //$shortUrlsArrTree = $this->threeLevelTree($shortUrlsArr);
         $this->makeTree($shortUrlsArr, 0, $shortUrlsArrTree);
-        //echo MGDebug::d($shortUrlsArrTree); die;
 
-        //$this->threeLevelTreeOutput($result);
-        //echo MGDebug::d($shortUrlsArrTree); die;
-        //echo MGDebug::d($shortUrlIds); die;
-
-        $outputData = $this->threeLevelTreeOutput($shortUrlsArrTree);
+        $outputData = $this->outTree($shortUrlsArrTree);
 
         return view('shorturl_new.category.index', ['shortUrlIds' => $shortUrlIds,
             'shortUrlsArrTree' => $shortUrlsArrTree, 'tableData' => $outputData,
