@@ -19,6 +19,7 @@
 
             <div>
                 @include('shorturl_new.category.table-data')
+{{--                {{ $tableData }}--}}
             </div>
 
         </div>

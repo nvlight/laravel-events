@@ -6,6 +6,7 @@ use App\Models\ShortUrl\ShortUrlsCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\MGDebug;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
@@ -43,8 +44,22 @@ class ShortUrlCategoryController extends Controller
         return $result;
     }
 
-    // позволяет вывести массив каталогов максимум 3-х уровневый
-    protected function threeLevelTreeOutput(Array $input)
+    protected function makeTree($data, $pid, &$result)
+    {
+        $i = 0;
+        foreach($data as $k => $v){
+            if ($v['parent_id'] === $pid){
+
+                $result['child'][$i] = $v;
+
+                $this->makeTree($data, $v['id'], $result['child'][$i]);
+
+                $i++;
+            }
+        }
+    }
+
+    protected function outTree(Array $input)
     {
         // id, user_id, parent_id, name
 
@@ -75,8 +90,23 @@ class ShortUrlCategoryController extends Controller
                 }
 
                 $offset -= $offsetInc;
+
             }
         }
+    }
+
+    // позволяет вывести массив каталогов максимум 3-х уровневый
+    protected function threeLevelTreeOutput(Array $input)
+    {
+        $result = "";
+
+        if (!isset($input['child'])) {
+            return $result;
+        }
+
+        $result = View::make('shorturl_new.category.table-data', ['shortUrlsArrTree' => $input ])->render();
+
+        return $result;
     }
 
     public function index()
@@ -92,14 +122,22 @@ class ShortUrlCategoryController extends Controller
         ;
 
         $shortUrlsArr = $shorturls->toArray();
-        $shortUrlsArrTree = $this->threeLevelTree($shortUrlsArr);
+        //echo MGDebug::d($shortUrlsArr); die;
+        //echo MGDebug::d($result, 'first_iteration'); die;
+
+        $shortUrlsArrTree = [];
+        //$shortUrlsArrTree = $this->threeLevelTree($shortUrlsArr);
+        $this->makeTree($shortUrlsArr, 0, $shortUrlsArrTree);
+        //echo MGDebug::d($shortUrlsArrTree); die;
 
         //$this->threeLevelTreeOutput($result);
-        //echo MGDebug::d($result); die;
+        //echo MGDebug::d($shortUrlsArrTree); die;
         //echo MGDebug::d($shortUrlIds); die;
 
+        $outputData = $this->threeLevelTreeOutput($shortUrlsArrTree);
+
         return view('shorturl_new.category.index', ['shortUrlIds' => $shortUrlIds,
-            'shortUrlsArrTree' => $shortUrlsArrTree,
+            'shortUrlsArrTree' => $shortUrlsArrTree, 'tableData' => $outputData,
         ]);
     }
 
