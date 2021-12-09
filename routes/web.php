@@ -430,3 +430,15 @@ Route::group([
         Route::get('/get_categories', [App\Http\Controllers\Evento\MainFilterController::class, 'getCategories' ]);
     });
 });
+
+Route::group([
+    'prefix' => 'natpot', // prefix for url
+    'as' => 'natpot.',    // prefix for names
+    'namespace' => 'natpot',
+    'middleware' => ['auth'],
+], function () {
+    Route::get('/', [App\Http\Controllers\Natpot\NatpotController::class, 'index']);
+
+    Route::post('/calculate', [App\Http\Controllers\Natpot\NatpotController::class, 'calculate'])->name('calculate');
+
+});
