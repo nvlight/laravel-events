@@ -24,7 +24,10 @@ class NatpotController extends Controller
 
     public function index()
     {
-        return view('natpot.index');
+        $fixedNatpotData = $this->getFixedNatpots();
+        $natpotType = 0;
+
+        return view('natpot.index', ['fixedNatpotData' => $fixedNatpotData, 'natpotType' => $natpotType]);
     }
 
     protected function number_in_range($a, $b, $number)
@@ -129,10 +132,51 @@ class NatpotController extends Controller
         return $multiplier;
     }
 
+    protected function getFixedNatpots()
+    {
+//        <optgroup label="Белый. Ширина до 5 метров">
+//            <option value="1">Матовый</option>
+//            <option value="2">Сатиновый</option>
+//            <option value="3">Глянцевый</option>
+//        </optgroup>
+//        <optgroup label="Цветной. Ширина до 5 метров">
+//            <option value="4">Матовый</option>
+//            <option value="5">Сатиновый</option>
+//            <option value="6">Глянцевый</option>
+//        </optgroup>
+//        <option value="7">Фактурные (ширина до 3.2 метра)</option>
+//        <option value="8">Искры (ширина до 3.2 метра)</option>
+//        <option value="9">Облака (ширина до 3.2 метра)</option>
+//        <option value="10"><strong>Дескор</strong></option>
+        $id = 0;
+        $natpot = [
+            [ 'optgroup_label' => "Белый. Ширина до 5 метров",
+                'child' => [
+                  ['value' => ++$id, 'text' => 'Матовый' ],
+                  ['value' => ++$id, 'text' => 'Сатиновый' ],
+                  ['value' => ++$id, 'text' => 'Глянцевый' ],
+                ]
+            ],
+            [ 'optgroup_label' => "Цветной. Ширина до 5 метров",
+                'child' => [
+                    ['value' => ++$id, 'text' => 'Матовый' ],
+                    ['value' => ++$id, 'text' => 'Сатиновый' ],
+                    ['value' => ++$id, 'text' => 'Глянцевый' ],
+                ]
+            ],
+            [
+                ['value' => ++$id, 'text' => 'Фактурные (ширина до 3.2 метра)' ],
+                ['value' => ++$id, 'text' => 'Искры (ширина до 3.2 метра)' ],
+                ['value' => ++$id, 'text' => 'Облака (ширина до 3.2 метра)' ],
+                ['value' => ++$id, 'text' => '<strong>Дескор</strong>' ],
+            ],
+        ];
+
+        return $natpot;
+    }
+
     public function calculate(Request $request)
     {
-        echo MGDebug::d($request->all());
-
         $a = $request->post('st1');
         $b = $request->post('st2');
         $c = $request->post('st3');
@@ -142,6 +186,8 @@ class NatpotController extends Controller
 
         $natpotType = intval($request->post('natpot_type'));
 
+        $fixedNatpotData = $this->getFixedNatpots();
+
         $calculated['maxWidth'] = $this->getMaxWidth($a, $b, $c, $d);
         $calculated['perimeter'] = $this->getPerimeter($a,$b,$c,$d);
         $calculated['square'] = $this->getSquare($a,$b,$c,$d);
@@ -150,10 +196,10 @@ class NatpotController extends Controller
         $calculated['bagets_cost'] = $this->getBagetsCost($calculated['bagets_amount']);
         $calculated['multiplier'] = $this->getMultiplier($natpotType, $calculated['maxWidth']);
 
-        echo MGDebug::d($calculated);
+        //echo MGDebug::d($calculated);
 
-        die;
-
-        return view('natpot.index');
+        return view('natpot.index', ['calculated' => $calculated, 'fixedNatpotData' => $fixedNatpotData,
+                'natpotType' => $natpotType,
+            ]);
     }
 }

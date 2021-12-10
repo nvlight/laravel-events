@@ -8,6 +8,12 @@
         <h4 style="margin-top: 30px;">Калькулятор стоимости</h4>
         <h5 style="margin-top: 25px; margin-bottom: 25px;">Заполните и отправьте заявку для расчета стоимости потолка. Калькулятор считает точную цену, которая не изменится на замере.</h5>
 
+        <div>
+            @if (isset($calculated))
+                {!! \App\Models\MGDebug::d($calculated) !!}
+            @endif
+        </div>
+
         <form action="{{ route('natpot.calculate') }}" method="POST">
             <table class="table table-bordered table-striped">
                 @csrf
@@ -19,20 +25,41 @@
                         <td>
                             <select name="natpot_type" id="natpot_type" class="form-control">
                                 <option value="0">Выберите тип потолка</option>
-                                <optgroup label="Белый. Ширина до 5 метров">
-                                    <option value="1">Матовый</option>
-                                    <option value="2">Сатиновый</option>
-                                    <option value="3">Глянцевый</option>
-                                </optgroup>
-                                <optgroup label="Цветной. Ширина до 5 метров">
-                                    <option value="4">Матовый</option>
-                                    <option value="5">Сатиновый</option>
-                                    <option value="6">Глянцевый</option>
-                                </optgroup>
-                                <option value="7">Фактурные (ширина до 3.2 метра)</option>
-                                <option value="8">Искры (ширина до 3.2 метра)</option>
-                                <option value="9">Облака (ширина до 3.2 метра)</option>
-                                <option value="10"><strong>Дескор</strong></option>
+                                @if ( isset($fixedNatpotData) )
+                                    @foreach($fixedNatpotData as $natpot)
+                                        @if (isset($natpot['child']))
+                                            <optgroup label="{{ $natpot['optgroup_label'] }}">
+                                                @foreach($natpot['child'] as $child)
+                                                    <option
+                                                        @if ($child['value'] == $natpotType) selected @endif
+                                                        value="{{ $child['value'] }}">{!! $child['text'] !!}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @else
+                                            @foreach($natpot as $main)
+                                                <option
+                                                    @if ($main['value'] == $natpotType) selected @endif
+                                                    value="{{ $main['value'] }}">{!! $main['text'] !!}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                @endif
+{{--                                <optgroup label="Белый. Ширина до 5 метров">--}}
+{{--                                    <option value="1">Матовый</option>--}}
+{{--                                    <option value="2">Сатиновый</option>--}}
+{{--                                    <option value="3">Глянцевый</option>--}}
+{{--                                </optgroup>--}}
+{{--                                <optgroup label="Цветной. Ширина до 5 метров">--}}
+{{--                                    <option value="4">Матовый</option>--}}
+{{--                                    <option value="5">Сатиновый</option>--}}
+{{--                                    <option value="6">Глянцевый</option>--}}
+{{--                                </optgroup>--}}
+{{--                                <option value="7">Фактурные (ширина до 3.2 метра)</option>--}}
+{{--                                <option value="8">Искры (ширина до 3.2 метра)</option>--}}
+{{--                                <option value="9">Облака (ширина до 3.2 метра)</option>--}}
+{{--                                <option value="10"><strong>Дескор</strong></option>--}}
                             </select>
                         </td>
                     </tr>
@@ -95,62 +122,66 @@
                             <input class="form-control" id="pipes" name="pipes" type="text" value="0">
                         </td>
                     </tr>
+
+                    @if (isset($calculated))
+                        <tr>
+                            <td colspan="2" style="text-align: center;">
+                                <strong>Результаты подсчетов</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="Perimeter">Периметр</label>
+                            </td>
+                            <td>
+                                <input class="form-control" id="Perimeter" type="text" value="{{$calculated['perimeter']}}" disabled >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="Square">Площадь</label>
+                            </td>
+                            <td>
+                                <input class="form-control" id="Square" type="text" value="{{$calculated['square']}}" disabled >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="baget">Багеты</label>
+                            </td>
+                            <td>
+                                <input class="form-control" id="baget" type="text"
+                                    value="{{$calculated['bagets_amount']}} м, {{$calculated['bagets_cost']}} руб. " disabled >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="dubGvozdi">Дюбель-гвозди (6 x 40 мм)</label>
+                            </td>
+                            <td>
+                                <input class="form-control" id="dubGvozdi" type="text"
+                                   value="" disabled >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="dubGvozdi">Саморезы по дереву (3.5 x 4.1 см)</label>
+                            </td>
+                            <td>
+                                <input class="form-control" id="dubGvozdi" type="text" value="" disabled >
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="totalSumm">Общая сумма</label>
+                            </td>
+                            <td>
+                                <input class="form-control" id="totalSumm" type="text" value="" disabled >
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <td colspan="2" style="text-align: center;">
-                            <strong>Результаты подсчетов</strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="Perimeter">Периметр</label>
-                        </td>
-                        <td>
-                            <input class="form-control" id="Perimeter" type="text" value="" disabled >
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="Square">Площадь</label>
-                        </td>
-                        <td>
-                            <input class="form-control" id="Square" type="text" value="" disabled >
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="baget">Багеты</label>
-                        </td>
-                        <td>
-                            <input class="form-control" id="baget" type="text" value="" disabled >
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="dubGvozdi">Дюбель-гвозди (6 x 40 мм)</label>
-                        </td>
-                        <td>
-                            <input class="form-control" id="dubGvozdi" type="text" value="" disabled >
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="dubGvozdi">Саморезы по дереву (3.5 x 4.1 см)</label>
-                        </td>
-                        <td>
-                            <input class="form-control" id="dubGvozdi" type="text" value="" disabled >
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for="totalSumm">Общая сумма</label>
-                        </td>
-                        <td>
-                            <input class="form-control" id="totalSumm" type="text" value="" disabled >
-                        </td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td style="text-align: center;">
                             <button class="btn btn-success" type="submit">Рассчитать</button>
                             <button class="btn btn-primary" type="reset">Сбросить</button>
                         </td>
