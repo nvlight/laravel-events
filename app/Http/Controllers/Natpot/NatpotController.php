@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Natpot;
 
+use App\Http\Controllers\SimpleTestSystem\DescriptionTypeController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\MGDebug;
@@ -27,7 +28,19 @@ class NatpotController extends Controller
     CONST DUBGV_ONE_BOX_AMOUNT = 50;
     CONST DUBGV_ONE_BOX_WITH_50_COST = 100;
 
+    CONST SAMOR_DIF_LENTH = 0.18;
+    CONST SAMOR_RESERVE_AMOUNT = 33;
+
     CONST BROTHER_MULTIPLIER = 3;
+
+    CONST SAMOR_ONE_ELEMENT_COST = 1.2; // rub
+
+    protected $samor = [];
+
+    public function __construct()
+    {
+        $this->samor['3.5x4.1']['one_weight'] = 2.24;
+    }
 
     public function index()
     {
@@ -207,6 +220,26 @@ class NatpotController extends Controller
         return $natpot;
     }
 
+    protected function getSamorAmountReal($perimeter)
+    {
+        return round( $perimeter / self::SAMOR_DIF_LENTH ) + self::SAMOR_RESERVE_AMOUNT;
+    }
+
+    protected function getSamorFullCost($samorAmountReal)
+    {
+        return round(self::SAMOR_ONE_ELEMENT_COST * $samorAmountReal);
+    }
+
+    protected function getSamorWeight($samorAmountReal)
+    {
+        return $this->samor['3.5x4.1']['one_weight'] * $samorAmountReal;
+    }
+
+    protected function getSamorWeightInKG($samorWeight)
+    {
+        return round($samorWeight / 1000,2 );
+    }
+
     public function calculate(Request $request)
     {
         $a = $request->post('st1');
@@ -233,6 +266,12 @@ class NatpotController extends Controller
         $calculated['dubgv_cost'] = $this->getDubgvCost($calculated['perimeter']);
         $calculated['сeiling_one_square_summ'] = $calculated['multiplier'] * self::BROTHER_MULTIPLIER;
         $calculated['сeiling_squares_summ'] = $calculated['square'] * $calculated['multiplier'] * self::BROTHER_MULTIPLIER;
+
+        $calculated['samor']['amount_real'] = $this->getSamorAmountReal($calculated['perimeter']);
+        $calculated['samor']['full_weight'] = $this->getSamorWeight($calculated['samor']['amount_real']);
+        $calculated['samor']['full_weight_ing_kg'] = $this->getSamorWeightInKG($calculated['samor']['full_weight']);
+        $calculated['samor']['full_cost'] = $this->getSamorFullCost($calculated['samor']['amount_real']);
+
         //$calculated['dubgv_amountReal_0'] = $this->getDubgvAmount($calculated['perimeter']);
         //$calculated['dubgv_amountReal_1'] = $this->getDubgvAmountReal($calculated['perimeter']);
 

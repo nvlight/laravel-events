@@ -196,7 +196,8 @@
                                 <label for="dubGvozdi">Саморезы по дереву (3.5 x 4.1 см) (расходник)</label>
                             </td>
                             <td>
-                                <input class="form-control" id="dubGvozdi" type="text" value="" disabled >
+                                <input class="form-control" id="dubGvozdi" type="text"
+                                   value="{{$calculated['samor']['full_weight_ing_kg']}} кг., {{$calculated['samor']['full_cost']}} руб." disabled >
                             </td>
                         </tr>
                         <tr>
