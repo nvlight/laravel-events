@@ -66,30 +66,58 @@
                     <tr>
                         <td colspan="2" style="text-align: center;"><strong>Исходные данные сторон (кв. м)</strong></td>
                     </tr>
-                    <tr>
-                        <td><label for="st1">Сторона A</label></td>
-                        <td>
-                            <input class="form-control" id="st1" name="st1" type="text" value="5" placeholder="кв.м.">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="st2">Сторона B</label></td>
-                        <td>
-                            <input class="form-control" id="st2" name="st2" type="text" value="4" placeholder="кв.м.">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="st3">Сторона C</label></td>
-                        <td>
-                            <input class="form-control" id="st3" name="st3" type="text" value="5" placeholder="кв.м.">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><label for="st4">Сторона D</label></td>
-                        <td>
-                            <input class="form-control" id="st4" name="st4" type="text" value="4" placeholder="кв.м.">
-                        </td>
-                    </tr>
+                    @if (isset($sideValues))
+                        @php $sv = 0; @endphp
+                        <tr>
+                            <td><label for="st1">Сторона A</label></td>
+                            <td>
+                                <input class="form-control" id="st1" name="st1" type="text" value="{{$sideValues[$sv++]}}" placeholder="кв.м.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="st2">Сторона B</label></td>
+                            <td>
+                                <input class="form-control" id="st2" name="st2" type="text" value="{{$sideValues[$sv++]}}" placeholder="кв.м.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="st3">Сторона C</label></td>
+                            <td>
+                                <input class="form-control" id="st3" name="st3" type="text" value="{{$sideValues[$sv++]}}" placeholder="кв.м.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="st4">Сторона D</label></td>
+                            <td>
+                                <input class="form-control" id="st4" name="st4" type="text" value="{{$sideValues[$sv++]}}" placeholder="кв.м.">
+                            </td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td><label for="st1">Сторона A</label></td>
+                            <td>
+                                <input class="form-control" id="st1" name="st1" type="text" value="5" placeholder="кв.м.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="st2">Сторона B</label></td>
+                            <td>
+                                <input class="form-control" id="st2" name="st2" type="text" value="4" placeholder="кв.м.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="st3">Сторона C</label></td>
+                            <td>
+                                <input class="form-control" id="st3" name="st3" type="text" value="5" placeholder="кв.м.">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><label for="st4">Сторона D</label></td>
+                            <td>
+                                <input class="form-control" id="st4" name="st4" type="text" value="4" placeholder="кв.м.">
+                            </td>
+                        </tr>
+                    @endif
                     <tr>
                         <td colspan="2" style="text-align: right;">
                             <a href=""><strong>Добавить еще 1 сторону</strong></a>
@@ -147,7 +175,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <label for="baget">Багеты</label>
+                                <label for="baget">Багеты (расходник)</label>
                             </td>
                             <td>
                                 <input class="form-control" id="baget" type="text"
@@ -156,28 +184,38 @@
                         </tr>
                         <tr>
                             <td>
-                                <label for="dubGvozdi">Дюбель-гвозди (6 x 40 мм)</label>
+                                <label for="dubGvozdi">Дюбель-гвозди (6 x 40 мм) (расходник)</label>
                             </td>
                             <td>
                                 <input class="form-control" id="dubGvozdi" type="text"
-                                   value="" disabled >
+                                   value="{{$calculated['dubgv_amount']}} шт., {{$calculated['dubgv_cost']}} руб." disabled >
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <label for="dubGvozdi">Саморезы по дереву (3.5 x 4.1 см)</label>
+                                <label for="dubGvozdi">Саморезы по дереву (3.5 x 4.1 см) (расходник)</label>
                             </td>
                             <td>
                                 <input class="form-control" id="dubGvozdi" type="text" value="" disabled >
                             </td>
                         </tr>
                         <tr>
-                            <td>
-                                <label for="totalSumm">Общая сумма</label>
-                            </td>
-                            <td>
-                                <input class="form-control" id="totalSumm" type="text" value="" disabled >
-                            </td>
+                            <td><label for="totalSumm">Стоимость 1 кв.м. потолка</label></td>
+                            <td><input class="form-control" id="сeiling_one_square_summ" type="text"
+                                       value="{{$calculated['сeiling_one_square_summ']}}" disabled ></td>
+                        </tr>
+                        <tr>
+                            <td><label for="totalSumm">Стоимость потолка</label></td>
+                            <td><input class="form-control" id="сeiling_squares_summ" type="text"
+                                    value="{{$calculated['сeiling_squares_summ']}}" disabled ></td>
+                        </tr>
+                        <tr>
+                            <td><label for="totalSumm">Стоимость расходников (общая) </label></td>
+                            <td><input class="form-control" id="totalСonsumablesSumm" type="text" value="" disabled ></td>
+                        </tr>
+                        <tr>
+                            <td><label for="totalSumm">Стоимость итоговая</label></td>
+                            <td><input class="form-control" id="totalSumm" type="text" value="" disabled ></td>
                         </tr>
                     @endif
                     <tr>

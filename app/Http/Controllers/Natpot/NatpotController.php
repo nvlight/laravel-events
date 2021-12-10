@@ -22,12 +22,44 @@ class NatpotController extends Controller
     CONST BAGET_ONE_COST = 25;   // kv.m.
     CONST BAGET_ONE_LENGTH = 2;  // m
 
+    CONST DUBGV_DIF_LENGTH = 0.18;   // длина между дюбль-гвоздями
+    CONST DUBGV_RESERVE_AMOUNT = 33; // длина между дюбль-гвоздями
+    CONST DUBGV_ONE_BOX_AMOUNT = 50;
+    CONST DUBGV_ONE_BOX_WITH_50_COST = 100;
+
+    CONST BROTHER_MULTIPLIER = 3;
+
     public function index()
     {
         $fixedNatpotData = $this->getFixedNatpots();
         $natpotType = 0;
 
         return view('natpot.index', ['fixedNatpotData' => $fixedNatpotData, 'natpotType' => $natpotType]);
+    }
+
+    protected function getDubgvAmount($perimeter)
+    {
+        return $perimeter / self::DUBGV_DIF_LENGTH;
+    }
+
+    protected function getDubgvAmountReal($perimeter)
+    {
+        return $this->getDubgvAmount($perimeter) + self::DUBGV_RESERVE_AMOUNT;
+    }
+
+    protected function getDubgvBoxCount($perimeter)
+    {
+        return ceil( $this->getDubgvAmountReal($perimeter) / self::DUBGV_ONE_BOX_AMOUNT ) ;
+    }
+
+    protected function getDubgvAmountPlusBoxDiff($perimeter)
+    {
+        return $this->getDubgvBoxCount($perimeter) * self::DUBGV_ONE_BOX_AMOUNT ;
+    }
+
+    protected function getDubgvCost($perimeter)
+    {
+        return $this->getDubgvBoxCount($perimeter) * self::DUBGV_ONE_BOX_WITH_50_COST;
     }
 
     protected function number_in_range($a, $b, $number)
@@ -182,6 +214,8 @@ class NatpotController extends Controller
         $c = $request->post('st3');
         $d = $request->post('st4');
 
+        $sideValues = [$a, $b, $c, $d];
+
         $calculated = [];
 
         $natpotType = intval($request->post('natpot_type'));
@@ -195,11 +229,17 @@ class NatpotController extends Controller
         $calculated['bagets_amount'] = $this->getBagetsAmount($calculated['perimeter']);
         $calculated['bagets_cost'] = $this->getBagetsCost($calculated['bagets_amount']);
         $calculated['multiplier'] = $this->getMultiplier($natpotType, $calculated['maxWidth']);
+        $calculated['dubgv_amount'] = $this->getDubgvAmountPlusBoxDiff($calculated['perimeter']);
+        $calculated['dubgv_cost'] = $this->getDubgvCost($calculated['perimeter']);
+        $calculated['сeiling_one_square_summ'] = $calculated['multiplier'] * self::BROTHER_MULTIPLIER;
+        $calculated['сeiling_squares_summ'] = $calculated['square'] * $calculated['multiplier'] * self::BROTHER_MULTIPLIER;
+        //$calculated['dubgv_amountReal_0'] = $this->getDubgvAmount($calculated['perimeter']);
+        //$calculated['dubgv_amountReal_1'] = $this->getDubgvAmountReal($calculated['perimeter']);
 
         //echo MGDebug::d($calculated);
 
         return view('natpot.index', ['calculated' => $calculated, 'fixedNatpotData' => $fixedNatpotData,
-                'natpotType' => $natpotType,
+                'natpotType' => $natpotType, 'sideValues' => $sideValues,
             ]);
     }
 }
