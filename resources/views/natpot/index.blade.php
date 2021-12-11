@@ -10,7 +10,7 @@
 
         <div>
             @if (isset($calculated))
-                {!! \App\Models\MGDebug::d($calculated) !!}
+{{--                {!! \App\Models\MGDebug::d($calculated) !!}--}}
             @endif
         </div>
 
@@ -162,7 +162,7 @@
                                 <label for="Perimeter">Периметр</label>
                             </td>
                             <td>
-                                <input class="form-control" id="Perimeter" type="text" value="{{$calculated['perimeter']}}" disabled >
+                                <input class="form-control" id="Perimeter" type="text" value="{{$calculated['perimeter']}} м." disabled >
                             </td>
                         </tr>
                         <tr>
@@ -170,7 +170,8 @@
                                 <label for="Square">Площадь</label>
                             </td>
                             <td>
-                                <input class="form-control" id="Square" type="text" value="{{$calculated['square']}}" disabled >
+                                <input class="form-control" id="Square" type="text"
+                                   value="{{$calculated['square_ceil']}} кв.м. ({{$calculated['square']}} кв.м.)" disabled >
                             </td>
                         </tr>
                         <tr>
@@ -179,7 +180,7 @@
                             </td>
                             <td>
                                 <input class="form-control" id="baget" type="text"
-                                    value="{{$calculated['bagets_amount']}} м, {{$calculated['bagets_cost']}} руб. " disabled >
+                                    value="{{$calculated['bagets_amount_ceil']}} ({{$calculated['bagets_amount']}}) м, {{$calculated['bagets_cost']}} руб. " disabled >
                             </td>
                         </tr>
                         <tr>
@@ -201,22 +202,30 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><label for="totalSumm">Стоимость 1 кв.м. потолка</label></td>
+                            <td><label for="сeiling_one_square_summ">Стоимость 1 кв.м. потолка</label></td>
                             <td><input class="form-control" id="сeiling_one_square_summ" type="text"
-                                       value="{{$calculated['сeiling_one_square_summ']}}" disabled ></td>
+                                       value="{{$calculated['сeiling_one_square_summ']}} руб." disabled ></td>
                         </tr>
                         <tr>
-                            <td><label for="totalSumm">Стоимость потолка</label></td>
+                            <td><label for="сeiling_squares_summ">Стоимость потолка</label></td>
                             <td><input class="form-control" id="сeiling_squares_summ" type="text"
-                                    value="{{$calculated['сeiling_squares_summ']}}" disabled ></td>
+                                    value="{{$calculated['сeiling_squares_summ']}} руб." disabled ></td>
                         </tr>
                         <tr>
-                            <td><label for="totalSumm">Стоимость расходников (общая) </label></td>
-                            <td><input class="form-control" id="totalСonsumablesSumm" type="text" value="" disabled ></td>
+                            <td><label for="fuelCost">Затраты на топливо</label></td>
+                            <td><input class="form-control" id="fuelCost" type="text"
+                                       value="{{$fuelCost}} руб." disabled ></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="totalСonsumablesSumm">Стоимость расходников (общая) </label></td>
+                            <td><input class="form-control" id="totalСonsumablesSumm" type="text"
+                               value="{{$calculated['consumablesTotalSumm']}}" disabled ></td>
                         </tr>
                         <tr>
                             <td><label for="totalSumm">Стоимость итоговая</label></td>
-                            <td><input class="form-control" id="totalSumm" type="text" value="" disabled ></td>
+                            <td><input class="form-control" id="totalSumm" type="text"
+                                value="{{$calculated['finalCost']}}" disabled ></td>
                         </tr>
                     @endif
                     <tr>
