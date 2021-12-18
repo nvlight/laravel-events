@@ -132,7 +132,7 @@
                         </td>
                         <td>
                             <input class="form-control" id="chandeliers" name="chandeliers" type="text"
-                                   value="{{$chandeliers}}">
+                                   value="{{$chandeliers ?? 0}}">
                         </td>
                     </tr>
                     <tr>
@@ -141,7 +141,7 @@
                         </td>
                         <td>
                             <input class="form-control" id="fixtures" name="fixtures" type="text"
-                                   value="{{$fixtures}}">
+                                   value="{{$fixtures ?? 0}}">
                         </td>
                     </tr>
                     <tr>
@@ -150,7 +150,7 @@
                         </td>
                         <td>
                             <input class="form-control" id="pipes" name="pipes" type="text"
-                                   value="{{$pipes}}">
+                                   value="{{$pipes ?? 0}}">
                         </td>
                     </tr>
 
@@ -178,12 +178,30 @@
                             </td>
                         </tr>
                         <tr>
+                            <td><label for="сeiling_one_square_summ">Стоимость 1 кв.м. потолка</label></td>
+                            <td><input class="form-control" id="сeiling_one_square_summ" type="text"
+                                       value="{{$calculated['сeiling_one_square_summ']}} {{$rusRoubleChar}}" disabled ></td>
+                        </tr>
+                        <tr>
+                            <td><label for="сeiling_squares_summ">Стоимость потолка</label></td>
+                            <td><input class="form-control" id="сeiling_squares_summ" type="text"
+                                    value="{{$calculated['сeiling_squares_summ']}} {{$rusRoubleChar}}" disabled ></td>
+                        </tr>
+
+                        <tr>
+                            <td><label for="chandFixPipesSumm">Люстры, светильники, трубы</label></td>
+                            <td><input class="form-control" id="chandFixPipesSumm" type="text"
+                                       value="{{$calculated['chandFixPipesSumm']}} {{$rusRoubleChar}}" disabled ></td>
+                        </tr>
+
+
+                        <tr>
                             <td>
                                 <label for="baget">Багеты (расходник)</label>
                             </td>
                             <td>
                                 <input class="form-control" id="baget" type="text"
-                                    value="{{$calculated['bagets_amount_ceil']}} ({{$calculated['bagets_amount']}}) м, {{$calculated['bagets_cost']}} руб. " disabled >
+                                       value="{{$calculated['bagets_amount_ceil']}} ({{$calculated['bagets_amount']}}) м, {{$calculated['bagets_cost']}} {{$rusRoubleChar}} " disabled >
                             </td>
                         </tr>
                         <tr>
@@ -192,7 +210,7 @@
                             </td>
                             <td>
                                 <input class="form-control" id="dubGvozdi" type="text"
-                                   value="{{$calculated['dubgv_amount']}} шт., {{$calculated['dubgv_cost']}} руб." disabled >
+                                       value="{{$calculated['dubgv_amount']}} шт., {{$calculated['dubgv_cost']}} {{$rusRoubleChar}}" disabled >
                             </td>
                         </tr>
                         <tr>
@@ -201,41 +219,23 @@
                             </td>
                             <td>
                                 <input class="form-control" id="dubGvozdi" type="text"
-                                   value="{{$calculated['samor']['full_weight_ing_kg']}} кг., {{$calculated['samor']['full_cost']}} руб." disabled >
+                                       value="{{$calculated['samor']['full_weight_ing_kg']}} кг., {{$calculated['samor']['full_cost']}} {{$rusRoubleChar}}" disabled >
                             </td>
                         </tr>
                         <tr>
-                            <td><label for="сeiling_one_square_summ">Стоимость 1 кв.м. потолка</label></td>
-                            <td><input class="form-control" id="сeiling_one_square_summ" type="text"
-                                       value="{{$calculated['сeiling_one_square_summ']}} руб." disabled ></td>
-                        </tr>
-                        <tr>
-                            <td><label for="сeiling_squares_summ">Стоимость потолка</label></td>
-                            <td><input class="form-control" id="сeiling_squares_summ" type="text"
-                                    value="{{$calculated['сeiling_squares_summ']}} руб." disabled ></td>
-                        </tr>
-
-                        <tr>
-                            <td><label for="chandFixPipesSumm">Люстры, светильники, трубы</label></td>
-                            <td><input class="form-control" id="chandFixPipesSumm" type="text"
-                                       value="{{$calculated['chandFixPipesSumm']}} руб." disabled ></td>
-                        </tr>
-
-                        <tr>
                             <td><label for="fuelCost">Затраты на топливо</label></td>
                             <td><input class="form-control" id="fuelCost" type="text"
-                                       value="{{$fuelCost}} руб." disabled ></td>
+                                       value="{{$fuelCost}} {{$rusRoubleChar}}" disabled ></td>
                         </tr>
-
                         <tr>
                             <td><label for="totalСonsumablesSumm">Стоимость расходников (общая) </label></td>
                             <td><input class="form-control" id="totalСonsumablesSumm" type="text"
-                               value="{{$calculated['consumablesTotalSumm']}}" disabled ></td>
+                               value="{{$calculated['consumablesTotalSumm']}} {{$rusRoubleChar}}" disabled ></td>
                         </tr>
                         <tr>
                             <td><label for="totalSumm">Стоимость итоговая</label></td>
                             <td><input class="form-control" id="totalSumm" type="text"
-                                value="{{$calculated['finalCost']}}" disabled ></td>
+                                value="{{$calculated['finalCost']}} {{$rusRoubleChar}}" disabled ></td>
                         </tr>
                     @endif
                     <tr>

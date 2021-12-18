@@ -39,6 +39,8 @@ class NatpotController extends Controller
     CONST FIXTURES_COST = 300;
     CONST PIPES_COST = 300;
 
+    CONST RUSS_ROUBLE_CHAR = "₽";
+
     protected $samor = [];
 
     public function __construct()
@@ -287,6 +289,7 @@ class NatpotController extends Controller
         $calculated['consumables']['bagets_cost'] = $calculated['bagets_cost'];
         $calculated['consumables']['dubgv_cost'] = $calculated['dubgv_cost'];
         $calculated['consumables']['samor_cost'] = $calculated['samor']['full_cost'];
+        $calculated['consumables']['chandFixPipesSumm'] = $calculated['chandFixPipesSumm'];
         $calculated['consumables']['fuel'] = self::FUEL_FOR_ROAD_COST;
         $calculated['consumablesTotalSumm'] = array_sum($calculated['consumables']);
         $calculated['finalCost'] = array_sum([$calculated['consumablesTotalSumm'], $calculated['сeiling_squares_summ']]);
@@ -295,7 +298,8 @@ class NatpotController extends Controller
 
         return view('natpot.index', ['calculated' => $calculated, 'fixedNatpotData' => $fixedNatpotData,
                 'natpotType' => $natpotType, 'sideValues' => $sideValues, 'fuelCost' => $calculated['consumables']['fuel'],
-                'chandeliers' => $chandeliers, 'fixtures' => $fixtures, 'pipes' => $pipes
+                'chandeliers' => $chandeliers, 'fixtures' => $fixtures, 'pipes' => $pipes,
+                'rusRoubleChar' => self::RUSS_ROUBLE_CHAR
             ]);
     }
 }
