@@ -35,6 +35,10 @@ class NatpotController extends Controller
     CONST SAMOR_ONE_ELEMENT_COST = 1.2; // rub
     CONST FUEL_FOR_ROAD_COST = 1000; // rub
 
+    CONST CHANDELIERS_COST = 300;
+    CONST FIXTURES_COST = 300;
+    CONST PIPES_COST = 300;
+
     protected $samor = [];
 
     public function __construct()
@@ -231,6 +235,15 @@ class NatpotController extends Controller
         return round($samorWeight / 1000,2 );
     }
 
+    protected function getChandFixPipesSumm($chandeliers, $fixtures, $pipes)
+    {
+        $chandeliersSumm = $chandeliers * self::CHANDELIERS_COST;
+        $fixturesSumm = $fixtures * self::FIXTURES_COST;
+        $pipesSumm = $pipes * self::PIPES_COST;
+
+        return array_sum([$chandeliersSumm, $fixturesSumm, $pipesSumm]);
+    }
+
     public function calculate(Request $request)
     {
         $a = $request->post('st1');
@@ -239,6 +252,10 @@ class NatpotController extends Controller
         $d = $request->post('st4');
 
         $sideValues = [$a, $b, $c, $d];
+
+        $chandeliers = $request->post('chandeliers');
+        $fixtures = $request->post('fixtures');
+        $pipes = $request->post('pipes');
 
         $calculated = [];
 
@@ -265,6 +282,8 @@ class NatpotController extends Controller
         $calculated['samor']['full_weight_ing_kg'] = $this->getSamorWeightInKG($calculated['samor']['full_weight']);
         $calculated['samor']['full_cost'] = $this->getSamorFullCost($calculated['samor']['amount_real']);
 
+        $calculated['chandFixPipesSumm'] = $this->getChandFixPipesSumm($chandeliers, $fixtures, $pipes);
+
         $calculated['consumables']['bagets_cost'] = $calculated['bagets_cost'];
         $calculated['consumables']['dubgv_cost'] = $calculated['dubgv_cost'];
         $calculated['consumables']['samor_cost'] = $calculated['samor']['full_cost'];
@@ -275,7 +294,8 @@ class NatpotController extends Controller
         //echo MGDebug::d($calculated);
 
         return view('natpot.index', ['calculated' => $calculated, 'fixedNatpotData' => $fixedNatpotData,
-                'natpotType' => $natpotType, 'sideValues' => $sideValues, 'fuelCost' => $calculated['consumables']['fuel']
+                'natpotType' => $natpotType, 'sideValues' => $sideValues, 'fuelCost' => $calculated['consumables']['fuel'],
+                'chandeliers' => $chandeliers, 'fixtures' => $fixtures, 'pipes' => $pipes
             ]);
     }
 }

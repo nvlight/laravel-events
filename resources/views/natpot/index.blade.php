@@ -131,7 +131,8 @@
                             <label for="chandeliers">Люстры</label>
                         </td>
                         <td>
-                            <input class="form-control" id="chandeliers" name="chandeliers" type="text" value="0">
+                            <input class="form-control" id="chandeliers" name="chandeliers" type="text"
+                                   value="{{$chandeliers}}">
                         </td>
                     </tr>
                     <tr>
@@ -139,7 +140,8 @@
                             <label for="fixtures">Светильники</label>
                         </td>
                         <td>
-                            <input class="form-control" id="fixtures" name="fixtures" type="text" value="0">
+                            <input class="form-control" id="fixtures" name="fixtures" type="text"
+                                   value="{{$fixtures}}">
                         </td>
                     </tr>
                     <tr>
@@ -147,7 +149,8 @@
                             <label for="pipes">Трубы</label>
                         </td>
                         <td>
-                            <input class="form-control" id="pipes" name="pipes" type="text" value="0">
+                            <input class="form-control" id="pipes" name="pipes" type="text"
+                                   value="{{$pipes}}">
                         </td>
                     </tr>
 
@@ -211,6 +214,13 @@
                             <td><input class="form-control" id="сeiling_squares_summ" type="text"
                                     value="{{$calculated['сeiling_squares_summ']}} руб." disabled ></td>
                         </tr>
+
+                        <tr>
+                            <td><label for="chandFixPipesSumm">Люстры, светильники, трубы</label></td>
+                            <td><input class="form-control" id="chandFixPipesSumm" type="text"
+                                       value="{{$calculated['chandFixPipesSumm']}} руб." disabled ></td>
+                        </tr>
+
                         <tr>
                             <td><label for="fuelCost">Затраты на топливо</label></td>
                             <td><input class="form-control" id="fuelCost" type="text"
