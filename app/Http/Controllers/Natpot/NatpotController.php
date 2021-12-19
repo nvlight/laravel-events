@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Natpot;
 
 use App\Http\Controllers\SimpleTestSystem\DescriptionTypeController;
+use App\Http\Requests\Natpot\CalculateRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\MGDebug;
@@ -48,7 +49,7 @@ class NatpotController extends Controller
         $this->samor['3.5x4.1']['one_weight'] = 2.24;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $fixedNatpotData = $this->getFixedNatpots();
         $natpotType = 0;
@@ -246,28 +247,17 @@ class NatpotController extends Controller
         return array_sum([$chandeliersSumm, $fixturesSumm, $pipesSumm]);
     }
 
-    public function calculate(Request $request)
+    protected function calculateHandler($sides, $natpotType, $chandeliers, $fixtures, $pipes)
     {
-        $a = $request->post('st1');
-        $b = $request->post('st2');
-        $c = $request->post('st3');
-        $d = $request->post('st4');
-
-        $sideValues = [$a, $b, $c, $d];
-
-        $chandeliers = $request->post('chandeliers');
-        $fixtures = $request->post('fixtures');
-        $pipes = $request->post('pipes');
-
         $calculated = [];
 
-        $natpotType = intval($request->post('natpot_type'));
+        $i = 0;
+        $calculated['minWidth'] = $this->getMinWidth($sides[$i++], $sides[$i++], $sides[$i++], $sides[$i++]);
+        $i = 0;
+        $calculated['perimeter'] = $this->getPerimeter($sides[$i++], $sides[$i++], $sides[$i++], $sides[$i++]);
+        $i = 0;
+        $calculated['square'] = $this->getSquareNormal($sides[$i++], $sides[$i++], $sides[$i++], $sides[$i++]);
 
-        $fixedNatpotData = $this->getFixedNatpots();
-
-        $calculated['minWidth'] = $this->getMinWidth($a, $b, $c, $d);
-        $calculated['perimeter'] = $this->getPerimeter($a,$b,$c,$d);
-        $calculated['square'] = $this->getSquareNormal($a,$b,$c,$d);
         $calculated['square_ceil'] = $this->getCeilSquare($calculated['square']);
         $calculated['bagets_amount'] = $this->getBagetsAmount($calculated['perimeter']) + self::BAGET_RESERVE_LENTH;
         $calculated['bagets_amount_ceil'] = $this->getBagetsAmountCeil($calculated['bagets_amount']);
@@ -293,6 +283,32 @@ class NatpotController extends Controller
         $calculated['consumables']['fuel'] = self::FUEL_FOR_ROAD_COST;
         $calculated['consumablesTotalSumm'] = array_sum($calculated['consumables']);
         $calculated['finalCost'] = array_sum([$calculated['consumablesTotalSumm'], $calculated['сeiling_squares_summ']]);
+
+        return $calculated;
+    }
+
+    public function calculate(CalculateRequest $request)
+    {
+        $attributes = $request->validated();
+        dd($attributes);
+
+        // для сторон и типа потолка следовало бы поставить валидатор
+        $a = $request->post('st1') ?? 0;
+        $b = $request->post('st2') ?? 0;
+        $c = $request->post('st3') ?? 0;
+        $d = $request->post('st4') ?? 0;
+        $sides = [$a, $b, $c, $d];
+
+        $natpotType = intval($request->post('natpot_type'));
+
+        $sideValues = [$a, $b, $c, $d];
+
+        $chandeliers = $request->post('chandeliers') ?? 0;
+        $fixtures = $request->post('fixtures') ?? 0;
+        $pipes = $request->post('pipes') ?? 0;
+
+        $fixedNatpotData = $this->getFixedNatpots();
+        $calculated = $this->calculateHandler($sides, $natpotType, $chandeliers, $fixtures, $pipes);
 
         //echo MGDebug::d($calculated);
 

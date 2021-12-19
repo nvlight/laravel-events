@@ -12,6 +12,8 @@
             @if (isset($calculated))
 {{--                {!! \App\Models\MGDebug::d($calculated) !!}--}}
             @endif
+            @php //dump() @endphp
+            @include('errors')
         </div>
 
         <form action="{{ route('natpot.calculate') }}" method="POST">
@@ -96,25 +98,25 @@
                         <tr>
                             <td><label for="st1">Сторона A</label></td>
                             <td>
-                                <input class="form-control" id="st1" name="st1" type="text" value="5" placeholder="кв.м.">
+                                <input class="form-control" id="st1" name="st1" type="text" value="" placeholder="кв.м.">
                             </td>
                         </tr>
                         <tr>
                             <td><label for="st2">Сторона B</label></td>
                             <td>
-                                <input class="form-control" id="st2" name="st2" type="text" value="4" placeholder="кв.м.">
+                                <input class="form-control" id="st2" name="st2" type="text" value="" placeholder="кв.м.">
                             </td>
                         </tr>
                         <tr>
                             <td><label for="st3">Сторона C</label></td>
                             <td>
-                                <input class="form-control" id="st3" name="st3" type="text" value="5" placeholder="кв.м.">
+                                <input class="form-control" id="st3" name="st3" type="text" value="" placeholder="кв.м.">
                             </td>
                         </tr>
                         <tr>
                             <td><label for="st4">Сторона D</label></td>
                             <td>
-                                <input class="form-control" id="st4" name="st4" type="text" value="4" placeholder="кв.м.">
+                                <input class="form-control" id="st4" name="st4" type="text" value="" placeholder="кв.м.">
                             </td>
                         </tr>
                     @endif
