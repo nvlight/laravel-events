@@ -5,16 +5,19 @@
     <h2>Натяжные потолки</h2>
 
     <section class="natpot_calc_section">
-        <h4 style="margin-top: 30px;">Калькулятор стоимости</h4>
+        <h4 style="margin-top: 30px;"><a href="{{route('natpot.index')}}">Калькулятор стоимости</a></h4>
         <h5 style="margin-top: 25px; margin-bottom: 25px;">Заполните и отправьте заявку для расчета стоимости потолка. Калькулятор считает точную цену, которая не изменится на замере.</h5>
 
         <div>
             @if (isset($calculated))
 {{--                {!! \App\Models\MGDebug::d($calculated) !!}--}}
             @endif
-            @php //dump() @endphp
-            @include('errors')
         </div>
+
+
+        @if ((old('natpot_type')))
+            {{old('natpot_type')}}
+        @endif
 
         <form action="{{ route('natpot.calculate') }}" method="POST">
             <table class="table table-bordered table-striped">
@@ -27,13 +30,14 @@
                         <td>
                             <select name="natpot_type" id="natpot_type" class="form-control">
                                 <option value="0">Выберите тип потолка</option>
-                                @if ( isset($fixedNatpotData) )
+                                @if ( isset($fixedNatpotData) ) )
                                     @foreach($fixedNatpotData as $natpot)
                                         @if (isset($natpot['child']))
                                             <optgroup label="{{ $natpot['optgroup_label'] }}">
                                                 @foreach($natpot['child'] as $child)
                                                     <option
                                                         @if ($child['value'] == $natpotType) selected @endif
+                                                        @if ($child['value'] == old('natpot_type')) selected @endif
                                                         value="{{ $child['value'] }}">{!! $child['text'] !!}
                                                     </option>
                                                 @endforeach
@@ -42,84 +46,51 @@
                                             @foreach($natpot as $main)
                                                 <option
                                                     @if ($main['value'] == $natpotType) selected @endif
+                                                    @if ($main['value'] == old('natpot_type')) selected @endif
                                                     value="{{ $main['value'] }}">{!! $main['text'] !!}
                                                 </option>
                                             @endforeach
                                         @endif
                                     @endforeach
                                 @endif
-{{--                                <optgroup label="Белый. Ширина до 5 метров">--}}
-{{--                                    <option value="1">Матовый</option>--}}
-{{--                                    <option value="2">Сатиновый</option>--}}
-{{--                                    <option value="3">Глянцевый</option>--}}
-{{--                                </optgroup>--}}
-{{--                                <optgroup label="Цветной. Ширина до 5 метров">--}}
-{{--                                    <option value="4">Матовый</option>--}}
-{{--                                    <option value="5">Сатиновый</option>--}}
-{{--                                    <option value="6">Глянцевый</option>--}}
-{{--                                </optgroup>--}}
-{{--                                <option value="7">Фактурные (ширина до 3.2 метра)</option>--}}
-{{--                                <option value="8">Искры (ширина до 3.2 метра)</option>--}}
-{{--                                <option value="9">Облака (ширина до 3.2 метра)</option>--}}
-{{--                                <option value="10"><strong>Дескор</strong></option>--}}
                             </select>
+                            @include('natpot.show_error', ['param' => 'natpot_type'])
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: center;"><strong>Исходные данные сторон (кв. м)</strong></td>
                     </tr>
-                    @if (isset($sideValues))
+
+                    <tr>
                         @php $sv = 0; @endphp
-                        <tr>
-                            <td><label for="st1">Сторона A</label></td>
-                            <td>
-                                <input class="form-control" id="st1" name="st1" type="text" value="{{$sideValues[$sv++]}}" placeholder="кв.м.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="st2">Сторона B</label></td>
-                            <td>
-                                <input class="form-control" id="st2" name="st2" type="text" value="{{$sideValues[$sv++]}}" placeholder="кв.м.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="st3">Сторона C</label></td>
-                            <td>
-                                <input class="form-control" id="st3" name="st3" type="text" value="{{$sideValues[$sv++]}}" placeholder="кв.м.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="st4">Сторона D</label></td>
-                            <td>
-                                <input class="form-control" id="st4" name="st4" type="text" value="{{$sideValues[$sv++]}}" placeholder="кв.м.">
-                            </td>
-                        </tr>
-                    @else
-                        <tr>
-                            <td><label for="st1">Сторона A</label></td>
-                            <td>
-                                <input class="form-control" id="st1" name="st1" type="text" value="" placeholder="кв.м.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="st2">Сторона B</label></td>
-                            <td>
-                                <input class="form-control" id="st2" name="st2" type="text" value="" placeholder="кв.м.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="st3">Сторона C</label></td>
-                            <td>
-                                <input class="form-control" id="st3" name="st3" type="text" value="" placeholder="кв.м.">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><label for="st4">Сторона D</label></td>
-                            <td>
-                                <input class="form-control" id="st4" name="st4" type="text" value="" placeholder="кв.м.">
-                            </td>
-                        </tr>
-                    @endif
+                        <td><label for="st1">Сторона A</label></td>
+                        <td>
+                            <input class="form-control" id="st1" name="st1" type="text" value="{{old('st1', $sides[$sv++])}}" placeholder="кв.м.">
+                            @include('natpot.show_error', ['param' => 'st1'])
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><label for="st2">Сторона B</label></td>
+                        <td>
+                            <input class="form-control" id="st2" name="st2" type="text" value="{{old('st2', $sides[$sv++])}}" placeholder="кв.м.">
+                            @include('natpot.show_error', ['param' => 'st2'])
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="st3">Сторона C</label></td>
+                        <td>
+                            <input class="form-control" id="st3" name="st3" type="text" value="{{old('st3', $sides[$sv++])}}" placeholder="кв.м.">
+                            @include('natpot.show_error', ['param' => 'st3'])
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="st4">Сторона D</label></td>
+                        <td>
+                            <input class="form-control" id="st4" name="st4" type="text" value="{{old('st4', $sides[$sv++])}}" placeholder="кв.м.">
+                            @include('natpot.show_error', ['param' => 'st4'])
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="2" style="text-align: right;">
                             <a href=""><strong>Добавить еще 1 сторону</strong></a>

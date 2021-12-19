@@ -437,7 +437,7 @@ Route::group([
     'namespace' => 'natpot',
     'middleware' => ['auth'],
 ], function () {
-    Route::get('/', [App\Http\Controllers\Natpot\NatpotController::class, 'index']);
+    Route::get('/', [App\Http\Controllers\Natpot\NatpotController::class, 'index'])->name('index');
 
     Route::post('/calculate', [App\Http\Controllers\Natpot\NatpotController::class, 'calculate'])->name('calculate');
 

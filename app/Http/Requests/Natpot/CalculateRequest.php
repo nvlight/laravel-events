@@ -41,10 +41,10 @@ class CalculateRequest extends FormRequest
     {
         return [
             'natpot_type' => ['required','integer', 'min:1'],
-            'st1' => ['required','integer','min:1'],
-            'st2' => ['required','integer','min:1'],
-            'st3' => ['required','integer','min:1'],
-            'st4' => ['required','integer','min:1'],
+            'st1' => ['required','numeric','min:1'],
+            'st2' => ['required','numeric','min:1'],
+            'st3' => ['required','numeric','min:1'],
+            'st4' => ['required','numeric','min:1'],
 
             'chandeliers' => ['integer','min:0'],
             'fixtures' => ['integer','min:0'],

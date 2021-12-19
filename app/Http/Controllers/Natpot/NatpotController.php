@@ -42,6 +42,8 @@ class NatpotController extends Controller
 
     CONST RUSS_ROUBLE_CHAR = "₽";
 
+    protected $sides = [];
+
     protected $samor = [];
 
     public function __construct()
@@ -54,7 +56,11 @@ class NatpotController extends Controller
         $fixedNatpotData = $this->getFixedNatpots();
         $natpotType = 0;
 
-        return view('natpot.index', ['fixedNatpotData' => $fixedNatpotData, 'natpotType' => $natpotType]);
+        $sides = $this->getSides($request);
+
+        return view('natpot.index', ['fixedNatpotData' => $fixedNatpotData, 'natpotType' => $natpotType,
+                'sides' => $sides
+            ]);
     }
 
     protected function getDubgvAmount($perimeter)
@@ -106,13 +112,54 @@ class NatpotController extends Controller
         return array_sum([$a, $b, $c, $d]);
     }
 
-    protected function getSquareNormal($a, $b, $c, $d)
+    protected function getSquareSimple($a, $b, $c, $d)
     {
-        if ( ($a === $b) || ( ($a === $c) ** ($b===$d) ) ){
+        if ( ( ($a === $b) && ($b === $c) && ($c === $d) )  || ( ($a === $c) && ($b === $d) ) ){
             return $a * $b;
         }
 
         return $this->squareTrapezoidBy4Sides($a, $b, $c, $d);
+    }
+
+    protected function getMaxValAndKeyFromArray($a)
+    {
+        if (!count($a)) {
+            return false;
+        }
+
+        $key = array_key_first($a);
+        $value = $a[array_key_first($a)];
+        foreach($a as $k => $v){
+            if ($v > $value){
+                $value = $v;
+                $key = $k;
+            }
+        }
+
+        return ['key' => $key, 'value' => $value];
+    }
+
+    /**
+     * @param $a
+     * @param $b
+     * @param $c
+     * @param $d
+     * @return float|int
+     */
+    protected function getSquareNormal($a, $b, $c, $d)
+    {
+        $sides = $this->sides;
+        $maxFirst = $this->getMaxValAndKeyFromArray($sides);
+        unset($sides[$maxFirst['key']]);
+        unset($sides[$this->getMaxValAndKeyFromArray($sides)['key']]);
+        $maxSecond = $this->getMaxValAndKeyFromArray($sides);
+
+        //dump($maxFirst);
+        //dump($maxSecond);
+
+        $square = $maxFirst['value'] * $maxSecond['value'];
+
+        return $square;
     }
 
     protected function getCeilSquare($square)
@@ -287,33 +334,36 @@ class NatpotController extends Controller
         return $calculated;
     }
 
-    public function calculate(CalculateRequest $request)
+    protected function getSides($request)
     {
-        $attributes = $request->validated();
-        dd($attributes);
-
         // для сторон и типа потолка следовало бы поставить валидатор
         $a = $request->post('st1') ?? 0;
         $b = $request->post('st2') ?? 0;
         $c = $request->post('st3') ?? 0;
         $d = $request->post('st4') ?? 0;
-        $sides = [$a, $b, $c, $d];
+
+        return $sides = [$a, $b, $c, $d];
+    }
+
+    public function calculate(CalculateRequest $request)
+    {
+        $attributes = $request->validated();
 
         $natpotType = intval($request->post('natpot_type'));
-
-        $sideValues = [$a, $b, $c, $d];
 
         $chandeliers = $request->post('chandeliers') ?? 0;
         $fixtures = $request->post('fixtures') ?? 0;
         $pipes = $request->post('pipes') ?? 0;
 
+        $this->sides = $this->getSides($request);
+
         $fixedNatpotData = $this->getFixedNatpots();
-        $calculated = $this->calculateHandler($sides, $natpotType, $chandeliers, $fixtures, $pipes);
+        $calculated = $this->calculateHandler($this->sides, $natpotType, $chandeliers, $fixtures, $pipes);
 
         //echo MGDebug::d($calculated);
 
         return view('natpot.index', ['calculated' => $calculated, 'fixedNatpotData' => $fixedNatpotData,
-                'natpotType' => $natpotType, 'sideValues' => $sideValues, 'fuelCost' => $calculated['consumables']['fuel'],
+                'natpotType' => $natpotType, 'sides' => $this->sides, 'fuelCost' => $calculated['consumables']['fuel'],
                 'chandeliers' => $chandeliers, 'fixtures' => $fixtures, 'pipes' => $pipes,
                 'rusRoubleChar' => self::RUSS_ROUBLE_CHAR
             ]);
