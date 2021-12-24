@@ -1,4 +1,4 @@
-@extends('layouts.event')
+@extends('layouts.natpot')
 
 @section('content')
 

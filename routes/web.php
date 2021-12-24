@@ -435,7 +435,7 @@ Route::group([
     'prefix' => 'natpot', // prefix for url
     'as' => 'natpot.',    // prefix for names
     'namespace' => 'natpot',
-    'middleware' => ['auth'],
+    //'middleware' => ['auth'],
 ], function () {
     Route::get('/', [App\Http\Controllers\Natpot\NatpotController::class, 'index'])->name('index');
 

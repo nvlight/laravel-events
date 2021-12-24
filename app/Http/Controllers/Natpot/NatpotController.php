@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Natpot;
 
-use App\Http\Controllers\SimpleTestSystem\DescriptionTypeController;
 use App\Http\Requests\Natpot\CalculateRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
