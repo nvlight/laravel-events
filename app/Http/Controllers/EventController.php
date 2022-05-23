@@ -61,8 +61,6 @@ class EventController extends Controller
     {
         $categories = Category::where('user_id', '=', auth()->id() )->get();
         $types = Type::where('user_id', '=', auth()->id() )->get();
-        
-        //dd($categories);
 
         return view('event.create', compact('categories', 'types'));
     }
@@ -81,6 +79,7 @@ class EventController extends Controller
 
         $attributes += ['user_id' => auth()->id()];
         $attributes['date'] =  Carbon::parse($attributes['date'])->format('Y-m-d');
+        $attributes['amount'] =  intval($attributes['amount']);
         //echo Debug::d($attributes); die;
 
         Event::create($attributes);

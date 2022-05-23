@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Evento;
 
 use App\Http\Requests\Evento\EventoRequest;
-use App\Models\Evento\Attachment;
 use App\Models\Evento\Evento;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
