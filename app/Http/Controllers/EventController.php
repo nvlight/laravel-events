@@ -138,13 +138,13 @@ class EventController extends Controller
 
         $event->type_id = $attributes['type_id'];
         $event->date =  $event->date = Carbon::parse( $attributes['date'])->format('Y-m-d');;
-        $event->amount = $attributes['amount'];
+        $event->amount = intval($attributes['amount']);
         $event->description = $attributes['description'];
         $event->save();
 
         session()->flash('event_updated','Событие обновлено');
 
-        return redirect('/event');
+        return redirect()->route('event.edit', $event);
     }
 
     public function destroy(Event $event)

@@ -21,9 +21,10 @@
     <div class="row">
         <div class="col-md-6">
             <h3>Редактирование события</h3>
-            <a href="/event">Список событий</a>
+            <a href="{{route('event.index')}}">Список событий</a>
+            <h5 class="text-success"><?=session()->get('event_updated');?></h5>
             @php
-                //dump($event);
+                //dump($event->toArray());
             @endphp
             <form action="/event/{{$event->id}}" method="POST">
                 @csrf
@@ -72,11 +73,13 @@
                 <div class="mb-3">
                     <label for="description">Описание</label>
                     <textarea class="form-control {{ $errors->has('description') ? 'border-danger' : '' }}" name="description" id="description" cols="30" rows="10">{{$event->description}}</textarea>
+                    @include('errors_show_single', ['column' => 'description'])
                 </div>
 
                 <div class="mb-3">
                     <label for="amount">Сумма</label>
                     <input class="form-control {{ $errors->has('amount') ? 'border-danger' : '' }}" id="amount" name="amount" placeholder="500" value="{{$event->amount}}" >
+                    @include('errors_show_single', ['column' => 'amount'])
                 </div>
 
                 <script>
