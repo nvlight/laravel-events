@@ -27,7 +27,6 @@
             <form action="/event" method="POST">
                 @csrf
 
-                {{-- новый селект --}}
                 <div class="mb-3">
                     <label for="category_id">Категория</label>
                     <select data-live-search="true" class="form-control selectpicker" name="category_id" id="category_id">

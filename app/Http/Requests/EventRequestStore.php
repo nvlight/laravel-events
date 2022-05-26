@@ -43,6 +43,9 @@ class EventRequestStore extends FormRequest
             'type_id.integer' => 'Тип должен быть целым числом',
             'type_id.min' => 'Тип должен быть больше нуля',
 
+            'date.required' => 'Дата обязательна для заполнения',
+            'date.date' => 'Дата должны быть в формате даты!',
+
             'amount.integer' => 'Сумма должна быть целым числом',
             'amount.min' => 'Сумма должна быть больше нуля',
 
@@ -50,9 +53,6 @@ class EventRequestStore extends FormRequest
             'description.string' => 'Описание должно быть текстом',
             'description.min' => 'Описание должно быть больше :min символов',
             'description.max' => 'Описание должно быть меньше :max символов',
-
-            'date.required' => 'Дата обязательна для заполнения',
-            'date.date' => 'Дата должны быть в формате даты!',
         ];
     }
 
