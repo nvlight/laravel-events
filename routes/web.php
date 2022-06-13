@@ -12,8 +12,11 @@
 */
 
 Auth::routes(['verify' => true]);
-
-Route::get('/', 'EventController@index')->middleware('verified');
+//Auth::routes(['verify' => true]);
+Route::get('/', 'EventController@index')
+    ->name('event.index')
+    ->middleware('verified');
+//Route::get('/', 'EventController@index')->middleware('verified');
 
 Route::get('/tests', 'SimpleTestSystem\HhController@index');//->middleware('guest');
 Route::get('/tests/resume','SimpleTestSystem\HhController@testResume');

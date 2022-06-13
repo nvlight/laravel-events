@@ -9,6 +9,7 @@ use App\Models\Event\Type;
 use App\Models\MGDebug;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Validator;
@@ -66,10 +67,8 @@ class EventController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param EventRequestStore $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(EventRequestStore $request)
     {
@@ -936,4 +935,21 @@ class EventController extends Controller
         return redirect()->back()->with('event_copy', 'Событие успешно скопировано');
     }
 
+    /**
+     * @return Event|Collection
+     */
+    public function testVarPhpDoc(){
+        $need = new Collection();
+        /**
+         * @var Event[] $events
+         */
+        $events = Event::all();
+        foreach($events as $event){
+            $need = $event;
+            break;
+            //$event-> // now IDE show us all methods for $event
+        }
+
+        return $need;
+    }
 }

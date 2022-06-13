@@ -90,7 +90,7 @@ class LoginController extends Controller
                 return redirect()->route('login.phone');
             }
 
-            return redirect()->intended(route('cabinet.home'));
+            return redirect()->intended(route('event.index'));
         }
 
         return redirect()->intended($this->redirectPath());
@@ -127,7 +127,7 @@ class LoginController extends Controller
             $request->session()->flush();
             $this->clearLoginAttempts($request);
             Auth::login($user, $session['remember']);
-            return redirect()->intended(route('cabinet.home'));
+            return redirect()->intended(route('event.index'));
         }
 
         $this->incrementLoginAttempts($request);

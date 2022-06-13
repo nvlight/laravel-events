@@ -6,6 +6,9 @@
     //echo \App\Debug::d($events);
     //echo \App\Debug::d($categories);
     //echo \App\Debug::d($types);
+    /**
+     * @var \App\Models\Event\Event $event
+     */
     ?>
 
     <style>
